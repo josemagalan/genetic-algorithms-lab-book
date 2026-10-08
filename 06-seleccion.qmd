@@ -1,0 +1,368 @@
+# Seleccionar a los padres
+
+<!-- Seguimiento interno (no visible): los ejemplos reproducibles se comprobaron en selection-ga (commit f2de292) el 2026-10-07. Registro en memoria/sesiones/2026-10-07-08-capitulo-6-quarto.md. -->
+
+**Herramientas:** [selection-ga](https://josemagalan.github.io/selection-ga/#lang=es) y [SelectionMechanisms](https://josemagalan.shinyapps.io/SelectionMechanisms/), accesibles desde el [portal](https://josemagalan.github.io/genetic-algorithms-lab/).
+
+::: {.callout-warning .objetivos title="Objetivos del capítulo"}
+Al terminar el recorrido básico de este capítulo podrás:
+
+- explicar por qué la selección debe favorecer a los mejores sin excluir a los demás;
+- calcular a mano qué padres eligen un torneo binario y una ruleta, dados los números aleatorios;
+- predecir cómo cambia la presión de la ruleta al sumar una constante a la aptitud, y por qué el torneo no cambia;
+- reconocer el truncamiento como un mecanismo que reduce la diversidad muy deprisa;
+- explicar por qué la selección por sí sola no basta para mejorar una población.
+:::
+
+## 6.1 ¿Quién se reproduce? [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#quien-se-reproduce}
+
+Si ya sabemos qué soluciones son mejores, ¿por qué no dejamos que se reproduzcan solo ellas?
+
+Tras evaluar la población, la **selección** decide qué individuos serán padres. Elige tantos padres como individuos tiene la población y los reúne en el *pool* de padres. Un mismo individuo puede aparecer varias veces y otro, ninguna. Los padres no son soluciones nuevas: son copias de individuos que ya existen.
+
+La selección tiene que equilibrar dos fuerzas:
+
+- **Explotación.** Los mejores deben tener más probabilidades de reproducirse, porque su material genético es, en principio, el más prometedor. Si solo se reproducen ellos, la población se llena enseguida de copias de unos pocos y pierde diversidad.
+- **Exploración.** Los menos aptos también deben tener alguna oportunidad, porque pueden contener partes útiles que todavía no se aprecian en su aptitud. Pero si elegimos a los padres al azar, sin mirar la aptitud, la búsqueda deja de avanzar.
+
+Llamamos **presión selectiva** al grado en que la reproducción favorece a los mejores. Con demasiada presión se explota en exceso; con muy poca, se explora sin rumbo. Cada mecanismo de este capítulo regula esa presión de una manera distinta.
+
+:::: {.callout-note .ejercicio #ejercicio-6-1 title="Ejercicio 6.1 · Predice"}
+Ordenar la población y dejar que se reproduzca solo la mejor mitad parece la opción más natural. ¿Qué le pasará a la diversidad de la población al cabo de unas pocas generaciones? Anota tu predicción: la comprobarás en el [ejemplo 6.5](#ejemplo-6-5).
+::::
+
+## 6.2 Torneo [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#torneo}
+
+¿Cómo podemos favorecer a los mejores comparando solo a unos pocos individuos cada vez?
+
+En el **torneo binario** (*k* = 2) se sortean dos contendientes entre toda la población y el de mayor aptitud pasa al *pool* de padres. Se hace un torneo por cada padre que se necesite. Conviene distinguir dos niveles de reemplazo:
+
+- **Entre torneos** siempre hay reemplazo: al terminar cada torneo, todos los individuos vuelven a ser candidatos. Así, un buen individuo puede ganar varios torneos y tener varias copias.
+- **Dentro de un torneo**, selection-ga ofrece dos variantes. En «Con reemplazo», la opción por defecto y la que usamos aquí, los contendientes se sortean de uno en uno entre toda la población, de modo que un individuo puede enfrentarse a sí mismo. En «Sin reemplazo», los contendientes de un torneo son distintos.
+
+Con cuatro individuos A, B, C y D de aptitudes 1, 2, 3 y 4 hay 4 × 4 = 16 sorteos posibles de los dos contendientes, todos igual de probables. D gana todos aquellos en los que aparece (7), C los que no incluyen a D (5), B los que no incluyen a C ni a D (3) y A solo el torneo contra sí mismo (1):
+
+| | A | B | C | D |
+|---|:---:|:---:|:---:|:---:|
+| P(ganar un torneo), con reemplazo | 1/16 | 3/16 | 5/16 | 7/16 |
+| Copias esperadas en 4 torneos | 0,25 | 0,75 | 1,25 | 1,75 |
+| P(ganar un torneo), sin reemplazo | 0 | 1/6 | 1/3 | 1/2 |
+
+En la variante sin reemplazo el peor no gana nunca. Con reemplazo solo puede ganar si le toca enfrentarse a sí mismo.
+
+::: {.callout-tip .ejemplo #ejemplo-6-2 title="Ejemplo reproducible 6.2 · Cuatro torneos binarios"}
+**Datos.** Aptitudes 1, 2, 3 y 4 (A, B, C y D). La herramienta sortea estos contendientes:
+
+| Torneo | 1 | 2 | 3 | 4 |
+|---|:---:|:---:|:---:|:---:|
+| Contendientes | B, B | A, D | A, C | B, D |
+
+**Predice.** ¿Quién gana cada torneo? ¿Cambia algo si las aptitudes son 101, 102, 103 y 104?
+
+[Abrir: torneo con aptitudes 1–4](https://josemagalan.github.io/selection-ga/#op=tournament&lang=es&r=68&f=1-2-3-4){.abrir target="_blank"}
+[Abrir: torneo con aptitudes 101–104](https://josemagalan.github.io/selection-ga/#op=tournament&lang=es&r=68&f=101-102-103-104){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+Los ganadores son **B, D, C y D** en los dos casos. El primer torneo enfrenta a B consigo mismo, así que B gana. A participa en dos torneos y pierde ambos. D gana los dos en que participa. Con 101–104 los ganadores no cambian, porque el torneo solo compara qué individuo es mejor.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (torneo con aptitudes 1–4)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/selection-ga/#op=tournament&lang=es&r=68&f=1-2-3-4" loading="lazy" title="selection-ga: selección por torneo"></iframe>
+</details>
+
+<!-- Comprobado el 2026-10-07: con los dos enlaces, la herramienta muestra «Resultado: los padres son B D C D». -->
+:::
+
+El torneo no depende de la escala de la aptitud: basta con saber cuál de dos individuos es mejor. El tamaño del torneo *k* controla la presión. Con *k* = 1 la selección es al azar y, cuanto mayor es *k*, más fácil es que en cada torneo esté alguno de los mejores.
+
+::: {.callout-note .en-app title="En la aplicación · selection-ga, «Selección por torneo»"}
+[Explorar en selection-ga](https://josemagalan.github.io/selection-ga/#op=tournament&lang=es&f=1-2-3-4){.explorar target="_blank"}
+
+- Pulsa **Sortear de nuevo** varias veces y fíjate en cuántas copias recibe A.
+- Pulsa **Copias en 1000 repeticiones** y compara con las copias esperadas de la tabla.
+- Sube *k* de 2 a 5 y observa cómo se concentran las copias en D.
+- Cambia a la variante **Sin reemplazo** y comprueba que A ya no gana nunca.
+:::
+
+## 6.3 Ruleta [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#ruleta}
+
+¿Y si cada individuo recibe una probabilidad proporcional a su aptitud?
+
+En la **selección por ruleta**, cada individuo *i* recibe la probabilidad
+
+$$
+p_i = \frac{f_i}{\sum_j f_j}.
+$$
+
+Puede imaginarse como un reparto de boletos para un sorteo: quien tiene más aptitud tiene más boletos. Para girar la ruleta en un ordenador se calculan las probabilidades acumuladas $q_i = p_1 + \dots + p_i$, se saca un número aleatorio $r \in [0, 1)$ y se elige al primer individuo con $r < q_i$. Se gira tantas veces como padres se necesiten. Las aptitudes deben ser no negativas y su suma, mayor que cero.
+
+| | A | B | C | D |
+|---|:---:|:---:|:---:|:---:|
+| Aptitud $f$ | 1 | 2 | 3 | 4 |
+| Probabilidad $p$ | 0,100 | 0,200 | 0,300 | 0,400 |
+| Acumulada $q$ | 0,100 | 0,300 | 0,600 | 1,000 |
+| Copias esperadas en 4 giros | 0,4 | 0,8 | 1,2 | 1,6 |
+
+Las copias esperadas solo se cumplen en promedio. Cada giro es independiente, así que en una ejecución concreta un buen individuo puede quedarse sin copias y uno mediocre llevarse varias.
+
+::: {.callout-tip .ejemplo #ejemplo-6-3 title="Ejemplo reproducible 6.3 · Cuatro giros de la ruleta"}
+**Datos.** Aptitudes 1, 2, 3 y 4. Números aleatorios: 0,11; 0,71; 0,80 y 0,45.
+
+**Predice.** ¿En qué tramo cae cada número? ¿Qué padres salen?
+
+[Abrir: ruleta con aptitudes 1–4](https://josemagalan.github.io/selection-ga/#op=roulette&lang=es&r=135&f=1-2-3-4){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+0,11 cae en el tramo de B (0,10–0,30); 0,71 y 0,80, en el de D (0,60–1); 0,45, en el de C (0,30–0,60). Los padres son **B, D, D y C**: el mejor sale dos veces y el peor ninguna. Las copias obtenidas (0, 1, 1 y 2) se parecen a las esperadas, pero no coinciden.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (ruleta con aptitudes 1–4)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/selection-ga/#op=roulette&lang=es&r=135&f=1-2-3-4" loading="lazy" title="selection-ga: ruleta"></iframe>
+</details>
+
+<!-- Comprobado el 2026-10-07: la herramienta muestra las copias 0, 1, 1 y 2. -->
+:::
+
+::: {.callout-note .en-app title="En la aplicación · selection-ga, «Ruleta»"}
+[Explorar en selection-ga](https://josemagalan.github.io/selection-ga/#op=roulette&lang=es&f=1-2-3-4){.explorar target="_blank"}
+
+- Avanza paso a paso y sigue cada puntero en la ruleta y en su versión desenrollada.
+- Pulsa **Copias en 1000 repeticiones**: verás con qué frecuencia recibe cada individuo 0, 1, 2… copias. Es el ruido de la ruleta.
+- Pulsa **Ejemplo de Goldberg (x²)** para ver el ejemplo clásico de cuatro cadenas de 5 bits con aptitud $f(x) = x^2$ [@goldberg1989].
+- Con **Practicar**, la herramienta te da los números aleatorios y comprueba tus padres hueco a hueco.
+:::
+
+## 6.4 Cuando la ruleta deja de distinguir [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#ruleta-deja-de-distinguir}
+
+Con las aptitudes 1, 2, 3 y 4, el mejor individuo, D, tiene una probabilidad de $4/10 = 0{,}40$ en cada giro. ¿Qué ocurre si sumamos la misma cantidad a todas las aptitudes? El orden no cambia: D sigue siendo el mejor y A el peor. Pero la ruleta no mira el orden, sino los cocientes $f_i / \sum f$.
+
+::: {.callout-tip .ejemplo #ejemplo-6-4 title="Ejemplo reproducible 6.4 · Sumar una constante a la aptitud"}
+**Datos.** Los mismos cuatro individuos y los mismos números aleatorios del [ejemplo 6.3](#ejemplo-6-3) (0,11; 0,71; 0,80 y 0,45), pero sumando $C = 100$ a todas las aptitudes: 101, 102, 103 y 104.
+
+**Predice.** ¿Qué probabilidad tiene ahora D? ¿Qué padres salen con los mismos números?
+
+[Abrir: contraejemplo con C = 100](https://josemagalan.github.io/selection-ga/#op=offset&lang=es&r=135&shift=100&f=1-2-3-4){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+| | A | B | C | D |
+|---|:---:|:---:|:---:|:---:|
+| Aptitud desplazada $f + C$ | 101 | 102 | 103 | 104 |
+| Probabilidad $p$ | 0,246 | 0,249 | 0,251 | 0,254 |
+| Acumulada $q$ | 0,246 | 0,495 | 0,746 | 1,000 |
+| **Copias** | 1 | 1 | 1 | 1 |
+
+Los mismos números eligen ahora **A, C, D y B**: cada individuo sale una vez. La probabilidad de D baja de 0,40 a $104/410 \approx 0{,}254$, casi la de elegir al azar (0,25).
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (contraejemplo con C = 100)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/selection-ga/#op=offset&lang=es&r=135&shift=100&f=1-2-3-4" loading="lazy" title="selection-ga: contraejemplo de aptitud desplazada"></iframe>
+</details>
+
+<!-- Comprobado el 2026-10-07: la herramienta muestra las copias 1, 1, 1 y 1. -->
+:::
+
+La ruleta reparte según los cocientes $f_i / \sum f$, y sumar una constante $C$ a todas las aptitudes cambia esos cocientes aunque no cambie el orden. Por eso **la presión selectiva de la ruleta depende de la escala de la aptitud**.
+
+- Con $C > 0$, todos reciben los mismos «boletos» extra, las probabilidades se igualan y la presión disminuye.
+- Con $C < 0$, mientras todas las aptitudes sigan siendo positivas, las diferencias pesan más y la presión aumenta. Con 101–104, $C = -100$ devuelve exactamente las probabilidades de 1–4.
+
+Esto ocurre en la práctica más de lo que parece. Al final de una búsqueda, cuando la población ya es buena y las aptitudes se parecen, la ruleta deja de empujar justo cuando haría falta afinar. El torneo de la [sección 6.2](#torneo) no tiene este problema.
+
+::: {.callout-note .en-app title="En la aplicación · selection-ga, «Contraejemplo: aptitud desplazada»"}
+[Explorar en selection-ga](https://josemagalan.github.io/selection-ga/#op=offset&lang=es&f=1-2-3-4){.explorar target="_blank"}
+
+- Mueve el control **Desplazamiento C** entre 0 y 2000, en pasos de 100, y observa cómo se igualan los sectores de la ruleta y la fila de probabilidades.
+- Pulsa **Sortear de nuevo**: con otros números cambian los padres, pero no las probabilidades.
+- Abre **Introducir las aptitudes a mano** y prueba con beneficios de entre 1000 y 1040 €.
+:::
+
+**Notación.** Seguimos la de la herramienta: la constante es $C$ y el control se llama «Desplazamiento C».
+
+:::: {.callout-note .ejercicio #ejercicio-6-4 title="Ejercicio 6.4 · Convertir el coste en aptitud"}
+En el problema del viajante se minimiza la longitud de la ruta, así que para usar la ruleta hay que convertir el coste en aptitud. Cuatro rutas miden 10, 12, 15 y 20. Calcula las probabilidades de la ruleta con tres conversiones: $f = 20 - \text{coste}$, $f = 25 - \text{coste}$ y $f = 1/(1 + \text{coste})$. ¿Cuál deja a la ruta más larga sin ninguna probabilidad? ¿Cambia el orden? ¿Cambia la presión? ¿Qué ocurriría con un torneo binario?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+| Conversión | Aptitudes | Probabilidades |
+|---|---|---|
+| $20 - \text{coste}$ | 10; 8; 5; 0 | 0,435; 0,348; 0,217; 0 |
+| $25 - \text{coste}$ | 15; 13; 10; 5 | 0,349; 0,302; 0,233; 0,116 |
+| $1/(1 + \text{coste})$ | 0,091; 0,077; 0,063; 0,048 | 0,327; 0,277; 0,225; 0,171 |
+
+El orden es el mismo con las tres conversiones, pero la presión cambia. Con $20 - \text{coste}$, la ruta más larga no puede ser elegida nunca. Un torneo binario daría las mismas probabilidades con cualquiera de las tres, porque solo compara qué ruta es más corta.
+</details>
+::::
+
+## 6.5 Truncamiento: un contraejemplo [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#truncamiento}
+
+¿Qué ocurre si solo dejamos reproducirse a los mejores?
+
+En la **selección por truncamiento** se ordena la población por aptitud y solo pasa el corte una proporción τ de los mejores; los demás no tienen ninguna oportunidad. En selection-ga, cada padre se elige al azar entre los que pasan el corte.
+
+Hay otra regla de la misma familia, la **selección por media**: quien supera la aptitud media se copia dos veces y quien no, se elimina. El tamaño de la población no se mantiene, porque no tiene por qué haber exactamente la mitad por encima de la media. Usar la **mediana** lo resuelve, y entonces la regla es un truncamiento con τ = 0,5.
+
+Estas reglas parecen razonables, pero se desaconsejan: reducen la diversidad muy deprisa.
+
+Una regla parecida, con dos umbrales en lugar de uno (la media más y menos una desviación típica), no se comporta así. Es la regla de Axelrod, y la veremos en la [sección 6.8](#ampliaciones), porque su problema es otro: no está especificada por completo.
+
+::: {.callout-tip .ejemplo #ejemplo-6-5 title="Ejemplo reproducible 6.5 · Cuarenta generaciones solo con selección"}
+**Datos.** La pantalla «Comparar mecanismos» de selection-ga simula 40 generaciones solo con selección: cada generación es la población de padres de la anterior, sin cruce ni mutación. Las poblaciones tienen 50 individuos con aptitudes al azar entre 1 y 100, y se hacen 50 repeticiones. Comparamos tres mecanismos con sus valores por defecto: truncamiento con τ = 0,5, torneo con *k* = 2 y ruleta.
+
+**Predice.** ¿Qué mecanismo deja menos individuos distintos al cabo de cinco generaciones? ¿Con cuál se pierde más a menudo el mejor individuo inicial?
+
+[Abrir: comparar mecanismos](https://josemagalan.github.io/selection-ga/#cmp=all&lang=es){.abrir target="_blank"}
+
+La simulación tarda unos segundos. Su resultado aparece al final de la página, en «Varias generaciones solo con selección».
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+| Mecanismo | Distintos en la generación 5 | Distintos en la generación 20 | Toma de control | El mejor se pierde |
+|---|:---:|:---:|---|:---:|
+| Truncamiento (τ = 0,5) | 2,2 | 1,1 | generación 6 (en el 76 % de las repeticiones) | 24 % |
+| Torneo (*k* = 2) | 4,5 | 1,1 | generación 8 (en el 92 %) | 8 % |
+| Ruleta | 10,7 | 3,2 | no en la mayoría (solo en el 16 %) | 48 % |
+
+Las gráficas muestran además que, ya en la primera generación, el truncamiento deja unos 21 individuos distintos de 50, frente a unos 28 del torneo y de la ruleta.
+</details>
+
+<!-- Comprobado el 2026-10-07: la tabla de la herramienta muestra estos valores con la simulación inicial. Los valores de la primera generación se obtuvieron con su código (`compare.simulate`, semilla 1). -->
+:::
+
+El truncamiento elimina de golpe a la mitad de la población. En cinco generaciones apenas quedan dos individuos distintos. Es el mecanismo que más diversidad pierde para una misma intensidad de selección [@blickle1996], y por eso lo usamos como contraejemplo. El torneo binario también concentra la población, pero más despacio al principio. La ruleta es la más lenta con estas aptitudes, que van de 1 a 100; ya vimos en la [sección 6.4](#ruleta-deja-de-distinguir) que su presión depende de la escala.
+
+## 6.6 Selección y diversidad a lo largo de generaciones [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#seleccion-y-diversidad}
+
+Si repetimos la selección generación tras generación, ¿mejora la población indefinidamente?
+
+La selección cambia la frecuencia de los individuos que ya existen, pero no crea ninguno nuevo. Sin cruce ni mutación, la población acaba formada por copias de unos pocos, o de uno solo. La aptitud media sube mientras desaparecen los peores y se detiene cuando ya no queda nada que elegir. Además, como la selección es aleatoria, el mejor individuo inicial puede perderse por mala suerte. A esta pérdida por azar se la llama **deriva genética**.
+
+En el [ejemplo 6.5](#ejemplo-6-5), el mejor inicial se perdió en casi la mitad de las repeticiones con la ruleta (48 %), en una de cada cuatro con el truncamiento (24 %) y en el 8 % con el torneo. La **toma de control** (*takeover time*) es el número de generaciones hasta que todos los individuos son copias del mejor inicial [@goldberg1991].
+
+<!-- Seguimiento interno: los cuatro valores de «Simular de nuevo» de la caja siguiente proceden del código de selection-ga (commit f2de292), no de la interfaz. -->
+
+::: {.callout-note .en-app title="En la aplicación · selection-ga, «Comparar mecanismos»"}
+[Explorar en selection-ga](https://josemagalan.github.io/selection-ga/#cmp=all&lang=es){.explorar target="_blank"}
+
+- En la gráfica de **aptitud media**, fíjate en cuándo deja de subir cada mecanismo.
+- Pulsa **Simular de nuevo** para repetir con otras poblaciones. En las cuatro simulaciones siguientes el mejor se pierde con la ruleta en el 52, 66, 58 y 56 % de las repeticiones, y con el torneo en el 14, 12, 14 y 14 %.
+- Elige qué mecanismos aparecen en las gráficas (hasta cuatro) y añade el **ranking lineal** o el **SUS**.
+:::
+
+La aptitud media deja de mejorar en cuanto la población se llena de copias: en pocas generaciones con truncamiento y torneo, y más despacio con la ruleta. **La selección sola no basta.** Hacen falta operadores que creen soluciones nuevas (cruce y mutación, capítulos 7 y 8) y un reemplazamiento que no pierda la mejor solución (elitismo, capítulo 9). Y como el resultado depende del azar, para comparar mecanismos o parámetros hay que repetir las ejecuciones (capítulo 10).
+
+<!-- Enlaces pendientes: cuando existan los capítulos, enlazar con referencias de Quarto a #sec-cruce (7), #sec-mutacion (8), #sec-reemplazo (9) y #sec-experimentos (10). Los números siguen el índice propuesto (P009), no aprobado. -->
+
+:::: {.callout-note .ejercicio #ejercicio-6-6 title="Ejercicio 6.6 · ¿Basta con una ejecución?"}
+Un compañero ejecuta una sola vez la simulación con la ruleta y el mejor no se pierde. Concluye que con la ruleta el mejor nunca se pierde. ¿Qué le dirías? ¿Cómo lo comprobarías con la herramienta?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+Una ejecución no basta para hablar de frecuencias. En las 50 repeticiones de cada simulación, el mejor se pierde con la ruleta en aproximadamente la mitad de los casos, y la proporción varía entre simulaciones (del 48 al 66 % en las cinco primeras). Que no se pierda en una ejecución concreta es perfectamente compatible con esa frecuencia. Para comprobarlo, basta con mirar la columna «El mejor se pierde» y pulsar «Simular de nuevo» varias veces.
+</details>
+::::
+
+## 6.7 Otros mecanismos de selección [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#otros-mecanismos}
+
+Esta sección amplía el recorrido básico. Requiere manejar probabilidades acumuladas y la idea de copias esperadas de las secciones [6.2](#torneo) y [6.3](#ruleta).
+
+**Muestreo estocástico universal (SUS).** Es la ruleta de @baker1987 girada una sola vez. Cada individuo ocupa un tramo igual a sus copias esperadas, $e_i = N \cdot f_i / \sum f$, y sobre la ruleta se colocan $N$ punteros separados exactamente 1, a partir de un único número aleatorio. Cada individuo recibe sus copias esperadas redondeadas hacia abajo o hacia arriba. La probabilidad de cada individuo sigue siendo la de la ruleta, pero se elimina el ruido del muestreo.
+
+::: {.callout-tip .ejemplo #ejemplo-6-7 title="Ejemplo reproducible 6.7 · SUS frente a la ruleta"}
+**Datos.** Aptitudes 1, 2, 3 y 4, como en el [ejemplo 6.3](#ejemplo-6-3). Copias esperadas: 0,4; 0,8; 1,2 y 1,6.
+
+**Predice.** Con SUS, ¿cuántas copias puede recibir D? ¿Y A?
+
+[Abrir: SUS con aptitudes 1–4](https://josemagalan.github.io/selection-ga/#op=sus&lang=es&r=135&f=1-2-3-4){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+D solo puede recibir 1 o 2 copias, y A, 0 o 1. En este sorteo los padres son **A, B, C y D**: cada uno recibe una copia, sus copias esperadas redondeadas. Con la ruleta ([ejemplo 6.3](#ejemplo-6-3)), D recibió 2 copias y A ninguna, pero en otro sorteo podría haber recibido 0, 1, 2, 3 o 4.
+</details>
+
+<!-- Comprobado el 2026-10-07: la herramienta muestra «Resultado: los padres son A B C D». -->
+:::
+
+**Selección basada en el rango.** Solo importa el orden. En el **ranking lineal**, el mejor espera *s* copias y el peor, 2 − *s*, con *s* entre 1 y 2 [@baker1985; @eiben2015]. En el **ranking exponencial**, cada individuo tiene 1/*c* veces la probabilidad del anterior, con 0 < *c* < 1, lo que permite presiones más altas [@blickle1996]. Ninguno depende de la escala de la aptitud.
+
+**Escalado de la aptitud.** Transforma la aptitud antes de girar la ruleta [@goldberg1989]. El **escalado lineal** conserva la media y hace que el mejor espere *cm* copias. El **truncamiento sigma** resta la base $\bar f - c\,\sigma$. Ojo: esta *c* minúscula no es la constante *C* de la [sección 6.4](#ruleta-deja-de-distinguir).
+
+**Selección de Boltzmann.** Asigna a cada individuo un peso $\exp(f_i / T)$ [@delamaza1993]. La temperatura *T* regula la presión. Solo cuentan las diferencias de aptitud, así que sumar una constante no cambia nada.
+
+**Variantes del torneo.** El tamaño *k*, la variante «Sin reemplazo» y el torneo estocástico, en el que el mejor del torneo solo gana con probabilidad *p*. Con *k* = 2 y con reemplazo, las copias esperadas coinciden con las del ranking lineal con $s = 2 - 1/N$ [@blickle1996].
+
+::: {.callout-note .en-app title="En la aplicación · selection-ga"}
+- Abre [Ranking lineal](https://josemagalan.github.io/selection-ga/#op=linear-ranking&lang=es&f=1-2-3-4){target="_blank"} y mueve *s* entre 1 y 2. Con *s* = 1, ¿qué probabilidad tiene cada uno?
+- Abre [Ranking exponencial](https://josemagalan.github.io/selection-ga/#op=exponential-ranking&lang=es&f=1-2-3-4){target="_blank"}, [Ruleta con escalado](https://josemagalan.github.io/selection-ga/#op=scaled-roulette&lang=es&f=1-2-3-4){target="_blank"} y [Selección de Boltzmann](https://josemagalan.github.io/selection-ga/#op=boltzmann&lang=es&f=1-2-3-4){target="_blank"}. Introduce las aptitudes 101, 102, 103 y 104 y compara con lo que pasaba con la ruleta.
+- En [Comparar mecanismos](https://josemagalan.github.io/selection-ga/#cmp=all&lang=es){target="_blank"}, la tabla «Presión y diversidad en 1000 repeticiones» mide para cada mecanismo las copias del mejor, la intensidad de selección, la pérdida de diversidad y la variabilidad del muestreo.
+:::
+
+## 6.8 Ampliaciones [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas} {#ampliaciones}
+
+**Cómo medir la selección.** @blickle1996 comparan los mecanismos por su **intensidad de selección**, cuánto sube la aptitud media en desviaciones típicas, y por la **pérdida de diversidad**. @baker1987 estudia el sesgo y la dispersión del muestreo. @goldberg1991 analizan el tiempo de toma de control. selection-ga calcula estas medidas en «Comparar mecanismos».
+
+**Dinámica a lo largo de muchas generaciones.** [SelectionMechanisms](https://josemagalan.shinyapps.io/SelectionMechanisms/) permite comparar mecanismos durante muchas generaciones y simulaciones, con su efecto sobre la convergencia, la aptitud y la diversidad. Es la aplicación en la que se inspira la simulación de selection-ga. Se describe en un artículo aceptado en CIO 2026, cuya referencia definitiva se añadirá cuando se publique.
+
+**Un mecanismo hay que especificarlo por completo.** La regla de @axelrod1986 viene de la simulación social: la usó en su modelo evolutivo de las normas. Se calculan la media $\bar f$ y la desviación típica σ de la población, y cada individuo tiene 2 hijos si $f \ge \bar f + \sigma$, ninguno si $f \le \bar f - \sigma$ y 1 en el resto.
+
+La regla no dice qué hacer cuando el número de hijos *M* no coincide con el tamaño *N* de la población, y lo normal es que no coincida. Con las aptitudes 1, 2, 3 y 10 ($\bar f = 4$, σ ≈ 3,54), solo D llega a $\bar f + \sigma \approx 7{,}54$ y nadie queda por debajo de $\bar f - \sigma \approx 0{,}46$, así que salen 5 hijos para 4 huecos. Con 1, 8, 9 y 10 ($\bar f = 7$, σ ≈ 3,54) ocurre lo contrario: A no pasa de $\bar f - \sigma \approx 3{,}46$, nadie llega a $\bar f + \sigma$ y salen 3 hijos. Tampoco dice qué hacer si todos tienen la misma aptitud: entonces σ = 0 y cada individuo cumple a la vez las dos condiciones.
+
+Hay varias formas de completar la regla:
+
+- **Ajustar al azar.** Si sobran hijos, se eliminan al azar de uno en uno; si faltan, se duplican hijos elegidos al azar. Es lo que hicieron @galan2005 al reimplementar el modelo, y lo que hace selection-ga.
+- **Usar percentiles.** Se dan 2 hijos a una proporción de los mejores y ninguno a la misma proporción de los peores, de modo que siempre hay *N* hijos.
+
+::: {.callout-tip .ejemplo #ejemplo-6-8 title="Ejemplo reproducible 6.8 · El mismo individuo, dos sorteos"}
+**Datos.** Aptitudes 1, 2, 3 y 10. Antes del ajuste, A, B y C tienen 1 hijo y D tiene 2: 5 hijos para 4 huecos. La herramienta elimina uno al azar.
+
+**Predice.** ¿Con qué probabilidad se queda D con una sola copia, como los demás, aunque destaque tanto?
+
+[Abrir: primer sorteo](https://josemagalan.github.io/selection-ga/#op=axelrod&lang=es&r=1&f=1-2-3-10){.abrir target="_blank"}
+[Abrir: segundo sorteo](https://josemagalan.github.io/selection-ga/#op=axelrod&lang=es&r=6&f=1-2-3-10){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+En el primer sorteo se elimina uno de los hijos de D, y los padres son **A, B, C y D**: el mejor acaba con una copia, como todos. En el segundo se elimina el de C, y los padres son **A, B, D y D**. Como 2 de los 5 hijos son de D, lo primero ocurre con probabilidad 2/5 = 0,4. La recompensa que da la regla depende de un paso que la regla no especifica.
+</details>
+:::
+
+<!-- Comprobado el 2026-10-08 en la interfaz (Chromium sin interfaz, paso 11 de 11): r=1 → «los padres son A B C D»; r=6 → «A B D D»; con f=1-8-9-10 y r=2 → «B C D D». Código: js/operators/axelrod.js, commit f2de292. -->
+
+La regla de Axelrod no pierde diversidad tan deprisa como el truncamiento. En la simulación del [ejemplo 6.5](#ejemplo-6-5) quedan 6,4 individuos distintos en la generación 5, frente a 2,2 con el truncamiento, y el mejor no se pierde en ninguna repetición. Pero el detalle importa. @galan2005 repitieron el modelo de las normas con otros mecanismos de selección, y los resultados cambiaron mucho. Elegir el mecanismo de selección, y describirlo por completo, forma parte del modelo.
+
+<!-- Comprobado el 2026-10-08: la tabla «Varias generaciones solo con selección» de «Comparar mecanismos» muestra para Axelrod 6,4 / 1,2 / generación 8 (100 %) / 0 %. Que los resultados cambian con el mecanismo: Galán e Izquierdo (2005, §6.11–6.16), según el texto docente de selection-ga; pendiente de cotejo con el artículo. -->
+
+::: {.callout-note .en-app title="En la aplicación · selection-ga, «Selección de Axelrod»"}
+[Explorar en selection-ga](https://josemagalan.github.io/selection-ga/#op=axelrod&lang=es&f=1-8-9-10){.explorar target="_blank"}
+
+- Con las aptitudes 1, 8, 9 y 10 faltan hijos. Avanza paso a paso y mira a quién se duplica. Pulsa **Sortear de nuevo** varias veces.
+- Introduce cuatro aptitudes iguales y observa cómo resuelve la herramienta el caso σ = 0.
+- En [Comparar mecanismos](https://josemagalan.github.io/selection-ga/#cmp=all&lang=es){target="_blank"}, compara su «Variabilidad del muestreo» con la de la ruleta y el torneo.
+:::
+
+## Resumen {#resumen}
+
+- La selección favorece a los mejores, pero debe dejar oportunidades a los demás.
+- El torneo solo depende del orden. La ruleta depende de la escala de la aptitud y pierde presión cuando las aptitudes se parecen.
+- El truncamiento reduce la diversidad muy deprisa.
+- La selección no crea soluciones nuevas, y el mejor puede perderse por azar.
+
+## Referencias del capítulo {#referencias}
+
+<!-- Seguimiento interno: entradas en referencias.bib, tomadas de la bibliografía de selection-ga (commit f2de292), pendientes de cotejo con las obras. La lista se genera con las obras citadas en el capítulo. -->
+
+::: {#refs}
+:::

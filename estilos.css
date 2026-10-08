@@ -1,0 +1,130 @@
+/* Tres tipos de contenido (D021): explicación (texto normal), ejemplo reproducible y uso de la aplicación. */
+
+.callout.ejemplo {
+  border-left-color: #0f6e56 !important;
+}
+.callout.ejemplo > .callout-header {
+  background-color: #e3f2ec !important;
+}
+.callout.ejemplo .callout-icon::before {
+  content: "▶";
+  font-style: normal;
+  color: #0f6e56;
+  background-image: none !important;
+}
+
+.callout.en-app {
+  border-left-color: #4a3f9e !important;
+}
+.callout.en-app > .callout-header {
+  background-color: #ecebf8 !important;
+}
+.callout.en-app .callout-icon::before {
+  content: "⚙";
+  font-style: normal;
+  color: #4a3f9e;
+  background-image: none !important;
+}
+
+/* Botón para abrir la herramienta en el estado del ejemplo */
+a.abrir {
+  display: inline-block;
+  padding: 0.35rem 0.8rem;
+  margin: 0.15rem 0.4rem 0.15rem 0;
+  border-radius: 0.4rem;
+  background: #0f6e56;
+  color: #fff !important;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+a.abrir:hover { background: #0b5643; }
+
+/* Botón para explorar libremente (cajas «En la aplicación»): sin estado fijado */
+a.explorar {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  margin: 0.1rem 0 0.4rem 0;
+  border-radius: 0.4rem;
+  border: 1.5px solid #4a3f9e;
+  background: #fff;
+  color: #4a3f9e !important;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+a.explorar::after { content: " ↗"; }
+a.explorar:hover { background: #ecebf8; }
+
+/* Herramienta incrustada, desplegable */
+details.incrustada { margin-top: 0.6rem; }
+details.incrustada summary { cursor: pointer; font-weight: 600; }
+details.incrustada iframe {
+  width: 100%;
+  height: 720px;
+  border: 1px solid #ccc;
+  border-radius: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+/* Ejercicio (papel y lápiz): actividad del alumno sin herramienta */
+.callout.ejercicio {
+  border-left-color: #8a5a2b !important;
+}
+.callout.ejercicio > .callout-header {
+  background-color: #f6ede3 !important;
+}
+.callout.ejercicio .callout-icon::before {
+  content: "✎";
+  font-style: normal;
+  color: #8a5a2b;
+  background-image: none !important;
+}
+
+/* Objetivos del capítulo: aspecto de aviso, con diana en lugar de «!» */
+.callout.objetivos .callout-icon::before {
+  content: "◎";
+  font-style: normal;
+  font-weight: 700;
+  color: #b07b00;
+  background-image: none !important;
+}
+
+/* Nota de verificación (ya no se usa en el texto: pasa a comentarios en el .qmd) */
+.verificado {
+  font-size: 0.82rem;
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+/* Etiqueta de nivel. Código de las pistas de esquí:
+   Básico azul, Avanzado rojo, Para saber más negro.
+   En el texto se lee el nombre completo; en «En esta página», la sigla. */
+.nivel {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.3;
+  padding: 0.08rem 0.5rem;
+  border-radius: 999px;
+  color: #fff;
+  background: #666;
+  vertical-align: middle;
+  letter-spacing: 0.01em;
+}
+.nivel.basico    { background: #1f63b0; }
+.nivel.avanzado  { background: #b3261e; }
+.nivel.saber-mas { background: #1c1c1c; }
+
+.nivel .corto { display: none; }
+.nivel.solo-corto .corto { display: inline; }
+#TOC .nivel .largo,
+nav[role="doc-toc"] .nivel .largo { display: none; }
+#TOC .nivel .corto,
+nav[role="doc-toc"] .nivel .corto { display: inline; }
+#TOC .nivel,
+nav[role="doc-toc"] .nivel {
+  font-size: 0.68rem;
+  padding: 0 0.38rem;
+  margin-left: 0.2rem;
+}

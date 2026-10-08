@@ -1,0 +1,27 @@
+# Cómo leer este libro {.unnumbered}
+
+El libro distingue a simple vista lo que se lee de lo que se hace. La teoría va como texto normal; todo lo que te pide trabajar va dentro de una caja.
+
+**Explicaciones.** Son el texto y las figuras que presentan los conceptos. Se leen como cualquier libro y no necesitan ninguna herramienta.
+
+::: {.callout-tip .ejemplo title="Ejemplo reproducible"}
+Plantea una situación concreta, con datos y números aleatorios fijados, e invita a predecir el resultado antes de verlo. Los botones verdes **Abrir** llevan a la aplicación exactamente en ese estado, de modo que el resultado coincide con el del libro. También puede desplegarse la herramienta dentro de la página.
+:::
+
+::: {.callout-note .en-app title="En la aplicación"}
+Da instrucciones para seguir explorando por cuenta propia: qué control mover, qué botón pulsar y qué observar. Aquí los resultados ya no están fijados de antemano. El botón **Explorar** abre la pantalla correspondiente para probar por tu cuenta.
+:::
+
+::: {.callout-note .ejercicio title="Ejercicio"}
+Se resuelve con papel y lápiz: predecir, calcular o argumentar. Cuando tiene solución, está plegada al final de la caja; intenta resolverlo antes de abrirla.
+:::
+
+Cada capítulo empieza con sus **objetivos**, en una caja como esta:
+
+::: {.callout-warning .objetivos title="Objetivos del capítulo"}
+Lo que podrás hacer al terminar el recorrido básico del capítulo.
+:::
+
+Las secciones llevan una etiqueta de nivel: [[Básico]{.largo}[B]{.corto}]{.nivel .basico}, [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} y [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas}. En el índice lateral «En esta página» aparecen abreviadas como [[B]{.corto}]{.nivel .basico .solo-corto}, [[A]{.corto}]{.nivel .avanzado .solo-corto} y [[+]{.corto}]{.nivel .saber-mas .solo-corto}. El recorrido básico puede leerse de forma continua sin las ampliaciones.
+
+Todas las herramientas se abren desde el portal [Algoritmos genéticos, paso a paso](https://josemagalan.github.io/genetic-algorithms-lab/).

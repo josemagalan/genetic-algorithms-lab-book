@@ -1,0 +1,8 @@
+# Salidas de Quarto (las genera GitHub Actions)
+/_book/
+/.quarto/
+*_files/
+*.html
+!vendor/**/*.html
+
+**/*.quarto_ipynb

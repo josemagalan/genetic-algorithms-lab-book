@@ -1,0 +1,40 @@
+project:
+  type: book
+  output-dir: _book
+  post-render: python3 filtros/e-ante-i.py   # «y» → «e» ante i-/hi- (Galán e Izquierdo)
+  resources:
+    - vendor/
+
+book:
+  title: "Algoritmos genéticos, paso a paso"
+  site-url: https://josemagalan.github.io/genetic-algorithms-lab-book/
+  repo-url: https://github.com/josemagalan/genetic-algorithms-lab-book
+  repo-branch: main
+  repo-actions: [edit, issue, source]   # «Editar esta página», «Informar de un problema», «Ver el código»
+  author:
+    - José Manuel Galán
+    - Silvia Díaz-de la Fuente
+    - Virginia Ahedo
+    - María Pereda
+    - José Ignacio Santos
+  date: "2026-10-07"
+  language: es
+  chapters:
+    - index.qmd
+    - 06-seleccion.qmd
+
+lang: es
+bibliography: referencias.bib     # entradas pendientes de cotejo (ver la cabecera del archivo)
+csl: vendor/csl/apa.csl           # APA 7.ª ed. (CC BY-SA 3.0), en local y adaptada al castellano (vendor/csl/LEEME.md)
+link-citations: true
+
+format:
+  html:
+    theme: default          # sin fuentes de Google: el libro no depende de CDN, como las herramientas
+    css: estilos.css
+    html-math-method:
+      method: katex
+      url: "vendor/katex/"   # KaTeX 0.19.0 (MIT) copiado en local
+    toc: true
+    toc-title: "En esta página"
+    number-sections: false
