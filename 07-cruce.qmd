@@ -107,11 +107,9 @@ Con los dos padres del reparto de tareas, calcula los hijos del cruce en dos pun
 <details>
 <summary>**Ver la solución**</summary>
 
-Se intercambian las posiciones 4 y 5: el Hijo 1 es (2, 4, 1, **2, 3**, 1) y el Hijo 2, (1, 4, 2, **3, 3**, 4). En la posición 5 el intercambio no cambia nada, porque los dos padres tienen un 3. Ningún hijo puede asignar la tarea 1 a la máquina 3: allí solo puede haber un 2 o un 1, los valores de los padres. Para que aparezcan valores nuevos hace falta la mutación.
+Se intercambian las posiciones 4 y 5: el Hijo 1 es (2, 4, 1, **2, 3**, 1) y el Hijo 2, (1, 4, 2, **3, 3**, 4). En la posición 5 el intercambio no cambia nada, porque los dos padres tienen un 3. Ningún hijo puede asignar la tarea 1 a la máquina 3: allí solo puede haber un 2 o un 1, los valores de los padres. Para que aparezcan valores nuevos hace falta la [mutación](08-mutacion.qmd#sec-mutacion).
 </details>
 ::::
-
-<!-- Enlace pendiente: cuando exista, enlazar «la mutación» con #sec-mutacion (8). -->
 
 ::: {.callout-note .en-app title="En la aplicación · crossover-ga, «Cruce en un punto»"}
 [Explorar en crossover-ga](https://josemagalan.github.io/crossover-ga/#op=one-point&lang=es){.explorar target="_blank"}
