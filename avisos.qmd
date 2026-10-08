@@ -1,0 +1,9 @@
+# Agradecimientos y avisos {.unnumbered #sec-avisos}
+
+## Agradecimientos {#agradecimientos}
+
+Los autores agradecen el apoyo del plan Claude Team para científicos de Anthropic.
+
+## Uso de asistentes de IA {#uso-ia}
+
+En la elaboración de este material se han utilizado asistentes de inteligencia artificial. Los contenidos originales y de partida —herramientas, vídeos, materiales docentes y publicaciones— son obra de los autores. Todos los materiales han sido revisados, corregidos y verificados por los autores, que son los responsables de esta publicación.

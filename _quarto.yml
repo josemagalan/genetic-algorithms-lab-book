@@ -22,6 +22,7 @@ book:
   chapters:
     - index.qmd
     - 06-seleccion.qmd
+    - avisos.qmd            # siempre al final: los capítulos nuevos van antes
 
 lang: es
 bibliography: referencias.bib     # entradas pendientes de cotejo (ver la cabecera del archivo)

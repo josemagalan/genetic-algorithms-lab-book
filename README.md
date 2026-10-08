@@ -12,6 +12,7 @@ Libro para aprender algoritmos genéticos de forma práctica, con actividades so
 |---|---|
 | Cómo leer este libro | Borrador |
 | 6. Seleccionar a los padres | Borrador completo, en revisión |
+| Agradecimientos y avisos | Texto aprobado |
 
 El resto de capítulos está en preparación.
 
@@ -37,6 +38,10 @@ Cada página del libro tiene enlaces «Informar sobre problema» y «Editar esta
 ## Autores
 
 José Manuel Galán, Silvia Díaz-de la Fuente, Virginia Ahedo, María Pereda y José Ignacio Santos.
+
+## Agradecimientos y uso de IA
+
+Los autores agradecen el apoyo del plan Claude Team para científicos de Anthropic. En la elaboración de este material se han utilizado asistentes de inteligencia artificial; los contenidos originales son obra de los autores, que han revisado, corregido y verificado todos los materiales y son los responsables de la publicación. El texto completo está en la página «Agradecimientos y avisos» del libro.
 
 ## Licencia
 
