@@ -13,7 +13,8 @@ Libro para aprender algoritmos genéticos de forma práctica, con actividades so
 | Cómo leer este libro | Borrador |
 | 6. Seleccionar a los padres | Borrador completo, en revisión |
 | 7. Cruzar | Borrador completo, en revisión |
-| 8. Mutar | Borrador completo, pendiente de revisión |
+| 8. Mutar | Borrador completo, en revisión |
+| 9. Reemplazar y parar | Borrador completo, pendiente de revisión |
 | Agradecimientos y avisos | Texto aprobado |
 
 El resto de capítulos está en preparación.

@@ -1,0 +1,402 @@
+# Reemplazar y parar {#sec-reemplazo}
+
+<!-- Seguimiento interno (no visible): redactado el 2026-10-08. Los ejemplos reproducibles se comprobaron en selection-ga (commit f2de292, 2026-10-07) el 2026-10-08, con su código y en la interfaz publicada. Guiones: memoria/verificaciones/2026-10-08-reemplazo.js y 2026-10-08-reemplazo-interfaz.py. La figura 9.1 es propia: figuras/09-elitismo-parada.py (Python 3, solo biblioteca estándar) genera figuras/09-elitismo-parada.svg. Registro en memoria/sesiones/2026-10-08-09-capitulo-9-reemplazo.md. En selection-ga, las edades de los padres salen de la semilla de la población (s=) y el hueco «al azar» es floor(u · μ). -->
+
+**Herramientas:** [selection-ga](https://josemagalan.github.io/selection-ga/#lang=es), accesible desde el [portal](https://josemagalan.github.io/genetic-algorithms-lab/).
+
+::: {.callout-warning .objetivos title="Objetivos del capítulo"}
+Al terminar el recorrido básico de este capítulo podrás:
+
+- explicar qué decide el reemplazo y distinguir el reemplazo generacional del estado estacionario;
+- formar a mano la generación siguiente con y sin élite, y predecir si se conserva la mejor solución;
+- explicar qué gana y qué arriesga el elitismo;
+- enumerar los criterios de parada habituales y elegir uno según se conozca o no el óptimo y los recursos disponibles;
+- leer una curva de la mejor aptitud y señalar dónde pararía cada criterio.
+:::
+
+## 9.1 ¿Quién pasa a la generación siguiente? [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#quien-sobrevive}
+
+Ya tenemos padres elegidos por la selección e hijos creados por cruce y mutación. ¿Con quiénes seguimos?
+
+En cada generación, un algoritmo genético selecciona padres ([capítulo 6](06-seleccion.qmd#sec-seleccion)), los cruza ([capítulo 7](07-cruce.qmd#sec-cruce)) y muta a los descendientes ([capítulo 8](08-mutacion.qmd#sec-mutacion)). Falta decidir qué individuos forman la población de la generación siguiente: los hijos, los padres o una mezcla de los dos. Esa decisión es el **reemplazo** (o reemplazamiento), también llamado **selección de supervivientes**: la selección de padres decide quién se reproduce y el reemplazo, quién sigue en la población [@talbi2009, p. 221]. Como el tamaño de la población suele ser constante, si entran hijos tienen que salir otros tantos individuos.
+
+Hay dos estrategias básicas [@talbi2009, p. 221; @mitchell1998, apartado 5.4]:
+
+- **Reemplazo generacional.** Los hijos sustituyen a toda la población de padres. Es el del algoritmo genético canónico de Holland y el más extendido.
+- **Estado estacionario** (*steady state*). En cada paso solo entran uno o unos pocos hijos, que sustituyen a otros tantos miembros de la población. El resto sigue igual.
+
+Después de reemplazar se vuelve a empezar el ciclo, hasta que se cumple un **criterio de parada**. Lo veremos en la [sección 9.6](#cuando-parar).
+
+**Notación.** Seguimos la de la herramienta. Los padres son A, B, C… y su número es μ (*mu*); los hijos son a, b, c… y su número es λ (*lambda*). En el [capítulo 6](06-seleccion.qmd#torneo) hablamos de sortear «con reemplazo» en el sentido de devolver al individuo para que pueda volver a salir; en este capítulo, *reemplazo* significa sustituir a unos individuos de la población por otros.
+
+:::: {.callout-note .ejercicio #ejercicio-9-1 title="Ejercicio 9.1 · Predice"}
+En el reemplazo generacional, todos los hijos sustituyen a todos los padres. ¿Puede la mejor aptitud de la población ser peor en la generación siguiente que en la actual? ¿Y la aptitud media? Anota tu predicción: la comprobarás en el [ejemplo 9.2](#ejemplo-9-2).
+::::
+
+## 9.2 Reemplazo generacional [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#generacional}
+
+Si los hijos sustituyen a todos los padres, ¿qué le pasa al mejor padre?
+
+En el reemplazo generacional se crean tantos hijos como padres ($\lambda = \mu$) y la generación siguiente está formada solo por los hijos [@talbi2009, p. 221]. Es sencillo, y cada generación es una población nueva. Pero nada garantiza que algún hijo sea tan bueno como el mejor padre. Un buen individuo puede perderse porque la selección no lo elija o porque el cruce o la mutación destruyan lo que lo hacía bueno [@mitchell1998, apartado 5.4].
+
+::: {.callout-tip .ejemplo #ejemplo-9-2 title="Ejemplo reproducible 9.2 · Los hijos sustituyen a todos"}
+**Datos.** Seis padres y seis hijos, ya creados por cruce y mutación:
+
+| Padre | A | B | C | D | E | F |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| Aptitud | 12 | 30 | 5 | 21 | 9 | 17 |
+
+| Hijo | a | b | c | d | e | f |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| Aptitud | 25 | 3 | 18 | 9 | 14 | 7 |
+
+La pantalla se llama «Generacional con elitismo»; con un **Tamaño de la élite e** igual a 0 es el reemplazo generacional puro.
+
+**Predice.** ¿Quiénes forman la generación siguiente? ¿Cómo cambian la mejor aptitud y la aptitud media?
+
+[Abrir: reemplazo generacional, e = 0](https://josemagalan.github.io/selection-ga/#op=elitism&lang=es&elite=0&f=12-30-5-21-9-17&g=25-3-18-9-14-7){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+La generación siguiente es **a b c d e f**: sobreviven los 6 hijos y ningún padre. La mejor aptitud baja de 30 a 25, porque B no tiene sustituto tan bueno, y la media baja de 15,7 a 12,7. Responde al [ejercicio 9.1](#ejercicio-9-1): con el reemplazo generacional puro, la mejor aptitud y la media pueden empeorar de una generación a otra.
+</details>
+:::
+
+<!-- Comprobado el 2026-10-08: la herramienta muestra en el paso 9 de 9 «Siguiente generación: a b c d e f. Sobreviven 0 padres y 6 hijos; la aptitud media pasa de 15,7 a 12,7 y la mejor, de 30 a 25. El mejor padre se ha perdido: este reemplazo no es elitista.» -->
+
+En una generación concreta puede ocurrir lo contrario: si algún hijo supera al mejor padre, la mejor aptitud sube. Lo que el reemplazo generacional puro no garantiza es que no baje.
+
+## 9.3 Elitismo [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#elitismo}
+
+¿Cómo evitamos perder la mejor solución sin renunciar al reemplazo generacional?
+
+El **elitismo** consiste en pasar a la generación siguiente, sin cruzarlos ni mutarlos, el mejor individuo o los *e* mejores. Se les llama la **élite**. Lo introdujo De Jong en su tesis de 1975 [@goldberg1989, p. 115; @mitchell1998, apartado 5.4], y se añade a menudo al reemplazo generacional. La élite no se aparta de la población: sigue en ella y puede ser elegida como padre en la generación siguiente, de modo que sus genes también se combinan con los de otros.
+
+Para que la población no crezca, alguien tiene que dejarle sitio. Hay dos formas parecidas de organizarlo:
+
+- Crear solo $\mu - e$ hijos y añadirles la élite.
+- Crear μ hijos, como en el reemplazo generacional puro, y que la élite ocupe el lugar de los *e* peores. Es lo que hace selection-ga.
+
+En el modelo original de De Jong, la población crecía en uno: si el mejor individuo encontrado hasta entonces no estaba entre los hijos, se añadía como miembro *N* + 1 [@goldberg1989, p. 115].
+
+Con al menos un individuo de élite, la mejor aptitud de la población nunca baja. Muchos estudios han encontrado que el elitismo mejora claramente el funcionamiento del algoritmo [@mitchell1998, apartado 5.4]. Pero tiene un precio, que veremos en la [sección 9.5](#elitismo-ejecucion).
+
+::: {.callout-tip .ejemplo #ejemplo-9-3 title="Ejemplo reproducible 9.3 · Un individuo de élite"}
+**Datos.** Los mismos padres e hijos del [ejemplo 9.2](#ejemplo-9-2), con un **Tamaño de la élite e** igual a 1.
+
+**Predice.** ¿Quién forma la élite? ¿Qué hijo desaparece? ¿Cómo cambian ahora la mejor aptitud y la media?
+
+[Abrir: generacional con élite e = 1](https://josemagalan.github.io/selection-ga/#op=elitism&lang=es&elite=1&f=12-30-5-21-9-17&g=25-3-18-9-14-7){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+La élite es B (30), el mejor padre. Ocupa el lugar del peor hijo, b (3). La generación siguiente es **B a c d e f**: un padre y cinco hijos. La mejor aptitud se mantiene en 30 y la media sube de 15,7 a 17,2.
+
+Con *e* = 0, la media bajaba a 12,7. Con la élite, cambiamos el peor hijo por el mejor padre.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (generacional con élite)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/selection-ga/#op=elitism&lang=es&elite=1&f=12-30-5-21-9-17&g=25-3-18-9-14-7" loading="lazy" title="selection-ga: generacional con elitismo"></iframe>
+</details>
+:::
+
+<!-- Comprobado el 2026-10-08: la herramienta muestra en el paso 11 de 11 «Siguiente generación: B a c d e f. Sobreviven 1 padres y 5 hijos; la aptitud media pasa de 15,7 a 17,2 y la mejor, de 30 a 30. Con la élite, la mejor aptitud nunca baja.» -->
+
+:::: {.callout-note .ejercicio #ejercicio-9-3 title="Ejercicio 9.3 · A mano"}
+Cuatro padres A–D con aptitudes 8, 15, 4 y 11, y cuatro hijos a–d con aptitudes 10, 2, 13 y 6. Forma la generación siguiente con reemplazo generacional y una élite de 1, como en selection-ga. ¿Cuál es la mejor aptitud antes y después? ¿Y si no hubiera élite?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+La élite es B (15), que ocupa el lugar del peor hijo, b (2). La generación siguiente es **B a c d**, con aptitudes 15, 10, 13 y 6: la mejor sigue siendo 15. Sin élite, la generación siguiente sería a b c d y la mejor aptitud bajaría a 13. Puedes comprobarlo con el [enlace del ejercicio](https://josemagalan.github.io/selection-ga/#op=elitism&lang=es&elite=1&f=8-15-4-11&g=10-2-13-6){target="_blank"}.
+</details>
+::::
+
+::: {.callout-note .en-app title="En la aplicación · selection-ga, «Generacional con elitismo»"}
+[Explorar en selection-ga](https://josemagalan.github.io/selection-ga/#op=elitism&lang=es){.explorar target="_blank"}
+
+- Avanza paso a paso y fíjate en la fila **Sobrevive**: vale 1 para quien pasa a la generación siguiente.
+- Pon el **Tamaño de la élite e** a 0 y pulsa **Población aleatoria** varias veces. ¿Cuántas veces se pierde el mejor padre? Lee el mensaje final.
+- Con *e* = 1, comprueba que la mejor aptitud nunca baja, aunque la media sí puede bajar.
+:::
+
+## 9.4 Estado estacionario [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#estacionario}
+
+¿Hace falta renovar toda la población de una vez?
+
+En el **estado estacionario** se crean unos pocos hijos, a menudo uno o dos, y cada uno entra en la población sustituyendo a un miembro. El resto de la población sigue igual. En el caso extremo, en cada paso se crea un solo hijo, que sustituye, por ejemplo, al peor individuo de la población [@talbi2009, p. 221]. Las generaciones se solapan: un buen hijo puede ser elegido como padre enseguida, sin esperar a que se complete una generación.
+
+Lo que decide el comportamiento es a quién se sustituye. Lo más frecuente es sustituir a los peores [@mitchell1998, apartado 5.4]. Así lo hacía GENITOR, el primero de los algoritmos de estado estacionario [@whitley1994, apartado 8.1]. Veremos otras variantes en la [sección 9.7](#variantes-estacionario).
+
+La mayoría de los algoritmos genéticos descritos en la bibliografía son generacionales [@mitchell1998, apartado 5.4]. El estado estacionario se ha usado sobre todo en sistemas que aprenden de forma incremental y en los que importa recordar lo ya aprendido, como los sistemas clasificadores [@mitchell1998, apartado 5.4].
+
+::: {.callout-tip .ejemplo #ejemplo-9-4 title="Ejemplo reproducible 9.4 · Dos hijos entran en la población"}
+**Datos.** Los padres de los ejemplos anteriores (A–F: 12, 30, 5, 21, 9 y 17) y dos hijos nuevos, a (25) y b (14). Variante **Sustituir al peor**.
+
+**Predice.** ¿A quién sustituye a? ¿Y b? ¿Se pierde el mejor?
+
+[Abrir: estado estacionario, sustituir al peor](https://josemagalan.github.io/selection-ga/#op=steady-state&lang=es&v=worst&lambda=2&f=12-30-5-21-9-17&g=25-14&s=31){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+El hijo a sustituye al peor de la población, C (5). Después, el peor es E (9), y b lo sustituye. La generación siguiente es **A B a D b F**: cuatro padres y dos hijos. La mejor aptitud sigue en 30 y la media sube de 15,7 a 19,8.
+
+Sustituir al peor protege al mejor tanto como el elitismo, o más: el mejor solo saldría si fuera el peor de la población.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (estado estacionario)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/selection-ga/#op=steady-state&lang=es&v=worst&lambda=2&f=12-30-5-21-9-17&g=25-14&s=31" loading="lazy" title="selection-ga: estado estacionario"></iframe>
+</details>
+:::
+
+<!-- Comprobado el 2026-10-08: la herramienta muestra en el paso 5 de 5 «Siguiente generación: A B a D b F. Sobreviven 4 padres y 2 hijos; la aptitud media pasa de 15,7 a 19,8 y la mejor, de 30 a 30.» El parámetro s=31 fija las edades de los padres (fila «Edad»: 2, 5, 3, 1, 2, 3), que no influyen en esta variante. -->
+
+::: {.callout-note .en-app title="En la aplicación · selection-ga, «Estado estacionario»"}
+[Explorar en selection-ga](https://josemagalan.github.io/selection-ga/#op=steady-state&lang=es){.explorar target="_blank"}
+
+- Cambia el **Número de hijos λ** entre 1 y 3 y fíjate en cuántos huecos de la población cambian.
+- Pulsa **Población aleatoria** varias veces con **Sustituir al peor**. ¿Se pierde alguna vez el mejor?
+:::
+
+## 9.5 El elitismo a lo largo de una ejecución [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#elitismo-ejecucion}
+
+El elitismo solo protege a uno o a unos pocos individuos en cada generación. ¿Se nota en una ejecución completa?
+
+Para verlo, hemos programado un algoritmo genético con los operadores de los capítulos anteriores y lo hemos aplicado a un problema sencillo: **OneMax**, que consiste en encontrar una cadena de 40 bits con el mayor número posible de unos. La aptitud es el número de unos, así que el óptimo es 40 y lo conocemos de antemano. El algoritmo usa una población de 20 individuos, torneo binario, cruce en un punto con *Pc* = 0,8, inversión de bits con *pm* = 1/40 y reemplazo generacional, sin élite o con un individuo de élite. Las dos ejecuciones parten de la misma población inicial.
+
+[]{#figura-9-1}
+
+![**Figura 9.1.** Mejor aptitud de la población en cada generación, con y sin élite. OneMax de 40 bits, población de 20, semilla 3. Las líneas verticales y los puntos marcan dónde pararían algunos criterios en la ejecución con élite ([sección 9.6](#cuando-parar)). Figura propia, generada con `figuras/09-elitismo-parada.py`, en el repositorio del libro.](figuras/09-elitismo-parada.svg){fig-alt="Gráfica de líneas de la mejor aptitud frente a la generación, de 0 a 100. Con élite, la línea sube por escalones, nunca baja, y alcanza el óptimo, 40, en la generación 42. Sin élite, la línea sube y baja entre 34 y 38 a partir de la generación 15 y termina en 36 sin llegar al óptimo."}
+
+<details>
+<summary>Ver los datos de la figura</summary>
+
+Mejor aptitud de la población en algunas generaciones:
+
+| Generación | 0 | 5 | 10 | 15 | 20 | 25 | 30 | 35 | 38 | 42 | 50 | 62 | 80 | 100 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Sin élite | 28 | 30 | 32 | 37 | 36 | 36 | 36 | 34 | 36 | 36 | 37 | 37 | 38 | 36 |
+| Con élite | 28 | 31 | 33 | 35 | 36 | 37 | 39 | 39 | 39 | 40 | 40 | 40 | 40 | 40 |
+</details>
+
+<!-- Seguimiento interno: datos generados el 2026-10-08 con figuras/09-elitismo-parada.py (Python 3.12 en el entorno del asistente). Semilla 3: sin élite, la mejor aptitud baja 18 veces en 100 generaciones; máximo 38 (generación 29) y final 36. Con élite, óptimo en la generación 42. Resumen de las semillas 1–30: sin élite llegan al óptimo 17 de 30 ejecuciones (generación mediana 79, entre 43 y 100); con élite, las 30 (mediana 33, entre 22 y 58). Elegida la semilla 3 porque muestra a la vez la parada prematura con 10 generaciones sin mejora; no es la más favorable al elitismo. -->
+
+Con élite, la mejor aptitud sube por escalones y nunca baja: cada mejora se conserva hasta que aparece otra. Sin élite, sube al principio de forma parecida, pero sobre todo desde la generación 15 sube y baja: las mejoras se encuentran y se vuelven a perder. En esta ejecución, sin élite no se llega al óptimo en 100 generaciones; con élite se llega en la generación 42.
+
+Una sola ejecución no basta para sacar conclusiones, porque el resultado depende del azar (lo vimos en el [ejercicio 6.6](06-seleccion.qmd#ejercicio-6-6)). Por eso repetimos el experimento con 30 semillas distintas. Sin élite, llegaron al óptimo en 100 generaciones 17 de las 30 ejecuciones; con élite, las 30, y más de la mitad en 33 generaciones o menos.
+
+¿Siempre ayuda tanto? No. OneMax tiene una sola cima, y en problemas así el elitismo ayuda mucho. De Jong comprobó que el elitismo mejoraba los resultados en funciones con un solo óptimo, pero los empeoraba en una función con muchos óptimos locales: mejora la búsqueda local a costa de la visión global [@goldberg1989, p. 115]. Si la élite domina la población, sus copias desplazan a los demás y la diversidad se pierde antes; la población puede converger prematuramente en un óptimo local [@talbi2009, p. 221]. Por eso la élite suele ser pequeña, de uno o dos individuos.
+
+:::: {.callout-note .ejercicio #ejercicio-9-5 title="Ejercicio 9.5 · Leer la figura"}
+En la [figura 9.1](#figura-9-1), sin élite, la mejor aptitud de la generación 80 es 38 y la de la generación 100 es 36. Si el algoritmo se detuviera en la generación 100 y devolviera el mejor individuo de la última población, ¿cuál sería su aptitud? ¿Qué debería hacer el algoritmo para no perder el 38?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+Devolvería un individuo con aptitud 36, aunque había encontrado uno con 38. Sin élite, el algoritmo debe guardar aparte la **mejor solución encontrada** hasta el momento y actualizarla en cada generación; al parar, devuelve esa y no la mejor de la última población. Con élite, las dos coinciden, porque el mejor encontrado siempre está en la población.
+</details>
+::::
+
+## 9.6 ¿Cuándo parar? [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#cuando-parar}
+
+El ciclo de selección, cruce, mutación y reemplazo puede repetirse indefinidamente. ¿Cuándo damos la búsqueda por terminada?
+
+Al parar, el algoritmo devuelve la mejor solución encontrada, como vimos en el [ejercicio 9.5](#ejercicio-9-5). Los criterios de parada más habituales son de dos tipos [@talbi2009, pp. 198–199]:
+
+- **Fijados de antemano.** Se sabe desde el principio cuándo acabará la búsqueda: un número máximo de generaciones, un límite de tiempo de cálculo o un número máximo de evaluaciones de la función de aptitud. Responden a que los recursos son limitados. Evaluar puede ser lo más caro: si cada evaluación tarda una hora, 10 000 evaluaciones llevan más de un año, unas 50 generaciones con una población de 200 [@whitley1994, apartado 1.1].
+- **Que dependen de la búsqueda.** No se sabe de antemano cuándo se cumplirán:
+  - **Se ha alcanzado el óptimo**, o una solución lo bastante buena. Exige conocer el óptimo o una cota de su valor, y eso es poco frecuente.
+  - **Han pasado *k* generaciones sin mejora** de la mejor solución encontrada.
+
+Hay también criterios que miran la diversidad de la población; los veremos en la [sección 9.9](#ampliaciones).
+
+En la [figura 9.1](#figura-9-1), la ejecución con élite muestra qué haría cada criterio:
+
+| Criterio | Para en la generación | Mejor aptitud encontrada |
+|---|:---:|:---:|
+| 10 generaciones sin mejora | 38 | 39 |
+| Óptimo alcanzado (40) | 42 | 40 |
+| 20 generaciones sin mejora | 62 | 40 |
+| Máximo de 100 generaciones | 100 | 40 |
+
+Con 10 generaciones sin mejora, el algoritmo se detiene en la generación 38, justo antes de encontrar el óptimo. Con 20, lo encuentra, pero sigue 20 generaciones sin ganar nada. Con un máximo de 100 generaciones, las últimas 58 no aportan nada. Esperar demasiado poco puede dejar la búsqueda a medias; esperar demasiado gasta recursos. Por eso se suelen combinar criterios: por ejemplo, parar al alcanzar el óptimo, si se conoce, o tras 20 generaciones sin mejora, y en todo caso después de 100 generaciones.
+
+:::: {.callout-note .ejercicio #ejercicio-9-6 title="Ejercicio 9.6 · ¿Dónde para?"}
+Un algoritmo genético con élite busca el máximo de un problema cuyo óptimo es 50. Esta es la mejor aptitud de su población en cada generación:
+
+| Generación | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Mejor aptitud | 31 | 35 | 35 | 42 | 42 | 42 | 47 | 47 | 47 | 47 | 50 |
+
+¿En qué generación para con cada criterio: (a) 3 generaciones sin mejora; (b) 5 generaciones sin mejora; (c) alcanzar el óptimo; (d) un máximo de 8 generaciones? ¿Qué aptitud devuelve en cada caso?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+Contamos las generaciones desde la última mejora: hubo mejoras en las generaciones 1, 3, 6 y 10.
+
+- (a) En la generación 5 ya han pasado 2 generaciones sin mejora desde la 3; en la 9 se cumplen 3 desde la 6. Para en la **generación 9** y devuelve **47**.
+- (b) Antes de la generación 10 nunca pasan 5 generaciones seguidas sin mejora. En la 10 se alcanza el óptimo y ya no puede mejorar, así que para en la **generación 15** y devuelve **50**, tras cinco generaciones que no aportan nada.
+- (c) Para en la **generación 10** y devuelve **50**.
+- (d) Para en la **generación 8** y devuelve **47**.
+
+Con un criterio de 3 generaciones sin mejora, el algoritmo abandona justo antes de encontrar el óptimo.
+</details>
+::::
+
+## 9.7 Variantes del estado estacionario [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#variantes-estacionario}
+
+Si cada hijo sustituye a un miembro de la población, ¿importa mucho a cuál?
+
+Entre el reemplazo generacional y el estado estacionario con un solo hijo hay posiciones intermedias: en cada paso se puede sustituir a cualquier número λ de individuos, entre 1 y μ [@talbi2009, p. 221]. De Jong llamó **salto generacional** (*generation gap*) a la fracción *G* de la población que se renueva en cada generación: *G* = 1 es el reemplazo generacional y *G* < 1, una población que se solapa con la anterior [@goldberg1989, p. 111; @mitchell1998, apartado 5.4]. En el modelo de De Jong, los hijos ocupaban huecos de la población elegidos al azar [@goldberg1989, p. 111].
+
+selection-ga ofrece tres reglas para elegir a quién sustituye cada hijo:
+
+- **Sustituir al peor**, como en GENITOR. Es muy elitista: el mejor nunca se pierde.
+- **Sustituir al más viejo**: sale quien lleva más tiempo en la población, sea bueno o malo. Cada individuo vive un número fijo de pasos. La herramienta muestra la edad de cada padre en la fila **Edad**; el recién llegado empieza con edad 0 y todos envejecen uno en cada paso.
+- **Sustituir a uno al azar**: el reemplazo no añade presión, y toda la presión viene de la selección de padres.
+
+La elección cambia mucho la presión selectiva. Goldberg y Deb mostraron que sustituir al peor genera una presión mucho mayor que sustituir al azar [@whitley1994, apartado 8.1]. El nombre «estado estacionario» puede despistar: estos algoritmos varían más que los generacionales, y por eso son más sensibles a los errores de muestreo y a la deriva genética. A cambio, como en GENITOR se conservan los mejores puntos encontrados, la búsqueda es más agresiva y en la práctica suele ser bastante eficaz [@whitley1994, apartado 8.1].
+
+::: {.callout-tip .ejemplo #ejemplo-9-7 title="Ejemplo reproducible 9.7 · Tres formas de dejar sitio"}
+**Datos.** Los padres y los dos hijos del [ejemplo 9.4](#ejemplo-9-4) (A–F: 12, 30, 5, 21, 9 y 17; a: 25; b: 14). Las edades de los padres son:
+
+| Padre | A | B | C | D | E | F |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| Aptitud | 12 | 30 | 5 | 21 | 9 | 17 |
+| Edad | 2 | 5 | 3 | 1 | 2 | 3 |
+
+**Predice.** ¿Qué pasa con B si se sustituye al más viejo? A igual edad, la herramienta sustituye al primero. Con la sustitución al azar, ¿puede perderse B?
+
+[Abrir: sustituir al más viejo](https://josemagalan.github.io/selection-ga/#op=steady-state&lang=es&v=oldest&lambda=2&f=12-30-5-21-9-17&g=25-14&s=31){.abrir target="_blank"}
+[Abrir: sustituir a uno al azar](https://josemagalan.github.io/selection-ga/#op=steady-state&lang=es&v=random&r=19&lambda=2&f=12-30-5-21-9-17&g=25-14&s=31){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+| Variante | Generación siguiente | Mejor aptitud | Aptitud media |
+|---|:---:|:---:|:---:|
+| Sustituir al peor ([ejemplo 9.4](#ejemplo-9-4)) | A B a D b F | 30 | 19,8 |
+| Sustituir al más viejo | **A a b D E F** | 25 | 16,3 |
+| Sustituir a uno al azar | **a b C D E F** | 25 | 15,2 |
+
+Sustituyendo al más viejo, el hijo a ocupa el lugar de B (edad 5), y el mejor se pierde por viejo. Después todos envejecen un paso: C y F tienen edad 4, y b sustituye a C, el primero. Con el sorteo de la segunda URL, los huecos elegidos al azar son el de A y el de B, y el mejor también se pierde. Solo la sustitución del peor conserva a B.
+</details>
+:::
+
+<!-- Comprobado el 2026-10-08: la herramienta muestra con s=31 la fila «Edad» 2, 5, 3, 1, 2, 3, y en el paso 3 «Hijo 1, a (f = 25): sustituye al más viejo, B (edad 5, f = 30), en el hueco 2…». En el paso 5 de 5: «Siguiente generación: A a b D E F… la aptitud media pasa de 15,7 a 16,3 y la mejor, de 30 a 25. El mejor padre se ha perdido…». Al azar con r=19: «Siguiente generación: a b C D E F… de 15,7 a 15,2 y la mejor, de 30 a 25…». Los números del sorteo (u = 0,0585 y 0,3269, huecos floor(6u) + 1 = 1 y 2) solo se ven en el código. -->
+
+:::: {.callout-note .ejercicio #ejercicio-9-7 title="Ejercicio 9.7 · Un hijo peor que todos"}
+Con los mismos padres, la variante **Sustituir al peor** y dos hijos, a (25) y b (3). ¿Entra b en la población, aunque sea peor que todos los padres? ¿A quién sustituye?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+En selection-ga cada hijo entra sin condiciones. El hijo a sustituye a C (5), el peor. Después el peor es E (9), y b lo sustituye aunque sea peor: la generación siguiente es **A B a D b F**, con media 18. Otras variantes solo insertan al hijo si es mejor que el individuo al que sustituiría. Puedes comprobarlo con el [enlace del ejercicio](https://josemagalan.github.io/selection-ga/#op=steady-state&lang=es&v=worst&lambda=2&f=12-30-5-21-9-17&g=25-3&s=31){target="_blank"}.
+</details>
+::::
+
+<!-- Comprobado el 2026-10-08: «Siguiente generación: A B a D b F. Sobreviven 4 padres y 2 hijos; la aptitud media pasa de 15,7 a 18 y la mejor, de 30 a 30.» -->
+
+::: {.callout-note .en-app title="En la aplicación · selection-ga, «Estado estacionario»"}
+[Explorar en selection-ga](https://josemagalan.github.io/selection-ga/#op=steady-state&lang=es){.explorar target="_blank"}
+
+- Cambia la **Variante** y pulsa **Población aleatoria** varias veces. ¿Con qué variante se pierde más a menudo el mejor?
+- Con **Sustituir al más viejo**, sigue la fila **Edad** paso a paso. ¿Puede un hijo recién llegado ser sustituido por el siguiente?
+:::
+
+## 9.8 (μ + λ), (μ, λ) y élites mayores [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#mu-lambda}
+
+¿Y si padres e hijos compitieran juntos por quedarse en la población?
+
+Las **estrategias evolutivas**, de Rechenberg y Schwefel, usan otros dos esquemas de reemplazo [@whitley1994, apartado 8]:
+
+- **(μ + λ).** Los μ padres crean λ hijos, y de los μ + λ individuos sobreviven los μ mejores. Un padre sigue en la población hasta que aparecen hijos mejores que él.
+- **(μ, λ).** Los hijos sustituyen a los padres y la selección se hace solo entre los hijos: sobreviven los μ mejores de los λ. Hace falta que $\lambda \geq \mu$.
+
+(μ + λ) es elitista: el mejor nunca se pierde. (μ, λ) no lo es, y se parece al reemplazo generacional del algoritmo genético canónico. GENITOR, que sustituye al peor, se comporta como una estrategia (μ + λ), y por eso la mejora de la población es monótona [@whitley1994, apartado 8.1].
+
+El elitismo con *e* individuos está entre los dos extremos: con *e* = 0 es el reemplazo generacional puro y, cuanto mayor es *e*, más padres compiten con los hijos por quedarse.
+
+::: {.callout-tip .ejemplo #ejemplo-9-8 title="Ejemplo reproducible 9.8 · Competir juntos o solo entre hijos"}
+**Datos.** Los padres de siempre (A–F: 12, 30, 5, 21, 9 y 17) y nueve hijos (λ = 9):
+
+| Hijo | a | b | c | d | e | f | g | h | i |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Aptitud | 25 | 3 | 18 | 9 | 14 | 7 | 28 | 11 | 20 |
+
+**Predice.** ¿Quiénes sobreviven con (μ + λ)? ¿Y con (μ, λ)? ¿Cuántos padres quedan en cada caso?
+
+[Abrir: (μ + λ)](https://josemagalan.github.io/selection-ga/#op=mu-plus-lambda&lang=es&lambda=9&f=12-30-5-21-9-17&g=25-3-18-9-14-7-28-11-20){.abrir target="_blank"}
+[Abrir: (μ, λ)](https://josemagalan.github.io/selection-ga/#op=mu-comma-lambda&lang=es&lambda=9&f=12-30-5-21-9-17&g=25-3-18-9-14-7-28-11-20){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+| Esquema | Supervivientes, de mejor a peor | Padres | Mejor aptitud | Aptitud media |
+|---|:---:|:---:|:---:|:---:|
+| (μ + λ) | **B g a D i c** (30, 28, 25, 21, 20, 18) | 2 | 30 | 23,7 |
+| (μ, λ) | **g a i c e h** (28, 25, 20, 18, 14, 11) | 0 | 28 | 19,3 |
+
+Con (μ + λ), B y D siguen porque están entre los seis mejores de los quince. Con (μ, λ), los padres desaparecen todos, B incluido, y la mejor aptitud baja de 30 a 28.
+</details>
+:::
+
+<!-- Comprobado el 2026-10-08: (μ + λ), paso 10 de 10, «Siguiente generación: B g a D i c. Sobreviven 2 padres y 4 hijos; la aptitud media pasa de 15,7 a 23,7 y la mejor, de 30 a 30.»; (μ, λ), paso 11 de 11, «Siguiente generación: g a i c e h. Sobreviven 0 padres y 6 hijos; la aptitud media pasa de 15,7 a 19,3 y la mejor, de 30 a 28. El mejor padre se ha perdido…». -->
+
+¿Por qué usar un esquema que puede perder al mejor? Porque quedarse siempre con los mejores tiene el precio que vimos en la [sección 9.5](#elitismo-ejecucion): la población pierde diversidad deprisa y puede converger prematuramente [@talbi2009, p. 221]. Con (μ + λ), un individuo muy bueno puede quedarse indefinidamente en la población. Con (μ, λ), ningún individuo dura más de una generación.
+
+<!-- Seguimiento interno: la herramienta (js/content/mu-comma-lambda.js) añade que (μ, λ) se adapta mejor si el problema cambia con el tiempo y favorece la autoadaptación de la mutación, y que en las estrategias evolutivas se usa λ ≈ 7μ, citando a Beyer y Schwefel (2002). No se ha cotejado con la obra (sin PDF en Recursos), por eso no se incluye. -->
+
+:::: {.callout-note .ejercicio #ejercicio-9-8 title="Ejercicio 9.8 · Casos límite"}
+Con los padres A–F (12, 30, 5, 21, 9 y 17) y los seis hijos del [ejemplo 9.2](#ejemplo-9-2) (25, 3, 18, 9, 14 y 7):
+
+1. ¿Quiénes sobreviven con (μ, λ) y λ = μ = 6? Compáralo con el reemplazo generacional puro.
+2. ¿Quiénes sobreviven con elitismo y *e* = 2?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+1. Con λ = μ no hay nada que elegir: sobreviven los seis hijos, como en el reemplazo generacional puro. La herramienta los ordena de mejor a peor (a c e d f b), pero son los mismos. La mejor aptitud baja a 25.
+2. La élite son B (30) y D (21), que ocupan el lugar de los dos peores hijos, b (3) y f (7). Sobreviven **B D a c d e**, con media 19,5.
+</details>
+::::
+
+<!-- Comprobado con el código el 2026-10-08 (2026-10-08-reemplazo.js): (μ, λ) con λ = 6 → a c e d f b; elitismo e = 2 → B D a c d e, media 19,5. -->
+
+::: {.callout-note .en-app title="En la aplicación · selection-ga, (μ + λ) y (μ, λ)"}
+- En [Selección (μ + λ)](https://josemagalan.github.io/selection-ga/#op=mu-plus-lambda&lang=es){target="_blank"}, mueve el **Número de hijos λ** de 1 a 12. ¿Cuántos padres sobreviven cuando hay pocos hijos? ¿Y cuando hay muchos?
+- En [Selección (μ, λ)](https://josemagalan.github.io/selection-ga/#op=mu-comma-lambda&lang=es){target="_blank"}, pon λ igual a μ y comprueba que sobreviven todos los hijos. Después aumenta λ: ¿qué pasa con la aptitud media de los supervivientes?
+- En [Generacional con elitismo](https://josemagalan.github.io/selection-ga/#op=elitism&lang=es){target="_blank"}, sube el **Tamaño de la élite e** de 0 a 3 con la misma población y observa cómo cambia la proporción de padres e hijos.
+:::
+
+## 9.9 Ampliaciones [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas} {#ampliaciones}
+
+**Sustituir al más parecido.** De Jong buscó un reemplazo que mantuviera la diversidad en las funciones con muchos óptimos, donde el elitismo empeoraba los resultados. Se inspiró en la naturaleza: cuando individuos parecidos llenan un nicho, compiten más entre sí. En su modelo de **apiñamiento** (*crowding*), con un salto generacional *G* = 0,1, cada hijo sustituía al individuo más parecido a él de entre unos pocos tomados al azar; su número es el factor de apiñamiento, *CF*. Con *CF* = 2 obtuvo resultados casi óptimos en una función con muchos óptimos locales [@goldberg1989, p. 116]. Otros autores desarrollaron después las ideas de apiñamiento y de nicho, importantes en la optimización de funciones con muchos óptimos [@goldberg1989, p. 116].
+
+**Escoger a veces a los peores.** Si el reemplazo siempre se queda con los mejores, la convergencia es más rápida, pero puede ser prematura. A veces conviene conservar individuos malos para evitar los errores de muestreo [@talbi2009, p. 221]. Es la misma tensión entre presión selectiva y diversidad que vimos con el truncamiento en el [capítulo 6](06-seleccion.qmd#truncamiento).
+
+**Aptitud con ruido.** En algunos problemas, la aptitud de un individuo es aleatoria: dos evaluaciones del mismo individuo dan valores distintos, por ejemplo porque proceden de una simulación. Conservar a los mejores de una generación a otra, como hace (μ + λ), permite volver a evaluarlos y estimar su aptitud cada vez con más fiabilidad [@mitchell1998, apartado 5.4].
+
+**Parar cuando la población se estanca.** Los criterios de parada propios de los algoritmos basados en poblaciones miran el estado de la población, sobre todo su diversidad: se para cuando cae por debajo de un umbral [@talbi2009, p. 199]. Para usarlos hay que medir la diversidad, por ejemplo con el número de individuos distintos o con la distancia media entre ellos.
+
+**El reemplazo como parámetro.** El tipo de reemplazo también puede ajustarse. Grefenstette usó un algoritmo genético para buscar los parámetros de otro, entre ellos el salto generacional y si había elitismo; el mejor conjunto para una de sus medidas de rendimiento usaba *G* = 1 y elitismo [@mitchell1998, apartado 5.6]. Pero esas recomendaciones dependen de las funciones de prueba con que se obtuvieron.
+
+## Resumen {#resumen}
+
+- El reemplazo decide quién forma la generación siguiente. En el reemplazo generacional, los hijos sustituyen a todos los padres; en el estado estacionario, solo entran unos pocos hijos en cada paso.
+- Con el reemplazo generacional puro, la mejor solución puede perderse. El elitismo pasa los *e* mejores, sin cambios, a la generación siguiente; así, la mejor aptitud nunca baja.
+- El elitismo acelera la búsqueda, pero puede reducir la diversidad y llevar a una convergencia prematura. Por eso la élite suele ser pequeña.
+- El algoritmo para cuando alcanza el óptimo, si se conoce, cuando agota los recursos o cuando lleva varias generaciones sin mejorar. Devuelve la mejor solución encontrada.
+
+## Referencias del capítulo {#referencias}
+
+<!-- Seguimiento interno: cotejado el 2026-10-08 con los PDF de Recursos. talbi2009: pp. 198–199 (apartado 3.1.2, criterios de parada) y p. 221 (apartado 3.3.3, estrategias de reemplazo). mitchell1998: apartados 5.4 (elitismo, estado estacionario, salto generacional, (μ + λ) con aptitud con ruido) y 5.6 (Grefenstette); se cita por apartados porque el PDF es una conversión sin la paginación impresa. goldberg1989: pp. 111, 115 y 116, con OCR de las páginas 129–134 del PDF escaneado (salto generacional, modelos R2 y R5 de De Jong). whitley1994: apartados 1.1, 8 y 8.1, con OCR del borrador de Recursos, sin la paginación de la revista. De Jong (1975), Goldberg y Deb (1991) y Grefenstette se citan a través de esas obras. La lista se genera con las obras citadas en el capítulo. -->
+
+::: {.referencias-capitulo #refs}
+:::
