@@ -1,0 +1,616 @@
+# Cruzar {#sec-cruce}
+
+<!-- Seguimiento interno (no visible): revisado el 2026-10-08 a petición del autor: OX clásico en 7.6 y la variante por defecto de la herramienta en 7.9 (D038); representación entera explícita en 7.2 y 7.3 (D039). Los ejemplos reproducibles se comprobaron en crossover-ga (commit e6fb577, 2026-10-07) el 2026-10-08, con su código y en la interfaz publicada. Guiones: memoria/verificaciones/2026-10-08-cruce.js y 2026-10-08-cruce-interfaz.py. Registro en memoria/sesiones/2026-10-08-06-capitulo-7-cruce.md. -->
+
+**Herramientas:** [crossover-ga](https://josemagalan.github.io/crossover-ga/#lang=es), accesible desde el [portal](https://josemagalan.github.io/genetic-algorithms-lab/).
+
+::: {.callout-warning .objetivos title="Objetivos del capítulo"}
+Al terminar el recorrido básico de este capítulo podrás:
+
+- explicar qué hace el cruce y qué dos condiciones debe cumplir: heredar rasgos de los padres y producir hijos válidos;
+- calcular a mano los hijos de los cruces en un punto, en dos puntos y uniforme, con genes binarios o enteros, a partir de los cortes o de la máscara;
+- calcular los hijos de los cruces uniforme y aritmético con números reales, y predecir si pueden salir del intervalo de los padres;
+- explicar con un contraejemplo por qué las permutaciones necesitan cruces propios;
+- aplicar paso a paso los cruces OX, PMX y CX.
+:::
+
+## 7.1 ¿Para qué cruzar? [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#para-que-cruzar}
+
+La selección ya ha elegido a los padres. ¿Cómo obtenemos de ellos soluciones nuevas?
+
+En el [capítulo de selección](06-seleccion.qmd#sec-seleccion) vimos que la selección solo copia individuos que ya existen. El **cruce** (o recombinación) toma dos padres del *pool* y combina partes de sus cromosomas para formar dos hijos. Los padres se emparejan de dos en dos, y cada pareja da lugar a dos hijos.
+
+Un buen cruce tiene que cumplir dos condiciones [@talbi2009, pp. 213–214]:
+
+- **Heredabilidad.** Los hijos deben parecerse a sus padres y conservar parte de su material genético. Si el cruce mezcla al azar sin conservar nada, se pierde lo que hacía buenos a los padres.
+- **Validez.** Los hijos deben ser soluciones del problema, que se puedan evaluar. Cómo se consigue depende de la representación: un cruce pensado para cadenas de bits puede producir soluciones no válidas si el cromosoma es una permutación.
+
+El cruce actúa sobre el genotipo, así que cada representación tiene sus propios operadores. En este capítulo los veremos para las representaciones binaria (y entera), real y de permutación.
+
+No se cruzan todas las parejas. Cada pareja se cruza con una probabilidad *Pc*, la **probabilidad de cruce**; si no se cruza, sus hijos son copias de los padres. Así, aunque el cruce rompa una buena combinación de genes en una pareja, otras pasan intactas a la generación siguiente. Los valores más usados de *Pc* están entre 0,45 y 0,95 [@talbi2009, p. 214]. Cómo elegirla con experimentos se verá más adelante, en el capítulo dedicado a los parámetros.
+
+<!-- Enlace pendiente: cuando exista, enlazar «el capítulo dedicado a los parámetros» con #sec-experimentos (10). -->
+
+**Notación.** Seguimos la de la herramienta: Padre 1 y Padre 2, Hijo 1 e Hijo 2. Las posiciones se numeran desde 1, y «corte tras la posición 3» separa las posiciones 1–3 de las demás.
+
+:::: {.callout-note .ejercicio #ejercicio-7-1 title="Ejercicio 7.1 · Predice"}
+Dos padres binarios tienen el mismo bit en una posición, por ejemplo un 1 en la segunda. ¿Puede alguno de sus hijos tener un 0 en esa posición, si se cruzan intercambiando partes de los cromosomas? Anota tu predicción: la comprobarás en el [ejemplo 7.2](#ejemplo-7-2).
+::::
+
+## 7.2 Cruce en un punto y en dos puntos [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#uno-y-dos-puntos}
+
+¿Cuál es la forma más sencilla de combinar dos cadenas de bits?
+
+Los cruces de esta sección y el uniforme de la [sección 7.3](#uniforme) sirven tal cual para dos representaciones: la **binaria**, en la que cada gen es un bit, y la **entera**, en la que cada gen es un número entero. Solo cortan e intercambian posiciones, sin mirar qué valor hay en cada una [@eiben2015]. Empezamos con bits y después lo repetimos con enteros.
+
+En el **cruce en un punto** se elige al azar un punto de corte. El Hijo 1 se queda con la cabeza del Padre 1 (hasta el corte) y la cola del Padre 2 (desde el corte); el Hijo 2, al revés. Es el cruce clásico de los algoritmos genéticos.
+
+En el **cruce en dos puntos** se eligen dos cortes y los hijos intercambian el tramo que queda entre ellos. El Hijo 1 conserva los dos extremos del Padre 1 y toma el tramo central del Padre 2.
+
+Los dos se describen con una **máscara de cruce**, un bit por posición [@syswerda1989]. Con un 0, cada hijo copia el gen de su propio padre; con un 1, los hijos lo intercambian: el Hijo 1 toma el gen del Padre 2 y el Hijo 2, el del Padre 1. En el cruce en un punto, la máscara es un bloque de ceros seguido de uno de unos. En el de dos puntos, el bloque de unos queda en el centro.
+
+::: {.callout-tip .ejemplo #ejemplo-7-2 title="Ejemplo reproducible 7.2 · Un corte y dos cortes"}
+**Datos.** Dos padres de 8 bits, que coinciden en las posiciones 2 y 6:
+
+| Posición | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Padre 1 | 1 | 1 | 0 | 1 | 0 | 0 | 1 | 0 |
+| Padre 2 | 0 | 1 | 1 | 0 | 1 | 0 | 0 | 1 |
+
+Cruce en un punto con el corte tras la posición 3. Cruce en dos puntos con los cortes tras las posiciones 2 y 6.
+
+**Predice.** ¿Qué máscara corresponde a cada cruce? ¿Cuáles son los hijos? ¿Qué bit tienen los hijos en las posiciones 2 y 6?
+
+[Abrir: cruce en un punto](https://josemagalan.github.io/crossover-ga/#op=one-point&lang=es&p1=1-1-0-1-0-0-1-0&p2=0-1-1-0-1-0-0-1&c=3){.abrir target="_blank"}
+[Abrir: cruce en dos puntos](https://josemagalan.github.io/crossover-ga/#op=two-point&lang=es&p1=1-1-0-1-0-0-1-0&p2=0-1-1-0-1-0-0-1&c=2-6){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+| Posición | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Máscara, un punto | 0 | 0 | 0 | 1 | 1 | 1 | 1 | 1 |
+| **Hijo 1** | 1 | 1 | 0 | 0 | 1 | 0 | 0 | 1 |
+| **Hijo 2** | 0 | 1 | 1 | 1 | 0 | 0 | 1 | 0 |
+| Máscara, dos puntos | 0 | 0 | 1 | 1 | 1 | 1 | 0 | 0 |
+| **Hijo 1** | 1 | 1 | 1 | 0 | 1 | 0 | 1 | 0 |
+| **Hijo 2** | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 1 |
+
+En los dos cruces, los hijos tienen un 1 en la posición 2 y un 0 en la 6, como los dos padres. Donde los padres coinciden, intercambiar no cambia nada. Esto responde al [ejercicio 7.1](#ejercicio-7-1): el cruce solo recombina lo que ya tienen los padres.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (cruce en un punto)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/crossover-ga/#op=one-point&lang=es&p1=1-1-0-1-0-0-1-0&p2=0-1-1-0-1-0-0-1&c=3" loading="lazy" title="crossover-ga: cruce en un punto"></iframe>
+</details>
+
+<!-- Comprobado el 2026-10-08: con los dos enlaces, la herramienta muestra en el paso 6 de 6 los hijos 11001001 y 01110010 (un punto) y 11101010 y 01010001 (dos puntos), y «En las 2 posiciones en que los padres coinciden, los hijos tienen ese mismo bit». -->
+:::
+
+En el cruce en un punto, los genes que están cerca viajan juntos: es difícil que un corte caiga justo entre ellos. En cambio, el primer gen y el último de un hijo proceden siempre de padres distintos, así que una buena combinación de los dos extremos se rompe con cualquier corte [@talbi2009, p. 214]. En el cruce en dos puntos, el primer gen y el último sí pueden venir del mismo padre: el cromosoma se comporta como un anillo, y los extremos dejan de ser un caso especial.
+
+**Con enteros.** Supongamos que hay que repartir seis tareas entre cuatro máquinas. Cada gen indica la máquina, de 1 a 4, que hace una tarea. El cruce en un punto con el corte tras la posición 3 funciona exactamente igual que con bits, con la máscara 0 0 0 1 1 1:
+
+| Tarea | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| Padre 1 | 2 | 4 | 1 | 3 | 3 | 1 |
+| Padre 2 | 1 | 4 | 2 | 2 | 3 | 4 |
+| Máscara | 0 | 0 | 0 | 1 | 1 | 1 |
+| **Hijo 1** | 2 | 4 | 1 | 2 | 3 | 4 |
+| **Hijo 2** | 1 | 4 | 2 | 3 | 3 | 1 |
+
+Los dos hijos son repartos válidos: cada tarea tiene una máquina entre 1 y 4. En las tareas 2 y 5, donde los padres coinciden, los hijos también. En estos cruces, crossover-ga solo admite bits, así que con enteros el cruce en uno o dos puntos se calcula a mano. El cruce uniforme con enteros sí se puede ejecutar en la herramienta, como veremos en el [ejemplo 7.3](#ejemplo-7-3).
+
+:::: {.callout-note .ejercicio #ejercicio-7-2 title="Ejercicio 7.2 · Cruzar vectores de enteros"}
+Con los dos padres del reparto de tareas, calcula los hijos del cruce en dos puntos con los cortes tras las posiciones 3 y 5. ¿Puede algún hijo, con cualquier cruce de esta sección, asignar la tarea 1 a la máquina 3?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+Se intercambian las posiciones 4 y 5: el Hijo 1 es (2, 4, 1, **2, 3**, 1) y el Hijo 2, (1, 4, 2, **3, 3**, 4). En la posición 5 el intercambio no cambia nada, porque los dos padres tienen un 3. Ningún hijo puede asignar la tarea 1 a la máquina 3: allí solo puede haber un 2 o un 1, los valores de los padres. Para que aparezcan valores nuevos hace falta la mutación.
+</details>
+::::
+
+<!-- Enlace pendiente: cuando exista, enlazar «la mutación» con #sec-mutacion (8). -->
+
+::: {.callout-note .en-app title="En la aplicación · crossover-ga, «Cruce en un punto»"}
+[Explorar en crossover-ga](https://josemagalan.github.io/crossover-ga/#op=one-point&lang=es){.explorar target="_blank"}
+
+- Avanza paso a paso y fíjate en cómo la máscara decide qué posiciones se conservan y cuáles se intercambian.
+- Arrastra el marcador ◆ para mover el corte y observa cómo cambian la máscara y los hijos.
+- Pulsa **Padres aleatorios** y, antes de avanzar, usa **Practicar** para escribir tu predicción de los dos hijos y comprobarla gen a gen.
+- Cambia a **Cruce en dos puntos** y mueve los dos cortes hasta que la máscara sea igual que la de un solo corte. ¿Dónde tiene que quedar uno de ellos?
+:::
+
+## 7.3 Cruce uniforme [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#uniforme}
+
+¿Y si, en lugar de cortar en tramos, decidimos cada posición por separado?
+
+En el **cruce uniforme**, para cada posición se saca un número aleatorio $r_i \in [0, 1)$. Si $r_i \le p$, los hijos intercambian el gen de esa posición; si no, cada hijo copia el de su propio padre. Con $p = 0{,}5$, la versión original, cada gen del Hijo 1 viene con la misma probabilidad de cada padre. Con un *p* menor, cada hijo se parece más a su propio padre.
+
+Es la misma idea de la máscara de la [sección 7.2](#uno-y-dos-puntos), pero ahora la máscara se sortea bit a bit y puede tener cualquier forma [@syswerda1989]. Por eso el cruce uniforme rompe más los bloques de genes contiguos que los cruces por cortes.
+
+::: {.callout-tip .ejemplo #ejemplo-7-3 title="Ejemplo reproducible 7.3 · Una máscara sorteada, con bits y con enteros"}
+**Datos.** Los mismos padres del [ejemplo 7.2](#ejemplo-7-2), con $p = 0{,}5$. Números aleatorios de las posiciones 1 a 8: 0,28; 0,07; 0,58; 0,94; 0,15; 0,01; 0,69 y 0,64.
+
+Con enteros, los padres del reparto de tareas de la [sección 7.2](#uno-y-dos-puntos), (2, 4, 1, 3, 3, 1) y (1, 4, 2, 2, 3, 4), con los seis primeros números: 0,28; 0,07; 0,58; 0,94; 0,15 y 0,01. crossover-ga no tiene una sección entera, pero su cruce uniforme de la representación real copia los genes sin cambiarlos, así que con enteros hace exactamente lo mismo.
+
+**Predice.** ¿Qué posiciones se intercambian? ¿Cuáles son los hijos, con bits y con enteros?
+
+[Abrir: cruce uniforme con bits](https://josemagalan.github.io/crossover-ga/#op=uniform-binary&lang=es&r=12&p=0.5&p1=1-1-0-1-0-0-1-0&p2=0-1-1-0-1-0-0-1){.abrir target="_blank"}
+[Abrir: cruce uniforme con enteros](https://josemagalan.github.io/crossover-ga/#op=uniform-real&lang=es&r=12&p=0.5&p1=2-4-1-3-3-1&p2=1-4-2-2-3-4){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+Se intercambian las posiciones con $r_i \le 0{,}5$: la 1, la 2, la 5 y la 6.
+
+| Posición | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Máscara | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 0 |
+| **Hijo 1** | 0 | 1 | 0 | 1 | 1 | 0 | 1 | 0 |
+| **Hijo 2** | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 |
+
+Las posiciones 2 y 6 se intercambian, pero no cambian nada, porque allí los padres coinciden.
+
+Con enteros, la máscara de las seis posiciones es 1 1 0 0 1 1:
+
+| Tarea | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Hijo 1** | 1 | 4 | 1 | 3 | 3 | 4 |
+| **Hijo 2** | 2 | 4 | 2 | 2 | 3 | 1 |
+
+En las tareas 2 y 5 los padres coinciden, y los hijos también.
+</details>
+
+<!-- Comprobado el 2026-10-08: la herramienta muestra en el paso 11 de 11 los hijos 01011010 y 11100001 y «4 posiciones intercambiadas y 4 conservadas». Con enteros (uniform-real, r=12), paso 9 de 9: 1 4 1 3 3 4 y 2 4 2 2 3 1, «En las 2 posiciones en que los padres coinciden, los hijos tienen ese mismo valor». La herramienta redondea los números aleatorios a centésimas. -->
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-7-3 title="Ejercicio 7.3 · ¿Un punto por casualidad?"}
+Con los padres del [ejemplo 7.2](#ejemplo-7-2) y $p = 0{,}5$, ¿con qué probabilidad da el cruce uniforme exactamente el mismo Hijo 1 y el mismo Hijo 2 que el cruce en un punto con el corte tras la posición 3?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+Hace falta que la máscara coincida con 0 0 0 1 1 1 1 1, pero solo en las posiciones en que los padres difieren: la 1, la 3, la 4, la 5, la 7 y la 8. En la 2 y la 6 da igual, porque los padres coinciden. Cada uno de esos seis bits acierta con probabilidad 1/2, así que la probabilidad es $(1/2)^6 = 1/64 \approx 0{,}016$.
+</details>
+::::
+
+::: {.callout-note .en-app title="En la aplicación · crossover-ga, «Cruce uniforme»"}
+[Explorar en crossover-ga](https://josemagalan.github.io/crossover-ga/#op=uniform-binary&lang=es){.explorar target="_blank"}
+
+- Pulsa **Sortear de nuevo** varias veces y cuenta cuántas posiciones se intercambian cada vez.
+- Baja la **Probabilidad de intercambio (p)** de 0,5 a 0,1 y observa cuánto se parece cada hijo a su propio padre.
+- Abre el [cruce uniforme con enteros](https://josemagalan.github.io/crossover-ga/#op=uniform-real&lang=es&p1=2-4-1-3-3-1&p2=1-4-2-2-3-4){target="_blank"} y escribe tus propios padres enteros en **Introducir padres a mano**.
+- Pulsa **Comparar operadores** y fíjate en la columna «Tramos»: cuántos bloques seguidos toma cada hijo de un mismo padre con cada cruce.
+:::
+
+## 7.4 Cruzar números reales [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#reales}
+
+Si cada gen es un número real, ¿basta con intercambiar genes, o conviene mezclarlos?
+
+Con la **representación real** se puede seguir intercambiando genes. El **cruce uniforme** funciona igual que en la [sección 7.3](#uniforme): cada gen del hijo es exactamente el de uno de los padres. Pero así nunca aparece un valor nuevo en una posición.
+
+El **cruce aritmético** mezcla los valores [@michalewicz1996]. Cada gen de los hijos es una media ponderada de los genes de los padres en esa posición, con un peso λ entre 0 y 1:
+
+$$
+H_1 = \lambda\, P_1 + (1 - \lambda)\, P_2, \qquad H_2 = \lambda\, P_2 + (1 - \lambda)\, P_1.
+$$
+
+Con $\lambda = 0{,}5$, los dos hijos son iguales: la media de los padres.
+
+::: {.callout-tip .ejemplo #ejemplo-7-4 title="Ejemplo reproducible 7.4 · Copiar o mezclar"}
+**Datos.** Dos padres con cinco genes reales:
+
+| Posición | 1 | 2 | 3 | 4 | 5 |
+|---|:---:|:---:|:---:|:---:|:---:|
+| Padre 1 | 2,0 | 8,5 | 4,0 | 1,5 | 6,0 |
+| Padre 2 | 6,0 | 2,5 | 5,0 | 9,5 | 3,0 |
+
+Cruce uniforme con $p = 0{,}5$ y los números aleatorios 0,28; 0,07; 0,58; 0,94 y 0,15. Cruce aritmético con $\lambda = 0{,}25$.
+
+**Predice.** ¿Cuáles son los hijos de cada cruce? ¿Puede alguno de ellos tener en la posición 4 un valor mayor que 9,5?
+
+[Abrir: cruce uniforme](https://josemagalan.github.io/crossover-ga/#op=uniform-real&lang=es&r=12&p=0.5&p1=2-8.5-4-1.5-6&p2=6-2.5-5-9.5-3){.abrir target="_blank"}
+[Abrir: cruce aritmético con λ = 0,25](https://josemagalan.github.io/crossover-ga/#op=arithmetic&lang=es&lambda=0.25&p1=2-8.5-4-1.5-6&p2=6-2.5-5-9.5-3){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+| Posición | 1 | 2 | 3 | 4 | 5 |
+|---|:---:|:---:|:---:|:---:|:---:|
+| Uniforme: **Hijo 1** | 6,0 | 2,5 | 4,0 | 1,5 | 3,0 |
+| Uniforme: **Hijo 2** | 2,0 | 8,5 | 5,0 | 9,5 | 6,0 |
+| Aritmético: **Hijo 1** | 5,0 | 4,0 | 4,75 | 7,5 | 3,75 |
+| Aritmético: **Hijo 2** | 3,0 | 7,0 | 4,25 | 3,5 | 5,25 |
+
+En el uniforme se intercambian las posiciones 1, 2 y 5, y los hijos solo tienen valores de los padres. En el aritmético, por ejemplo, $0{,}25 \times 2{,}0 + 0{,}75 \times 6{,}0 = 5{,}0$. Con λ = 0,25, el Hijo 1 queda más cerca del Padre 2. Ningún hijo pasa de 9,5 en la posición 4: una media ponderada siempre queda entre los dos valores que promedia.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (cruce aritmético)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/crossover-ga/#op=arithmetic&lang=es&lambda=0.25&p1=2-8.5-4-1.5-6&p2=6-2.5-5-9.5-3" loading="lazy" title="crossover-ga: cruce aritmético"></iframe>
+</details>
+
+<!-- Comprobado el 2026-10-08: la herramienta muestra los hijos 6 2.5 4 1.5 3 y 2 8.5 5 9.5 6 (uniforme, paso 8 de 8) y 5 4 4.75 7.5 3.75 y 3 7 4.25 3.5 5.25 (aritmético, paso 5 de 5). -->
+:::
+
+Ni el cruce uniforme ni el aritmético sacan a los hijos del intervalo que forman los padres en cada posición. Si se cruza solo de esta forma, generación tras generación, los valores de cada gen se van concentrando y la población pierde diversidad. En la [sección 7.9](#otros-cruces) veremos cruces reales que pueden salir de ese intervalo.
+
+:::: {.callout-note .ejercicio #ejercicio-7-4 title="Ejercicio 7.4 · ¿Hasta dónde llega la población?"}
+En una población, el primer gen de los individuos toma valores entre 2 y 6. Si solo se aplica el cruce aritmético, sin mutación, ¿podrá algún descendiente tener un primer gen mayor que 6 dentro de diez generaciones? ¿Y si se usa siempre λ = 0,5?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+No. Cada hijo queda entre sus dos padres, así que el valor máximo de la población no puede crecer ni el mínimo disminuir: los valores nunca salen de [2, 6]. Con λ = 0,5, además, cada hijo es la media de sus padres, y los valores de la población se parecen cada vez más entre sí.
+</details>
+::::
+
+::: {.callout-note .en-app title="En la aplicación · crossover-ga, «Cruce aritmético»"}
+[Explorar en crossover-ga](https://josemagalan.github.io/crossover-ga/#op=arithmetic&lang=es){.explorar target="_blank"}
+
+- Mueve el **Peso (λ)** de 0 a 1. ¿Con qué valores son los hijos copias de los padres? ¿Con cuál son iguales entre sí?
+- Pulsa **Comparar operadores** y mira la columna «Dentro del intervalo» para el cruce uniforme y el aritmético.
+:::
+
+## 7.5 Permutaciones: por qué no sirve el cruce en un punto [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#permutaciones}
+
+En el problema del viajante, una solución es el orden en que se visitan las ciudades. ¿Qué pasa si cruzamos dos rutas como si fueran cadenas de bits?
+
+En la **representación de permutación**, el cromosoma es una ordenación de *n* elementos, sin repetidos. Se usa en problemas de rutas y de secuenciación. Cada número es una ciudad (o una tarea) y debe aparecer exactamente una vez.
+
+::: {.callout-tip .ejemplo #ejemplo-7-5 title="Ejemplo reproducible 7.5 · Cortar dos rutas"}
+**Datos.** Dos padres que ordenan nueve ciudades:
+
+| Posición | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Padre 1 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+| Padre 2 | 9 | 4 | 5 | 2 | 6 | 3 | 8 | 1 | 7 |
+
+Cruce en un punto, como en la [sección 7.2](#uno-y-dos-puntos), con el corte tras la posición 4.
+
+**Predice.** ¿Son los hijos rutas válidas?
+
+[Abrir: cruce en un punto con permutaciones](https://josemagalan.github.io/crossover-ga/#op=one-point-perm&lang=es&p1=1-2-3-4-5-6-7-8-9&p2=9-4-5-2-6-3-8-1-7&c=4){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+| Posición | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Hijo 1** | 1 | 2 | 3 | 4 | 6 | 3 | 8 | 1 | 7 |
+| **Hijo 2** | 9 | 4 | 5 | 2 | 5 | 6 | 7 | 8 | 9 |
+
+Ninguno es una permutación. El Hijo 1 visita dos veces las ciudades 1 y 3 y nunca la 5 ni la 9. Al Hijo 2 le pasa lo contrario: repite la 5 y la 9 y le faltan la 1 y la 3.
+</details>
+
+<!-- Comprobado el 2026-10-08: la herramienta muestra en el paso 5 de 6 «El Hijo 1 repite 1, 3 y le faltan 5, 9; el Hijo 2 repite 5, 9 y le faltan 1, 3. Ninguno de los dos es una permutación válida». -->
+:::
+
+Los cruces de la representación binaria no sirven para permutaciones: casi siempre producen hijos con genes repetidos y otros que faltan [@talbi2009, p. 218]. Hacen falta cruces que respeten la condición de validez de la [sección 7.1](#para-que-cruzar). Los tres más usados son OX, PMX y CX. Los tres aprovechan algo de cada padre, pero conservan cosas distintas.
+
+:::: {.callout-note .ejercicio #ejercicio-7-5 title="Ejercicio 7.5 · ¿Algún corte con suerte?"}
+Con los padres del [ejemplo 7.5](#ejemplo-7-5), ¿hay algún punto de corte con el que el cruce en un punto dé hijos válidos? ¿Qué condición tendría que cumplirse?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+El Hijo 1 es válido si su cabeza (del Padre 1) y su cola (del Padre 2) no comparten ninguna ciudad. Eso ocurre si las cabezas de los dos padres contienen las mismas ciudades, aunque sea en distinto orden. Con estos padres no pasa con ningún corte. Por ejemplo, con el corte tras la posición 8, la cabeza del Padre 1 contiene las ciudades 1 a 8 y la del Padre 2 incluye el 9. Si un hijo es válido, el otro también, porque lo que sobra en uno es justo lo que le falta al otro.
+</details>
+::::
+
+::: {.callout-note .en-app title="En la aplicación · crossover-ga, «Contraejemplo: cruce en un punto»"}
+[Explorar en crossover-ga](https://josemagalan.github.io/crossover-ga/#op=one-point-perm&lang=es){.explorar target="_blank"}
+
+- Pulsa **Ver como rutas**. Cada gen se convierte en una ciudad y cada cromosoma, en una ruta del viajante. Observa qué ciudades quedan sin visitar en cada hijo.
+- Pulsa **Padres aleatorios** varias veces. ¿Cuántas veces salen hijos válidos?
+:::
+
+<!-- Comprobado con el código (2026-10-08): con estos padres, ningún corte de 1 a 8 da hijos válidos. -->
+
+## 7.6 Cruce OX [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#ox}
+
+¿Cómo podemos copiar un trozo de un padre y completar el hijo sin repetir ninguna ciudad?
+
+El **cruce de orden**, OX (*order crossover*), procede de una propuesta de @davis1985 y la versión con dos cortes la describe @goldberg1989. Se eligen dos cortes, y el tramo entre ellos es el **segmento**. Para formar el Hijo 1:
+
+1. El Hijo 1 copia el segmento del Padre 1, en las mismas posiciones.
+2. Se recorre el Padre 2 empezando tras el segundo corte y dando la vuelta, y se apuntan, en ese orden, las ciudades que todavía no están en el hijo.
+3. Esas ciudades se colocan en los huecos del hijo, empezando también tras el segundo corte y dando la vuelta hasta el principio.
+
+El Hijo 2 se forma igual, con los papeles de los padres cambiados. Así, cada hijo conserva un tramo de un padre y el **orden relativo** en que el otro padre visita las demás ciudades [@talbi2009, p. 218]. En crossover-ga es la variante «Clásica (Goldberg, 1989)». La herramienta abre por defecto otra variante, que veremos en la [sección 7.9](#otros-cruces); los enlaces de este capítulo ya seleccionan la clásica.
+
+::: {.callout-tip .ejemplo #ejemplo-7-6 title="Ejemplo reproducible 7.6 · Segmento y orden"}
+**Datos.** Los padres del [ejemplo 7.5](#ejemplo-7-5). Cortes tras las posiciones 3 y 7: el segmento son las posiciones 4–7.
+
+| Posición | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Padre 1 | 1 | 2 | 3 | **4** | **5** | **6** | **7** | 8 | 9 |
+| Padre 2 | 9 | 4 | 5 | **2** | **6** | **3** | **8** | 1 | 7 |
+
+**Predice.** ¿Qué ciudades del Padre 2 faltan en el Hijo 1 tras copiar el segmento, y en qué orden? ¿En qué posiciones se colocan?
+
+[Abrir: cruce OX](https://josemagalan.github.io/crossover-ga/#op=ox&lang=es&v=classic&p1=1-2-3-4-5-6-7-8-9&p2=9-4-5-2-6-3-8-1-7&c=3-7){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+El Hijo 1 copia 4 5 6 7 en las posiciones 4–7. El Padre 2, leído desde la posición 8 y dando la vuelta, es 1 7 9 4 5 2 6 3 8. Saltando las ciudades del segmento quedan 1, 9, 2, 3 y 8, en ese orden, y se colocan en las posiciones 8, 9, 1, 2 y 3.
+
+| Posición | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Hijo 1** | 2 | 3 | 8 | 4 | 5 | 6 | 7 | 1 | 9 |
+| **Hijo 2** | 4 | 5 | 7 | 2 | 6 | 3 | 8 | 9 | 1 |
+
+El Hijo 2 copia el segmento del Padre 2 (2 6 3 8) y coloca 9, 1, 4, 5 y 7, en el orden del Padre 1 leído desde la posición 8.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (cruce OX)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/crossover-ga/#op=ox&lang=es&v=classic&p1=1-2-3-4-5-6-7-8-9&p2=9-4-5-2-6-3-8-1-7&c=3-7" loading="lazy" title="crossover-ga: cruce OX"></iframe>
+</details>
+
+<!-- Comprobado el 2026-10-08: con v=classic, la herramienta muestra en el paso 20 de 20 los hijos 2 3 8 4 5 6 7 1 9 y 4 5 7 2 6 3 8 9 1. La variante por defecto (from_start) daría 3 8 1 4 5 6 7 9 2 y 5 7 9 2 6 3 8 1 4 (sección 7.9). -->
+:::
+
+::: {.callout-note .en-app title="En la aplicación · crossover-ga, «Cruce OX»"}
+[Explorar en crossover-ga](https://josemagalan.github.io/crossover-ga/#op=ox&lang=es&v=classic){.explorar target="_blank"}
+
+- Comprueba que en **Variante** está elegida «Clásica (Goldberg, 1989)». Si abres la herramienta desde el portal, sale otra por defecto.
+- Avanza paso a paso: los números pequeños en los huecos indican el orden en que se rellenan.
+- Arrastra los cortes para cambiar el segmento y predice el Hijo 1 antes de avanzar.
+- Usa **Practicar** con varios **Padres aleatorios** hasta acertar los dos hijos a la primera.
+:::
+
+## 7.7 Cruce PMX [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#pmx}
+
+¿Podemos completar el hijo respetando, siempre que se pueda, la posición que cada ciudad tenía en un padre?
+
+El **cruce PMX** (*partially mapped crossover*) lo propusieron @goldberg1985 para el problema del viajante. También usa dos cortes y un segmento, pero rellena el resto de otra forma. En la herramienta, para formar el Hijo 1:
+
+1. El Hijo 1 recibe el segmento del Padre 2.
+2. Los pares de genes que ocupan la misma posición del segmento forman una **tabla de correspondencias**: Padre 1 ↔ Padre 2.
+3. Fuera del segmento, cada posición copia el gen del Padre 1 si no está ya en el hijo.
+4. Si ya está, se busca en la tabla su correspondiente, y se repite hasta encontrar un gen que no esté en el hijo.
+
+El Hijo 2 se forma igual, con el segmento del Padre 1 y el resto del Padre 2. Algunos textos dan al Hijo 1 el segmento del Padre 1; se obtienen los mismos dos hijos con los nombres cambiados.
+
+::: {.callout-tip .ejemplo #ejemplo-7-7 title="Ejemplo reproducible 7.7 · Seguir las correspondencias"}
+**Datos.** Los mismos padres y cortes del [ejemplo 7.6](#ejemplo-7-6): segmento en las posiciones 4–7. La tabla de correspondencias es 4 ↔ 2, 5 ↔ 6, 6 ↔ 3 y 7 ↔ 8.
+
+**Predice.** El Hijo 1 recibe 2 6 3 8 en las posiciones 4–7. ¿Qué gen va en la posición 3, donde el Padre 1 tiene un 3?
+
+[Abrir: cruce PMX](https://josemagalan.github.io/crossover-ga/#op=pmx&lang=es&p1=1-2-3-4-5-6-7-8-9&p2=9-4-5-2-6-3-8-1-7&c=3-7){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+El 3 ya está en el segmento del hijo. Su correspondiente es el 6, que también está. El correspondiente del 6 es el 5, que no está: va un **5** (cadena 3 → 6 → 5). Del mismo modo, en la posición 2 va un 4 (2 → 4) y en la 8, un 7 (8 → 7). Las posiciones 1 y 9 copian el 1 y el 9 del Padre 1.
+
+| Posición | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Hijo 1** | 1 | 4 | 5 | 2 | 6 | 3 | 8 | 7 | 9 |
+| **Hijo 2** | 9 | 2 | 3 | 4 | 5 | 6 | 7 | 1 | 8 |
+
+En el Hijo 2, las cadenas son 4 → 2 en la posición 2, 5 → 6 → 3 en la 3 y 7 → 8 en la 9.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (cruce PMX)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/crossover-ga/#op=pmx&lang=es&p1=1-2-3-4-5-6-7-8-9&p2=9-4-5-2-6-3-8-1-7&c=3-7" loading="lazy" title="crossover-ga: cruce PMX"></iframe>
+</details>
+
+<!-- Comprobado el 2026-10-08: la herramienta muestra en el paso 31 de 31 los hijos 1 4 5 2 6 3 8 7 9 y 9 2 3 4 5 6 7 1 8, y «El Hijo 1 conserva el segmento del Padre 2 y 2 de 5 posiciones del Padre 1». Las cadenas proceden de la traza del código. -->
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-7-7 title="Ejercicio 7.7 · OX frente a PMX"}
+Compara el Hijo 1 de OX ([ejemplo 7.6](#ejemplo-7-6)) con el de PMX. Fuera del segmento, ¿cuántas ciudades conserva cada uno en la misma posición que en el padre que lo completa?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+Fuera del segmento están las posiciones 1, 2, 3, 8 y 9. El Hijo 1 de PMX (1 4 5 · · · · 7 9) conserva dos ciudades en la posición que tenían en el Padre 1: el 1 y el 9. El de OX (2 3 8 · · · · 1 9) solo conserva una en la posición que tenía en el Padre 2, el 1 de la posición 8, pero conserva el orden relativo de las cinco. PMX tiende a conservar posiciones y OX, el orden. Lo mediremos en la [sección 7.10](#que-conserva).
+</details>
+::::
+
+::: {.callout-note .en-app title="En la aplicación · crossover-ga, «Cruce PMX»"}
+[Explorar en crossover-ga](https://josemagalan.github.io/crossover-ga/#op=pmx&lang=es){.explorar target="_blank"}
+
+- Avanza paso a paso y sigue la **Cadena** que aparece cuando un gen ya está en el hijo.
+- Busca, arrastrando los cortes, un segmento con el que alguna cadena tenga más de dos pasos.
+:::
+
+## 7.8 Cruce CX [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#cx}
+
+¿Y si queremos que cada ciudad del hijo ocupe exactamente la posición que tenía en uno de sus padres?
+
+El **cruce de ciclos**, CX (*cycle crossover*), lo propusieron @oliver1987. No usa cortes. Se parece al cruce uniforme, que decide cada posición por separado, pero aquí las decisiones van encadenadas. Si el Hijo 1 toma de la posición 1 el gen del Padre 1, ese mismo gen no puede venir del Padre 2 en otra posición. Por tanto, la posición donde el Padre 2 tiene ese gen también debe tomarse del Padre 1, y así sucesivamente hasta volver a la posición 1. Esas posiciones forman un **ciclo**.
+
+Para formar los hijos:
+
+1. Se empieza por la primera posición libre y se sigue la cadena hasta cerrar el ciclo.
+2. Se elige al azar de qué padre toma el Hijo 1 todo ese ciclo. El Hijo 2 lo toma del otro.
+3. Se repite con la siguiente posición libre hasta completar los hijos.
+
+Es la variante por defecto de la herramienta, «Ciclos al azar». Los dos hijos son siempre permutaciones válidas, y el Hijo 2 es el complementario del Hijo 1.
+
+::: {.callout-tip .ejemplo #ejemplo-7-8 title="Ejemplo reproducible 7.8 · Tres ciclos"}
+**Datos.** Los padres del [ejemplo 7.5](#ejemplo-7-5). En el sorteo, el Hijo 1 toma el primer ciclo del Padre 1, el segundo del Padre 2 y el tercero del Padre 1.
+
+**Predice.** ¿Qué posiciones forman cada ciclo? ¿Cuáles son los hijos?
+
+[Abrir: cruce CX](https://josemagalan.github.io/crossover-ga/#op=cx&lang=es&v=random&r=8&p1=1-2-3-4-5-6-7-8-9&p2=9-4-5-2-6-3-8-1-7){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+- **Ciclo 1**, del Padre 1. Empieza en la posición 1, con el 1. En el Padre 2, el 1 está en la posición 8; allí el Padre 1 tiene un 8, que en el Padre 2 está en la 7; el 7 está en la 9, y el 9, en la 1. Posiciones 1, 8, 7 y 9.
+- **Ciclo 2**, del Padre 2. Empieza en la posición 2: posiciones 2 y 4.
+- **Ciclo 3**, del Padre 1. Empieza en la posición 3: posiciones 3, 6 y 5.
+
+| Posición | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Hijo 1** | 1 | 4 | 3 | 2 | 5 | 6 | 7 | 8 | 9 |
+| **Hijo 2** | 9 | 2 | 5 | 4 | 6 | 3 | 8 | 1 | 7 |
+
+Cada ciudad está en la posición que tenía en uno de los padres.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (cruce CX)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/crossover-ga/#op=cx&lang=es&v=random&r=8&p1=1-2-3-4-5-6-7-8-9&p2=9-4-5-2-6-3-8-1-7" loading="lazy" title="crossover-ga: cruce CX"></iframe>
+</details>
+
+<!-- Comprobado el 2026-10-08: la herramienta muestra en el paso 14 de 14 los hijos 1 4 3 2 5 6 7 8 9 y 9 2 5 4 6 3 8 1 7, con los ciclos 1 → 8 → 7 → 9 (Padre 1), 2 → 4 (Padre 2) y 3 → 6 → 5 (Padre 1). -->
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-7-8 title="Ejercicio 7.8 · ¿Cuántos hijos distintos?"}
+Con los padres del [ejemplo 7.8](#ejemplo-7-8), ¿cuántos Hijos 1 distintos puede dar CX con la variante «Ciclos al azar»? ¿Con qué probabilidad es el Hijo 1 una copia exacta de uno de los padres?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+Hay tres ciclos y cada uno puede venir de cualquiera de los dos padres: $2^3 = 8$ Hijos 1 distintos, todos igual de probables. Dos de ellos son copias: todos los ciclos del Padre 1, o todos del Padre 2. La probabilidad es 2/8 = 0,25. Con menos ciclos, las copias son más frecuentes: con dos ciclos, la mitad de las veces.
+</details>
+::::
+
+::: {.callout-note .en-app title="En la aplicación · crossover-ga, «Cruce CX»"}
+[Explorar en crossover-ga](https://josemagalan.github.io/crossover-ga/#op=cx&lang=es){.explorar target="_blank"}
+
+- Avanza paso a paso y sigue las flechas entre los padres hasta que se cierra cada ciclo.
+- Pulsa **Sortear de nuevo** varias veces con los mismos padres. ¿Cuántas veces sale una copia de un padre?
+- Pulsa **Ver como rutas** y compara la longitud de las rutas de los hijos con las de los padres.
+:::
+
+## 7.9 Otros cruces [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#otros-cruces}
+
+Esta sección amplía el recorrido básico. Requiere la máscara de cruce de la [sección 7.2](#uno-y-dos-puntos) y los cruces de las secciones [7.4](#reales) a [7.8](#cx).
+
+**Cruce en *n* puntos.** Generaliza los cruces por cortes: con *k* cortes, los tramos alternan entre copiar del propio padre y tomar del otro. Su máscara cambia de valor en cada corte. Con un corte es el cruce en un punto, y con dos, el de dos puntos.
+
+**Cruce BLX-α.** @eshelman1993 propusieron sortear cada gen de los hijos en el intervalo de los padres ampliado por los dos lados. Si en una posición los padres valen $c_{\min}$ y $c_{\max}$, con $I = c_{\max} - c_{\min}$, cada hijo se sortea de manera uniforme en $[c_{\min} - \alpha I,\ c_{\max} + \alpha I]$. Con α = 0 los hijos quedan dentro del intervalo de los padres; con α > 0 pueden salir de él, lo que contrarresta la concentración de la [sección 7.4](#reales).
+
+::: {.callout-tip .ejemplo #ejemplo-7-9 title="Ejemplo reproducible 7.9 · Salir del intervalo"}
+**Datos.** Los padres reales del [ejemplo 7.4](#ejemplo-7-4), con α = 0,5. En la posición 2 los padres valen 8,5 y 2,5, así que $I = 6$ y los hijos se sortean en $[-0{,}5;\ 11{,}5]$.
+
+**Predice.** ¿Qué proporción de los genes de los hijos esperas que caiga fuera del intervalo de sus padres?
+
+[Abrir: cruce BLX-α con α = 0,5](https://josemagalan.github.io/crossover-ga/#op=blx&lang=es&r=1&alpha=0.5&p1=2-8.5-4-1.5-6&p2=6-2.5-5-9.5-3){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+| Posición | 1 | 2 | 3 | 4 | 5 |
+|---|:---:|:---:|:---:|:---:|:---:|
+| Intervalo de los padres | [2; 6] | [2,5; 8,5] | [4; 5] | [1,5; 9,5] | [3; 6] |
+| **Hijo 1** | 5,02 | 5,83 | *5,44* | 7,31 | 4,05 |
+| **Hijo 2** | *0,02* | *11,27* | 4,06 | 9,03 | *7,47* |
+
+Cuatro de los diez genes (en cursiva) caen fuera del intervalo de sus padres. Con α = 0,5, el intervalo ampliado mide el doble que el de los padres, así que se espera que la mitad de los genes caiga fuera.
+</details>
+
+<!-- Comprobado el 2026-10-08: la herramienta muestra en el paso 8 de 8 los hijos 5,02 5,83 5,44 7,31 4,05 y 0,02 11,27 4,06 9,03 7,47. La proporción esperada (50 %) coincide con la columna «Dentro del intervalo» de «Comparar operadores» con padres al azar (código, compare.randomMean). -->
+:::
+
+**Cruce SBX.** El *simulated binary crossover* de @deb1995 imita con números reales la dispersión del cruce en un punto binario. Los dos hijos quedan a la misma distancia de la media de los padres, y el parámetro η controla cuánto se alejan: con η grande, los hijos quedan cerca de los padres.
+
+**Variantes de OX.** La variante por defecto de crossover-ga, «Orden desde el inicio», lee el Padre 2 desde la primera posición, no desde el segundo corte, y rellena los huecos a partir del segundo corte, como la clásica. Con los padres del [ejemplo 7.6](#ejemplo-7-6) da los hijos 3 8 1 4 5 6 7 9 2 y 5 7 9 2 6 3 8 1 4. Cada hijo sigue conservando el segmento de su padre y, leído en círculo, el orden relativo del otro, pero la variante no es pura, como veremos en el [ejemplo 7.11](#ejemplo-7-11). En la variante «De izquierda a derecha», el Padre 2 se lee desde la primera posición y los huecos se rellenan en orden.
+
+**Variantes de CX.** En CX, la variante «Primer ciclo del Padre 1 (Goldberg, 1989)» toma el primer ciclo del Padre 1 y todas las demás posiciones del Padre 2, y «Ciclos alternos» alterna los padres de un ciclo a otro. Ninguna de las dos necesita sorteo. Con los padres del [ejemplo 7.8](#ejemplo-7-8), la primera da el Hijo 1 1 4 5 2 6 3 7 8 9, y la segunda coincide con el de ese ejemplo, porque allí el sorteo alternó los padres.
+
+**Cruce ERX.** El *edge recombination crossover* de @whitley1989 intenta que el hijo herede las **aristas** de los padres: los pares de ciudades vecinas en la ruta. Construye una tabla de adyacencias con los vecinos de cada ciudad en los dos padres y, a cada paso, elige como siguiente ciudad el vecino con menos opciones pendientes.
+
+::: {.callout-note .en-app title="En la aplicación · crossover-ga"}
+- Abre [Cruce en n puntos](https://josemagalan.github.io/crossover-ga/#op=n-point&lang=es){target="_blank"} y sube el **Número de cortes** de 1 a 5. ¿Cómo cambia la máscara?
+- Abre [Cruce SBX](https://josemagalan.github.io/crossover-ga/#op=sbx&lang=es){target="_blank"} y mueve la **Concentración (η)** entre 1 y 20 mirando la nube de otros hijos posibles.
+- En [Cruce OX](https://josemagalan.github.io/crossover-ga/#op=ox&lang=es&v=from_start&p1=1-2-3-4-5-6-7-8-9&p2=9-4-5-2-6-3-8-1-7&c=3-7){target="_blank"}, con los padres del [ejemplo 7.6](#ejemplo-7-6), y en [Cruce CX](https://josemagalan.github.io/crossover-ga/#op=cx&lang=es){target="_blank"}, cambia la **Variante** con los mismos padres y compara los hijos.
+- Abre [Cruce ERX](https://josemagalan.github.io/crossover-ga/#op=erx&lang=es){target="_blank"}, sigue la tabla de adyacencias paso a paso y pulsa **Ver como rutas**.
+:::
+
+## 7.10 Qué conserva cada operador [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#que-conserva}
+
+Esta sección requiere los cruces de permutación de las secciones [7.6](#ox) a [7.9](#otros-cruces).
+
+La heredabilidad de la [sección 7.1](#para-que-cruzar) se puede concretar: ¿qué hereda el hijo de sus padres? Con permutaciones hay tres respuestas posibles, y cada cruce favorece una:
+
+- **Posición:** la ciudad ocupa la misma posición que en un padre. CX la conserva siempre, por construcción.
+- **Orden relativo:** las ciudades se visitan en el mismo orden que en un padre, aunque en otras posiciones. Es lo que conserva OX del segundo padre [@talbi2009, p. 218].
+- **Adyacencias:** las ciudades vecinas en el hijo ya eran vecinas en un padre. Es lo que busca ERX.
+
+Qué conviene conservar depende del problema. En el viajante, con distancias iguales a la ida y a la vuelta, la longitud de una ruta depende solo de qué ciudades son vecinas, no de la posición en que empieza la ruta. En otros problemas de secuenciación puede importar el orden o la posición. @oliver1987 compararon PMX, OX y CX en el problema del viajante.
+
+::: {.callout-tip .ejemplo #ejemplo-7-10 title="Ejemplo reproducible 7.10 · Comparar los cruces de permutación"}
+**Datos.** La pantalla «Comparar operadores» de crossover-ga aplica todos los cruces de una representación a los mismos padres. La tabla «Qué conserva cada operador» puede promediar sobre muchos padres al azar: aquí, 1000 parejas de padres de longitud 9, con 10 cruces de cada operador por pareja. OX se aplica en su variante clásica.
+
+**Predice.** ¿Qué operador conserva más posiciones? ¿Cuál, más adyacencias? ¿Hay alguno que, a menudo, no mezcle nada?
+
+[Abrir: comparar los cruces de permutación](https://josemagalan.github.io/crossover-ga/#cmp=permutation&lang=es&from=ox&v=classic&avg=rand&r=8&p1=1-2-3-4-5-6-7-8-9&p2=9-4-5-2-6-3-8-1-7&c=3-7){.abrir target="_blank"}
+
+La media con padres al azar tarda unos segundos en calcularse.
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+| Operador | Posición | Orden relativo | Adyacencias | Copia de un padre | Hijos válidos |
+|---|:---:|:---:|:---:|:---:|:---:|
+| Contraejemplo: un punto | 100 % | 49 % | 86 % | 3 % | 4 % |
+| PMX | 83 % | 71 % | 72 % | 4 % | 100 % |
+| OX | 62 % | 84 % | 77 % | 4 % | 100 % |
+| CX | 100 % | 91 % | 89 % | 63 % | 100 % |
+| ERX | 36 % | 50 % | 93 % | 2 % | 100 % |
+
+Hay que leer la tabla por partes. El cruce en un punto conserva todas las posiciones, pero solo el 4 % de sus hijos es válido. CX conserva todas las posiciones, pero el 63 % de sus hijos es copia de un padre: con nueve ciudades suele haber pocos ciclos ([ejercicio 7.8](#ejercicio-7-8)), y una copia puntúa al 100 % en todo. Entre los demás, PMX es el que más posiciones conserva, OX el que más orden relativo y ERX el que más adyacencias.
+</details>
+
+<!-- Comprobado el 2026-10-08: la tabla de la interfaz, con «Media con: padres al azar» y OX en la variante «Clásica» (from=ox&v=classic), muestra estos porcentajes (en negrita). Los mismos valores se obtienen con compare.randomMean (1000 parejas, 10 cruces, semilla 1). Con la variante por defecto de OX, su fila sería 47 / 84 / 77 / 3 / 100. Entre paréntesis, la interfaz muestra los del ejemplo de la parte superior, que no se usan aquí. -->
+:::
+
+::: {.callout-note .en-app title="En la aplicación · crossover-ga, «Comparar operadores»"}
+[Explorar en crossover-ga](https://josemagalan.github.io/crossover-ga/#cmp=permutation&lang=es){.explorar target="_blank"}
+
+- Cambia **Media con** entre «estos padres» y «padres al azar». ¿Qué columnas dependen más de los padres concretos?
+- Haz la misma comparación con [los cruces binarios](https://josemagalan.github.io/crossover-ga/#cmp=binary&lang=es){target="_blank"} (columnas «Del padre propio» y «Tramos») y con [los reales](https://josemagalan.github.io/crossover-ga/#cmp=real&lang=es){target="_blank"} (columnas «Dentro del intervalo» y «Distancia»).
+- Despliega «Qué mide cada columna» para ver la definición exacta de cada medida.
+:::
+
+## 7.11 Ampliaciones [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas} {#ampliaciones}
+
+**Más propiedades de un cruce.** @talbi2009 [pp. 213–214] precisa la heredabilidad. Un cruce es **puro** si dos padres idénticos dan hijos idénticos a ellos: solo recombina, y deja a la mutación la tarea de introducir valores nuevos. Es **respetuoso** si conserva lo que tienen en común los dos padres, como los cruces binarios en las posiciones 2 y 6 del [ejemplo 7.2](#ejemplo-7-2).
+
+El detalle de cada variante importa. @talbi2009 [p. 218] señala que OX, tal como se explica en la [sección 7.6](#ox), es puro, y que deja de serlo si se empieza a leer o a rellenar en el primer corte. Tampoco lo es la variante «Orden desde el inicio» de la [sección 7.9](#otros-cruces), que empieza a leer el otro padre por la primera posición.
+
+::: {.callout-tip .ejemplo #ejemplo-7-11 title="Ejemplo reproducible 7.11 · Cruzar un padre consigo mismo"}
+**Datos.** Los dos padres son la ruta 1 2 3 4 5 6 7 8 9. Cruce OX con el segmento en las posiciones 4–7, con la variante «Orden desde el inicio» y con la «Clásica (Goldberg, 1989)».
+
+**Predice.** ¿Son los hijos iguales a los padres en las dos variantes?
+
+[Abrir: OX, «Orden desde el inicio»](https://josemagalan.github.io/crossover-ga/#op=ox&lang=es&v=from_start&p1=1-2-3-4-5-6-7-8-9&p2=1-2-3-4-5-6-7-8-9&c=3-7){.abrir target="_blank"}
+[Abrir: OX, «Clásica»](https://josemagalan.github.io/crossover-ga/#op=ox&lang=es&v=classic&p1=1-2-3-4-5-6-7-8-9&p2=1-2-3-4-5-6-7-8-9&c=3-7){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+Con la variante clásica, los dos hijos son **1 2 3 4 5 6 7 8 9**, iguales a los padres. Con «Orden desde el inicio», los dos hijos son **3 8 9 4 5 6 7 1 2**. Las ciudades de fuera del segmento (1, 2, 3, 8 y 9) se leen desde el principio, pero se colocan a partir del segundo corte, y así se desplazan. Ni siquiera es la misma ruta leída desde otra ciudad: las ciudades 3 y 8 pasan a ser vecinas.
+</details>
+
+<!-- Comprobado el 2026-10-08 en la interfaz (paso 20 de 20) y con el código. -->
+:::
+
+**Esquemas y bloques.** La teoría de esquemas de Holland explica por qué el cruce en un punto conserva con más facilidad los grupos de genes próximos que los alejados [@goldberg1989; @whitley1994]. Es la idea que hay detrás de la [sección 7.2](#uno-y-dos-puntos).
+
+**Los cromosomas como rutas.** En los cruces de permutación, el botón **Ver como rutas** de crossover-ga dibuja cada cromosoma como una ruta del viajante sobre un mapa de ciudades al azar. Muestra la longitud de cada ruta y marca los tramos nuevos del hijo, que no estaban en ningún padre. Así se ve qué significan, en el problema, las columnas de la [sección 7.10](#que-conserva).
+
+## Resumen {#resumen}
+
+- El cruce combina dos padres en dos hijos, que deben heredar rasgos de los padres y ser soluciones válidas.
+- En binaria y entera, los cruces en un punto, en dos puntos y uniforme se describen con una máscara. Donde los padres coinciden, los hijos también.
+- En la representación real, el cruce uniforme copia valores y el aritmético los promedia; ninguno sale del intervalo de los padres.
+- Las permutaciones necesitan cruces propios: OX conserva el orden relativo, PMX completa con correspondencias y CX conserva las posiciones.
+
+## Referencias del capítulo {#referencias}
+
+<!-- Seguimiento interno: entradas nuevas en referencias.bib, tomadas de la bibliografía de crossover-ga (commit e6fb577). Cotejadas el 2026-10-08 con los PDF de Recursos: talbi2009 (pp. 213–214 y 218), davis1985 (título, autor y páginas), eshelman1993 (título, autores y pp. 187–202) y deb1995 (revista, volumen y páginas). Las demás, pendientes de cotejo. La lista se genera con las obras citadas en el capítulo. -->
+
+::: {.referencias-capitulo #refs}
+:::
