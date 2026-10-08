@@ -27,9 +27,7 @@ Un buen cruce tiene que cumplir dos condiciones [@talbi2009, pp. 213–214]:
 
 El cruce actúa sobre el genotipo, así que cada representación tiene sus propios operadores. En este capítulo los veremos para las representaciones binaria (y entera), real y de permutación.
 
-No se cruzan todas las parejas. Cada pareja se cruza con una probabilidad *Pc*, la **probabilidad de cruce**; si no se cruza, sus hijos son copias de los padres. Así, aunque el cruce rompa una buena combinación de genes en una pareja, otras pasan intactas a la generación siguiente. Los valores más usados de *Pc* están entre 0,45 y 0,95 [@talbi2009, p. 214]. Cómo elegirla con experimentos se verá más adelante, en el capítulo dedicado a los parámetros.
-
-<!-- Enlace pendiente: cuando exista, enlazar «el capítulo dedicado a los parámetros» con #sec-experimentos (10). -->
+No se cruzan todas las parejas. Cada pareja se cruza con una probabilidad *Pc*, la **probabilidad de cruce**; si no se cruza, sus hijos son copias de los padres. Así, aunque el cruce rompa una buena combinación de genes en una pareja, otras pasan intactas a la generación siguiente. Los valores más usados de *Pc* están entre 0,45 y 0,95 [@talbi2009, p. 214]. Cómo elegirla con experimentos se verá más adelante, en el [capítulo dedicado a los parámetros](10-experimentos.qmd#pc-pm).
 
 **Notación.** Seguimos la de la herramienta: Padre 1 y Padre 2, Hijo 1 e Hijo 2. Las posiciones se numeran desde 1, y «corte tras la posición 3» separa las posiciones 1–3 de las demás.
 

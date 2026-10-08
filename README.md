@@ -15,6 +15,7 @@ Libro para aprender algoritmos genéticos de forma práctica, con actividades so
 | 7. Cruzar | Borrador completo, en revisión |
 | 8. Mutar | Borrador completo, en revisión |
 | 9. Reemplazar y parar | Borrador completo, pendiente de revisión |
+| 10. Parámetros y aleatoriedad | Borrador completo, pendiente de revisión |
 | Agradecimientos y avisos | Texto aprobado |
 
 El resto de capítulos está en preparación.
