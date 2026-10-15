@@ -4,451 +4,451 @@
 
 Aquí están todas las cajas de trabajo del libro. Los **ejemplos reproducibles** abren la herramienta en un estado fijado, de modo que el resultado coincide con el del libro; las cajas **En la aplicación** proponen explorar sin resultados fijados; los **ejercicios** se resuelven con papel y lápiz. La primera parte las ordena por herramienta, para preparar una sesión con una aplicación concreta; la segunda, por capítulo. La columna de nivel es la de la sección en la que está la caja.
 
-## Por herramienta {#por-herramienta}
+## Por herramienta {.unnumbered #por-herramienta}
 
-### Portal genetic-algorithms-lab {#h-portal}
+### Portal genetic-algorithms-lab {.unnumbered #h-portal}
 
 2 cajas «En la aplicación».
 
 | Actividad | Título | Sección | Nivel |
 |---|---|:-:|:-:|
-| [En la aplicación](02-ciclo.qmd#ciclo) | «Así encajan en el algoritmo» | [2.2](02-ciclo.qmd#ciclo) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](11-recapitulacion.qmd#problema-nuevo) | Exploración libre | [11.4](11-recapitulacion.qmd#problema-nuevo) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](02-ciclo.qmd#sec-ciclo-ciclo) | «Así encajan en el algoritmo» | [2.2](02-ciclo.qmd#sec-ciclo-ciclo) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](11-recapitulacion.qmd#sec-recapitulacion-problema-nuevo) | Exploración libre | [11.4](11-recapitulacion.qmd#sec-recapitulacion-problema-nuevo) | [[B]{.corto}]{.nivel .basico .solo-corto} |
 
-### representation-ga · Representación {#h-representation-ga}
+### representation-ga · Representación {.unnumbered #h-representation-ga}
 
 10 ejemplos reproducibles y 8 cajas «En la aplicación».
 
 | Actividad | Título | Sección | Nivel |
 |---|---|:-:|:-:|
-| [Ejemplo 3.1](03-representacion.qmd#ejemplo-3-1) | De bits a un punto | [3.1](03-representacion.qmd#genotipo-fenotipo) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](03-representacion.qmd#genotipo-fenotipo) | «Optimización de una función continua» | [3.1](03-representacion.qmd#genotipo-fenotipo) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 3.3](03-representacion.qmd#ejemplo-3-3) | Más bits, mejor rejilla | [3.3](03-representacion.qmd#precision) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](03-representacion.qmd#precision) | «Optimización de una función continua» | [3.3](03-representacion.qmd#precision) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 3.4](03-representacion.qmd#ejemplo-3-4) | Cargas y makespan | [3.4](03-representacion.qmd#entera) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](03-representacion.qmd#entera) | «Asignación de tareas a máquinas» | [3.4](03-representacion.qmd#entera) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 3.5](03-representacion.qmd#ejemplo-3-5) | Un circuito, doce cromosomas | [3.5](03-representacion.qmd#permutaciones) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](03-representacion.qmd#permutaciones) | «Problema del viajante (TSP)» | [3.5](03-representacion.qmd#permutaciones) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 3.6](03-representacion.qmd#ejemplo-3-6) | Un punto que la binaria no puede escribir | [3.6](03-representacion.qmd#real) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 3.7](03-representacion.qmd#ejemplo-3-7) | Tres cromosomas, ¿cuáles caben? | [3.7](03-representacion.qmd#validez) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](03-representacion.qmd#validez) | «Problema de la mochila» | [3.7](03-representacion.qmd#validez) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 3.8](03-representacion.qmd#ejemplo-3-8) | El mismo punto, dos códigos | [3.8](03-representacion.qmd#gray) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](03-representacion.qmd#gray) | «Comparar codificaciones» | [3.8](03-representacion.qmd#gray) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 3.9](03-representacion.qmd#ejemplo-3-9) | Una matriz que no es un plan | [3.9](03-representacion.qmd#matriz) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](03-representacion.qmd#matriz) | «Comparar codificaciones» | [3.9](03-representacion.qmd#matriz) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 3.10](03-representacion.qmd#ejemplo-3-10) | Cinco tratamientos para un mismo cromosoma | [3.10](03-representacion.qmd#infactibles) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 3.11](03-representacion.qmd#ejemplo-3-11) | Tres salidas para un punto | [3.11](03-representacion.qmd#fuera-caja) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](03-representacion.qmd#fuera-caja) | «Optimización de una función continua» | [3.11](03-representacion.qmd#fuera-caja) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 3.1](03-representacion.qmd#ejemplo-representacion-genotipo-fenotipo) | De bits a un punto | [3.1](03-representacion.qmd#sec-representacion-genotipo-fenotipo) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](03-representacion.qmd#sec-representacion-genotipo-fenotipo) | «Optimización de una función continua» | [3.1](03-representacion.qmd#sec-representacion-genotipo-fenotipo) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 3.3](03-representacion.qmd#ejemplo-representacion-precision) | Más bits, mejor rejilla | [3.3](03-representacion.qmd#sec-representacion-precision) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](03-representacion.qmd#sec-representacion-precision) | «Optimización de una función continua» | [3.3](03-representacion.qmd#sec-representacion-precision) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 3.4](03-representacion.qmd#ejemplo-representacion-entera) | Cargas y makespan | [3.4](03-representacion.qmd#sec-representacion-entera) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](03-representacion.qmd#sec-representacion-entera) | «Asignación de tareas a máquinas» | [3.4](03-representacion.qmd#sec-representacion-entera) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 3.5](03-representacion.qmd#ejemplo-representacion-permutaciones) | Un circuito, doce cromosomas | [3.5](03-representacion.qmd#sec-representacion-permutaciones) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](03-representacion.qmd#sec-representacion-permutaciones) | «Problema del viajante (TSP)» | [3.5](03-representacion.qmd#sec-representacion-permutaciones) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 3.6](03-representacion.qmd#ejemplo-representacion-real) | Un punto que la binaria no puede escribir | [3.6](03-representacion.qmd#sec-representacion-real) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 3.7](03-representacion.qmd#ejemplo-representacion-validez) | Tres cromosomas, ¿cuáles caben? | [3.7](03-representacion.qmd#sec-representacion-validez) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](03-representacion.qmd#sec-representacion-validez) | «Problema de la mochila» | [3.7](03-representacion.qmd#sec-representacion-validez) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 3.8](03-representacion.qmd#ejemplo-representacion-gray) | El mismo punto, dos códigos | [3.8](03-representacion.qmd#sec-representacion-gray) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](03-representacion.qmd#sec-representacion-gray) | «Comparar codificaciones» | [3.8](03-representacion.qmd#sec-representacion-gray) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 3.9](03-representacion.qmd#ejemplo-representacion-matriz) | Una matriz que no es un plan | [3.9](03-representacion.qmd#sec-representacion-matriz) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](03-representacion.qmd#sec-representacion-matriz) | «Comparar codificaciones» | [3.9](03-representacion.qmd#sec-representacion-matriz) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 3.10](03-representacion.qmd#ejemplo-representacion-infactibles) | Cinco tratamientos para un mismo cromosoma | [3.10](03-representacion.qmd#sec-representacion-infactibles) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 3.11](03-representacion.qmd#ejemplo-representacion-fuera-caja) | Tres salidas para un punto | [3.11](03-representacion.qmd#sec-representacion-fuera-caja) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](03-representacion.qmd#sec-representacion-fuera-caja) | «Optimización de una función continua» | [3.11](03-representacion.qmd#sec-representacion-fuera-caja) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
 
-### initialization-and-evaluation-ga · Inicialización y evaluación {#h-initialization-and-evaluation-ga}
+### initialization-and-evaluation-ga · Inicialización y evaluación {.unnumbered #h-initialization-and-evaluation-ga}
 
 13 ejemplos reproducibles y 11 cajas «En la aplicación».
 
 | Actividad | Título | Sección | Nivel |
 |---|---|:-:|:-:|
-| [Ejemplo 4.1](04-inicializar-evaluar.qmd#ejemplo-4-1) | Una asignación al azar | [4.1](04-inicializar-evaluar.qmd#uniforme) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](04-inicializar-evaluar.qmd#uniforme) | «Aleatoria uniforme» | [4.1](04-inicializar-evaluar.qmd#uniforme) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 4.2](04-inicializar-evaluar.qmd#ejemplo-4-2) | Un circuito de cinco ciudades | [4.2](04-inicializar-evaluar.qmd#fisher-yates) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 4.3](04-inicializar-evaluar.qmd#ejemplo-4-3) | Ocho mochilas al azar | [4.3](04-inicializar-evaluar.qmd#diversidad) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](04-inicializar-evaluar.qmd#diversidad) | «Aleatoria uniforme» | [4.3](04-inicializar-evaluar.qmd#diversidad) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 4.4](04-inicializar-evaluar.qmd#ejemplo-4-4) | Basta una copia | [4.4](04-inicializar-evaluar.qmd#sembrar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](04-inicializar-evaluar.qmd#sembrar) | «Sembrar con una heurística (contraejemplo)» | [4.4](04-inicializar-evaluar.qmd#sembrar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 4.5](04-inicializar-evaluar.qmd#ejemplo-4-5) | Evaluar una mochila que no cabe | [4.5](04-inicializar-evaluar.qmd#evaluar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](04-inicializar-evaluar.qmd#evaluar) | «Del genotipo a la aptitud» | [4.5](04-inicializar-evaluar.qmd#evaluar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 4.6](04-inicializar-evaluar.qmd#ejemplo-4-6) | Seis asignaciones en la ruleta | [4.6](04-inicializar-evaluar.qmd#objetivo-aptitud) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](04-inicializar-evaluar.qmd#objetivo-aptitud) | «Objetivo frente a aptitud» | [4.6](04-inicializar-evaluar.qmd#objetivo-aptitud) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 4.7](04-inicializar-evaluar.qmd#ejemplo-4-7) | ¿Cuánto debe costar pasarse? | [4.7](04-inicializar-evaluar.qmd#penalizacion) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](04-inicializar-evaluar.qmd#penalizacion) | «Restricciones como penalización» | [4.7](04-inicializar-evaluar.qmd#penalizacion) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 4.8](04-inicializar-evaluar.qmd#ejemplo-4-8) | Lo que ahorra una caché | [4.8](04-inicializar-evaluar.qmd#coste) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](04-inicializar-evaluar.qmd#coste) | «Coste de evaluar» | [4.8](04-inicializar-evaluar.qmd#coste) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 4.9](04-inicializar-evaluar.qmd#ejemplo-4-9) | Halton a mano | [4.9](04-inicializar-evaluar.qmd#cuasialeatoria) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](04-inicializar-evaluar.qmd#cuasialeatoria) | «Cuasialeatoria e hipercubo latino» | [4.9](04-inicializar-evaluar.qmd#cuasialeatoria) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 4.10](04-inicializar-evaluar.qmd#ejemplo-4-10) | Seis asignaciones separadas | [4.10](04-inicializar-evaluar.qmd#inhibicion) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 4.11](04-inicializar-evaluar.qmd#ejemplo-4-11) | Mochilas llenas | [4.11](04-inicializar-evaluar.qmd#factible) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](04-inicializar-evaluar.qmd#factible) | «Inicialización factible» y «Comparar estrategias» | [4.11](04-inicializar-evaluar.qmd#factible) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 4.12](04-inicializar-evaluar.qmd#ejemplo-4-12) | Subir por los vecinos | [4.12](04-inicializar-evaluar.qmd#paisaje) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](04-inicializar-evaluar.qmd#paisaje) | «Paisaje de aptitud» | [4.12](04-inicializar-evaluar.qmd#paisaje) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 4.13](04-inicializar-evaluar.qmd#ejemplo-4-13) | Dos individuos que se confunden | [4.13](04-inicializar-evaluar.qmd#ruido) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](04-inicializar-evaluar.qmd#ruido) | «Aptitud con ruido» | [4.13](04-inicializar-evaluar.qmd#ruido) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 4.1](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-uniforme) | Una asignación al azar | [4.1](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-uniforme) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-uniforme) | «Aleatoria uniforme» | [4.1](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-uniforme) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 4.2](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-fisher-yates) | Un circuito de cinco ciudades | [4.2](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-fisher-yates) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 4.3](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-diversidad) | Ocho mochilas al azar | [4.3](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-diversidad) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-diversidad) | «Aleatoria uniforme» | [4.3](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-diversidad) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 4.4](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-sembrar) | Basta una copia | [4.4](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-sembrar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-sembrar) | «Sembrar con una heurística (contraejemplo)» | [4.4](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-sembrar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 4.5](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-evaluar) | Evaluar una mochila que no cabe | [4.5](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-evaluar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-evaluar) | «Del genotipo a la aptitud» | [4.5](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-evaluar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 4.6](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-objetivo-aptitud) | Seis asignaciones en la ruleta | [4.6](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-objetivo-aptitud) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-objetivo-aptitud) | «Objetivo frente a aptitud» | [4.6](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-objetivo-aptitud) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 4.7](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-penalizacion) | ¿Cuánto debe costar pasarse? | [4.7](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-penalizacion) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-penalizacion) | «Restricciones como penalización» | [4.7](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-penalizacion) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 4.8](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-coste) | Lo que ahorra una caché | [4.8](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-coste) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-coste) | «Coste de evaluar» | [4.8](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-coste) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 4.9](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-cuasialeatoria) | Halton a mano | [4.9](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-cuasialeatoria) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-cuasialeatoria) | «Cuasialeatoria e hipercubo latino» | [4.9](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-cuasialeatoria) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 4.10](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-inhibicion) | Seis asignaciones separadas | [4.10](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-inhibicion) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 4.11](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-factible) | Mochilas llenas | [4.11](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-factible) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-factible) | «Inicialización factible» y «Comparar estrategias» | [4.11](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-factible) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 4.12](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-paisaje) | Subir por los vecinos | [4.12](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-paisaje) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-paisaje) | «Paisaje de aptitud» | [4.12](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-paisaje) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 4.13](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-ruido) | Dos individuos que se confunden | [4.13](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-ruido) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-ruido) | «Aptitud con ruido» | [4.13](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-ruido) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
 
-### selection-ga · Selección {#h-selection-ga}
+### selection-ga · Selección {.unnumbered #h-selection-ga}
 
 13 ejemplos reproducibles, 11 cajas «En la aplicación» y 3 ejercicios.
 
 | Actividad | Título | Sección | Nivel |
 |---|---|:-:|:-:|
-| [En la aplicación](01-evolucion.qmd#dos-fuerzas) | «Comparar mecanismos» | [1.3](01-evolucion.qmd#dos-fuerzas) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 2.5](02-ciclo.qmd#ejemplo-2-5) | Cuatro giros de la ruleta | [2.5](02-ciclo.qmd#seleccionar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 2.7](02-ciclo.qmd#ejemplo-2-7) | La nueva población | [2.7](02-ciclo.qmd#reemplazar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 2.7](02-ciclo.qmd#ejercicio-2-7) | El mejor se pierde | [2.7](02-ciclo.qmd#reemplazar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 5.2](05-seleccion.qmd#ejemplo-5-2) | Cuatro torneos binarios | [5.2](05-seleccion.qmd#torneo) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](05-seleccion.qmd#torneo) | «Selección por torneo» | [5.2](05-seleccion.qmd#torneo) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 5.3](05-seleccion.qmd#ejemplo-5-3) | Cuatro giros de la ruleta | [5.3](05-seleccion.qmd#ruleta) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](05-seleccion.qmd#ruleta) | «Ruleta» | [5.3](05-seleccion.qmd#ruleta) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 5.4](05-seleccion.qmd#ejemplo-5-4) | Sumar una constante a la aptitud | [5.4](05-seleccion.qmd#ruleta-deja-de-distinguir) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](05-seleccion.qmd#ruleta-deja-de-distinguir) | «Contraejemplo: aptitud desplazada» | [5.4](05-seleccion.qmd#ruleta-deja-de-distinguir) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 5.5](05-seleccion.qmd#ejemplo-5-5) | Cuarenta generaciones solo con selección | [5.5](05-seleccion.qmd#truncamiento) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](05-seleccion.qmd#seleccion-y-diversidad) | «Comparar mecanismos» | [5.6](05-seleccion.qmd#seleccion-y-diversidad) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 5.7](05-seleccion.qmd#ejemplo-5-7) | SUS frente a la ruleta | [5.7](05-seleccion.qmd#otros-mecanismos) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](05-seleccion.qmd#otros-mecanismos) | Exploración libre | [5.7](05-seleccion.qmd#otros-mecanismos) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 5.8](05-seleccion.qmd#ejemplo-5-8) | El mismo individuo, dos sorteos | [5.8](05-seleccion.qmd#ampliaciones) | [[+]{.corto}]{.nivel .saber-mas .solo-corto} |
-| [En la aplicación](05-seleccion.qmd#ampliaciones) | «Selección de Axelrod» | [5.8](05-seleccion.qmd#ampliaciones) | [[+]{.corto}]{.nivel .saber-mas .solo-corto} |
-| [Ejemplo 8.2](08-reemplazo.qmd#ejemplo-8-2) | Los hijos sustituyen a todos | [8.2](08-reemplazo.qmd#generacional) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 8.3](08-reemplazo.qmd#ejemplo-8-3) | Un individuo de élite | [8.3](08-reemplazo.qmd#elitismo) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 8.3](08-reemplazo.qmd#ejercicio-8-3) | A mano | [8.3](08-reemplazo.qmd#elitismo) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](08-reemplazo.qmd#elitismo) | «Generacional con elitismo» | [8.3](08-reemplazo.qmd#elitismo) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 8.4](08-reemplazo.qmd#ejemplo-8-4) | Dos hijos entran en la población | [8.4](08-reemplazo.qmd#estacionario) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](08-reemplazo.qmd#estacionario) | «Estado estacionario» | [8.4](08-reemplazo.qmd#estacionario) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 8.7](08-reemplazo.qmd#ejemplo-8-7) | Tres formas de dejar sitio | [8.7](08-reemplazo.qmd#variantes-estacionario) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejercicio 8.7](08-reemplazo.qmd#ejercicio-8-7) | Un hijo peor que todos | [8.7](08-reemplazo.qmd#variantes-estacionario) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](08-reemplazo.qmd#variantes-estacionario) | «Estado estacionario» | [8.7](08-reemplazo.qmd#variantes-estacionario) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 8.8](08-reemplazo.qmd#ejemplo-8-8) | Competir juntos o solo entre hijos | [8.8](08-reemplazo.qmd#mu-lambda) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](08-reemplazo.qmd#mu-lambda) | (μ + λ) y (μ, λ) | [8.8](08-reemplazo.qmd#mu-lambda) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](01-evolucion.qmd#sec-evolucion-dos-fuerzas) | «Comparar mecanismos» | [1.3](01-evolucion.qmd#sec-evolucion-dos-fuerzas) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 2.5](02-ciclo.qmd#ejemplo-ciclo-seleccionar) | Cuatro giros de la ruleta | [2.5](02-ciclo.qmd#sec-ciclo-seleccionar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 2.7](02-ciclo.qmd#ejemplo-ciclo-reemplazar) | La nueva población | [2.7](02-ciclo.qmd#sec-ciclo-reemplazar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 2.7](02-ciclo.qmd#ejercicio-ciclo-reemplazar) | El mejor se pierde | [2.7](02-ciclo.qmd#sec-ciclo-reemplazar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 5.2](05-seleccion.qmd#ejemplo-seleccion-torneo) | Cuatro torneos binarios | [5.2](05-seleccion.qmd#sec-seleccion-torneo) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](05-seleccion.qmd#sec-seleccion-torneo) | «Selección por torneo» | [5.2](05-seleccion.qmd#sec-seleccion-torneo) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 5.3](05-seleccion.qmd#ejemplo-seleccion-ruleta) | Cuatro giros de la ruleta | [5.3](05-seleccion.qmd#sec-seleccion-ruleta) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](05-seleccion.qmd#sec-seleccion-ruleta) | «Ruleta» | [5.3](05-seleccion.qmd#sec-seleccion-ruleta) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 5.4](05-seleccion.qmd#ejemplo-seleccion-ruleta-deja-de-distinguir) | Sumar una constante a la aptitud | [5.4](05-seleccion.qmd#sec-seleccion-ruleta-deja-de-distinguir) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](05-seleccion.qmd#sec-seleccion-ruleta-deja-de-distinguir) | «Contraejemplo: aptitud desplazada» | [5.4](05-seleccion.qmd#sec-seleccion-ruleta-deja-de-distinguir) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 5.5](05-seleccion.qmd#ejemplo-seleccion-truncamiento) | Cuarenta generaciones solo con selección | [5.5](05-seleccion.qmd#sec-seleccion-truncamiento) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](05-seleccion.qmd#sec-seleccion-seleccion-y-diversidad) | «Comparar mecanismos» | [5.6](05-seleccion.qmd#sec-seleccion-seleccion-y-diversidad) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 5.7](05-seleccion.qmd#ejemplo-seleccion-otros-mecanismos) | SUS frente a la ruleta | [5.7](05-seleccion.qmd#sec-seleccion-otros-mecanismos) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](05-seleccion.qmd#sec-seleccion-otros-mecanismos) | Exploración libre | [5.7](05-seleccion.qmd#sec-seleccion-otros-mecanismos) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 5.8](05-seleccion.qmd#ejemplo-seleccion-ampliaciones) | El mismo individuo, dos sorteos | [5.8](05-seleccion.qmd#sec-seleccion-ampliaciones) | [[+]{.corto}]{.nivel .saber-mas .solo-corto} |
+| [En la aplicación](05-seleccion.qmd#sec-seleccion-ampliaciones) | «Selección de Axelrod» | [5.8](05-seleccion.qmd#sec-seleccion-ampliaciones) | [[+]{.corto}]{.nivel .saber-mas .solo-corto} |
+| [Ejemplo 8.2](08-reemplazo.qmd#ejemplo-reemplazo-generacional) | Los hijos sustituyen a todos | [8.2](08-reemplazo.qmd#sec-reemplazo-generacional) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 8.3](08-reemplazo.qmd#ejemplo-reemplazo-elitismo) | Un individuo de élite | [8.3](08-reemplazo.qmd#sec-reemplazo-elitismo) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 8.3](08-reemplazo.qmd#ejercicio-reemplazo-elitismo) | A mano | [8.3](08-reemplazo.qmd#sec-reemplazo-elitismo) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](08-reemplazo.qmd#sec-reemplazo-elitismo) | «Generacional con elitismo» | [8.3](08-reemplazo.qmd#sec-reemplazo-elitismo) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 8.4](08-reemplazo.qmd#ejemplo-reemplazo-estacionario) | Dos hijos entran en la población | [8.4](08-reemplazo.qmd#sec-reemplazo-estacionario) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](08-reemplazo.qmd#sec-reemplazo-estacionario) | «Estado estacionario» | [8.4](08-reemplazo.qmd#sec-reemplazo-estacionario) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 8.7](08-reemplazo.qmd#ejemplo-reemplazo-variantes-estacionario) | Tres formas de dejar sitio | [8.7](08-reemplazo.qmd#sec-reemplazo-variantes-estacionario) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 8.7](08-reemplazo.qmd#ejercicio-reemplazo-variantes-estacionario) | Un hijo peor que todos | [8.7](08-reemplazo.qmd#sec-reemplazo-variantes-estacionario) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](08-reemplazo.qmd#sec-reemplazo-variantes-estacionario) | «Estado estacionario» | [8.7](08-reemplazo.qmd#sec-reemplazo-variantes-estacionario) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 8.8](08-reemplazo.qmd#ejemplo-reemplazo-mu-lambda) | Competir juntos o solo entre hijos | [8.8](08-reemplazo.qmd#sec-reemplazo-mu-lambda) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](08-reemplazo.qmd#sec-reemplazo-mu-lambda) | (μ + λ) y (μ, λ) | [8.8](08-reemplazo.qmd#sec-reemplazo-mu-lambda) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
 
-### crossover-ga · Cruce {#h-crossover-ga}
+### crossover-ga · Cruce {.unnumbered #h-crossover-ga}
 
 12 ejemplos reproducibles y 10 cajas «En la aplicación».
 
 | Actividad | Título | Sección | Nivel |
 |---|---|:-:|:-:|
-| [Ejemplo 2.6](02-ciclo.qmd#ejemplo-2-6) | Dos cruces en un punto | [2.6](02-ciclo.qmd#variar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 6.2](06-cruce.qmd#ejemplo-6-2) | Un corte y dos cortes | [6.2](06-cruce.qmd#uno-y-dos-puntos) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](06-cruce.qmd#uno-y-dos-puntos) | «Cruce en un punto» | [6.2](06-cruce.qmd#uno-y-dos-puntos) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 6.3](06-cruce.qmd#ejemplo-6-3) | Una máscara sorteada, con bits y con enteros | [6.3](06-cruce.qmd#uniforme) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](06-cruce.qmd#uniforme) | «Cruce uniforme» | [6.3](06-cruce.qmd#uniforme) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 6.4](06-cruce.qmd#ejemplo-6-4) | Copiar o mezclar | [6.4](06-cruce.qmd#reales) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](06-cruce.qmd#reales) | «Cruce aritmético» | [6.4](06-cruce.qmd#reales) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 6.5](06-cruce.qmd#ejemplo-6-5) | Cortar dos rutas | [6.5](06-cruce.qmd#permutaciones) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](06-cruce.qmd#permutaciones) | «Contraejemplo: cruce en un punto» | [6.5](06-cruce.qmd#permutaciones) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 6.6](06-cruce.qmd#ejemplo-6-6) | Segmento y orden | [6.6](06-cruce.qmd#ox) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](06-cruce.qmd#ox) | «Cruce OX» | [6.6](06-cruce.qmd#ox) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 6.7](06-cruce.qmd#ejemplo-6-7) | Seguir las correspondencias | [6.7](06-cruce.qmd#pmx) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](06-cruce.qmd#pmx) | «Cruce PMX» | [6.7](06-cruce.qmd#pmx) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 6.8](06-cruce.qmd#ejemplo-6-8) | Tres ciclos | [6.8](06-cruce.qmd#cx) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](06-cruce.qmd#cx) | «Cruce CX» | [6.8](06-cruce.qmd#cx) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 6.9](06-cruce.qmd#ejemplo-6-9) | Salir del intervalo | [6.9](06-cruce.qmd#otros-cruces) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](06-cruce.qmd#otros-cruces) | Exploración libre | [6.9](06-cruce.qmd#otros-cruces) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 6.10](06-cruce.qmd#ejemplo-6-10) | Comparar los cruces de permutación | [6.10](06-cruce.qmd#que-conserva) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](06-cruce.qmd#que-conserva) | «Comparar operadores» | [6.10](06-cruce.qmd#que-conserva) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 6.11](06-cruce.qmd#ejemplo-6-11) | Cruzar un padre consigo mismo | [6.11](06-cruce.qmd#ampliaciones) | [[+]{.corto}]{.nivel .saber-mas .solo-corto} |
-| [Ejemplo 10.3](10-viajante.qmd#ejemplo-10-3) | El cruce y la mutación de la generación | [10.3](10-viajante.qmd#a-mano) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](10-viajante.qmd#a-mano) | «Cruce OX» | [10.3](10-viajante.qmd#a-mano) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 2.6](02-ciclo.qmd#ejemplo-ciclo-variar) | Dos cruces en un punto | [2.6](02-ciclo.qmd#sec-ciclo-variar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 6.2](06-cruce.qmd#ejemplo-cruce-uno-y-dos-puntos) | Un corte y dos cortes | [6.2](06-cruce.qmd#sec-cruce-uno-y-dos-puntos) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](06-cruce.qmd#sec-cruce-uno-y-dos-puntos) | «Cruce en un punto» | [6.2](06-cruce.qmd#sec-cruce-uno-y-dos-puntos) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 6.3](06-cruce.qmd#ejemplo-cruce-uniforme) | Una máscara sorteada, con bits y con enteros | [6.3](06-cruce.qmd#sec-cruce-uniforme) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](06-cruce.qmd#sec-cruce-uniforme) | «Cruce uniforme» | [6.3](06-cruce.qmd#sec-cruce-uniforme) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 6.4](06-cruce.qmd#ejemplo-cruce-reales) | Copiar o mezclar | [6.4](06-cruce.qmd#sec-cruce-reales) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](06-cruce.qmd#sec-cruce-reales) | «Cruce aritmético» | [6.4](06-cruce.qmd#sec-cruce-reales) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 6.5](06-cruce.qmd#ejemplo-cruce-permutaciones) | Cortar dos rutas | [6.5](06-cruce.qmd#sec-cruce-permutaciones) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](06-cruce.qmd#sec-cruce-permutaciones) | «Contraejemplo: cruce en un punto» | [6.5](06-cruce.qmd#sec-cruce-permutaciones) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 6.6](06-cruce.qmd#ejemplo-cruce-ox) | Segmento y orden | [6.6](06-cruce.qmd#sec-cruce-ox) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](06-cruce.qmd#sec-cruce-ox) | «Cruce OX» | [6.6](06-cruce.qmd#sec-cruce-ox) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 6.7](06-cruce.qmd#ejemplo-cruce-pmx) | Seguir las correspondencias | [6.7](06-cruce.qmd#sec-cruce-pmx) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](06-cruce.qmd#sec-cruce-pmx) | «Cruce PMX» | [6.7](06-cruce.qmd#sec-cruce-pmx) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 6.8](06-cruce.qmd#ejemplo-cruce-cx) | Tres ciclos | [6.8](06-cruce.qmd#sec-cruce-cx) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](06-cruce.qmd#sec-cruce-cx) | «Cruce CX» | [6.8](06-cruce.qmd#sec-cruce-cx) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 6.9](06-cruce.qmd#ejemplo-cruce-otros-cruces) | Salir del intervalo | [6.9](06-cruce.qmd#sec-cruce-otros-cruces) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](06-cruce.qmd#sec-cruce-otros-cruces) | Exploración libre | [6.9](06-cruce.qmd#sec-cruce-otros-cruces) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 6.10](06-cruce.qmd#ejemplo-cruce-que-conserva) | Comparar los cruces de permutación | [6.10](06-cruce.qmd#sec-cruce-que-conserva) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](06-cruce.qmd#sec-cruce-que-conserva) | «Comparar operadores» | [6.10](06-cruce.qmd#sec-cruce-que-conserva) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 6.11](06-cruce.qmd#ejemplo-cruce-ampliaciones) | Cruzar un padre consigo mismo | [6.11](06-cruce.qmd#sec-cruce-ampliaciones) | [[+]{.corto}]{.nivel .saber-mas .solo-corto} |
+| [Ejemplo 10.3](10-viajante.qmd#ejemplo-viajante-a-mano) | El cruce y la mutación de la generación | [10.3](10-viajante.qmd#sec-viajante-a-mano) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](10-viajante.qmd#sec-viajante-a-mano) | «Cruce OX» | [10.3](10-viajante.qmd#sec-viajante-a-mano) | [[B]{.corto}]{.nivel .basico .solo-corto} |
 
-### mutation-ga · Mutación {#h-mutation-ga}
+### mutation-ga · Mutación {.unnumbered #h-mutation-ga}
 
 10 ejemplos reproducibles y 9 cajas «En la aplicación».
 
 | Actividad | Título | Sección | Nivel |
 |---|---|:-:|:-:|
-| [En la aplicación](02-ciclo.qmd#variar) | «Inversión de bits» | [2.6](02-ciclo.qmd#variar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 7.2](07-mutacion.qmd#ejemplo-7-2) | Un sorteo por posición | [7.2](07-mutacion.qmd#inversion-bits) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](07-mutacion.qmd#inversion-bits) | «Inversión de bits» | [7.2](07-mutacion.qmd#inversion-bits) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 7.3](07-mutacion.qmd#ejemplo-7-3) | Saltar o deslizarse | [7.3](07-mutacion.qmd#enteros) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](07-mutacion.qmd#enteros) | «Mutación por deslizamiento» | [7.3](07-mutacion.qmd#enteros) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 7.4](07-mutacion.qmd#ejemplo-7-4) | El tamaño del paso | [7.4](07-mutacion.qmd#gaussiana) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](07-mutacion.qmd#gaussiana) | «Mutación gaussiana» | [7.4](07-mutacion.qmd#gaussiana) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 7.5](07-mutacion.qmd#ejemplo-7-5) | Cambiar ciudades al azar | [7.5](07-mutacion.qmd#permutaciones) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](07-mutacion.qmd#permutaciones) | «Contraejemplo: reinicio aleatorio» | [7.5](07-mutacion.qmd#permutaciones) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 7.6](07-mutacion.qmd#ejemplo-7-6) | Tres formas de recolocar | [7.6](07-mutacion.qmd#intercambio-insercion-inversion) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](07-mutacion.qmd#intercambio-insercion-inversion) | mutaciones de permutación | [7.6](07-mutacion.qmd#intercambio-insercion-inversion) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 7.7](07-mutacion.qmd#ejemplo-7-7) | Poca o mucha mutación | [7.7](07-mutacion.qmd#cuanto-mutar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](07-mutacion.qmd#cuanto-mutar) | «Comparar operadores» | [7.7](07-mutacion.qmd#cuanto-mutar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 7.8](07-mutacion.qmd#ejemplo-7-8) | Saltos que se estrechan | [7.8](07-mutacion.qmd#otras-mutaciones) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](07-mutacion.qmd#otras-mutaciones) | Exploración libre | [7.8](07-mutacion.qmd#otras-mutaciones) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 7.9](07-mutacion.qmd#ejemplo-7-9) | Comparar las mutaciones de permutación | [7.9](07-mutacion.qmd#que-conserva) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](07-mutacion.qmd#que-conserva) | «Comparar operadores» | [7.9](07-mutacion.qmd#que-conserva) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 7.10](07-mutacion.qmd#ejemplo-7-10) | Invertir casi todo | [7.10](07-mutacion.qmd#ampliaciones) | [[+]{.corto}]{.nivel .saber-mas .solo-corto} |
-| [Ejemplo 10.3](10-viajante.qmd#ejemplo-10-3) | El cruce y la mutación de la generación | [10.3](10-viajante.qmd#a-mano) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](02-ciclo.qmd#sec-ciclo-variar) | «Inversión de bits» | [2.6](02-ciclo.qmd#sec-ciclo-variar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 7.2](07-mutacion.qmd#ejemplo-mutacion-inversion-bits) | Un sorteo por posición | [7.2](07-mutacion.qmd#sec-mutacion-inversion-bits) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](07-mutacion.qmd#sec-mutacion-inversion-bits) | «Inversión de bits» | [7.2](07-mutacion.qmd#sec-mutacion-inversion-bits) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 7.3](07-mutacion.qmd#ejemplo-mutacion-enteros) | Saltar o deslizarse | [7.3](07-mutacion.qmd#sec-mutacion-enteros) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](07-mutacion.qmd#sec-mutacion-enteros) | «Mutación por deslizamiento» | [7.3](07-mutacion.qmd#sec-mutacion-enteros) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 7.4](07-mutacion.qmd#ejemplo-mutacion-gaussiana) | El tamaño del paso | [7.4](07-mutacion.qmd#sec-mutacion-gaussiana) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](07-mutacion.qmd#sec-mutacion-gaussiana) | «Mutación gaussiana» | [7.4](07-mutacion.qmd#sec-mutacion-gaussiana) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 7.5](07-mutacion.qmd#ejemplo-mutacion-permutaciones) | Cambiar ciudades al azar | [7.5](07-mutacion.qmd#sec-mutacion-permutaciones) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](07-mutacion.qmd#sec-mutacion-permutaciones) | «Contraejemplo: reinicio aleatorio» | [7.5](07-mutacion.qmd#sec-mutacion-permutaciones) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 7.6](07-mutacion.qmd#ejemplo-mutacion-intercambio-insercion-inversion) | Tres formas de recolocar | [7.6](07-mutacion.qmd#sec-mutacion-intercambio-insercion-inversion) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](07-mutacion.qmd#sec-mutacion-intercambio-insercion-inversion) | mutaciones de permutación | [7.6](07-mutacion.qmd#sec-mutacion-intercambio-insercion-inversion) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 7.7](07-mutacion.qmd#ejemplo-mutacion-cuanto-mutar) | Poca o mucha mutación | [7.7](07-mutacion.qmd#sec-mutacion-cuanto-mutar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](07-mutacion.qmd#sec-mutacion-cuanto-mutar) | «Comparar operadores» | [7.7](07-mutacion.qmd#sec-mutacion-cuanto-mutar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 7.8](07-mutacion.qmd#ejemplo-mutacion-otras-mutaciones) | Saltos que se estrechan | [7.8](07-mutacion.qmd#sec-mutacion-otras-mutaciones) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](07-mutacion.qmd#sec-mutacion-otras-mutaciones) | Exploración libre | [7.8](07-mutacion.qmd#sec-mutacion-otras-mutaciones) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 7.9](07-mutacion.qmd#ejemplo-mutacion-que-conserva) | Comparar las mutaciones de permutación | [7.9](07-mutacion.qmd#sec-mutacion-que-conserva) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](07-mutacion.qmd#sec-mutacion-que-conserva) | «Comparar operadores» | [7.9](07-mutacion.qmd#sec-mutacion-que-conserva) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 7.10](07-mutacion.qmd#ejemplo-mutacion-ampliaciones) | Invertir casi todo | [7.10](07-mutacion.qmd#sec-mutacion-ampliaciones) | [[+]{.corto}]{.nivel .saber-mas .solo-corto} |
+| [Ejemplo 10.3](10-viajante.qmd#ejemplo-viajante-a-mano) | El cruce y la mutación de la generación | [10.3](10-viajante.qmd#sec-viajante-a-mano) | [[B]{.corto}]{.nivel .basico .solo-corto} |
 
-### EvoTraveller {#h-evotraveller}
+### EvoTraveller {.unnumbered #h-evotraveller}
 
 8 ejemplos reproducibles y 2 cajas «En la aplicación».
 
 | Actividad | Título | Sección | Nivel |
 |---|---|:-:|:-:|
-| [En la aplicación](02-ciclo.qmd#ejecucion) | Exploración libre | [2.9](02-ciclo.qmd#ejecucion) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 9.1](09-experimentos.qmd#ejemplo-9-1) | Una ejecución | [9.1](09-experimentos.qmd#azar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 9.2](09-experimentos.qmd#ejemplo-9-2) | Sin mutación, con poca y con más | [9.2](09-experimentos.qmd#pc-pm) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 9.3](09-experimentos.qmd#ejemplo-9-3) | Cinco mapas, tres valores de pm | [9.3](09-experimentos.qmd#replicas) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](09-experimentos.qmd#casos-parecidos) | Exploración libre | [9.5](09-experimentos.qmd#casos-parecidos) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 10.1](10-viajante.qmd#ejemplo-10-1) | Una ejecución, de principio a fin | [10.1](10-viajante.qmd#observa) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 10.2](10-viajante.qmd#ejemplo-10-2) | Seis lugares en EvoTraveller | [10.2](10-viajante.qmd#problema) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 10.4](10-viajante.qmd#ejemplo-10-4) | Torneo de 2 y de 10 | [10.4](10-viajante.qmd#interpretar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 10.5](10-viajante.qmd#ejemplo-10-5) | Élite pequeña y élite grande | [10.5](10-viajante.qmd#elite) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 10.6](10-viajante.qmd#ejemplo-10-6) | Tres mapas, dos configuraciones | [10.6](10-viajante.qmd#caso-real) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](02-ciclo.qmd#sec-ciclo-ejecucion) | Exploración libre | [2.9](02-ciclo.qmd#sec-ciclo-ejecucion) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 9.1](09-experimentos.qmd#ejemplo-experimentos-azar) | Una ejecución | [9.1](09-experimentos.qmd#sec-experimentos-azar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 9.2](09-experimentos.qmd#ejemplo-experimentos-pc-pm) | Sin mutación, con poca y con más | [9.2](09-experimentos.qmd#sec-experimentos-pc-pm) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 9.3](09-experimentos.qmd#ejemplo-experimentos-replicas) | Cinco mapas, tres valores de pm | [9.3](09-experimentos.qmd#sec-experimentos-replicas) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](09-experimentos.qmd#sec-experimentos-casos-parecidos) | Exploración libre | [9.5](09-experimentos.qmd#sec-experimentos-casos-parecidos) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 10.1](10-viajante.qmd#ejemplo-viajante-observa) | Una ejecución, de principio a fin | [10.1](10-viajante.qmd#sec-viajante-observa) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 10.2](10-viajante.qmd#ejemplo-viajante-problema) | Seis lugares en EvoTraveller | [10.2](10-viajante.qmd#sec-viajante-problema) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 10.4](10-viajante.qmd#ejemplo-viajante-interpretar) | Torneo de 2 y de 10 | [10.4](10-viajante.qmd#sec-viajante-interpretar) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 10.5](10-viajante.qmd#ejemplo-viajante-elite) | Élite pequeña y élite grande | [10.5](10-viajante.qmd#sec-viajante-elite) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 10.6](10-viajante.qmd#ejemplo-viajante-caso-real) | Tres mapas, dos configuraciones | [10.6](10-viajante.qmd#sec-viajante-caso-real) | [[B]{.corto}]{.nivel .basico .solo-corto} |
 
-### SelectionMechanisms {#h-selectionmechanisms}
+### SelectionMechanisms {.unnumbered #h-selectionmechanisms}
 
 2 ejemplos reproducibles y 1 caja «En la aplicación».
 
 | Actividad | Título | Sección | Nivel |
 |---|---|:-:|:-:|
-| [Ejemplo 9.7](09-experimentos.qmd#ejemplo-9-7) | Diez generaciones de selección | [9.7](09-experimentos.qmd#diversidad) | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 9.8](09-experimentos.qmd#ejemplo-9-8) | 10 simulaciones o 100 | [9.8](09-experimentos.qmd#numero-replicas) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](09-experimentos.qmd#numero-replicas) | Exploración libre | [9.8](09-experimentos.qmd#numero-replicas) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 9.7](09-experimentos.qmd#ejemplo-experimentos-diversidad) | Diez generaciones de selección | [9.7](09-experimentos.qmd#sec-experimentos-diversidad) | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 9.8](09-experimentos.qmd#ejemplo-experimentos-numero-replicas) | 10 simulaciones o 100 | [9.8](09-experimentos.qmd#sec-experimentos-numero-replicas) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](09-experimentos.qmd#sec-experimentos-numero-replicas) | Exploración libre | [9.8](09-experimentos.qmd#sec-experimentos-numero-replicas) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
 
-## Por capítulo {#por-capitulo}
+## Por capítulo {.unnumbered #por-capitulo}
 
-### 1. Evolución y optimización {#a-cap-1}
-
-| Actividad | Título | Sección | Herramienta | Nivel |
-|---|---|:-:|---|:-:|
-| [Ejercicio 1.1](01-evolucion.qmd#ejercicio-1-1) | El cuello de las jirafas | [1.1](01-evolucion.qmd#darwin) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 1.2](01-evolucion.qmd#ejercicio-1-2) | ¿Es evolutiva la economía? | [1.2](01-evolucion.qmd#sistema-evolutivo) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 1.3](01-evolucion.qmd#ejercicio-1-3) | ¿Evolutivo o no? | [1.2](01-evolucion.qmd#sistema-evolutivo) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](01-evolucion.qmd#dos-fuerzas) | «Comparar mecanismos» | [1.3](01-evolucion.qmd#dos-fuerzas) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 1.4](01-evolucion.qmd#ejercicio-1-4) | ¿Explorar o explotar? | [1.3](01-evolucion.qmd#dos-fuerzas) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 1.5](01-evolucion.qmd#ejercicio-1-5) | ¿Cuántas rutas? | [1.4](01-evolucion.qmd#optimizar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 1.6](01-evolucion.qmd#ejercicio-1-6) | Subir por los vecinos | [1.4](01-evolucion.qmd#optimizar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 1.7](01-evolucion.qmd#ejercicio-1-7) | El algoritmo genético como sistema evolutivo | [1.5](01-evolucion.qmd#evolucion-artificial) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-
-### 2. El ciclo y las decisiones de diseño {#a-cap-2}
+### 1. Evolución y optimización {.unnumbered #a-cap-1}
 
 | Actividad | Título | Sección | Herramienta | Nivel |
 |---|---|:-:|---|:-:|
-| [Ejercicio 2.1](02-ciclo.qmd#ejercicio-2-1) | El vocabulario | [2.1](02-ciclo.qmd#poblacion) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](02-ciclo.qmd#ciclo) | «Así encajan en el algoritmo» | [2.2](02-ciclo.qmd#ciclo) | portal | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 2.2](02-ciclo.qmd#ejercicio-2-2) | Ordena | [2.2](02-ciclo.qmd#ciclo) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 2.3](02-ciclo.qmd#ejercicio-2-3) | Lee el pseudocódigo | [2.3](02-ciclo.qmd#pseudocodigo) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 2.4](02-ciclo.qmd#ejercicio-2-4) | Decodifica y evalúa | [2.4](02-ciclo.qmd#a-mano) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 2.5](02-ciclo.qmd#ejemplo-2-5) | Cuatro giros de la ruleta | [2.5](02-ciclo.qmd#seleccionar) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 2.6](02-ciclo.qmd#ejemplo-2-6) | Dos cruces en un punto | [2.6](02-ciclo.qmd#variar) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 2.6](02-ciclo.qmd#ejercicio-2-6) | ¿Ninguna mutación? | [2.6](02-ciclo.qmd#variar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](02-ciclo.qmd#variar) | «Inversión de bits» | [2.6](02-ciclo.qmd#variar) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 2.7](02-ciclo.qmd#ejemplo-2-7) | La nueva población | [2.7](02-ciclo.qmd#reemplazar) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 2.7](02-ciclo.qmd#ejercicio-2-7) | El mejor se pierde | [2.7](02-ciclo.qmd#reemplazar) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 2.8](02-ciclo.qmd#ejercicio-2-8) | ¿Qué decisión es? | [2.8](02-ciclo.qmd#decisiones) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](02-ciclo.qmd#ejecucion) | Exploración libre | [2.9](02-ciclo.qmd#ejecucion) | EvoTraveller | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 2.9](02-ciclo.qmd#ejercicio-2-9) | Las decisiones de EvoTraveller | [2.9](02-ciclo.qmd#ejecucion) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 2.10](02-ciclo.qmd#ejercicio-2-10) | Contar evaluaciones | [2.10](02-ciclo.qmd#variantes) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 1.1](01-evolucion.qmd#ejercicio-evolucion-darwin) | El cuello de las jirafas | [1.1](01-evolucion.qmd#sec-evolucion-darwin) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 1.2](01-evolucion.qmd#ejercicio-evolucion-sistema-evolutivo) | ¿Es evolutiva la economía? | [1.2](01-evolucion.qmd#sec-evolucion-sistema-evolutivo) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 1.3](01-evolucion.qmd#ejercicio-evolucion-sistema-evolutivo-2) | ¿Evolutivo o no? | [1.2](01-evolucion.qmd#sec-evolucion-sistema-evolutivo) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](01-evolucion.qmd#sec-evolucion-dos-fuerzas) | «Comparar mecanismos» | [1.3](01-evolucion.qmd#sec-evolucion-dos-fuerzas) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 1.4](01-evolucion.qmd#ejercicio-evolucion-dos-fuerzas) | ¿Explorar o explotar? | [1.3](01-evolucion.qmd#sec-evolucion-dos-fuerzas) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 1.5](01-evolucion.qmd#ejercicio-evolucion-optimizar) | ¿Cuántas rutas? | [1.4](01-evolucion.qmd#sec-evolucion-optimizar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 1.6](01-evolucion.qmd#ejercicio-evolucion-optimizar-2) | Subir por los vecinos | [1.4](01-evolucion.qmd#sec-evolucion-optimizar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 1.7](01-evolucion.qmd#ejercicio-evolucion-evolucion-artificial) | El algoritmo genético como sistema evolutivo | [1.5](01-evolucion.qmd#sec-evolucion-evolucion-artificial) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
 
-### 3. Representar soluciones {#a-cap-3}
+### 2. El ciclo y las decisiones de diseño {.unnumbered #a-cap-2}
 
 | Actividad | Título | Sección | Herramienta | Nivel |
 |---|---|:-:|---|:-:|
-| [Ejemplo 3.1](03-representacion.qmd#ejemplo-3-1) | De bits a un punto | [3.1](03-representacion.qmd#genotipo-fenotipo) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 3.1](03-representacion.qmd#ejercicio-3-1) | Decodificar | [3.1](03-representacion.qmd#genotipo-fenotipo) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](03-representacion.qmd#genotipo-fenotipo) | «Optimización de una función continua» | [3.1](03-representacion.qmd#genotipo-fenotipo) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 3.2](03-representacion.qmd#ejercicio-3-2) | Una sola variable en otro intervalo | [3.2](03-representacion.qmd#binaria) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 3.3](03-representacion.qmd#ejemplo-3-3) | Más bits, mejor rejilla | [3.3](03-representacion.qmd#precision) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 3.3](03-representacion.qmd#ejercicio-3-3) | ¿Cuántos bits? | [3.3](03-representacion.qmd#precision) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](03-representacion.qmd#precision) | «Optimización de una función continua» | [3.3](03-representacion.qmd#precision) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 3.4](03-representacion.qmd#ejemplo-3-4) | Cargas y makespan | [3.4](03-representacion.qmd#entera) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 3.4](03-representacion.qmd#ejercicio-3-4) | Cambiar un gen | [3.4](03-representacion.qmd#entera) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](03-representacion.qmd#entera) | «Asignación de tareas a máquinas» | [3.4](03-representacion.qmd#entera) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 3.5](03-representacion.qmd#ejemplo-3-5) | Un circuito, doce cromosomas | [3.5](03-representacion.qmd#permutaciones) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 3.5](03-representacion.qmd#ejercicio-3-5) | ¿Es una permutación? | [3.5](03-representacion.qmd#permutaciones) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](03-representacion.qmd#permutaciones) | «Problema del viajante (TSP)» | [3.5](03-representacion.qmd#permutaciones) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 3.6](03-representacion.qmd#ejemplo-3-6) | Un punto que la binaria no puede escribir | [3.6](03-representacion.qmd#real) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 3.6](03-representacion.qmd#ejercicio-3-6) | Elegir la representación | [3.6](03-representacion.qmd#real) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 3.7](03-representacion.qmd#ejemplo-3-7) | Tres cromosomas, ¿cuáles caben? | [3.7](03-representacion.qmd#validez) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 3.7](03-representacion.qmd#ejercicio-3-7) | ¿Cabe en la mochila? | [3.7](03-representacion.qmd#validez) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](03-representacion.qmd#validez) | «Problema de la mochila» | [3.7](03-representacion.qmd#validez) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 3.8](03-representacion.qmd#ejemplo-3-8) | El mismo punto, dos códigos | [3.8](03-representacion.qmd#gray) | representation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejercicio 3.8](03-representacion.qmd#ejercicio-3-8) | Pasar a Gray y volver | [3.8](03-representacion.qmd#gray) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](03-representacion.qmd#gray) | «Comparar codificaciones» | [3.8](03-representacion.qmd#gray) | representation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 3.9](03-representacion.qmd#ejemplo-3-9) | Una matriz que no es un plan | [3.9](03-representacion.qmd#matriz) | representation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejercicio 3.9](03-representacion.qmd#ejercicio-3-9) | Reparar una matriz | [3.9](03-representacion.qmd#matriz) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](03-representacion.qmd#matriz) | «Comparar codificaciones» | [3.9](03-representacion.qmd#matriz) | representation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 3.10](03-representacion.qmd#ejemplo-3-10) | Cinco tratamientos para un mismo cromosoma | [3.10](03-representacion.qmd#infactibles) | representation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejercicio 3.10](03-representacion.qmd#ejercicio-3-10) | Tres tratamientos | [3.10](03-representacion.qmd#infactibles) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 3.11](03-representacion.qmd#ejemplo-3-11) | Tres salidas para un punto | [3.11](03-representacion.qmd#fuera-caja) | representation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejercicio 3.11](03-representacion.qmd#ejercicio-3-11) | Fuera por la izquierda | [3.11](03-representacion.qmd#fuera-caja) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](03-representacion.qmd#fuera-caja) | «Optimización de una función continua» | [3.11](03-representacion.qmd#fuera-caja) | representation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejercicio 3.12](03-representacion.qmd#ejercicio-3-12) | Clasifica la correspondencia | [3.12](03-representacion.qmd#propiedades) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 2.1](02-ciclo.qmd#ejercicio-ciclo-poblacion) | El vocabulario | [2.1](02-ciclo.qmd#sec-ciclo-poblacion) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](02-ciclo.qmd#sec-ciclo-ciclo) | «Así encajan en el algoritmo» | [2.2](02-ciclo.qmd#sec-ciclo-ciclo) | portal | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 2.2](02-ciclo.qmd#ejercicio-ciclo-ciclo) | Ordena | [2.2](02-ciclo.qmd#sec-ciclo-ciclo) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 2.3](02-ciclo.qmd#ejercicio-ciclo-pseudocodigo) | Lee el pseudocódigo | [2.3](02-ciclo.qmd#sec-ciclo-pseudocodigo) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 2.4](02-ciclo.qmd#ejercicio-ciclo-a-mano) | Decodifica y evalúa | [2.4](02-ciclo.qmd#sec-ciclo-a-mano) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 2.5](02-ciclo.qmd#ejemplo-ciclo-seleccionar) | Cuatro giros de la ruleta | [2.5](02-ciclo.qmd#sec-ciclo-seleccionar) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 2.6](02-ciclo.qmd#ejemplo-ciclo-variar) | Dos cruces en un punto | [2.6](02-ciclo.qmd#sec-ciclo-variar) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 2.6](02-ciclo.qmd#ejercicio-ciclo-variar) | ¿Ninguna mutación? | [2.6](02-ciclo.qmd#sec-ciclo-variar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](02-ciclo.qmd#sec-ciclo-variar) | «Inversión de bits» | [2.6](02-ciclo.qmd#sec-ciclo-variar) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 2.7](02-ciclo.qmd#ejemplo-ciclo-reemplazar) | La nueva población | [2.7](02-ciclo.qmd#sec-ciclo-reemplazar) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 2.7](02-ciclo.qmd#ejercicio-ciclo-reemplazar) | El mejor se pierde | [2.7](02-ciclo.qmd#sec-ciclo-reemplazar) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 2.8](02-ciclo.qmd#ejercicio-ciclo-decisiones) | ¿Qué decisión es? | [2.8](02-ciclo.qmd#sec-ciclo-decisiones) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](02-ciclo.qmd#sec-ciclo-ejecucion) | Exploración libre | [2.9](02-ciclo.qmd#sec-ciclo-ejecucion) | EvoTraveller | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 2.9](02-ciclo.qmd#ejercicio-ciclo-ejecucion) | Las decisiones de EvoTraveller | [2.9](02-ciclo.qmd#sec-ciclo-ejecucion) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 2.10](02-ciclo.qmd#ejercicio-ciclo-variantes) | Contar evaluaciones | [2.10](02-ciclo.qmd#sec-ciclo-variantes) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
 
-### 4. Inicializar y evaluar {#a-cap-4}
+### 3. Representar soluciones {.unnumbered #a-cap-3}
 
 | Actividad | Título | Sección | Herramienta | Nivel |
 |---|---|:-:|---|:-:|
-| [Ejemplo 4.1](04-inicializar-evaluar.qmd#ejemplo-4-1) | Una asignación al azar | [4.1](04-inicializar-evaluar.qmd#uniforme) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 4.1](04-inicializar-evaluar.qmd#ejercicio-4-1) | Las mismas cifras, otras reglas | [4.1](04-inicializar-evaluar.qmd#uniforme) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](04-inicializar-evaluar.qmd#uniforme) | «Aleatoria uniforme» | [4.1](04-inicializar-evaluar.qmd#uniforme) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 4.2](04-inicializar-evaluar.qmd#ejemplo-4-2) | Un circuito de cinco ciudades | [4.2](04-inicializar-evaluar.qmd#fisher-yates) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 4.2](04-inicializar-evaluar.qmd#ejercicio-4-2) | Un barajado que parece bueno | [4.2](04-inicializar-evaluar.qmd#fisher-yates) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 4.3](04-inicializar-evaluar.qmd#ejemplo-4-3) | Ocho mochilas al azar | [4.3](04-inicializar-evaluar.qmd#diversidad) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 4.3](04-inicializar-evaluar.qmd#ejercicio-4-3) | Distancias a mano | [4.3](04-inicializar-evaluar.qmd#diversidad) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](04-inicializar-evaluar.qmd#diversidad) | «Aleatoria uniforme» | [4.3](04-inicializar-evaluar.qmd#diversidad) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 4.4](04-inicializar-evaluar.qmd#ejemplo-4-4) | Basta una copia | [4.4](04-inicializar-evaluar.qmd#sembrar) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 4.4](04-inicializar-evaluar.qmd#ejercicio-4-4) | La invasión, a mano | [4.4](04-inicializar-evaluar.qmd#sembrar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](04-inicializar-evaluar.qmd#sembrar) | «Sembrar con una heurística (contraejemplo)» | [4.4](04-inicializar-evaluar.qmd#sembrar) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 4.5](04-inicializar-evaluar.qmd#ejemplo-4-5) | Evaluar una mochila que no cabe | [4.5](04-inicializar-evaluar.qmd#evaluar) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 4.5](04-inicializar-evaluar.qmd#ejercicio-4-5) | Evaluar a mano | [4.5](04-inicializar-evaluar.qmd#evaluar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](04-inicializar-evaluar.qmd#evaluar) | «Del genotipo a la aptitud» | [4.5](04-inicializar-evaluar.qmd#evaluar) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 4.6](04-inicializar-evaluar.qmd#ejemplo-4-6) | Seis asignaciones en la ruleta | [4.6](04-inicializar-evaluar.qmd#objetivo-aptitud) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 4.6](04-inicializar-evaluar.qmd#ejercicio-4-6) | Sumar una constante | [4.6](04-inicializar-evaluar.qmd#objetivo-aptitud) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](04-inicializar-evaluar.qmd#objetivo-aptitud) | «Objetivo frente a aptitud» | [4.6](04-inicializar-evaluar.qmd#objetivo-aptitud) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 4.7](04-inicializar-evaluar.qmd#ejemplo-4-7) | ¿Cuánto debe costar pasarse? | [4.7](04-inicializar-evaluar.qmd#penalizacion) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 4.7](04-inicializar-evaluar.qmd#ejercicio-4-7) | La penalización cuadrática | [4.7](04-inicializar-evaluar.qmd#penalizacion) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](04-inicializar-evaluar.qmd#penalizacion) | «Restricciones como penalización» | [4.7](04-inicializar-evaluar.qmd#penalizacion) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 4.8](04-inicializar-evaluar.qmd#ejemplo-4-8) | Lo que ahorra una caché | [4.8](04-inicializar-evaluar.qmd#coste) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 4.8](04-inicializar-evaluar.qmd#ejercicio-4-8) | Presupuestos | [4.8](04-inicializar-evaluar.qmd#coste) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](04-inicializar-evaluar.qmd#coste) | «Coste de evaluar» | [4.8](04-inicializar-evaluar.qmd#coste) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 4.9](04-inicializar-evaluar.qmd#ejemplo-4-9) | Halton a mano | [4.9](04-inicializar-evaluar.qmd#cuasialeatoria) | initialization-and-evaluation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejercicio 4.9](04-inicializar-evaluar.qmd#ejercicio-4-9) | Más puntos de Halton | [4.9](04-inicializar-evaluar.qmd#cuasialeatoria) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](04-inicializar-evaluar.qmd#cuasialeatoria) | «Cuasialeatoria e hipercubo latino» | [4.9](04-inicializar-evaluar.qmd#cuasialeatoria) | initialization-and-evaluation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 4.10](04-inicializar-evaluar.qmd#ejemplo-4-10) | Seis asignaciones separadas | [4.10](04-inicializar-evaluar.qmd#inhibicion) | initialization-and-evaluation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejercicio 4.10](04-inicializar-evaluar.qmd#ejercicio-4-10) | ¿Entra o no entra? | [4.10](04-inicializar-evaluar.qmd#inhibicion) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 4.11](04-inicializar-evaluar.qmd#ejemplo-4-11) | Mochilas llenas | [4.11](04-inicializar-evaluar.qmd#factible) | initialization-and-evaluation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejercicio 4.11](04-inicializar-evaluar.qmd#ejercicio-4-11) | El orden decide | [4.11](04-inicializar-evaluar.qmd#factible) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](04-inicializar-evaluar.qmd#factible) | «Inicialización factible» y «Comparar estrategias» | [4.11](04-inicializar-evaluar.qmd#factible) | initialization-and-evaluation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 4.12](04-inicializar-evaluar.qmd#ejemplo-4-12) | Subir por los vecinos | [4.12](04-inicializar-evaluar.qmd#paisaje) | initialization-and-evaluation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejercicio 4.12](04-inicializar-evaluar.qmd#ejercicio-4-12) | ¿Es un óptimo local? | [4.12](04-inicializar-evaluar.qmd#paisaje) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](04-inicializar-evaluar.qmd#paisaje) | «Paisaje de aptitud» | [4.12](04-inicializar-evaluar.qmd#paisaje) | initialization-and-evaluation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 4.13](04-inicializar-evaluar.qmd#ejemplo-4-13) | Dos individuos que se confunden | [4.13](04-inicializar-evaluar.qmd#ruido) | initialization-and-evaluation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejercicio 4.13](04-inicializar-evaluar.qmd#ejercicio-4-13) | ¿Cuántas evaluaciones? | [4.13](04-inicializar-evaluar.qmd#ruido) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](04-inicializar-evaluar.qmd#ruido) | «Aptitud con ruido» | [4.13](04-inicializar-evaluar.qmd#ruido) | initialization-and-evaluation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejercicio 4.14](04-inicializar-evaluar.qmd#ejercicio-4-14) | ¿Quién domina a quién? | [4.14](04-inicializar-evaluar.qmd#ampliaciones) | — | [[+]{.corto}]{.nivel .saber-mas .solo-corto} |
+| [Ejemplo 3.1](03-representacion.qmd#ejemplo-representacion-genotipo-fenotipo) | De bits a un punto | [3.1](03-representacion.qmd#sec-representacion-genotipo-fenotipo) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 3.1](03-representacion.qmd#ejercicio-representacion-genotipo-fenotipo) | Decodificar | [3.1](03-representacion.qmd#sec-representacion-genotipo-fenotipo) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](03-representacion.qmd#sec-representacion-genotipo-fenotipo) | «Optimización de una función continua» | [3.1](03-representacion.qmd#sec-representacion-genotipo-fenotipo) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 3.2](03-representacion.qmd#ejercicio-representacion-binaria) | Una sola variable en otro intervalo | [3.2](03-representacion.qmd#sec-representacion-binaria) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 3.3](03-representacion.qmd#ejemplo-representacion-precision) | Más bits, mejor rejilla | [3.3](03-representacion.qmd#sec-representacion-precision) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 3.3](03-representacion.qmd#ejercicio-representacion-precision) | ¿Cuántos bits? | [3.3](03-representacion.qmd#sec-representacion-precision) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](03-representacion.qmd#sec-representacion-precision) | «Optimización de una función continua» | [3.3](03-representacion.qmd#sec-representacion-precision) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 3.4](03-representacion.qmd#ejemplo-representacion-entera) | Cargas y makespan | [3.4](03-representacion.qmd#sec-representacion-entera) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 3.4](03-representacion.qmd#ejercicio-representacion-entera) | Cambiar un gen | [3.4](03-representacion.qmd#sec-representacion-entera) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](03-representacion.qmd#sec-representacion-entera) | «Asignación de tareas a máquinas» | [3.4](03-representacion.qmd#sec-representacion-entera) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 3.5](03-representacion.qmd#ejemplo-representacion-permutaciones) | Un circuito, doce cromosomas | [3.5](03-representacion.qmd#sec-representacion-permutaciones) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 3.5](03-representacion.qmd#ejercicio-representacion-permutaciones) | ¿Es una permutación? | [3.5](03-representacion.qmd#sec-representacion-permutaciones) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](03-representacion.qmd#sec-representacion-permutaciones) | «Problema del viajante (TSP)» | [3.5](03-representacion.qmd#sec-representacion-permutaciones) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 3.6](03-representacion.qmd#ejemplo-representacion-real) | Un punto que la binaria no puede escribir | [3.6](03-representacion.qmd#sec-representacion-real) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 3.6](03-representacion.qmd#ejercicio-representacion-real) | Elegir la representación | [3.6](03-representacion.qmd#sec-representacion-real) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 3.7](03-representacion.qmd#ejemplo-representacion-validez) | Tres cromosomas, ¿cuáles caben? | [3.7](03-representacion.qmd#sec-representacion-validez) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 3.7](03-representacion.qmd#ejercicio-representacion-validez) | ¿Cabe en la mochila? | [3.7](03-representacion.qmd#sec-representacion-validez) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](03-representacion.qmd#sec-representacion-validez) | «Problema de la mochila» | [3.7](03-representacion.qmd#sec-representacion-validez) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 3.8](03-representacion.qmd#ejemplo-representacion-gray) | El mismo punto, dos códigos | [3.8](03-representacion.qmd#sec-representacion-gray) | representation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 3.8](03-representacion.qmd#ejercicio-representacion-gray) | Pasar a Gray y volver | [3.8](03-representacion.qmd#sec-representacion-gray) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](03-representacion.qmd#sec-representacion-gray) | «Comparar codificaciones» | [3.8](03-representacion.qmd#sec-representacion-gray) | representation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 3.9](03-representacion.qmd#ejemplo-representacion-matriz) | Una matriz que no es un plan | [3.9](03-representacion.qmd#sec-representacion-matriz) | representation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 3.9](03-representacion.qmd#ejercicio-representacion-matriz) | Reparar una matriz | [3.9](03-representacion.qmd#sec-representacion-matriz) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](03-representacion.qmd#sec-representacion-matriz) | «Comparar codificaciones» | [3.9](03-representacion.qmd#sec-representacion-matriz) | representation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 3.10](03-representacion.qmd#ejemplo-representacion-infactibles) | Cinco tratamientos para un mismo cromosoma | [3.10](03-representacion.qmd#sec-representacion-infactibles) | representation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 3.10](03-representacion.qmd#ejercicio-representacion-infactibles) | Tres tratamientos | [3.10](03-representacion.qmd#sec-representacion-infactibles) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 3.11](03-representacion.qmd#ejemplo-representacion-fuera-caja) | Tres salidas para un punto | [3.11](03-representacion.qmd#sec-representacion-fuera-caja) | representation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 3.11](03-representacion.qmd#ejercicio-representacion-fuera-caja) | Fuera por la izquierda | [3.11](03-representacion.qmd#sec-representacion-fuera-caja) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](03-representacion.qmd#sec-representacion-fuera-caja) | «Optimización de una función continua» | [3.11](03-representacion.qmd#sec-representacion-fuera-caja) | representation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 3.12](03-representacion.qmd#ejercicio-representacion-propiedades) | Clasifica la correspondencia | [3.12](03-representacion.qmd#sec-representacion-propiedades) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
 
-### 5. Seleccionar a los padres {#a-cap-5}
+### 4. Inicializar y evaluar {.unnumbered #a-cap-4}
 
 | Actividad | Título | Sección | Herramienta | Nivel |
 |---|---|:-:|---|:-:|
-| [Ejercicio 5.1](05-seleccion.qmd#ejercicio-5-1) | Predice | [5.1](05-seleccion.qmd#quien-se-reproduce) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 5.2](05-seleccion.qmd#ejemplo-5-2) | Cuatro torneos binarios | [5.2](05-seleccion.qmd#torneo) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](05-seleccion.qmd#torneo) | «Selección por torneo» | [5.2](05-seleccion.qmd#torneo) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 5.3](05-seleccion.qmd#ejemplo-5-3) | Cuatro giros de la ruleta | [5.3](05-seleccion.qmd#ruleta) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](05-seleccion.qmd#ruleta) | «Ruleta» | [5.3](05-seleccion.qmd#ruleta) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 5.4](05-seleccion.qmd#ejemplo-5-4) | Sumar una constante a la aptitud | [5.4](05-seleccion.qmd#ruleta-deja-de-distinguir) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](05-seleccion.qmd#ruleta-deja-de-distinguir) | «Contraejemplo: aptitud desplazada» | [5.4](05-seleccion.qmd#ruleta-deja-de-distinguir) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 5.4](05-seleccion.qmd#ejercicio-5-4) | Convertir el coste en aptitud | [5.4](05-seleccion.qmd#ruleta-deja-de-distinguir) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 5.5](05-seleccion.qmd#ejemplo-5-5) | Cuarenta generaciones solo con selección | [5.5](05-seleccion.qmd#truncamiento) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](05-seleccion.qmd#seleccion-y-diversidad) | «Comparar mecanismos» | [5.6](05-seleccion.qmd#seleccion-y-diversidad) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 5.6](05-seleccion.qmd#ejercicio-5-6) | ¿Basta con una ejecución? | [5.6](05-seleccion.qmd#seleccion-y-diversidad) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 5.7](05-seleccion.qmd#ejemplo-5-7) | SUS frente a la ruleta | [5.7](05-seleccion.qmd#otros-mecanismos) | selection-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](05-seleccion.qmd#otros-mecanismos) | Exploración libre | [5.7](05-seleccion.qmd#otros-mecanismos) | selection-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 5.8](05-seleccion.qmd#ejemplo-5-8) | El mismo individuo, dos sorteos | [5.8](05-seleccion.qmd#ampliaciones) | selection-ga | [[+]{.corto}]{.nivel .saber-mas .solo-corto} |
-| [En la aplicación](05-seleccion.qmd#ampliaciones) | «Selección de Axelrod» | [5.8](05-seleccion.qmd#ampliaciones) | selection-ga | [[+]{.corto}]{.nivel .saber-mas .solo-corto} |
+| [Ejemplo 4.1](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-uniforme) | Una asignación al azar | [4.1](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-uniforme) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 4.1](04-inicializar-evaluar.qmd#ejercicio-inicializar-evaluar-uniforme) | Las mismas cifras, otras reglas | [4.1](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-uniforme) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-uniforme) | «Aleatoria uniforme» | [4.1](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-uniforme) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 4.2](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-fisher-yates) | Un circuito de cinco ciudades | [4.2](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-fisher-yates) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 4.2](04-inicializar-evaluar.qmd#ejercicio-inicializar-evaluar-fisher-yates) | Un barajado que parece bueno | [4.2](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-fisher-yates) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 4.3](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-diversidad) | Ocho mochilas al azar | [4.3](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-diversidad) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 4.3](04-inicializar-evaluar.qmd#ejercicio-inicializar-evaluar-diversidad) | Distancias a mano | [4.3](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-diversidad) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-diversidad) | «Aleatoria uniforme» | [4.3](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-diversidad) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 4.4](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-sembrar) | Basta una copia | [4.4](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-sembrar) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 4.4](04-inicializar-evaluar.qmd#ejercicio-inicializar-evaluar-sembrar) | La invasión, a mano | [4.4](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-sembrar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-sembrar) | «Sembrar con una heurística (contraejemplo)» | [4.4](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-sembrar) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 4.5](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-evaluar) | Evaluar una mochila que no cabe | [4.5](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-evaluar) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 4.5](04-inicializar-evaluar.qmd#ejercicio-inicializar-evaluar-evaluar) | Evaluar a mano | [4.5](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-evaluar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-evaluar) | «Del genotipo a la aptitud» | [4.5](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-evaluar) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 4.6](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-objetivo-aptitud) | Seis asignaciones en la ruleta | [4.6](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-objetivo-aptitud) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 4.6](04-inicializar-evaluar.qmd#ejercicio-inicializar-evaluar-objetivo-aptitud) | Sumar una constante | [4.6](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-objetivo-aptitud) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-objetivo-aptitud) | «Objetivo frente a aptitud» | [4.6](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-objetivo-aptitud) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 4.7](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-penalizacion) | ¿Cuánto debe costar pasarse? | [4.7](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-penalizacion) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 4.7](04-inicializar-evaluar.qmd#ejercicio-inicializar-evaluar-penalizacion) | La penalización cuadrática | [4.7](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-penalizacion) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-penalizacion) | «Restricciones como penalización» | [4.7](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-penalizacion) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 4.8](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-coste) | Lo que ahorra una caché | [4.8](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-coste) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 4.8](04-inicializar-evaluar.qmd#ejercicio-inicializar-evaluar-coste) | Presupuestos | [4.8](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-coste) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-coste) | «Coste de evaluar» | [4.8](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-coste) | initialization-and-evaluation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 4.9](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-cuasialeatoria) | Halton a mano | [4.9](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-cuasialeatoria) | initialization-and-evaluation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 4.9](04-inicializar-evaluar.qmd#ejercicio-inicializar-evaluar-cuasialeatoria) | Más puntos de Halton | [4.9](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-cuasialeatoria) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-cuasialeatoria) | «Cuasialeatoria e hipercubo latino» | [4.9](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-cuasialeatoria) | initialization-and-evaluation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 4.10](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-inhibicion) | Seis asignaciones separadas | [4.10](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-inhibicion) | initialization-and-evaluation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 4.10](04-inicializar-evaluar.qmd#ejercicio-inicializar-evaluar-inhibicion) | ¿Entra o no entra? | [4.10](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-inhibicion) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 4.11](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-factible) | Mochilas llenas | [4.11](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-factible) | initialization-and-evaluation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 4.11](04-inicializar-evaluar.qmd#ejercicio-inicializar-evaluar-factible) | El orden decide | [4.11](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-factible) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-factible) | «Inicialización factible» y «Comparar estrategias» | [4.11](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-factible) | initialization-and-evaluation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 4.12](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-paisaje) | Subir por los vecinos | [4.12](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-paisaje) | initialization-and-evaluation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 4.12](04-inicializar-evaluar.qmd#ejercicio-inicializar-evaluar-paisaje) | ¿Es un óptimo local? | [4.12](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-paisaje) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-paisaje) | «Paisaje de aptitud» | [4.12](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-paisaje) | initialization-and-evaluation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 4.13](04-inicializar-evaluar.qmd#ejemplo-inicializar-evaluar-ruido) | Dos individuos que se confunden | [4.13](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-ruido) | initialization-and-evaluation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 4.13](04-inicializar-evaluar.qmd#ejercicio-inicializar-evaluar-ruido) | ¿Cuántas evaluaciones? | [4.13](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-ruido) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-ruido) | «Aptitud con ruido» | [4.13](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-ruido) | initialization-and-evaluation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 4.14](04-inicializar-evaluar.qmd#ejercicio-inicializar-evaluar-ampliaciones) | ¿Quién domina a quién? | [4.14](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-ampliaciones) | — | [[+]{.corto}]{.nivel .saber-mas .solo-corto} |
 
-### 6. Cruzar {#a-cap-6}
-
-| Actividad | Título | Sección | Herramienta | Nivel |
-|---|---|:-:|---|:-:|
-| [Ejercicio 6.1](06-cruce.qmd#ejercicio-6-1) | Predice | [6.1](06-cruce.qmd#para-que-cruzar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 6.2](06-cruce.qmd#ejemplo-6-2) | Un corte y dos cortes | [6.2](06-cruce.qmd#uno-y-dos-puntos) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 6.2](06-cruce.qmd#ejercicio-6-2) | Cruzar vectores de enteros | [6.2](06-cruce.qmd#uno-y-dos-puntos) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](06-cruce.qmd#uno-y-dos-puntos) | «Cruce en un punto» | [6.2](06-cruce.qmd#uno-y-dos-puntos) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 6.3](06-cruce.qmd#ejemplo-6-3) | Una máscara sorteada, con bits y con enteros | [6.3](06-cruce.qmd#uniforme) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 6.3](06-cruce.qmd#ejercicio-6-3) | ¿Un punto por casualidad? | [6.3](06-cruce.qmd#uniforme) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](06-cruce.qmd#uniforme) | «Cruce uniforme» | [6.3](06-cruce.qmd#uniforme) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 6.4](06-cruce.qmd#ejemplo-6-4) | Copiar o mezclar | [6.4](06-cruce.qmd#reales) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 6.4](06-cruce.qmd#ejercicio-6-4) | ¿Hasta dónde llega la población? | [6.4](06-cruce.qmd#reales) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](06-cruce.qmd#reales) | «Cruce aritmético» | [6.4](06-cruce.qmd#reales) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 6.5](06-cruce.qmd#ejemplo-6-5) | Cortar dos rutas | [6.5](06-cruce.qmd#permutaciones) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 6.5](06-cruce.qmd#ejercicio-6-5) | ¿Algún corte con suerte? | [6.5](06-cruce.qmd#permutaciones) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](06-cruce.qmd#permutaciones) | «Contraejemplo: cruce en un punto» | [6.5](06-cruce.qmd#permutaciones) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 6.6](06-cruce.qmd#ejemplo-6-6) | Segmento y orden | [6.6](06-cruce.qmd#ox) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](06-cruce.qmd#ox) | «Cruce OX» | [6.6](06-cruce.qmd#ox) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 6.7](06-cruce.qmd#ejemplo-6-7) | Seguir las correspondencias | [6.7](06-cruce.qmd#pmx) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 6.7](06-cruce.qmd#ejercicio-6-7) | OX frente a PMX | [6.7](06-cruce.qmd#pmx) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](06-cruce.qmd#pmx) | «Cruce PMX» | [6.7](06-cruce.qmd#pmx) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 6.8](06-cruce.qmd#ejemplo-6-8) | Tres ciclos | [6.8](06-cruce.qmd#cx) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 6.8](06-cruce.qmd#ejercicio-6-8) | ¿Cuántos hijos distintos? | [6.8](06-cruce.qmd#cx) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](06-cruce.qmd#cx) | «Cruce CX» | [6.8](06-cruce.qmd#cx) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 6.9](06-cruce.qmd#ejemplo-6-9) | Salir del intervalo | [6.9](06-cruce.qmd#otros-cruces) | crossover-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](06-cruce.qmd#otros-cruces) | Exploración libre | [6.9](06-cruce.qmd#otros-cruces) | crossover-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 6.10](06-cruce.qmd#ejemplo-6-10) | Comparar los cruces de permutación | [6.10](06-cruce.qmd#que-conserva) | crossover-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](06-cruce.qmd#que-conserva) | «Comparar operadores» | [6.10](06-cruce.qmd#que-conserva) | crossover-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 6.11](06-cruce.qmd#ejemplo-6-11) | Cruzar un padre consigo mismo | [6.11](06-cruce.qmd#ampliaciones) | crossover-ga | [[+]{.corto}]{.nivel .saber-mas .solo-corto} |
-
-### 7. Mutar {#a-cap-7}
+### 5. Seleccionar a los padres {.unnumbered #a-cap-5}
 
 | Actividad | Título | Sección | Herramienta | Nivel |
 |---|---|:-:|---|:-:|
-| [Ejercicio 7.1](07-mutacion.qmd#ejercicio-7-1) | Predice | [7.1](07-mutacion.qmd#para-que-mutar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 7.2](07-mutacion.qmd#ejemplo-7-2) | Un sorteo por posición | [7.2](07-mutacion.qmd#inversion-bits) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 7.2](07-mutacion.qmd#ejercicio-7-2) | ¿Cuántos bits cambian? | [7.2](07-mutacion.qmd#inversion-bits) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](07-mutacion.qmd#inversion-bits) | «Inversión de bits» | [7.2](07-mutacion.qmd#inversion-bits) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 7.3](07-mutacion.qmd#ejemplo-7-3) | Saltar o deslizarse | [7.3](07-mutacion.qmd#enteros) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 7.3](07-mutacion.qmd#ejercicio-7-3) | Elegir y calcular | [7.3](07-mutacion.qmd#enteros) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](07-mutacion.qmd#enteros) | «Mutación por deslizamiento» | [7.3](07-mutacion.qmd#enteros) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 7.4](07-mutacion.qmd#ejemplo-7-4) | El tamaño del paso | [7.4](07-mutacion.qmd#gaussiana) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 7.4](07-mutacion.qmd#ejercicio-7-4) | ¿Hasta dónde llega? | [7.4](07-mutacion.qmd#gaussiana) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](07-mutacion.qmd#gaussiana) | «Mutación gaussiana» | [7.4](07-mutacion.qmd#gaussiana) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 7.5](07-mutacion.qmd#ejemplo-7-5) | Cambiar ciudades al azar | [7.5](07-mutacion.qmd#permutaciones) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](07-mutacion.qmd#permutaciones) | «Contraejemplo: reinicio aleatorio» | [7.5](07-mutacion.qmd#permutaciones) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 7.6](07-mutacion.qmd#ejemplo-7-6) | Tres formas de recolocar | [7.6](07-mutacion.qmd#intercambio-insercion-inversion) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 7.6](07-mutacion.qmd#ejercicio-7-6) | Recolocar a mano | [7.6](07-mutacion.qmd#intercambio-insercion-inversion) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](07-mutacion.qmd#intercambio-insercion-inversion) | mutaciones de permutación | [7.6](07-mutacion.qmd#intercambio-insercion-inversion) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 7.7](07-mutacion.qmd#ejemplo-7-7) | Poca o mucha mutación | [7.7](07-mutacion.qmd#cuanto-mutar) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 7.7](07-mutacion.qmd#ejercicio-7-7) | ¿Cuántos quedan igual? | [7.7](07-mutacion.qmd#cuanto-mutar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](07-mutacion.qmd#cuanto-mutar) | «Comparar operadores» | [7.7](07-mutacion.qmd#cuanto-mutar) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 7.8](07-mutacion.qmd#ejemplo-7-8) | Saltos que se estrechan | [7.8](07-mutacion.qmd#otras-mutaciones) | mutation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](07-mutacion.qmd#otras-mutaciones) | Exploración libre | [7.8](07-mutacion.qmd#otras-mutaciones) | mutation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 7.9](07-mutacion.qmd#ejemplo-7-9) | Comparar las mutaciones de permutación | [7.9](07-mutacion.qmd#que-conserva) | mutation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejercicio 7.9](07-mutacion.qmd#ejercicio-7-9) | Contar adyacencias | [7.9](07-mutacion.qmd#que-conserva) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](07-mutacion.qmd#que-conserva) | «Comparar operadores» | [7.9](07-mutacion.qmd#que-conserva) | mutation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 7.10](07-mutacion.qmd#ejemplo-7-10) | Invertir casi todo | [7.10](07-mutacion.qmd#ampliaciones) | mutation-ga | [[+]{.corto}]{.nivel .saber-mas .solo-corto} |
+| [Ejercicio 5.1](05-seleccion.qmd#ejercicio-seleccion-quien-se-reproduce) | Predice | [5.1](05-seleccion.qmd#sec-seleccion-quien-se-reproduce) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 5.2](05-seleccion.qmd#ejemplo-seleccion-torneo) | Cuatro torneos binarios | [5.2](05-seleccion.qmd#sec-seleccion-torneo) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](05-seleccion.qmd#sec-seleccion-torneo) | «Selección por torneo» | [5.2](05-seleccion.qmd#sec-seleccion-torneo) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 5.3](05-seleccion.qmd#ejemplo-seleccion-ruleta) | Cuatro giros de la ruleta | [5.3](05-seleccion.qmd#sec-seleccion-ruleta) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](05-seleccion.qmd#sec-seleccion-ruleta) | «Ruleta» | [5.3](05-seleccion.qmd#sec-seleccion-ruleta) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 5.4](05-seleccion.qmd#ejemplo-seleccion-ruleta-deja-de-distinguir) | Sumar una constante a la aptitud | [5.4](05-seleccion.qmd#sec-seleccion-ruleta-deja-de-distinguir) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](05-seleccion.qmd#sec-seleccion-ruleta-deja-de-distinguir) | «Contraejemplo: aptitud desplazada» | [5.4](05-seleccion.qmd#sec-seleccion-ruleta-deja-de-distinguir) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 5.4](05-seleccion.qmd#ejercicio-seleccion-ruleta-deja-de-distinguir) | Convertir el coste en aptitud | [5.4](05-seleccion.qmd#sec-seleccion-ruleta-deja-de-distinguir) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 5.5](05-seleccion.qmd#ejemplo-seleccion-truncamiento) | Cuarenta generaciones solo con selección | [5.5](05-seleccion.qmd#sec-seleccion-truncamiento) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](05-seleccion.qmd#sec-seleccion-seleccion-y-diversidad) | «Comparar mecanismos» | [5.6](05-seleccion.qmd#sec-seleccion-seleccion-y-diversidad) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 5.6](05-seleccion.qmd#ejercicio-seleccion-seleccion-y-diversidad) | ¿Basta con una ejecución? | [5.6](05-seleccion.qmd#sec-seleccion-seleccion-y-diversidad) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 5.7](05-seleccion.qmd#ejemplo-seleccion-otros-mecanismos) | SUS frente a la ruleta | [5.7](05-seleccion.qmd#sec-seleccion-otros-mecanismos) | selection-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](05-seleccion.qmd#sec-seleccion-otros-mecanismos) | Exploración libre | [5.7](05-seleccion.qmd#sec-seleccion-otros-mecanismos) | selection-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 5.8](05-seleccion.qmd#ejemplo-seleccion-ampliaciones) | El mismo individuo, dos sorteos | [5.8](05-seleccion.qmd#sec-seleccion-ampliaciones) | selection-ga | [[+]{.corto}]{.nivel .saber-mas .solo-corto} |
+| [En la aplicación](05-seleccion.qmd#sec-seleccion-ampliaciones) | «Selección de Axelrod» | [5.8](05-seleccion.qmd#sec-seleccion-ampliaciones) | selection-ga | [[+]{.corto}]{.nivel .saber-mas .solo-corto} |
 
-### 8. Reemplazar y parar {#a-cap-8}
+### 6. Cruzar {.unnumbered #a-cap-6}
 
 | Actividad | Título | Sección | Herramienta | Nivel |
 |---|---|:-:|---|:-:|
-| [Ejercicio 8.1](08-reemplazo.qmd#ejercicio-8-1) | Predice | [8.1](08-reemplazo.qmd#quien-sobrevive) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 8.2](08-reemplazo.qmd#ejemplo-8-2) | Los hijos sustituyen a todos | [8.2](08-reemplazo.qmd#generacional) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 8.3](08-reemplazo.qmd#ejemplo-8-3) | Un individuo de élite | [8.3](08-reemplazo.qmd#elitismo) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 8.3](08-reemplazo.qmd#ejercicio-8-3) | A mano | [8.3](08-reemplazo.qmd#elitismo) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](08-reemplazo.qmd#elitismo) | «Generacional con elitismo» | [8.3](08-reemplazo.qmd#elitismo) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 8.4](08-reemplazo.qmd#ejemplo-8-4) | Dos hijos entran en la población | [8.4](08-reemplazo.qmd#estacionario) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](08-reemplazo.qmd#estacionario) | «Estado estacionario» | [8.4](08-reemplazo.qmd#estacionario) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 8.5](08-reemplazo.qmd#ejercicio-8-5) | Leer la figura | [8.5](08-reemplazo.qmd#elitismo-ejecucion) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 8.6](08-reemplazo.qmd#ejercicio-8-6) | ¿Dónde para? | [8.6](08-reemplazo.qmd#cuando-parar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 8.7](08-reemplazo.qmd#ejemplo-8-7) | Tres formas de dejar sitio | [8.7](08-reemplazo.qmd#variantes-estacionario) | selection-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejercicio 8.7](08-reemplazo.qmd#ejercicio-8-7) | Un hijo peor que todos | [8.7](08-reemplazo.qmd#variantes-estacionario) | selection-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](08-reemplazo.qmd#variantes-estacionario) | «Estado estacionario» | [8.7](08-reemplazo.qmd#variantes-estacionario) | selection-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejemplo 8.8](08-reemplazo.qmd#ejemplo-8-8) | Competir juntos o solo entre hijos | [8.8](08-reemplazo.qmd#mu-lambda) | selection-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejercicio 8.8](08-reemplazo.qmd#ejercicio-8-8) | Casos límite | [8.8](08-reemplazo.qmd#mu-lambda) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](08-reemplazo.qmd#mu-lambda) | (μ + λ) y (μ, λ) | [8.8](08-reemplazo.qmd#mu-lambda) | selection-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 6.1](06-cruce.qmd#ejercicio-cruce-para-que-cruzar) | Predice | [6.1](06-cruce.qmd#sec-cruce-para-que-cruzar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 6.2](06-cruce.qmd#ejemplo-cruce-uno-y-dos-puntos) | Un corte y dos cortes | [6.2](06-cruce.qmd#sec-cruce-uno-y-dos-puntos) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 6.2](06-cruce.qmd#ejercicio-cruce-uno-y-dos-puntos) | Cruzar vectores de enteros | [6.2](06-cruce.qmd#sec-cruce-uno-y-dos-puntos) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](06-cruce.qmd#sec-cruce-uno-y-dos-puntos) | «Cruce en un punto» | [6.2](06-cruce.qmd#sec-cruce-uno-y-dos-puntos) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 6.3](06-cruce.qmd#ejemplo-cruce-uniforme) | Una máscara sorteada, con bits y con enteros | [6.3](06-cruce.qmd#sec-cruce-uniforme) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 6.3](06-cruce.qmd#ejercicio-cruce-uniforme) | ¿Un punto por casualidad? | [6.3](06-cruce.qmd#sec-cruce-uniforme) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](06-cruce.qmd#sec-cruce-uniforme) | «Cruce uniforme» | [6.3](06-cruce.qmd#sec-cruce-uniforme) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 6.4](06-cruce.qmd#ejemplo-cruce-reales) | Copiar o mezclar | [6.4](06-cruce.qmd#sec-cruce-reales) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 6.4](06-cruce.qmd#ejercicio-cruce-reales) | ¿Hasta dónde llega la población? | [6.4](06-cruce.qmd#sec-cruce-reales) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](06-cruce.qmd#sec-cruce-reales) | «Cruce aritmético» | [6.4](06-cruce.qmd#sec-cruce-reales) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 6.5](06-cruce.qmd#ejemplo-cruce-permutaciones) | Cortar dos rutas | [6.5](06-cruce.qmd#sec-cruce-permutaciones) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 6.5](06-cruce.qmd#ejercicio-cruce-permutaciones) | ¿Algún corte con suerte? | [6.5](06-cruce.qmd#sec-cruce-permutaciones) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](06-cruce.qmd#sec-cruce-permutaciones) | «Contraejemplo: cruce en un punto» | [6.5](06-cruce.qmd#sec-cruce-permutaciones) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 6.6](06-cruce.qmd#ejemplo-cruce-ox) | Segmento y orden | [6.6](06-cruce.qmd#sec-cruce-ox) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](06-cruce.qmd#sec-cruce-ox) | «Cruce OX» | [6.6](06-cruce.qmd#sec-cruce-ox) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 6.7](06-cruce.qmd#ejemplo-cruce-pmx) | Seguir las correspondencias | [6.7](06-cruce.qmd#sec-cruce-pmx) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 6.7](06-cruce.qmd#ejercicio-cruce-pmx) | OX frente a PMX | [6.7](06-cruce.qmd#sec-cruce-pmx) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](06-cruce.qmd#sec-cruce-pmx) | «Cruce PMX» | [6.7](06-cruce.qmd#sec-cruce-pmx) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 6.8](06-cruce.qmd#ejemplo-cruce-cx) | Tres ciclos | [6.8](06-cruce.qmd#sec-cruce-cx) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 6.8](06-cruce.qmd#ejercicio-cruce-cx) | ¿Cuántos hijos distintos? | [6.8](06-cruce.qmd#sec-cruce-cx) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](06-cruce.qmd#sec-cruce-cx) | «Cruce CX» | [6.8](06-cruce.qmd#sec-cruce-cx) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 6.9](06-cruce.qmd#ejemplo-cruce-otros-cruces) | Salir del intervalo | [6.9](06-cruce.qmd#sec-cruce-otros-cruces) | crossover-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](06-cruce.qmd#sec-cruce-otros-cruces) | Exploración libre | [6.9](06-cruce.qmd#sec-cruce-otros-cruces) | crossover-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 6.10](06-cruce.qmd#ejemplo-cruce-que-conserva) | Comparar los cruces de permutación | [6.10](06-cruce.qmd#sec-cruce-que-conserva) | crossover-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](06-cruce.qmd#sec-cruce-que-conserva) | «Comparar operadores» | [6.10](06-cruce.qmd#sec-cruce-que-conserva) | crossover-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 6.11](06-cruce.qmd#ejemplo-cruce-ampliaciones) | Cruzar un padre consigo mismo | [6.11](06-cruce.qmd#sec-cruce-ampliaciones) | crossover-ga | [[+]{.corto}]{.nivel .saber-mas .solo-corto} |
 
-### 9. Parámetros y aleatoriedad {#a-cap-9}
-
-| Actividad | Título | Sección | Herramienta | Nivel |
-|---|---|:-:|---|:-:|
-| [Ejemplo 9.1](09-experimentos.qmd#ejemplo-9-1) | Una ejecución | [9.1](09-experimentos.qmd#azar) | EvoTraveller | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 9.1](09-experimentos.qmd#ejercicio-9-1) | Cambiar la semilla | [9.1](09-experimentos.qmd#azar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 9.2](09-experimentos.qmd#ejemplo-9-2) | Sin mutación, con poca y con más | [9.2](09-experimentos.qmd#pc-pm) | EvoTraveller | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 9.2](09-experimentos.qmd#ejercicio-9-2) | Por qué se estanca | [9.2](09-experimentos.qmd#pc-pm) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 9.3](09-experimentos.qmd#ejemplo-9-3) | Cinco mapas, tres valores de pm | [9.3](09-experimentos.qmd#replicas) | EvoTraveller | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 9.3](09-experimentos.qmd#ejercicio-9-3) | Media y desviación típica | [9.3](09-experimentos.qmd#replicas) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 9.4](09-experimentos.qmd#ejercicio-9-4) | ¿Cuántas veces me equivoco? | [9.4](09-experimentos.qmd#comparar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 9.5](09-experimentos.qmd#ejercicio-9-5) | Ajustar con un caso pequeño | [9.5](09-experimentos.qmd#casos-parecidos) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](09-experimentos.qmd#casos-parecidos) | Exploración libre | [9.5](09-experimentos.qmd#casos-parecidos) | EvoTraveller | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 9.6](09-experimentos.qmd#ejercicio-9-6) | ¿Qué prima? | [9.6](09-experimentos.qmd#objetivo) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 9.7](09-experimentos.qmd#ejemplo-9-7) | Diez generaciones de selección | [9.7](09-experimentos.qmd#diversidad) | SelectionMechanisms | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 9.7](09-experimentos.qmd#ejercicio-9-7) | Torneo de 2 y de 5 | [9.7](09-experimentos.qmd#diversidad) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 9.8](09-experimentos.qmd#ejemplo-9-8) | 10 simulaciones o 100 | [9.8](09-experimentos.qmd#numero-replicas) | SelectionMechanisms | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejercicio 9.8](09-experimentos.qmd#ejercicio-9-8) | Cuántas réplicas hacen falta | [9.8](09-experimentos.qmd#numero-replicas) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [En la aplicación](09-experimentos.qmd#numero-replicas) | Exploración libre | [9.8](09-experimentos.qmd#numero-replicas) | SelectionMechanisms | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejercicio 9.9](09-experimentos.qmd#ejercicio-9-9) | La trampa de ajustar de uno en uno | [9.9](09-experimentos.qmd#interaccion) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejercicio 9.10](09-experimentos.qmd#ejercicio-9-10) | ¿Parámetro u operador? | [9.10](09-experimentos.qmd#operadores) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-
-### 10. El viajante de principio a fin {#a-cap-10}
+### 7. Mutar {.unnumbered #a-cap-7}
 
 | Actividad | Título | Sección | Herramienta | Nivel |
 |---|---|:-:|---|:-:|
-| [Ejemplo 10.1](10-viajante.qmd#ejemplo-10-1) | Una ejecución, de principio a fin | [10.1](10-viajante.qmd#observa) | EvoTraveller | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 10.1](10-viajante.qmd#ejercicio-10-1) | Tres preguntas para después | [10.1](10-viajante.qmd#observa) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 10.2](10-viajante.qmd#ejemplo-10-2) | Seis lugares en EvoTraveller | [10.2](10-viajante.qmd#problema) | EvoTraveller | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 10.2](10-viajante.qmd#ejercicio-10-2) | La longitud de una ruta | [10.2](10-viajante.qmd#problema) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 10.3](10-viajante.qmd#ejemplo-10-3) | El cruce y la mutación de la generación | [10.3](10-viajante.qmd#a-mano) | crossover-ga, mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 10.3](10-viajante.qmd#ejercicio-10-3) | Con el OX clásico | [10.3](10-viajante.qmd#a-mano) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](10-viajante.qmd#a-mano) | «Cruce OX» | [10.3](10-viajante.qmd#a-mano) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 10.4](10-viajante.qmd#ejemplo-10-4) | Torneo de 2 y de 10 | [10.4](10-viajante.qmd#interpretar) | EvoTraveller | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 10.4](10-viajante.qmd#ejercicio-10-4) | Cuántas copias de la mejor ruta | [10.4](10-viajante.qmd#interpretar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 10.5](10-viajante.qmd#ejemplo-10-5) | Élite pequeña y élite grande | [10.5](10-viajante.qmd#elite) | EvoTraveller | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 10.5](10-viajante.qmd#ejercicio-10-5) | Sin élite, a mano | [10.5](10-viajante.qmd#elite) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejemplo 10.6](10-viajante.qmd#ejemplo-10-6) | Tres mapas, dos configuraciones | [10.6](10-viajante.qmd#caso-real) | EvoTraveller | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 10.6](10-viajante.qmd#ejercicio-10-6) | ¿Cuál elegirías? | [10.6](10-viajante.qmd#caso-real) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 10.7](10-viajante.qmd#ejercicio-10-7) | Contar las partes de una generación | [10.7](10-viajante.qmd#por-dentro) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejercicio 10.8](10-viajante.qmd#ejercicio-10-8) | ¿Por qué no basta con cambiar la variante de OX? | [10.8](10-viajante.qmd#mejorar) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 7.1](07-mutacion.qmd#ejercicio-mutacion-para-que-mutar) | Predice | [7.1](07-mutacion.qmd#sec-mutacion-para-que-mutar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 7.2](07-mutacion.qmd#ejemplo-mutacion-inversion-bits) | Un sorteo por posición | [7.2](07-mutacion.qmd#sec-mutacion-inversion-bits) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 7.2](07-mutacion.qmd#ejercicio-mutacion-inversion-bits) | ¿Cuántos bits cambian? | [7.2](07-mutacion.qmd#sec-mutacion-inversion-bits) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](07-mutacion.qmd#sec-mutacion-inversion-bits) | «Inversión de bits» | [7.2](07-mutacion.qmd#sec-mutacion-inversion-bits) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 7.3](07-mutacion.qmd#ejemplo-mutacion-enteros) | Saltar o deslizarse | [7.3](07-mutacion.qmd#sec-mutacion-enteros) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 7.3](07-mutacion.qmd#ejercicio-mutacion-enteros) | Elegir y calcular | [7.3](07-mutacion.qmd#sec-mutacion-enteros) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](07-mutacion.qmd#sec-mutacion-enteros) | «Mutación por deslizamiento» | [7.3](07-mutacion.qmd#sec-mutacion-enteros) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 7.4](07-mutacion.qmd#ejemplo-mutacion-gaussiana) | El tamaño del paso | [7.4](07-mutacion.qmd#sec-mutacion-gaussiana) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 7.4](07-mutacion.qmd#ejercicio-mutacion-gaussiana) | ¿Hasta dónde llega? | [7.4](07-mutacion.qmd#sec-mutacion-gaussiana) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](07-mutacion.qmd#sec-mutacion-gaussiana) | «Mutación gaussiana» | [7.4](07-mutacion.qmd#sec-mutacion-gaussiana) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 7.5](07-mutacion.qmd#ejemplo-mutacion-permutaciones) | Cambiar ciudades al azar | [7.5](07-mutacion.qmd#sec-mutacion-permutaciones) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](07-mutacion.qmd#sec-mutacion-permutaciones) | «Contraejemplo: reinicio aleatorio» | [7.5](07-mutacion.qmd#sec-mutacion-permutaciones) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 7.6](07-mutacion.qmd#ejemplo-mutacion-intercambio-insercion-inversion) | Tres formas de recolocar | [7.6](07-mutacion.qmd#sec-mutacion-intercambio-insercion-inversion) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 7.6](07-mutacion.qmd#ejercicio-mutacion-intercambio-insercion-inversion) | Recolocar a mano | [7.6](07-mutacion.qmd#sec-mutacion-intercambio-insercion-inversion) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](07-mutacion.qmd#sec-mutacion-intercambio-insercion-inversion) | mutaciones de permutación | [7.6](07-mutacion.qmd#sec-mutacion-intercambio-insercion-inversion) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 7.7](07-mutacion.qmd#ejemplo-mutacion-cuanto-mutar) | Poca o mucha mutación | [7.7](07-mutacion.qmd#sec-mutacion-cuanto-mutar) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 7.7](07-mutacion.qmd#ejercicio-mutacion-cuanto-mutar) | ¿Cuántos quedan igual? | [7.7](07-mutacion.qmd#sec-mutacion-cuanto-mutar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](07-mutacion.qmd#sec-mutacion-cuanto-mutar) | «Comparar operadores» | [7.7](07-mutacion.qmd#sec-mutacion-cuanto-mutar) | mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 7.8](07-mutacion.qmd#ejemplo-mutacion-otras-mutaciones) | Saltos que se estrechan | [7.8](07-mutacion.qmd#sec-mutacion-otras-mutaciones) | mutation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](07-mutacion.qmd#sec-mutacion-otras-mutaciones) | Exploración libre | [7.8](07-mutacion.qmd#sec-mutacion-otras-mutaciones) | mutation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 7.9](07-mutacion.qmd#ejemplo-mutacion-que-conserva) | Comparar las mutaciones de permutación | [7.9](07-mutacion.qmd#sec-mutacion-que-conserva) | mutation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 7.9](07-mutacion.qmd#ejercicio-mutacion-que-conserva) | Contar adyacencias | [7.9](07-mutacion.qmd#sec-mutacion-que-conserva) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](07-mutacion.qmd#sec-mutacion-que-conserva) | «Comparar operadores» | [7.9](07-mutacion.qmd#sec-mutacion-que-conserva) | mutation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 7.10](07-mutacion.qmd#ejemplo-mutacion-ampliaciones) | Invertir casi todo | [7.10](07-mutacion.qmd#sec-mutacion-ampliaciones) | mutation-ga | [[+]{.corto}]{.nivel .saber-mas .solo-corto} |
 
-### 11. Recapitulación {#a-cap-11}
+### 8. Reemplazar y parar {.unnumbered #a-cap-8}
 
 | Actividad | Título | Sección | Herramienta | Nivel |
 |---|---|:-:|---|:-:|
-| [Ejercicio 11.1](11-recapitulacion.qmd#ejercicio-11-1) | Una descripción incompleta | [11.1](11-recapitulacion.qmd#decisiones) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 11.2](11-recapitulacion.qmd#ejercicio-11-2) | ¿Qué representación? | [11.2](11-recapitulacion.qmd#mapa) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 11.3](11-recapitulacion.qmd#ejercicio-11-3) | ¿Qué falla en este diseño? | [11.3](11-recapitulacion.qmd#errores) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [En la aplicación](11-recapitulacion.qmd#problema-nuevo) | Exploración libre | [11.4](11-recapitulacion.qmd#problema-nuevo) | portal | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 11.4](11-recapitulacion.qmd#ejercicio-11-4) | ¿Un algoritmo genético? | [11.4](11-recapitulacion.qmd#problema-nuevo) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 11.5](11-recapitulacion.qmd#ejercicio-11-5) | Un calendario de exámenes | [11.4](11-recapitulacion.qmd#problema-nuevo) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 8.1](08-reemplazo.qmd#ejercicio-reemplazo-quien-sobrevive) | Predice | [8.1](08-reemplazo.qmd#sec-reemplazo-quien-sobrevive) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 8.2](08-reemplazo.qmd#ejemplo-reemplazo-generacional) | Los hijos sustituyen a todos | [8.2](08-reemplazo.qmd#sec-reemplazo-generacional) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 8.3](08-reemplazo.qmd#ejemplo-reemplazo-elitismo) | Un individuo de élite | [8.3](08-reemplazo.qmd#sec-reemplazo-elitismo) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 8.3](08-reemplazo.qmd#ejercicio-reemplazo-elitismo) | A mano | [8.3](08-reemplazo.qmd#sec-reemplazo-elitismo) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](08-reemplazo.qmd#sec-reemplazo-elitismo) | «Generacional con elitismo» | [8.3](08-reemplazo.qmd#sec-reemplazo-elitismo) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 8.4](08-reemplazo.qmd#ejemplo-reemplazo-estacionario) | Dos hijos entran en la población | [8.4](08-reemplazo.qmd#sec-reemplazo-estacionario) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](08-reemplazo.qmd#sec-reemplazo-estacionario) | «Estado estacionario» | [8.4](08-reemplazo.qmd#sec-reemplazo-estacionario) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 8.5](08-reemplazo.qmd#ejercicio-reemplazo-elitismo-ejecucion) | Leer la figura | [8.5](08-reemplazo.qmd#sec-reemplazo-elitismo-ejecucion) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 8.6](08-reemplazo.qmd#ejercicio-reemplazo-cuando-parar) | ¿Dónde para? | [8.6](08-reemplazo.qmd#sec-reemplazo-cuando-parar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 8.7](08-reemplazo.qmd#ejemplo-reemplazo-variantes-estacionario) | Tres formas de dejar sitio | [8.7](08-reemplazo.qmd#sec-reemplazo-variantes-estacionario) | selection-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 8.7](08-reemplazo.qmd#ejercicio-reemplazo-variantes-estacionario) | Un hijo peor que todos | [8.7](08-reemplazo.qmd#sec-reemplazo-variantes-estacionario) | selection-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](08-reemplazo.qmd#sec-reemplazo-variantes-estacionario) | «Estado estacionario» | [8.7](08-reemplazo.qmd#sec-reemplazo-variantes-estacionario) | selection-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejemplo 8.8](08-reemplazo.qmd#ejemplo-reemplazo-mu-lambda) | Competir juntos o solo entre hijos | [8.8](08-reemplazo.qmd#sec-reemplazo-mu-lambda) | selection-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 8.8](08-reemplazo.qmd#ejercicio-reemplazo-mu-lambda) | Casos límite | [8.8](08-reemplazo.qmd#sec-reemplazo-mu-lambda) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](08-reemplazo.qmd#sec-reemplazo-mu-lambda) | (μ + λ) y (μ, λ) | [8.8](08-reemplazo.qmd#sec-reemplazo-mu-lambda) | selection-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+
+### 9. Parámetros y aleatoriedad {.unnumbered #a-cap-9}
+
+| Actividad | Título | Sección | Herramienta | Nivel |
+|---|---|:-:|---|:-:|
+| [Ejemplo 9.1](09-experimentos.qmd#ejemplo-experimentos-azar) | Una ejecución | [9.1](09-experimentos.qmd#sec-experimentos-azar) | EvoTraveller | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 9.1](09-experimentos.qmd#ejercicio-experimentos-azar) | Cambiar la semilla | [9.1](09-experimentos.qmd#sec-experimentos-azar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 9.2](09-experimentos.qmd#ejemplo-experimentos-pc-pm) | Sin mutación, con poca y con más | [9.2](09-experimentos.qmd#sec-experimentos-pc-pm) | EvoTraveller | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 9.2](09-experimentos.qmd#ejercicio-experimentos-pc-pm) | Por qué se estanca | [9.2](09-experimentos.qmd#sec-experimentos-pc-pm) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 9.3](09-experimentos.qmd#ejemplo-experimentos-replicas) | Cinco mapas, tres valores de pm | [9.3](09-experimentos.qmd#sec-experimentos-replicas) | EvoTraveller | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 9.3](09-experimentos.qmd#ejercicio-experimentos-replicas) | Media y desviación típica | [9.3](09-experimentos.qmd#sec-experimentos-replicas) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 9.4](09-experimentos.qmd#ejercicio-experimentos-comparar) | ¿Cuántas veces me equivoco? | [9.4](09-experimentos.qmd#sec-experimentos-comparar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 9.5](09-experimentos.qmd#ejercicio-experimentos-casos-parecidos) | Ajustar con un caso pequeño | [9.5](09-experimentos.qmd#sec-experimentos-casos-parecidos) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](09-experimentos.qmd#sec-experimentos-casos-parecidos) | Exploración libre | [9.5](09-experimentos.qmd#sec-experimentos-casos-parecidos) | EvoTraveller | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 9.6](09-experimentos.qmd#ejercicio-experimentos-objetivo) | ¿Qué prima? | [9.6](09-experimentos.qmd#sec-experimentos-objetivo) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 9.7](09-experimentos.qmd#ejemplo-experimentos-diversidad) | Diez generaciones de selección | [9.7](09-experimentos.qmd#sec-experimentos-diversidad) | SelectionMechanisms | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 9.7](09-experimentos.qmd#ejercicio-experimentos-diversidad) | Torneo de 2 y de 5 | [9.7](09-experimentos.qmd#sec-experimentos-diversidad) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 9.8](09-experimentos.qmd#ejemplo-experimentos-numero-replicas) | 10 simulaciones o 100 | [9.8](09-experimentos.qmd#sec-experimentos-numero-replicas) | SelectionMechanisms | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 9.8](09-experimentos.qmd#ejercicio-experimentos-numero-replicas) | Cuántas réplicas hacen falta | [9.8](09-experimentos.qmd#sec-experimentos-numero-replicas) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [En la aplicación](09-experimentos.qmd#sec-experimentos-numero-replicas) | Exploración libre | [9.8](09-experimentos.qmd#sec-experimentos-numero-replicas) | SelectionMechanisms | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 9.9](09-experimentos.qmd#ejercicio-experimentos-interaccion) | La trampa de ajustar de uno en uno | [9.9](09-experimentos.qmd#sec-experimentos-interaccion) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 9.10](09-experimentos.qmd#ejercicio-experimentos-operadores) | ¿Parámetro u operador? | [9.10](09-experimentos.qmd#sec-experimentos-operadores) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+
+### 10. El viajante de principio a fin {.unnumbered #a-cap-10}
+
+| Actividad | Título | Sección | Herramienta | Nivel |
+|---|---|:-:|---|:-:|
+| [Ejemplo 10.1](10-viajante.qmd#ejemplo-viajante-observa) | Una ejecución, de principio a fin | [10.1](10-viajante.qmd#sec-viajante-observa) | EvoTraveller | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 10.1](10-viajante.qmd#ejercicio-viajante-observa) | Tres preguntas para después | [10.1](10-viajante.qmd#sec-viajante-observa) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 10.2](10-viajante.qmd#ejemplo-viajante-problema) | Seis lugares en EvoTraveller | [10.2](10-viajante.qmd#sec-viajante-problema) | EvoTraveller | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 10.2](10-viajante.qmd#ejercicio-viajante-problema) | La longitud de una ruta | [10.2](10-viajante.qmd#sec-viajante-problema) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 10.3](10-viajante.qmd#ejemplo-viajante-a-mano) | El cruce y la mutación de la generación | [10.3](10-viajante.qmd#sec-viajante-a-mano) | crossover-ga, mutation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 10.3](10-viajante.qmd#ejercicio-viajante-a-mano) | Con el OX clásico | [10.3](10-viajante.qmd#sec-viajante-a-mano) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](10-viajante.qmd#sec-viajante-a-mano) | «Cruce OX» | [10.3](10-viajante.qmd#sec-viajante-a-mano) | crossover-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 10.4](10-viajante.qmd#ejemplo-viajante-interpretar) | Torneo de 2 y de 10 | [10.4](10-viajante.qmd#sec-viajante-interpretar) | EvoTraveller | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 10.4](10-viajante.qmd#ejercicio-viajante-interpretar) | Cuántas copias de la mejor ruta | [10.4](10-viajante.qmd#sec-viajante-interpretar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 10.5](10-viajante.qmd#ejemplo-viajante-elite) | Élite pequeña y élite grande | [10.5](10-viajante.qmd#sec-viajante-elite) | EvoTraveller | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 10.5](10-viajante.qmd#ejercicio-viajante-elite) | Sin élite, a mano | [10.5](10-viajante.qmd#sec-viajante-elite) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejemplo 10.6](10-viajante.qmd#ejemplo-viajante-caso-real) | Tres mapas, dos configuraciones | [10.6](10-viajante.qmd#sec-viajante-caso-real) | EvoTraveller | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 10.6](10-viajante.qmd#ejercicio-viajante-caso-real) | ¿Cuál elegirías? | [10.6](10-viajante.qmd#sec-viajante-caso-real) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 10.7](10-viajante.qmd#ejercicio-viajante-por-dentro) | Contar las partes de una generación | [10.7](10-viajante.qmd#sec-viajante-por-dentro) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 10.8](10-viajante.qmd#ejercicio-viajante-mejorar) | ¿Por qué no basta con cambiar la variante de OX? | [10.8](10-viajante.qmd#sec-viajante-mejorar) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+
+### 11. Recapitulación {.unnumbered #a-cap-11}
+
+| Actividad | Título | Sección | Herramienta | Nivel |
+|---|---|:-:|---|:-:|
+| [Ejercicio 11.1](11-recapitulacion.qmd#ejercicio-recapitulacion-decisiones) | Una descripción incompleta | [11.1](11-recapitulacion.qmd#sec-recapitulacion-decisiones) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 11.2](11-recapitulacion.qmd#ejercicio-recapitulacion-mapa) | ¿Qué representación? | [11.2](11-recapitulacion.qmd#sec-recapitulacion-mapa) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 11.3](11-recapitulacion.qmd#ejercicio-recapitulacion-errores) | ¿Qué falla en este diseño? | [11.3](11-recapitulacion.qmd#sec-recapitulacion-errores) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [En la aplicación](11-recapitulacion.qmd#sec-recapitulacion-problema-nuevo) | Exploración libre | [11.4](11-recapitulacion.qmd#sec-recapitulacion-problema-nuevo) | portal | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 11.4](11-recapitulacion.qmd#ejercicio-recapitulacion-problema-nuevo) | ¿Un algoritmo genético? | [11.4](11-recapitulacion.qmd#sec-recapitulacion-problema-nuevo) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 11.5](11-recapitulacion.qmd#ejercicio-recapitulacion-problema-nuevo-2) | Un calendario de exámenes | [11.4](11-recapitulacion.qmd#sec-recapitulacion-problema-nuevo) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |

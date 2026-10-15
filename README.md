@@ -52,7 +52,8 @@ El resto de capítulos está en preparación.
 
 - Libro de [Quarto](https://quarto.org) (`_quarto.yml`); cada capítulo es un archivo `.qmd`.
 - Cada capítulo combina explicaciones, ejemplos reproducibles que abren la herramienta en un estado fijado, instrucciones para explorar en la aplicación y ejercicios. Las secciones se marcan por nivel: Básico, Avanzado y Para saber más.
-- `indice.qmd` (índice general) y `actividades.qmd` (índice de actividades) los genera `filtros/indices.py` en cada `quarto render`, a partir de los encabezados de sección y de las cajas de los capítulos. No se editan a mano.
+- La numeración es automática. Quarto numera capítulos, secciones y figuras (`number-sections`), y las referencias se escriben con su identificador: `sección -@sec-cruce-ox`, `figura -@fig-mapa`, `capítulo -@sec-cruce`. Los ejemplos y ejercicios llevan el número de su sección (el ejemplo 5.3 está en la sección 5.3); en su título no se escribe el número, y se citan con un enlace vacío: `ejemplo [](#ejemplo-seleccion-ruleta)`. Para el número de capítulo de una sección concreta: `capítulo [](#sec-cruce-permutaciones){.capitulo}`. Los rellena `filtros/numeracion.lua` con los números que calcula `filtros/indices.py` en el *pre-render* (`_numeracion.json`, que no se versiona).
+- `indice.qmd` (índice general) y `actividades.qmd` (índice de actividades) también los genera `filtros/indices.py` en cada `quarto render`, a partir de los encabezados de sección y de las cajas de los capítulos. No se editan a mano.
 - Bibliografía en `referencias.bib`, con estilo APA en castellano (`vendor/csl/`).
 - Sin dependencias externas en la página: KaTeX va en local (`vendor/katex/`).
 - Al hacer *push* a `main`, GitHub Actions genera el libro y lo publica en GitHub Pages (`.github/workflows/publish.yml`).

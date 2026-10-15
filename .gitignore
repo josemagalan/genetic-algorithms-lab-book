@@ -6,3 +6,6 @@
 !vendor/**/*.html
 
 **/*.quarto_ipynb
+
+# Numeración que calcula filtros/indices.py en cada render
+/_numeracion.json

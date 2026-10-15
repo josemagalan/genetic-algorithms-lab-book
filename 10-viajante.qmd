@@ -19,15 +19,15 @@ Al terminar el recorrido básico de este capítulo podrás:
 - elegir los parámetros de EvoTraveller con mapas parecidos al caso real y comprobar la elección con mapas nuevos.
 :::
 
-## 10.1 Primero, observa [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#observa}
+## Primero, observa [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sec-viajante-observa}
 
 ¿Qué hace un algoritmo genético con un problema de rutas, de la primera generación a la última?
 
-En los capítulos anteriores hemos estudiado cada pieza por separado: la representación, la población inicial y la aptitud, la selección, el cruce, la mutación, el reemplazo y los parámetros. En este capítulo las juntamos en un solo problema, el del viajante, con EvoTraveller [@santos2025]. Ya la usamos en la [sección 2.9](02-ciclo.qmd#ejecucion) y en el [capítulo 9](09-experimentos.qmd#azar). Antes de explicar nada, vamos a mirar una ejecución entera y a anotar lo que vemos. Las explicaciones llegarán en las secciones siguientes.
+En los capítulos anteriores hemos estudiado cada pieza por separado: la representación, la población inicial y la aptitud, la selección, el cruce, la mutación, el reemplazo y los parámetros. En este capítulo las juntamos en un solo problema, el del viajante, con EvoTraveller [@santos2025]. Ya la usamos en la sección -@sec-ciclo-ejecucion y en el capítulo [](#sec-experimentos-azar){.capitulo}. Antes de explicar nada, vamos a mirar una ejecución entera y a anotar lo que vemos. Las explicaciones llegarán en las secciones siguientes.
 
 EvoTraveller tiene tres gráficas. **Fitness** muestra la aptitud de la mejor ruta de cada generación; la aptitud es la inversa de la longitud, así que si sube, la mejor ruta es más corta. **Best solution** dibuja la mejor ruta al final. Y bajo **Solutions**, el control **Generation** elige una generación y la gráfica dibuja todas las rutas de la población en esa generación, cada una en su casilla.
 
-::: {.callout-tip .ejemplo #ejemplo-10-1 title="Ejemplo reproducible 10.1 · Una ejecución, de principio a fin"}
+::: {.callout-tip .ejemplo #ejemplo-viajante-observa title="Ejemplo reproducible · Una ejecución, de principio a fin"}
 **Datos.** En EvoTraveller, deja los valores iniciales de la barra lateral: **Number of places** 10, **Seed** 1111, **Population size** 100, **Generations** 50, **Tournament size** 4, **Mutation rate** 0,05, **Elitism** 0,05 y **Crossover** 0,6. Pulsa **Run**. Después, bajo **Solutions**, mueve **Generation** a 0, a 10 y a 49, el último valor.
 
 **Predice.** ¿Sigue subiendo la curva **Fitness** hasta la generación 50? ¿Se parecen entre sí las rutas de la población al principio? ¿Y al final?
@@ -48,33 +48,33 @@ A partir de la generación 1, la población se dibuja ordenada y el dibujo que q
 
 <!-- Comprobado el 2026-10-15 con el código de EvoTraveller (AppTest de Streamlit) y en la aplicación publicada, leyendo los datos de las gráficas: «Fitness» 0,023012797888624044 → 0,029320149702137577 desde la generación 3 (51 puntos); «Best solution» (0,0) (1,6) (4,8) (2,8) (4,9) (8,9) (7,6) (6,4) (8,3) (5,2) (0,0), longitud 34,11; «Generation 10»: 30 rutas distintas (contando una ruta y su inversa como la misma), 43 copias de la mejor; «Generation 49»: 23 distintas, 46 copias; «Generation 0»: 99 distintas (dos rutas son la misma recorrida al revés), por eso el texto dice «las 100 rutas son distintas» solo como cromosomas (100 permutaciones distintas). El último dibujo de la gráfica, en la fila de arriba, es el primer individuo de la población, que a partir de la generación 1 está ordenada por aptitud (main.py, solution_population_chart, con P.pop()). -->
 
-:::: {.callout-note .ejercicio #ejercicio-10-1 title="Ejercicio 10.1 · Tres preguntas para después"}
-Con lo que has visto en el [ejemplo 10.1](#ejemplo-10-1), apunta una respuesta provisional a cada pregunta. Las responderemos en las secciones siguientes.
+:::: {.callout-note .ejercicio #ejercicio-viajante-observa title="Ejercicio · Tres preguntas para después"}
+Con lo que has visto en el ejemplo [](#ejemplo-viajante-observa), apunta una respuesta provisional a cada pregunta. Las responderemos en las secciones siguientes.
 
 a) ¿Por qué la curva **Fitness** no baja nunca, ni siquiera un poco?
 b) ¿Por qué la población se llena de copias de la misma ruta?
-c) La mejor ruta posible de este mapa mide 31,50 ([sección 9.1](09-experimentos.qmd#azar)). ¿Por qué el algoritmo deja de mejorar en la generación 3, si le quedan 47 generaciones?
+c) La mejor ruta posible de este mapa mide 31,50 (sección -@sec-experimentos-azar). ¿Por qué el algoritmo deja de mejorar en la generación 3, si le quedan 47 generaciones?
 
 <details>
 <summary>**Ver la solución**</summary>
 
-a) Por la élite: las mejores rutas pasan sin cambios a la generación siguiente. Lo veremos en la [sección 10.5](#elite).
+a) Por la élite: las mejores rutas pasan sin cambios a la generación siguiente. Lo veremos en la sección -@sec-viajante-elite.
 
-b) Porque la élite y las copias de los ganadores del torneo, que casi siempre son la mejor ruta, ocupan buena parte de la población, y la mutación solo cambia el 5 % de los individuos. Lo calcularemos en el [ejercicio 10.4](#ejercicio-10-4).
+b) Porque la élite y las copias de los ganadores del torneo, que casi siempre son la mejor ruta, ocupan buena parte de la población, y la mutación solo cambia el 5 % de los individuos. Lo calcularemos en el ejercicio [](#ejercicio-viajante-interpretar).
 
-c) Porque la población ha perdido diversidad: casi todo lo que se cruza son copias de la misma ruta o variaciones pequeñas de ella, y no aparece nada mejor. Es la convergencia prematura de la [sección 9.7](09-experimentos.qmd#diversidad). Lo veremos en la [sección 10.4](#interpretar).
+c) Porque la población ha perdido diversidad: casi todo lo que se cruza son copias de la misma ruta o variaciones pequeñas de ella, y no aparece nada mejor. Es la convergencia prematura de la sección -@sec-experimentos-diversidad. Lo veremos en la sección -@sec-viajante-interpretar.
 </details>
 ::::
 
-## 10.2 El problema y su representación [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#problema}
+## El problema y su representación [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sec-viajante-problema}
 
 ¿Cómo se convierte una ruta en un cromosoma, y cuántas rutas hay?
 
 El **problema del viajante** es seguramente el problema de optimización combinatoria más popular. Dadas *n* ciudades y la distancia entre cada par, hay que encontrar el circuito más corto que visita cada ciudad una sola vez y vuelve al punto de partida [@talbi2009, p. 7]. En EvoTraveller, el punto de partida es un **origen** O en la posición (0, 0), y los demás lugares están en puntos enteros de una cuadrícula de 10 × 10. La distancia entre dos lugares es la distancia en línea recta, y la longitud de una ruta es la suma de las distancias de sus tramos.
 
-**Representación.** Un circuito es un orden de visita, así que la representación natural es una **permutación** de los lugares, como en la [sección 3.5](03-representacion.qmd#permutaciones): cada lugar aparece exactamente una vez [@talbi2009, p. 36]. El origen no forma parte del cromosoma, porque siempre es el primero y el último. El cromosoma es el **genotipo**; la ruta completa, con el origen al principio y al final, es el **fenotipo** ([sección 3.1](03-representacion.qmd#genotipo-fenotipo)). En este capítulo escribimos el cromosoma con los números de los lugares: 3 4 1 2 5 es la ruta O → 3 → 4 → 1 → 2 → 5 → O.
+**Representación.** Un circuito es un orden de visita, así que la representación natural es una **permutación** de los lugares, como en la sección -@sec-representacion-permutaciones: cada lugar aparece exactamente una vez [@talbi2009, p. 36]. El origen no forma parte del cromosoma, porque siempre es el primero y el último. El cromosoma es el **genotipo**; la ruta completa, con el origen al principio y al final, es el **fenotipo** (sección -@sec-representacion-genotipo-fenotipo). En este capítulo escribimos el cromosoma con los números de los lugares: 3 4 1 2 5 es la ruta O → 3 → 4 → 1 → 2 → 5 → O.
 
-**Aptitud.** Queremos minimizar la longitud *L*, y EvoTraveller usa como aptitud su inversa, $f = 1/L$, que es mayor cuanto más corta es la ruta ([sección 4.6](04-inicializar-evaluar.qmd#objetivo-aptitud)). Como la selección de EvoTraveller es un torneo, que solo mira qué ruta es mejor que otra, daría lo mismo elegir la ruta más corta directamente.
+**Aptitud.** Queremos minimizar la longitud *L*, y EvoTraveller usa como aptitud su inversa, $f = 1/L$, que es mayor cuanto más corta es la ruta (sección -@sec-inicializar-evaluar-objetivo-aptitud). Como la selección de EvoTraveller es un torneo, que solo mira qué ruta es mejor que otra, daría lo mismo elegir la ruta más corta directamente.
 
 **Tamaño del espacio de búsqueda.** Con *n* lugares contando el origen, hay $(n-1)!$ cromosomas distintos. Pero una ruta y la misma recorrida al revés tienen la misma longitud: 3 4 1 2 5 y 5 2 1 4 3 son el mismo circuito. Las rutas distintas son la mitad:
 
@@ -86,11 +86,9 @@ El **problema del viajante** es seguramente el problema de optimización combina
 
 Cada lugar más multiplica las rutas. Con 15 lugares hay más de 40 000 millones, y por eso no se pueden revisar todas salvo en mapas pequeños.
 
-Para trabajar a mano usaremos un mapa pequeño de EvoTraveller, con la semilla de siempre: **Number of places** 6 y **Seed** 1111. Son el origen y cinco lugares ([figura 10.1](#figura-10-1)).
+Para trabajar a mano usaremos un mapa pequeño de EvoTraveller, con la semilla de siempre: **Number of places** 6 y **Seed** 1111. Son el origen y cinco lugares (figura -@fig-mapa).
 
-[]{#figura-10-1}
-
-![**Figura 10.1.** El mapa de seis lugares de EvoTraveller con la semilla 1111 y la mejor de sus 60 rutas, O 3 4 1 2 5 O, de longitud 24,29. Figura propia, generada con `figuras/10-viajante.py`, en el repositorio del libro.](figuras/10-mapa.svg){fig-alt="Cuadrícula de 10 por 10 con el origen O en la esquina inferior izquierda, en (0, 0), y cinco lugares numerados: 1 en (7, 8), 2 en (5, 6), 3 en (1, 4), 4 en (2, 8) y 5 en (4, 6). La mejor ruta va del origen al 3, sube al 4, cruza a la derecha hasta el 1, baja al 2, pasa al 5, que está al lado, y vuelve al origen. Mide 24,29."}
+![El mapa de seis lugares de EvoTraveller con la semilla 1111 y la mejor de sus 60 rutas, O 3 4 1 2 5 O, de longitud 24,29. Figura propia, generada con `figuras/10-viajante.py`, en el repositorio del libro.](figuras/10-mapa.svg){#fig-mapa fig-alt="Cuadrícula de 10 por 10 con el origen O en la esquina inferior izquierda, en (0, 0), y cinco lugares numerados: 1 en (7, 8), 2 en (5, 6), 3 en (1, 4), 4 en (2, 8) y 5 en (4, 6). La mejor ruta va del origen al 3, sube al 4, cruza a la derecha hasta el 1, baja al 2, pasa al 5, que está al lado, y vuelve al origen. Mide 24,29."}
 
 Distancias entre los lugares, redondeadas a dos decimales:
 
@@ -105,10 +103,10 @@ Distancias entre los lugares, redondeadas a dos decimales:
 
 Las longitudes de las rutas de este capítulo están calculadas con las distancias sin redondear. Si sumas las de la tabla, a veces te saldrá una centésima de diferencia.
 
-::: {.callout-tip .ejemplo #ejemplo-10-2 title="Ejemplo reproducible 10.2 · Seis lugares en EvoTraveller"}
+::: {.callout-tip .ejemplo #ejemplo-viajante-problema title="Ejemplo reproducible · Seis lugares en EvoTraveller"}
 **Datos.** En EvoTraveller, pon **Number of places** 6 y deja los demás valores iniciales (**Seed** 1111, **Population size** 100, **Generations** 50). Pulsa **Run**. Después pon **Population size** 10 y **Generations** 10, y vuelve a pulsar **Run**.
 
-**Predice.** Con 100 individuos, ¿cuántas generaciones necesitará el algoritmo para encontrar la ruta de la [figura 10.1](#figura-10-1)? ¿Y con 10?
+**Predice.** Con 100 individuos, ¿cuántas generaciones necesitará el algoritmo para encontrar la ruta de la figura -@fig-mapa? ¿Y con 10?
 
 [Abrir EvoTraveller](https://evotraveller.streamlit.app/){.abrir target="_blank"}
 
@@ -125,7 +123,7 @@ Con un problema tan pequeño, el algoritmo genético no hace falta: basta con re
 
 <!-- Comprobado el 2026-10-15 con el código de EvoTraveller (AppTest) y en la aplicación publicada: mapa de 6 lugares con la semilla 1111: (7, 8), (5, 6), (1, 4), (2, 8), (4, 6) (algorithm.places(10, 5) tras set_seed(1111)). Con N = 100 y G = 50, «Fitness» constante 0,04118 (24,2857) desde la generación 0; «Best solution» (0,0) (1,4) (2,8) (7,8) (5,6) (4,6) (0,0). Con N = 10 y G = 10: 26,0144 → 25,6620 (g. 1) → 24,8033 (g. 8) → 24,2857 (g. 9); en la aplicación publicada, «Best solution» dibuja la misma ruta al revés, (0,0) (4,6) (5,6) (7,8) (2,8) (1,4) (0,0). El óptimo, 24,2857, se ha comprobado revisando las 120 permutaciones (figuras/10-viajante.py). -->
 
-:::: {.callout-note .ejercicio #ejercicio-10-2 title="Ejercicio 10.2 · La longitud de una ruta"}
+:::: {.callout-note .ejercicio #ejercicio-viajante-problema title="Ejercicio · La longitud de una ruta"}
 a) Con la tabla de distancias, calcula la longitud de la ruta 3 1 2 4 5.
 b) Escribe el cromosoma de la misma ruta recorrida al revés. ¿Por qué tiene la misma longitud?
 c) ¿Por qué no sirve como cromosoma un vector de cinco enteros del 1 al 5 elegidos libremente?
@@ -137,15 +135,15 @@ a) La ruta es O → 3 → 1 → 2 → 4 → 5 → O. Sus tramos miden 4,12 + 7,2
 
 b) Al revés, la ruta es O → 5 → 4 → 2 → 1 → 3 → O, con el cromosoma **5 4 2 1 3**. Usa los mismos seis tramos, recorridos en sentido contrario, y la distancia de ida y vuelta entre dos lugares es la misma.
 
-c) Porque un vector de enteros puede repetir lugares y dejar otros sin visitar, por ejemplo 3 1 3 4 5, que pasa dos veces por el 3 y nunca por el 2. No sería un circuito válido. Una permutación garantiza que cada lugar aparece una sola vez ([sección 3.5](03-representacion.qmd#permutaciones)).
+c) Porque un vector de enteros puede repetir lugares y dejar otros sin visitar, por ejemplo 3 1 3 4 5, que pasa dos veces por el 3 y nunca por el 2. No sería un circuito válido. Una permutación garantiza que cada lugar aparece una sola vez (sección -@sec-representacion-permutaciones).
 </details>
 ::::
 
-## 10.3 Una generación a mano [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#a-mano}
+## Una generación a mano [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sec-viajante-a-mano}
 
 ¿Qué le pasa a una población de rutas en una generación?
 
-Vamos a hacer a mano una generación como las de EvoTraveller, con una población de solo cuatro rutas en el mapa de la [figura 10.1](#figura-10-1). Cada generación de EvoTraveller tiene tres partes: la **élite**, que pasa sin cambios; las **copias** de individuos seleccionados, que pueden mutar; y los **hijos** de parejas de individuos seleccionados, que se cruzan y pueden mutar. Con cuatro individuos tomaremos uno de élite, una copia y una pareja, que da dos hijos. La selección es un torneo de dos; el cruce, el OX de EvoTraveller; y la mutación, el intercambio de dos lugares, con *pm* = 0,2 por individuo, el valor más alto que permite la herramienta.
+Vamos a hacer a mano una generación como las de EvoTraveller, con una población de solo cuatro rutas en el mapa de la figura -@fig-mapa. Cada generación de EvoTraveller tiene tres partes: la **élite**, que pasa sin cambios; las **copias** de individuos seleccionados, que pueden mutar; y los **hijos** de parejas de individuos seleccionados, que se cruzan y pueden mutar. Con cuatro individuos tomaremos uno de élite, una copia y una pareja, que da dos hijos. La selección es un torneo de dos; el cruce, el OX de EvoTraveller; y la mutación, el intercambio de dos lugares, con *pm* = 0,2 por individuo, el valor más alto que permite la herramienta.
 
 Los sorteos están fijados de antemano. Los hemos elegido para que en una sola generación aparezcan todos los casos que queremos ver.
 
@@ -160,9 +158,9 @@ Los sorteos están fijados de antemano. Los hemos elegido para que en una sola g
 
 La media de las longitudes es 30,06 y la mejor ruta es B.
 
-**2. Élite.** La mejor ruta, B, pasa a la generación siguiente sin cambios ([sección 8.3](08-reemplazo.qmd#elitismo)).
+**2. Élite.** La mejor ruta, B, pasa a la generación siguiente sin cambios (sección -@sec-reemplazo-elitismo).
 
-**3. Seleccionar.** Se juegan tres torneos de dos individuos distintos, y gana el de ruta más corta ([sección 5.2](05-seleccion.qmd#torneo)):
+**3. Seleccionar.** Se juegan tres torneos de dos individuos distintos, y gana el de ruta más corta (sección -@sec-seleccion-torneo):
 
 | Torneo | Contendientes | Ganador | Destino |
 |:---:|:---:|:---:|---|
@@ -172,7 +170,7 @@ La media de las longitudes es 30,06 y la mejor ruta es B.
 
 C, la peor ruta, no gana ningún torneo. Con dos contendientes distintos, la peor no puede ganar nunca.
 
-**4. Cruzar.** EvoTraveller cruza con OX en la variante que crossover-ga llama «Orden desde el inicio», que no es la clásica de la [sección 6.6](06-cruce.qmd#ox), sino la de la [sección 6.9](06-cruce.qmd#otros-cruces). Los cortes caen detrás del primer gen y detrás del tercero, así que el segmento son las posiciones 2–3. Para formar el Hijo 1:
+**4. Cruzar.** EvoTraveller cruza con OX en la variante que crossover-ga llama «Orden desde el inicio», que no es la clásica de la sección -@sec-cruce-ox, sino la de la sección -@sec-cruce-otros-cruces. Los cortes caen detrás del primer gen y detrás del tercero, así que el segmento son las posiciones 2–3. Para formar el Hijo 1:
 
 - copia el segmento del Padre 1 (B): · 1 2 · ·;
 - lee el Padre 2 (A) **desde la primera posición**, saltando los lugares que ya están: de 5 2 1 3 4 quedan 5, 3 y 4;
@@ -182,7 +180,7 @@ El Hijo 1 es **4 1 2 5 3**. El Hijo 2 se forma igual, con los papeles cambiados:
 
 **5. Mutar.** Cada individuo nuevo, salvo la élite, muta con probabilidad *pm* = 0,2. Se sortea un número para cada uno: 0,71 para la copia de D, 0,48 para el Hijo 1 y 0,13 para el Hijo 2. Solo el último es menor que 0,2, así que solo muta el Hijo 2. El intercambio sortea dos posiciones, la 4 y la 5, y las intercambia: 5 2 1 3 4 pasa a ser **5 2 1 4 3**.
 
-::: {.callout-tip .ejemplo #ejemplo-10-3 title="Ejemplo reproducible 10.3 · El cruce y la mutación de la generación"}
+::: {.callout-tip .ejemplo #ejemplo-viajante-a-mano title="Ejemplo reproducible · El cruce y la mutación de la generación"}
 **Datos.** Cruce OX en la variante «Orden desde el inicio», con el Padre 1 = 3 1 2 4 5 (B), el Padre 2 = 5 2 1 3 4 (A) y el segmento en las posiciones 2–3. Después, mutación por intercambio del Hijo 2, 5 2 1 3 4, en las posiciones 4 y 5.
 
 **Predice.** ¿Cuánto miden los dos hijos y el mutante? ¿Alguno mejora a B, la mejor ruta de la población?
@@ -199,7 +197,7 @@ El Hijo 1 es **4 1 2 5 3**. El Hijo 2 se forma igual, con los papeles cambiados:
 | Hijo 2 | **5 2 1 3 4** | 30,62 |
 | Hijo 2 mutado | **5 2 1 4 3** | 24,29 |
 
-El Hijo 1 mejora a sus dos padres. De sus seis tramos, cuatro vienen de ellos: 1–2, que tienen los dos; 2–5 y 4–O, de A; y O–3, de B. El Hijo 2 es una copia de A, porque A ya tiene los lugares de fuera del segmento (3, 4 y 5, contando desde la posición 4 y dando la vuelta) en el mismo orden que B. La mutación le da la vuelta al final de la ruta y la convierte en **la mejor ruta posible**, la de la [figura 10.1](#figura-10-1) recorrida al revés.
+El Hijo 1 mejora a sus dos padres. De sus seis tramos, cuatro vienen de ellos: 1–2, que tienen los dos; 2–5 y 4–O, de A; y O–3, de B. El Hijo 2 es una copia de A, porque A ya tiene los lugares de fuera del segmento (3, 4 y 5, contando desde la posición 4 y dando la vuelta) en el mismo orden que B. La mutación le da la vuelta al final de la ruta y la convierte en **la mejor ruta posible**, la de la figura -@fig-mapa recorrida al revés.
 </details>
 
 <details class="incrustada">
@@ -210,7 +208,7 @@ El Hijo 1 mejora a sus dos padres. De sus seis tramos, cuatro vienen de ellos: 1
 
 <!-- Comprobado el 2026-10-15 con el código de crossover-ga (ox.js, variante from_start, cortes 1 y 3) y de mutation-ga (swap.js, marcadores 3 y 4), y en la interfaz publicada: crossover-ga muestra los hijos 4 1 2 5 3 y 5 2 1 3 4; mutation-ga, el mutante 5 2 1 4 3. Las mismas operaciones con las funciones de EvoTraveller (ox_copy con start = 1, end = 3, e intercambio de los índices 3 y 4) dan los mismos cromosomas. Longitudes con figuras/10-viajante.py. -->
 
-**6. Reemplazar.** La generación siguiente está formada por la élite, la copia y los dos hijos ([figura 10.2](#figura-10-2)):
+**6. Reemplazar.** La generación siguiente está formada por la élite, la copia y los dos hijos (figura -@fig-generacion):
 
 | Individuo | Origen | Cromosoma | Longitud |
 |:---:|---|:---:|:---:|
@@ -221,14 +219,12 @@ El Hijo 1 mejora a sus dos padres. De sus seis tramos, cuatro vienen de ellos: 1
 
 La media de las longitudes baja de 30,06 a 26,54, y la mejor ruta, de 27,81 a 24,29. C ha desaparecido, y de A queda lo que ha pasado a los hijos.
 
-[]{#figura-10-2}
-
-![**Figura 10.2.** La generación a mano de la sección 10.3. Arriba, la población inicial; abajo, la siguiente. En naranja, la ruta más corta de cada población. Figura propia, generada con `figuras/10-viajante.py`, en el repositorio del libro.](figuras/10-generacion.svg){fig-alt="Dos filas de cuatro mapas pequeños. Arriba, las rutas A, de longitud 30,62; B, 27,81, en naranja; C, 32,53; y D, 29,26. Las cuatro se cruzan consigo mismas. Abajo, B, que pasa como élite; D, copiada; H1, 24,80; y H2, en naranja, 24,29, que es la mejor ruta posible y no se cruza consigo misma."}
+![La generación a mano de la sección -@sec-viajante-a-mano. Arriba, la población inicial; abajo, la siguiente. En naranja, la ruta más corta de cada población. Figura propia, generada con `figuras/10-viajante.py`, en el repositorio del libro.](figuras/10-generacion.svg){#fig-generacion fig-alt="Dos filas de cuatro mapas pequeños. Arriba, las rutas A, de longitud 30,62; B, 27,81, en naranja; C, 32,53; y D, 29,26. Las cuatro se cruzan consigo mismas. Abajo, B, que pasa como élite; D, copiada; H1, 24,80; y H2, en naranja, 24,29, que es la mejor ruta posible y no se cruza consigo misma."}
 
 Con cinco lugares hay solo 60 rutas y es fácil dar con la mejor. En un mapa de 15 lugares, con más de 40 000 millones de rutas, una generación no da tanto de sí: la mejora es lenta y depende de muchas generaciones.
 
-:::: {.callout-note .ejercicio #ejercicio-10-3 title="Ejercicio 10.3 · Con el OX clásico"}
-Repite el paso 4 con el OX clásico de la [sección 6.6](06-cruce.qmd#ox), que lee el otro padre a partir del segundo corte. Con los mismos padres, el mismo segmento y la misma mutación del Hijo 2 en las posiciones 4 y 5, ¿qué hijos salen y cuál es la mejor ruta de la generación siguiente?
+:::: {.callout-note .ejercicio #ejercicio-viajante-a-mano title="Ejercicio · Con el OX clásico"}
+Repite el paso 4 con el OX clásico de la sección -@sec-cruce-ox, que lee el otro padre a partir del segundo corte. Con los mismos padres, el mismo segmento y la misma mutación del Hijo 2 en las posiciones 4 y 5, ¿qué hijos salen y cuál es la mejor ruta de la generación siguiente?
 
 <details>
 <summary>**Ver la solución**</summary>
@@ -237,7 +233,7 @@ Hijo 1: el segmento de B es · 1 2 · ·. A, leído a partir del segundo corte, 
 
 Hijo 2: el segmento de A es · 2 1 · ·. B, leído a partir del segundo corte, es 4 5 3 1 2; quedan 4, 5 y 3. El Hijo 2 es **3 2 1 4 5**, de longitud 26,46. Mutado en las posiciones 4 y 5 queda 3 2 1 5 4, de longitud 26,10.
 
-La generación siguiente sería B (27,81), D (29,26), 5 1 2 3 4 (30,49) y 3 2 1 5 4 (26,10). La mejor ruta sería 3 2 1 5 4, que mejora a B pero no llega a 24,29. Con los mismos sorteos, la variante del cruce cambia los hijos. Las dos variantes conservan el segmento de un padre y el orden relativo del otro, y ninguna es mejor en general; en el viajante lo que importa son los tramos ([sección 9.10](09-experimentos.qmd#operadores)).
+La generación siguiente sería B (27,81), D (29,26), 5 1 2 3 4 (30,49) y 3 2 1 5 4 (26,10). La mejor ruta sería 3 2 1 5 4, que mejora a B pero no llega a 24,29. Con los mismos sorteos, la variante del cruce cambia los hijos. Las dos variantes conservan el segmento de un padre y el orden relativo del otro, y ninguna es mejor en general; en el viajante lo que importa son los tramos (sección -@sec-experimentos-operadores).
 </details>
 ::::
 
@@ -250,19 +246,19 @@ La generación siguiente sería B (27,81), D (29,26), 5 1 2 3 4 (30,49) y 3 2 1 
 - Cambia la **Variante** a «Clásica (Goldberg, 1989)» y vuelve a probar segmentos. ¿Con cuál da el Hijo 2 la mejor ruta?
 :::
 
-## 10.4 Qué pasó en la ejecución [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#interpretar}
+## Qué pasó en la ejecución [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sec-viajante-interpretar}
 
-Con lo que hemos hecho a mano, ¿cómo se explica lo que vimos en la ejecución del [ejemplo 10.1](#ejemplo-10-1)?
+Con lo que hemos hecho a mano, ¿cómo se explica lo que vimos en la ejecución del ejemplo [](#ejemplo-viajante-observa)?
 
-**La curva no baja nunca** porque hay élite: la mejor ruta de una generación pasa a la siguiente sin cambios, como B en la [sección 10.3](#a-mano). La mejor aptitud solo puede subir o quedarse igual.
+**La curva no baja nunca** porque hay élite: la mejor ruta de una generación pasa a la siguiente sin cambios, como B en la sección -@sec-viajante-a-mano. La mejor aptitud solo puede subir o quedarse igual.
 
 **La población se llena de copias** porque varias piezas empujan en la misma dirección. La élite ya son 6 copias de la mejor ruta. El torneo favorece a las mejores rutas, y cuantas más copias hay de la mejor, más torneos gana. Una copia sin mutar es idéntica a su padre, y con **Mutation rate** 0,05 solo muta uno de cada veinte individuos. En la generación 10, 43 de los 100 individuos eran la mejor ruta.
 
-**El algoritmo deja de mejorar** porque ha perdido diversidad. Casi la mitad de la población es la misma ruta, y muchos cruces son entre dos copias de ella. Con el OX de EvoTraveller, que no es puro ([ejemplo 6.11](06-cruce.qmd#ejemplo-6-11)), cruzar dos copias da la misma ruta solo si el segmento empieza en la primera posición; si no, da la misma ruta con un trozo desplazado. En este mapa, ninguno de esos hijos es más corto que la mejor ruta: de los 36 pares de cortes posibles, 8 la repiten y 28 la alargan. Y lo que trae la mutación no basta para dar con una ruta mejor. La búsqueda queda atascada alrededor de una ruta de 34,11, mientras que la mejor posible mide 31,50: es la **convergencia prematura** de la [sección 9.7](09-experimentos.qmd#diversidad). La población sigue cambiando, pero no aparece nada mejor.
+**El algoritmo deja de mejorar** porque ha perdido diversidad. Casi la mitad de la población es la misma ruta, y muchos cruces son entre dos copias de ella. Con el OX de EvoTraveller, que no es puro (ejemplo [](#ejemplo-cruce-ampliaciones)), cruzar dos copias da la misma ruta solo si el segmento empieza en la primera posición; si no, da la misma ruta con un trozo desplazado. En este mapa, ninguno de esos hijos es más corto que la mejor ruta: de los 36 pares de cortes posibles, 8 la repiten y 28 la alargan. Y lo que trae la mutación no basta para dar con una ruta mejor. La búsqueda queda atascada alrededor de una ruta de 34,11, mientras que la mejor posible mide 31,50: es la **convergencia prematura** de la sección -@sec-experimentos-diversidad. La población sigue cambiando, pero no aparece nada mejor.
 
-La presión selectiva ([capítulo 5](05-seleccion.qmd#sec-seleccion)) decide lo deprisa que se pierde la diversidad. En EvoTraveller la controla el **Tournament size**.
+La presión selectiva (capítulo -@sec-seleccion) decide lo deprisa que se pierde la diversidad. En EvoTraveller la controla el **Tournament size**.
 
-::: {.callout-tip .ejemplo #ejemplo-10-4 title="Ejemplo reproducible 10.4 · Torneo de 2 y de 10"}
+::: {.callout-tip .ejemplo #ejemplo-viajante-interpretar title="Ejemplo reproducible · Torneo de 2 y de 10"}
 **Datos.** Los valores iniciales de EvoTraveller, salvo **Tournament size**, que tomará dos valores: 2 y 10. Pulsa **Run** con cada uno y mira la población con **Generation** 10.
 
 **Predice.** ¿Con qué torneo hay más copias de la mejor ruta en la generación 10?
@@ -280,7 +276,7 @@ La presión selectiva ([capítulo 5](05-seleccion.qmd#sec-seleccion)) decide lo 
 
 Con el torneo de 10, más de la mitad de la población son copias de la mejor ruta; con el de 2, solo 14. Cuanto mayor es el torneo, mayor es la presión selectiva y más deprisa se pierde la diversidad.
 
-Fíjate en la última columna: en este mapa, con el torneo de 10 se encuentra la mejor ruta posible y con el de 4 no. Pero es una sola ejecución en un solo mapa, y ya sabemos que eso no basta ([sección 9.3](09-experimentos.qmd#replicas)).
+Fíjate en la última columna: en este mapa, con el torneo de 10 se encuentra la mejor ruta posible y con el de 4 no. Pero es una sola ejecución en un solo mapa, y ya sabemos que eso no basta (sección -@sec-experimentos-replicas).
 </details>
 :::
 
@@ -299,8 +295,8 @@ Con más presión selectiva se conservan menos rutas distintas y el algoritmo se
 
 <!-- Comprobado el 2026-10-15 con el código de EvoTraveller (algorithm.genetic_algorithm, igual que AppTest) para las 30 semillas 1111–1140 y 10 lugares; óptimos por programación dinámica. Valores: k = 2 → 72,8 distintas en la g. 10 y óptimo en 29; k = 4 → 43,3 y 17; k = 10 → 22,0 y 13; pm = 0,2 → 58,9 y 28. Diferencia media sobre el óptimo: 0,09 %, 2,06 %, 3,48 % y 0,29 %. Una ejecución por mapa: la semilla fija a la vez el mapa y el azar del algoritmo (A026). -->
 
-:::: {.callout-note .ejercicio #ejercicio-10-4 title="Ejercicio 10.4 · Cuántas copias de la mejor ruta"}
-En la generación 10 del [ejemplo 10.1](#ejemplo-10-1), 43 de los 100 individuos son la mejor ruta. Con los valores iniciales, cada generación de EvoTraveller tiene 6 rutas de élite, 34 copias de ganadores de torneos y 60 hijos de cruce (lo veremos en la [sección 10.7](#por-dentro)). Cada torneo enfrenta a 4 individuos distintos, y cada copia o hijo muta con probabilidad 0,05.
+:::: {.callout-note .ejercicio #ejercicio-viajante-interpretar title="Ejercicio · Cuántas copias de la mejor ruta"}
+En la generación 10 del ejemplo [](#ejemplo-viajante-observa), 43 de los 100 individuos son la mejor ruta. Con los valores iniciales, cada generación de EvoTraveller tiene 6 rutas de élite, 34 copias de ganadores de torneos y 60 hijos de cruce (lo veremos en la sección -@sec-viajante-por-dentro). Cada torneo enfrenta a 4 individuos distintos, y cada copia o hijo muta con probabilidad 0,05.
 
 a) ¿Qué probabilidad hay de que una copia de la mejor ruta gane un torneo?
 b) ¿Cuántas de las 34 copias serán, en promedio, la mejor ruta sin mutar?
@@ -323,15 +319,15 @@ c) Los dos padres son la mejor ruta con probabilidad $0{,}90^2 \approx 0{,}81$. 
 
 <!-- Comprobado el 2026-10-15: 1 − C(57,4)/C(100,4) = 0,8993; 0,8993² = 0,8087; 34 × 0,8993 × 0,95 = 29,05; 60 × 0,8087 × 2/9 × 0,95 = 10,24. En el código, ox_copy con dos padres iguales devuelve el mismo cromosoma solo si start = 0 (P = 2/n = 8 de 36 pares de cortes con 9 lugares); con la mejor ruta del ejemplo 10.1, los otros 28 pares dan rutas más largas y ninguno una más corta. Es un modelo aproximado: supone 43 copias en la población de partida y no cuenta los hijos que, por azar, reconstruyen la mejor ruta de otra forma. -->
 
-## 10.5 La élite en el reemplazo [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#elite}
+## La élite en el reemplazo [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sec-viajante-elite}
 
 ¿Cuántas de las mejores rutas conviene guardar de una generación a la siguiente?
 
-EvoTraveller usa un **reemplazo generacional con élite** ([sección 8.3](08-reemplazo.qmd#elitismo)): las *e* mejores rutas pasan sin cambios y el resto de la población se sustituye por copias e hijos. El tamaño de la élite lo fija **Elitism**, como fracción de la población. Con los valores iniciales, **Elitism** 0,05 y 100 individuos, la élite son 6 rutas (en la [sección 10.7](#por-dentro) veremos por qué 6 y no 5).
+EvoTraveller usa un **reemplazo generacional con élite** (sección -@sec-reemplazo-elitismo): las *e* mejores rutas pasan sin cambios y el resto de la población se sustituye por copias e hijos. El tamaño de la élite lo fija **Elitism**, como fracción de la población. Con los valores iniciales, **Elitism** 0,05 y 100 individuos, la élite son 6 rutas (en la sección -@sec-viajante-por-dentro veremos por qué 6 y no 5).
 
-Pero la élite son las 6 primeras **posiciones** de la población ordenada, no 6 rutas distintas. En el [ejemplo 10.1](#ejemplo-10-1), a partir de la generación 5, las 6 posiciones están ocupadas por copias de la misma ruta, porque la mejor ya tiene muchas copias. Una élite de 6 guarda entonces lo mismo que una élite de 1.
+Pero la élite son las 6 primeras **posiciones** de la población ordenada, no 6 rutas distintas. En el ejemplo [](#ejemplo-viajante-observa), a partir de la generación 5, las 6 posiciones están ocupadas por copias de la misma ruta, porque la mejor ya tiene muchas copias. Una élite de 6 guarda entonces lo mismo que una élite de 1.
 
-::: {.callout-tip .ejemplo #ejemplo-10-5 title="Ejemplo reproducible 10.5 · Élite pequeña y élite grande"}
+::: {.callout-tip .ejemplo #ejemplo-viajante-elite title="Ejemplo reproducible · Élite pequeña y élite grande"}
 **Datos.** Los valores iniciales de EvoTraveller, salvo **Elitism**, que tomará tres valores: 0,01, 0,05 y 0,1. Pulsa **Run** con cada uno.
 
 **Predice.** ¿Con qué élite se encuentra la ruta más corta?
@@ -353,7 +349,7 @@ La élite pequeña y la grande encuentran la mejor ruta posible; la intermedia, 
 
 <!-- Comprobado el 2026-10-15 con el código de EvoTraveller (AppTest) y en la aplicación publicada: Elitism 0,01 → 31,50 (aptitud 0,03175), mejor ruta desde la generación 19; 0,05 → 34,11 (0,02932); 0,1 → 31,50, desde la generación 6. -->
 
-Con los 30 mapas de 10 lugares de la [sección 10.4](#interpretar), una ejecución por mapa, el número de mapas en que se encuentra la mejor ruta es:
+Con los 30 mapas de 10 lugares de la sección -@sec-viajante-interpretar, una ejecución por mapa, el número de mapas en que se encuentra la mejor ruta es:
 
 | Mutation rate | Elitism 0,01 | Elitism 0,05 | Elitism 0,1 |
 |:---:|:---:|:---:|:---:|
@@ -369,12 +365,12 @@ Lo que sí importa es que **haya** élite. EvoTraveller no permite quitarla, per
 | Con élite (6 rutas) | 6,1 % | 0 de 30 | 0 de 30 |
 | Sin élite | 10,2 % | 28 de 30 | 13 de 30 |
 
-Sin élite, la mejor ruta de una generación puede perderse: si muta o se cruza, su hijo puede ser peor. En 13 de las 30 ejecuciones, la ruta que entrega el algoritmo al final es peor que otra que había encontrado antes. Con *pm* = 0,05 la diferencia es mucho menor (13,7 % con élite y 13,5 % sin ella), porque las copias de la mejor ruta casi nunca mutan. La élite hace barato mutar mucho, como vimos en la [sección 9.9](09-experimentos.qmd#interaccion).
+Sin élite, la mejor ruta de una generación puede perderse: si muta o se cruza, su hijo puede ser peor. En 13 de las 30 ejecuciones, la ruta que entrega el algoritmo al final es peor que otra que había encontrado antes. Con *pm* = 0,05 la diferencia es mucho menor (13,7 % con élite y 13,5 % sin ella), porque las copias de la mejor ruta casi nunca mutan. La élite hace barato mutar mucho, como vimos en la sección -@sec-experimentos-interaccion.
 
 <!-- Comprobado el 2026-10-15 con el código de EvoTraveller y con una copia de genetic_algorithm en la que la línea «e = max(1, int(elitism*population_size))» se sustituye por «e = 0» (memoria/verificaciones/2026-10-15-viajante-evotraveller.py). 15 lugares, semillas 1111–1140, valores iniciales con Mutation rate 0,2: con élite 6,06 % de media, sin élite 10,20 %; curva que empeora en alguna generación: 0 y 28 de 30; final peor que el mejor visto: 0 y 13. Con Mutation rate 0,05: 13,73 % y 13,50 %. Con 10 lugares y 0,05: con élite 2,06 % (17 óptimos), sin élite 1,06 % (24 óptimos), y la curva empeora en 18 de 30. Élite de 10 lugares: Elitism 0,01/0,05/0,1 → 26/17/20 óptimos con pm 0,05 y 23/28/27 con pm 0,2. Desde la generación 5 del ejemplo 10.1, los 6 primeros individuos de la población ordenada son la misma ruta. -->
 
-:::: {.callout-note .ejercicio #ejercicio-10-5 title="Ejercicio 10.5 · Sin élite, a mano"}
-Repite el reemplazo de la [sección 10.3](#a-mano) sin élite. En lugar de B pasa una segunda copia, la del ganador de un cuarto torneo entre B y D, y no muta. a) ¿Cuál es la generación siguiente y su mejor ruta? b) Imagina ahora que, además, el Hijo 2 no hubiera mutado y el Hijo 1 hubiera salido peor que B. ¿Qué podría pasar con la mejor ruta?
+:::: {.callout-note .ejercicio #ejercicio-viajante-elite title="Ejercicio · Sin élite, a mano"}
+Repite el reemplazo de la sección -@sec-viajante-a-mano sin élite. En lugar de B pasa una segunda copia, la del ganador de un cuarto torneo entre B y D, y no muta. a) ¿Cuál es la generación siguiente y su mejor ruta? b) Imagina ahora que, además, el Hijo 2 no hubiera mutado y el Hijo 1 hubiera salido peor que B. ¿Qué podría pasar con la mejor ruta?
 
 <details>
 <summary>**Ver la solución**</summary>
@@ -385,17 +381,17 @@ b) Si ningún hijo mejorase a B, la mejor ruta seguiría siendo B solo si B gana
 </details>
 ::::
 
-## 10.6 Del ensayo al caso real [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#caso-real}
+## Del ensayo al caso real [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sec-viajante-caso-real}
 
 Una empresa reparte cada semana desde su almacén a 14 clientes, cuyas posiciones cambian de una semana a otra. ¿Cómo elegimos los parámetros de EvoTraveller para calcular sus rutas?
 
-Es un problema **táctico** ([sección 9.6](09-experimentos.qmd#objetivo)): se resuelve cada semana, interesa la calidad de la ruta y hay un tiempo limitado para calcularla. Supongamos que el tiempo da para unas 5000 evaluaciones de rutas por semana, las de los valores iniciales de EvoTraveller: 100 rutas en cada una de las 51 generaciones, de la 0 a la 50. Vamos a juntar todo lo que hemos visto en los [capítulos 9](09-experimentos.qmd#sec-experimentos) y este.
+Es un problema **táctico** (sección -@sec-experimentos-objetivo): se resuelve cada semana, interesa la calidad de la ruta y hay un tiempo limitado para calcularla. Supongamos que el tiempo da para unas 5000 evaluaciones de rutas por semana, las de los valores iniciales de EvoTraveller: 100 rutas en cada una de las 51 generaciones, de la 0 a la 50. Vamos a juntar todo lo que hemos visto en los capítulos -@sec-experimentos y este.
 
-**1. Casos parecidos al real.** No conocemos los mapas de las semanas que vienen, pero sí cómo son: 15 lugares contando el almacén. Usaremos mapas de EvoTraveller de ese tamaño ([sección 9.5](09-experimentos.qmd#casos-parecidos)).
+**1. Casos parecidos al real.** No conocemos los mapas de las semanas que vienen, pero sí cómo son: 15 lugares contando el almacén. Usaremos mapas de EvoTraveller de ese tamaño (sección -@sec-experimentos-casos-parecidos).
 
 **2. Una medida.** En cada mapa, cuánto más larga es la ruta del algoritmo que la mejor posible, en porcentaje. Aquí la mejor ruta la calcula un programa exacto; en un caso real se compararía con la mejor conocida.
 
-**3. Mapas para ajustar y mapas para comprobar.** Ajustamos con 10 mapas (semillas 1111 a 1120) y guardamos otros 20 (semillas 1121 a 1140) para comprobar la elección al final. Si eligiéramos y evaluáramos con los mismos mapas, el resultado sería demasiado optimista ([sección 9.11](09-experimentos.qmd#ampliaciones)).
+**3. Mapas para ajustar y mapas para comprobar.** Ajustamos con 10 mapas (semillas 1111 a 1120) y guardamos otros 20 (semillas 1121 a 1140) para comprobar la elección al final. Si eligiéramos y evaluáramos con los mismos mapas, el resultado sería demasiado optimista (sección -@sec-experimentos-ampliaciones).
 
 **4. Configuraciones candidatas.** Con lo visto en este capítulo y en el anterior, probamos cuatro:
 
@@ -404,7 +400,7 @@ Es un problema **táctico** ([sección 9.6](09-experimentos.qmd#objetivo)): se r
 - **C**, como B pero con **Tournament size** 7;
 - **D**, como B pero con **Population size** 50 y **Generations** 100: 50 rutas en cada una de 101 generaciones, unas 5000 evaluaciones, como las demás.
 
-::: {.callout-tip .ejemplo #ejemplo-10-6 title="Ejemplo reproducible 10.6 · Tres mapas, dos configuraciones"}
+::: {.callout-tip .ejemplo #ejemplo-viajante-caso-real title="Ejemplo reproducible · Tres mapas, dos configuraciones"}
 **Datos.** En EvoTraveller, pon **Number of places** 15 y prueba las configuraciones B y D con tres semillas: 1111, 1112 y 1117. B: valores iniciales con **Mutation rate** 0,2. D: lo mismo, con **Population size** 50 y **Generations** 100. Son seis ejecuciones. Lee en la curva **Fitness** la aptitud final, aproximada, y calcula la longitud como su inversa.
 
 **Predice.** ¿Qué configuración da rutas más cortas?
@@ -438,7 +434,7 @@ Con los 10 mapas de ajuste, una ejecución por mapa, el resultado es:
 | C, *pm* = 0,2 y torneo de 7 | 4,7 % | 16,9 % | 2 de 10 |
 | D, *pm* = 0,2, población 50 y 100 generaciones | 5,4 % | 27,3 % | 3 de 10 |
 
-:::: {.callout-note .ejercicio #ejercicio-10-6 title="Ejercicio 10.6 · ¿Cuál elegirías?"}
+:::: {.callout-note .ejercicio #ejercicio-viajante-caso-real title="Ejercicio · ¿Cuál elegirías?"}
 Con la tabla de los 10 mapas de ajuste, ¿qué configuración elegirías para la empresa? ¿Cuánto te fías de la diferencia entre B y C? Mapa a mapa, C mejora a B en 5 mapas, empeora en 4 y empata en 1.
 
 <details>
@@ -459,11 +455,11 @@ Comprobamos las cuatro configuraciones con los 20 mapas que habíamos guardado:
 
 La mejora de A a B se mantiene en los mapas nuevos: de 13,9 % a 6,5 %. La pequeña ventaja de C sobre B, en cambio, ha desaparecido: con los mapas nuevos, C es peor que B en 12 de 20. Era azar. Y D, que en el ajuste parecía la peor de las tres por su peor mapa, queda ahora por delante. Su ventaja sobre B, 2,1 puntos de media, tampoco es mucho mayor que la variación entre mapas; harían falta más mapas para estar seguros.
 
-Para la empresa, la decisión razonable sería B o D, y no los valores iniciales. Si el tiempo lo permite, hay otra palanca: con *pm* = 0,2 y **Generations** 100, el doble de evaluaciones, la diferencia media en los mapas guardados baja al 4,6 % y el peor mapa queda en el 10,4 %. Comprar calidad con tiempo es una decisión del problema, no del algoritmo ([sección 9.6](09-experimentos.qmd#objetivo)).
+Para la empresa, la decisión razonable sería B o D, y no los valores iniciales. Si el tiempo lo permite, hay otra palanca: con *pm* = 0,2 y **Generations** 100, el doble de evaluaciones, la diferencia media en los mapas guardados baja al 4,6 % y el peor mapa queda en el 10,4 %. Comprar calidad con tiempo es una decisión del problema, no del algoritmo (sección -@sec-experimentos-objetivo).
 
 <!-- Comprobado el 2026-10-15 con el código de EvoTraveller (algorithm.genetic_algorithm, igual que AppTest en las semillas comprobadas), 15 lugares, una ejecución por mapa; óptimos por programación dinámica (Held–Karp). Ajuste (1111–1120): A 13,28 / 17,62 / 0; B 5,21 / 14,84 / 1; C 4,68 / 16,89 / 2; D 5,41 / 27,33 / 3. B frente a A: mejor en 9 de 10. C frente a B: mejor en 5, peor en 4, empate en 1. Comprobación (1121–1140): A 13,95 / 32,54 / 0; B 6,49 / 16,23 / 3; C 8,17 / 30,43 / 2; D 4,39 / 14,62 / 4; C peor que B en 12 de 20 (mejor en 8); D mejor que B en 12, peor en 7, empate en 1; diferencia media 2,10 puntos, desviación típica 5,36 (error típico 1,20; intervalo del 95 % de −0,25 a 4,45, incluye el 0). B con G = 100: 4,57 % de media y 10,41 % en el peor mapa (1,73 % en los de ajuste). En 18 de los 30 mapas de 15 lugares hay dos lugares en el mismo punto. -->
 
-## 10.7 EvoTraveller por dentro [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#por-dentro}
+## EvoTraveller por dentro [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-viajante-por-dentro}
 
 ¿Qué hace exactamente EvoTraveller en cada generación, y en qué se diferencia de lo que hemos hecho a mano?
 
@@ -478,16 +474,16 @@ El código de EvoTraveller es público. Leído con atención, cada generación h
 
 Hay tres diferencias con lo que hemos estudiado en otros capítulos:
 
-- **Crossover no es una probabilidad de cruce.** En el [capítulo 6](06-cruce.qmd#sec-cruce), cada pareja se cruza con probabilidad *Pc*, y el número de hijos de cruce varía de una generación a otra. En EvoTraveller, **Crossover** es una fracción fija: con 0,6 y 100 individuos hay exactamente 60 hijos de cruce en cada generación. En promedio es lo mismo, pero sin variación.
-- **La mutación es por individuo, no por gen.** Con *pm* = 0,2, un individuo cambia en promedio $2 \times 0{,}2 = 0{,}4$ posiciones ([sección 9.2](09-experimentos.qmd#pc-pm)).
-- **El problema y el algoritmo comparten la semilla.** **Seed** fija a la vez las posiciones de los lugares y los sorteos del algoritmo. Por eso, para repetir con otro azar hay que cambiar de mapa, y cada mapa es una sola ejecución ([sección 9.1](09-experimentos.qmd#azar)).
+- **Crossover no es una probabilidad de cruce.** En el capítulo -@sec-cruce, cada pareja se cruza con probabilidad *Pc*, y el número de hijos de cruce varía de una generación a otra. En EvoTraveller, **Crossover** es una fracción fija: con 0,6 y 100 individuos hay exactamente 60 hijos de cruce en cada generación. En promedio es lo mismo, pero sin variación.
+- **La mutación es por individuo, no por gen.** Con *pm* = 0,2, un individuo cambia en promedio $2 \times 0{,}2 = 0{,}4$ posiciones (sección -@sec-experimentos-pc-pm).
+- **El problema y el algoritmo comparten la semilla.** **Seed** fija a la vez las posiciones de los lugares y los sorteos del algoritmo. Por eso, para repetir con otro azar hay que cambiar de mapa, y cada mapa es una sola ejecución (sección -@sec-experimentos-azar).
 
 Dos detalles más ayudan a leer la herramienta. Los lugares se sortean en la cuadrícula y nada impide que dos caigan en el mismo punto: entonces **Best solution** muestra un lugar menos. Pasa con frecuencia; con 15 lugares, en 18 de los 30 mapas de las semillas 1111 a 1140. Y el control **Generation** llega hasta **Generations** − 1, así que la última población no se puede ver.
 
 <!-- Comprobado el 2026-10-15 en algorithm.py y main.py (commit 41205ad): set_seed fija numpy y random; places usa np.random.randint (puede repetir puntos; solo evita el (0, 0)); e = max(1, int(elitism*population_size)), +1 si es impar; nc = int(crossover*population_size), +1 si es impar; random_tournament con random.sample (contendientes distintos) sobre toda la población; barajado con random.sample; copias = population_size − nc − e; ox_crossover con start, end = sorted(random.sample(range(size), 2)), así que end ≤ size − 1 y el último índice nunca está en [start, end); mutate con probabilidad por individuo e intercambio de dos índices distintos; la élite no muta. Slider Generation de 0 a generations − 1. Mapas de 15 lugares con puntos repetidos en 1111–1140: 1113, 1114, 1115, 1116, 1118, 1119, 1122, 1123, 1126, 1128, 1129, 1130, 1131, 1132, 1134, 1135, 1136, 1139 (18).
 AVISO PARA LOS AUTORES DE EVOTRAVELLER (no visible): si e + nc > N, el bucle de copias no hace nada y la población crece: con N = 10 y Crossover 0,9, la población pasa a 12 desde la segunda generación; con N = 30, Elitism 0,1 y Crossover 0,9, a 32; con N = 50, Elitism 0,1 y Crossover 0,9, a 52. La gráfica «Solutions» solo dibuja los N primeros. No se menciona en el texto. -->
 
-:::: {.callout-note .ejercicio #ejercicio-10-7 title="Ejercicio 10.7 · Contar las partes de una generación"}
+:::: {.callout-note .ejercicio #ejercicio-viajante-por-dentro title="Ejercicio · Contar las partes de una generación"}
 Con **Population size** 100, **Elitism** 0,07 y **Crossover** 0,5, ¿cuántas rutas forman la élite, cuántas son copias y cuántas hijos de cruce? ¿Cuántas pueden mutar?
 
 <details>
@@ -499,13 +495,13 @@ Con **Population size** 100, **Elitism** 0,07 y **Crossover** 0,5, ¿cuántas ru
 
 <!-- Comprobado el 2026-10-15 con la fórmula del código: int(0.07*100) = int(7.000000000000001) = 7 → 8; int(0.5*100) = 50; copias 42. -->
 
-## 10.8 Mejorar el algoritmo [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#mejorar}
+## Mejorar el algoritmo [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-viajante-mejorar}
 
-Esta sección requiere las secciones [6.10](06-cruce.qmd#que-conserva), [7.9](07-mutacion.qmd#que-conserva) y [9.10](09-experimentos.qmd#operadores).
+Esta sección requiere las secciones -@sec-cruce-que-conserva, -@sec-mutacion-que-conserva y -@sec-experimentos-operadores.
 
 En EvoTraveller solo podemos cambiar los parámetros. Si pudiéramos cambiar también los operadores, ¿cuáles cambiaríamos?
 
-En la [sección 9.10](09-experimentos.qmd#operadores) vimos que, en el viajante, la longitud de una ruta depende de sus tramos, y que los operadores que los conservan funcionan mejor: la mutación por inversión rompe dos tramos y el intercambio, hasta cuatro; el cruce ERX conserva casi todos los tramos de los padres, y OX, menos. Lo comprobamos entonces con un algoritmo propio. Ahora lo hemos repetido con el propio código de EvoTraveller, cambiando solo el operador, con la configuración B de la [sección 10.6](#caso-real) (*pm* = 0,2) y los 30 mapas de 15 lugares:
+En la sección -@sec-experimentos-operadores vimos que, en el viajante, la longitud de una ruta depende de sus tramos, y que los operadores que los conservan funcionan mejor: la mutación por inversión rompe dos tramos y el intercambio, hasta cuatro; el cruce ERX conserva casi todos los tramos de los padres, y OX, menos. Lo comprobamos entonces con un algoritmo propio. Ahora lo hemos repetido con el propio código de EvoTraveller, cambiando solo el operador, con la configuración B de la sección -@sec-viajante-caso-real (*pm* = 0,2) y los 30 mapas de 15 lugares:
 
 | Cruce | Mutación | Diferencia media sobre la mejor ruta | Peor mapa | Mapas con la mejor ruta |
 |---|---|:---:|:---:|:---:|
@@ -515,14 +511,14 @@ En la [sección 9.10](09-experimentos.qmd#operadores) vimos que, en el viajante,
 | ERX | Intercambio | 2,8 % | 23,4 % | 15 de 30 |
 | ERX | Inversión | **1,1 %** | **5,9 %** | **15 de 30** |
 
-La primera fila son los operadores de EvoTraveller. No coincide exactamente con la configuración B de la [sección 10.6](#caso-real) (6,1 % en esos mismos 30 mapas) porque, para poder usar ERX, este programa trata como lugares distintos los que caen en el mismo punto ([sección 10.7](#por-dentro)).
+La primera fila son los operadores de EvoTraveller. No coincide exactamente con la configuración B de la sección -@sec-viajante-caso-real (6,1 % en esos mismos 30 mapas) porque, para poder usar ERX, este programa trata como lugares distintos los que caen en el mismo punto (sección -@sec-viajante-por-dentro).
 
-Cambiar la variante de OX apenas cambia la media: las dos conservan el orden relativo, no los tramos. Cambiar el intercambio por la inversión divide la diferencia media por más de tres, y ERX con inversión la deja en el 1,1 %, con el peor mapa en el 5,9 %. Con los operadores de EvoTraveller, ninguna configuración de la [sección 10.6](#caso-real) baja tanto, ni siquiera la que usa el doble de generaciones (3,6 % en estos 30 mapas). Los parámetros se ajustan **después** de elegir unos operadores que conserven lo que importa del problema ([sección 9.10](09-experimentos.qmd#operadores)).
+Cambiar la variante de OX apenas cambia la media: las dos conservan el orden relativo, no los tramos. Cambiar el intercambio por la inversión divide la diferencia media por más de tres, y ERX con inversión la deja en el 1,1 %, con el peor mapa en el 5,9 %. Con los operadores de EvoTraveller, ninguna configuración de la sección -@sec-viajante-caso-real baja tanto, ni siquiera la que usa el doble de generaciones (3,6 % en estos 30 mapas). Los parámetros se ajustan **después** de elegir unos operadores que conserven lo que importa del problema (sección -@sec-experimentos-operadores).
 
 <!-- Comprobado el 2026-10-15 con memoria/verificaciones/2026-10-15-viajante-evotraveller.py: el genetic_algorithm de EvoTraveller con algorithm.mutate y algorithm.ox_crossover sustituidos (inversión del tramo entre dos posiciones sorteadas, ambas incluidas; OX clásico; ERX de figuras/09-experimentos.py con el origen como un lugar más), lugares como (x, y, índice) para que los repetidos sean genes distintos; N = 100, G = 50, k = 4, pm = 0,2, Elitism 0,05, Crossover 0,6; semillas 1111–1140. Medias: 7,149; 7,22; 2,147; 2,82; 1,12 %. Peor mapa: 24,07; 25,36; 10,91; 23,41; 5,87 %. Óptimos: 4, 7, 9, 15, 15. Con pm = 0,05: 12,97; 11,37; 8,96; 5,85; 2,33 %. En 15 de los 30 mapas el programa con índices da una ruta final distinta de la herramienta (los mapas con lugares repetidos y alguno más, porque cambian los sorteos de OX al comparar genes); en los demás coincide. -->
 
-:::: {.callout-note .ejercicio #ejercicio-10-8 title="Ejercicio 10.8 · ¿Por qué no basta con cambiar la variante de OX?"}
-En el [ejercicio 10.3](#ejercicio-10-3), la variante clásica de OX daba otros hijos. ¿Por qué, entonces, cambiar de variante no mejora la media en la tabla? ¿Qué tienen en común las dos variantes y qué les falta?
+:::: {.callout-note .ejercicio #ejercicio-viajante-mejorar title="Ejercicio · ¿Por qué no basta con cambiar la variante de OX?"}
+En el ejercicio [](#ejercicio-viajante-a-mano), la variante clásica de OX daba otros hijos. ¿Por qué, entonces, cambiar de variante no mejora la media en la tabla? ¿Qué tienen en común las dos variantes y qué les falta?
 
 <details>
 <summary>**Ver la solución**</summary>
@@ -531,17 +527,17 @@ Las dos variantes copian el segmento de un padre y colocan los demás lugares en
 </details>
 ::::
 
-## 10.9 Ampliaciones [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas} {#ampliaciones}
+## Ampliaciones [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas} {#sec-viajante-ampliaciones}
 
-**Algoritmos híbridos.** Los algoritmos genéticos exploran bien el espacio de búsqueda, pero refinan mal las soluciones que encuentran. Por eso los más eficaces suelen combinarse con una búsqueda local, que mejora cada hijo antes de evaluarlo. Talbi llama a estos híbridos *low-level teamwork hybrids* e incluye entre ellos los **algoritmos meméticos** [@talbi2009, p. 388]. En el viajante, una búsqueda local clásica es la de 2-opt, que invierte tramos de la ruta mientras alguna inversión la acorte [@croes1958; @talbi2009, p. 92]. Su movimiento es el de la mutación por inversión ([sección 7.10](07-mutacion.qmd#ampliaciones)).
+**Algoritmos híbridos.** Los algoritmos genéticos exploran bien el espacio de búsqueda, pero refinan mal las soluciones que encuentran. Por eso los más eficaces suelen combinarse con una búsqueda local, que mejora cada hijo antes de evaluarlo. Talbi llama a estos híbridos *low-level teamwork hybrids* e incluye entre ellos los **algoritmos meméticos** [@talbi2009, p. 388]. En el viajante, una búsqueda local clásica es la de 2-opt, que invierte tramos de la ruta mientras alguna inversión la acorte [@croes1958; @talbi2009, p. 92]. Su movimiento es el de la mutación por inversión (sección -@sec-mutacion-ampliaciones).
 
-**Sembrar la población.** Se puede empezar con rutas construidas con una heurística, como la del vecino más cercano, en lugar de rutas al azar. No siempre ayuda: la población puede llenarse enseguida de copias de esas rutas y converger prematuramente ([sección 4.4](04-inicializar-evaluar.qmd#sembrar)). Talbi recoge un caso del viajante en que una búsqueda local da peores resultados partiendo de las rutas de una heurística voraz que partiendo de rutas al azar [@talbi2009, p. 102].
+**Sembrar la población.** Se puede empezar con rutas construidas con una heurística, como la del vecino más cercano, en lugar de rutas al azar. No siempre ayuda: la población puede llenarse enseguida de copias de esas rutas y converger prematuramente (sección -@sec-inicializar-evaluar-sembrar). Talbi recoge un caso del viajante en que una búsqueda local da peores resultados partiendo de las rutas de una heurística voraz que partiendo de rutas al azar [@talbi2009, p. 102].
 
-**El viajante real.** El viajante de este capítulo es el más sencillo: distancias en línea recta, iguales a la ida y a la vuelta, y un solo vehículo. Los problemas reales añaden ventanas de tiempo, requisitos concretos de las rutas o varios vehículos, como en el problema de rutas de vehículos [@talbi2009, p. 102]. Los algoritmos genéticos pueden adaptarse a restricciones como estas [@santos2025, p. 8], a costa de diseñar con cuidado la representación, la aptitud y el tratamiento de las rutas no factibles ([sección 4.7](04-inicializar-evaluar.qmd#penalizacion)).
+**El viajante real.** El viajante de este capítulo es el más sencillo: distancias en línea recta, iguales a la ida y a la vuelta, y un solo vehículo. Los problemas reales añaden ventanas de tiempo, requisitos concretos de las rutas o varios vehículos, como en el problema de rutas de vehículos [@talbi2009, p. 102]. Los algoritmos genéticos pueden adaptarse a restricciones como estas [@santos2025, p. 8], a costa de diseñar con cuidado la representación, la aptitud y el tratamiento de las rutas no factibles (sección -@sec-inicializar-evaluar-penalizacion).
 
-**EvoTraveller.** @santos2025 describen la herramienta: sus parámetros, las tres gráficas y el propósito de cada una. Destacan la gráfica de la población como su rasgo más característico, porque permite ver cómo los parámetros afectan a la convergencia y a la diversidad de las rutas, como hemos hecho en las [secciones 10.1](#observa) y [10.4](#interpretar).
+**EvoTraveller.** @santos2025 describen la herramienta: sus parámetros, las tres gráficas y el propósito de cada una. Destacan la gráfica de la población como su rasgo más característico, porque permite ver cómo los parámetros afectan a la convergencia y a la diversidad de las rutas, como hemos hecho en las secciones -@sec-viajante-observa y -@sec-viajante-interpretar.
 
-## Resumen {#resumen}
+## Resumen {.unnumbered #resumen}
 
 - En el problema del viajante, una ruta se representa con una permutación de los lugares y el origen se añade al principio y al final; la aptitud de EvoTraveller es la inversa de la longitud. Con *n* lugares hay $(n-1)!/2$ rutas distintas, demasiadas para revisarlas salvo en mapas pequeños.
 - Una generación de EvoTraveller tiene tres partes: la élite, que pasa sin cambios; las copias de los individuos seleccionados por torneo; y los hijos de parejas cruzadas con OX. Las copias y los hijos pueden mutar por intercambio.
@@ -549,7 +545,7 @@ Las dos variantes copian el segmento de un padre y colocan los demás lugares en
 - Importa que haya élite, pero no tanto su tamaño, porque las posiciones de la élite suelen estar ocupadas por copias de la misma ruta.
 - Los parámetros se eligen con mapas parecidos al caso real y se comprueban con mapas nuevos: una ventaja pequeña en los mapas de ajuste puede desaparecer en los nuevos.
 
-## Referencias del capítulo {#referencias}
+## Referencias del capítulo {.unnumbered #referencias}
 
 <!-- Seguimiento interno: santos2025 es una entrada nueva; cotejada el 2026-10-15 con el PDF local (Recursos/978-3-031-82334-3_2 (1).pdf, leído entero): autores, título, «R. Carrasco-Gallego et al. (Eds.): CIO 2024, LNDECT 239, pp. 6–10, 2025», DOI. Título del volumen, «Organizational Engineering, Coping with Complexity», según el portal y una ficha comercial del libro (megabooks.cz); falta comprobarlo en Springer, y la lista completa de editores. Localizadores: pp. 8–9 (descripción de la aplicación y de los parámetros), p. 8 (restricciones como ventanas de tiempo; la gráfica de la población como rasgo distintivo). talbi2009, cotejado con pdftotext: p. 7 (ejemplo 1.2, el viajante), p. 36 (ejemplo 1.28: (n − 1)! si se fija la primera ciudad), p. 92 (figura 2.5, 2-opt), p. 102 (ejemplo 2.7, soluciones iniciales voraces), p. 388 (híbridos LTH y algoritmos meméticos). croes1958 ya estaba en el capítulo 7 y sigue pendiente de cotejo. La lista se genera con las obras citadas en el capítulo. -->
 

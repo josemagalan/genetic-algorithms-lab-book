@@ -1,21 +1,35 @@
-"""Genera los dos índices del libro a partir de los capítulos: indice.qmd y actividades.qmd.
+"""Numeración de las cajas e índices del libro. Se ejecuta como «pre-render» (_quarto.yml).
 
+Quarto numera los capítulos, las secciones y las figuras (number-sections). Este
+guion calcula lo que Quarto no sabe numerar y genera tres archivos:
+
+- _numeracion.json (no se versiona): número de cada sección, ejemplo y ejercicio, y
+  archivo en el que está. Lo lee filtros/numeracion.lua para escribir el número en
+  el título de cada caja y en las referencias [](#ejemplo-…), [](#ejercicio-…) y
+  [](#sec-…){.capitulo}.
 - indice.qmd: índice general detallado (capítulos y secciones, con su nivel).
 - actividades.qmd: ejemplos reproducibles, cajas «En la aplicación» y ejercicios,
   por herramienta y por capítulo.
 
-Se ejecuta como «pre-render» del proyecto (_quarto.yml), así que los índices
-siempre reflejan los capítulos tal como están. Solo reescribe un archivo si su
-contenido cambia. También puede lanzarse a mano: python3 filtros/indices.py
+Regla de las cajas: un ejemplo o ejercicio lleva el número de su sección (el
+ejemplo 5.3 está en la sección 5.3), así que solo puede haber uno de cada tipo por
+sección. Un capítulo con «numeracion-cajas: correlativa» en su cabecera YAML los
+numera seguidos (1.1, 1.2, 1.3…) en todo el capítulo.
 
-Lee lo que ya marca cada capítulo y no necesita nada más:
-  ## N.M Título [[…]{.largo}[…]{.corto}]{.nivel .basico|.avanzado|.saber-mas} {#ancla}
-  ::: {.callout-tip .ejemplo #ejemplo-N-M title="Ejemplo reproducible N.M · …"}
+Solo reescribe un archivo si su contenido cambia. También puede lanzarse a mano:
+python3 filtros/indices.py
+
+Lee lo que ya marca cada capítulo:
+  ## Título [[…]{.largo}[…]{.corto}]{.nivel .basico|.avanzado|.saber-mas} {#sec-…}
+  ## Resumen {.unnumbered #resumen}
+  ::: {.callout-tip .ejemplo #ejemplo-… title="Ejemplo reproducible · …"}
   ::: {.callout-note .en-app title="En la aplicación · herramienta, «…»"}
-  :::: {.callout-note .ejercicio #ejercicio-N-M title="Ejercicio N.M · …"}
+  :::: {.callout-note .ejercicio #ejercicio-… title="Ejercicio · …"}
 """
+import json
 import os
 import re
+import sys
 from collections import OrderedDict
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -45,10 +59,11 @@ TIPOS = {
     'ejercicio': 'Ejercicio',
 }
 
-CAPITULO = re.compile(r'^# (.+?)\s*\{[^}]*\}\s*$')
+CAPITULO = re.compile(r'^# (.+?)\s*\{#([\w-]+)[^}]*\}\s*$')
 SECCION = re.compile(
-    r'^## (\d+)\.(\d+) (.+?) \[\[[^\]]*\]\{\.largo\}\[[^\]]*\]\{\.corto\}\]'
+    r'^## (.+?) \[\[[^\]]*\]\{\.largo\}\[[^\]]*\]\{\.corto\}\]'
     r'\{\.nivel \.([\w-]+)\}\s*\{#([\w-]+)\}\s*$')
+SECCION_SIN_NIVEL = re.compile(r'^## (.+?)\s*\{([^}]*)\}\s*$')
 CAJA = re.compile(r'^(:{3,}) \{\.callout-\w+ \.(ejemplo|en-app|ejercicio)(?: #([\w-]+))? title="([^"]*)"\}\s*$')
 URL = re.compile(r'https?://[^\s)\]"\'>]+')
 
@@ -82,25 +97,42 @@ def capitulos():
     return [a for a in re.findall(r'^\s+-\s+([\w-]+\.qmd)', bloque, re.M) if re.match(r'\d\d-', a)]
 
 
-def leer(archivo):
+class ErrorNumeracion(Exception):
+    pass
+
+
+def leer(archivo, numero):
     with open(os.path.join(RAIZ, archivo), encoding='utf-8') as fh:
-        lineas = fh.read().split('\n')
-    cap = {'archivo': archivo, 'numero': int(archivo[:2]), 'titulo': None, 'secciones': [], 'cajas': []}
+        texto = fh.read()
+    cabecera = re.match(r'^---\n(.*?)\n---\n', texto, re.S)
+    correlativa = bool(cabecera and re.search(r'^numeracion-cajas:\s*correlativa\b', cabecera.group(1), re.M))
+    lineas = texto.split('\n')
+    cap = {'archivo': archivo, 'numero': numero, 'titulo': None, 'id': None, 'secciones': [], 'cajas': []}
     seccion = None
+    n_seccion = 0
+    usados = {}                 # (tipo, sección) -> id de la caja, para detectar repeticiones
+    seguidos = {'ejemplo': 0, 'ejercicio': 0}
     i = 0
     while i < len(lineas):
         linea = lineas[i]
         if cap['titulo'] is None:
             m = CAPITULO.match(linea)
             if m:
-                cap['titulo'] = m.group(1).strip()
-        m = SECCION.match(linea)
-        if m:
-            seccion = {'num': f'{m.group(1)}.{m.group(2)}', 'titulo': m.group(3).strip(),
-                       'nivel': m.group(4), 'ancla': m.group(5)}
-            cap['secciones'].append(seccion)
-        elif linea.startswith('## '):
-            seccion = None          # Resumen, Referencias…
+                cap['titulo'], cap['id'] = m.group(1).strip(), m.group(2)
+        if linea.startswith('## '):
+            m = SECCION.match(linea)
+            if m:
+                n_seccion += 1
+                seccion = {'num': f'{numero}.{n_seccion}', 'titulo': m.group(1).strip(),
+                           'nivel': m.group(2), 'ancla': m.group(3)}
+                cap['secciones'].append(seccion)
+            else:
+                m = SECCION_SIN_NIVEL.match(linea)
+                if m and '.unnumbered' in m.group(2):
+                    seccion = None          # Resumen, Referencias…
+                else:
+                    raise ErrorNumeracion(f'{archivo}: la sección «{linea[3:]}» no lleva etiqueta de nivel '
+                                          'ni {.unnumbered}; Quarto la numeraría y los índices no la verían.')
         m = CAJA.match(linea)
         if m:
             cierre = m.group(1)
@@ -108,12 +140,31 @@ def leer(archivo):
             while j < len(lineas) and lineas[j].strip() != cierre:
                 j += 1
             contenido = '\n'.join(lineas[i + 1:j])
-            titulo = m.group(4)
+            tipo, ancla, titulo = m.group(2), m.group(3), m.group(4)
             partes = titulo.split(' · ', 1)
-            cabeza, nombre = partes[0], (partes[1] if len(partes) > 1 else '')
-            numero = re.search(r'(\d+\.\d+)$', cabeza)
+            nombre = partes[1] if len(partes) > 1 else ''
+            num = None
+            if tipo in seguidos:
+                if re.search(r'\d+\.\d+', partes[0]):
+                    raise ErrorNumeracion(f'{archivo}: la caja #{ancla} lleva el número escrito en el título '
+                                          f'(«{titulo}»); quítalo, lo pone el filtro.')
+                if not ancla:
+                    raise ErrorNumeracion(f'{archivo}: una caja «{titulo}» no tiene identificador (#{tipo}-…).')
+                if correlativa:
+                    seguidos[tipo] += 1
+                    num = f'{numero}.{seguidos[tipo]}'
+                else:
+                    if seccion is None:
+                        raise ErrorNumeracion(f'{archivo}: la caja #{ancla} está fuera de una sección numerada.')
+                    if (tipo, seccion['num']) in usados:
+                        raise ErrorNumeracion(
+                            f'{archivo}: la sección {seccion["num"]} tiene dos cajas de tipo {tipo} '
+                            f'(#{usados[(tipo, seccion["num"])]} y #{ancla}). Con la numeración por sección solo '
+                            'cabe una; muévela o pon «numeracion-cajas: correlativa» en la cabecera del capítulo.')
+                    usados[(tipo, seccion['num'])] = ancla
+                    num = seccion['num']
             cap['cajas'].append({
-                'tipo': m.group(2), 'ancla': m.group(3), 'numero': numero.group(1) if numero else None,
+                'tipo': tipo, 'ancla': ancla, 'numero': num,
                 'nombre': nombre, 'seccion': seccion,
                 'herramientas': herramientas_de(contenido),
             })
@@ -184,7 +235,7 @@ def indice_general(caps):
          f"Las actividades —{cajas['ejemplo']} ejemplos reproducibles, {cajas['en-app']} cajas "
          f"«En la aplicación» y {cajas['ejercicio']} ejercicios— están listadas en el "
          '[índice de actividades](actividades.qmd), por capítulo y por herramienta.', '',
-         '## El libro de un vistazo {#vistazo}', '',
+         '## El libro de un vistazo {.unnumbered #vistazo}', '',
          '| Capítulo | B | A | + | Ejemplos | En la aplicación | Ejercicios |',
          '|---|:-:|:-:|:-:|:-:|:-:|:-:|']
     for c in caps:
@@ -196,7 +247,7 @@ def indice_general(caps):
              f"**{cajas['ejemplo']}** | **{cajas['en-app']}** | **{cajas['ejercicio']}** |")
     o.append('')
     for c in caps:
-        o += [f"## {c['numero']}. {c['titulo']} {{#cap-{c['numero']}}}", '']
+        o += [f"## {c['numero']}. {c['titulo']} {{.unnumbered #cap-{c['numero']}}}", '']
         for s in c['secciones']:
             o.append(f"- [{s['num']} {s['titulo']}]({c['archivo']}#{s['ancla']}) {insignia(s['nivel'])}")
         o.append('')
@@ -212,7 +263,7 @@ def indice_actividades(caps):
          'una sesión con una aplicación concreta; la segunda, por capítulo. La columna de nivel es '
          'la de la sección en la que está la caja.', '']
     # --- Por herramienta
-    o += ['## Por herramienta {#por-herramienta}', '']
+    o += ['## Por herramienta {.unnumbered #por-herramienta}', '']
     for clave, nombre in HERRAMIENTAS.items():
         filas = [(c, b) for c in caps for b in c['cajas'] if clave in b['herramientas']]
         if not filas:
@@ -225,18 +276,18 @@ def indice_actividades(caps):
                                                 (n_ejer, 'ejercicio', 'ejercicios'))
                    if n for texto in [f'{n} {uno if n == 1 else varios}']]
         frase = resumen[0] if len(resumen) == 1 else ', '.join(resumen[:-1]) + ' y ' + resumen[-1]
-        o += [f"### {nombre} {{#h-{clave}}}", '', frase[0].upper() + frase[1:] + '.', '',
+        o += [f"### {nombre} {{.unnumbered #h-{clave}}}", '', frase[0].upper() + frase[1:] + '.', '',
               '| Actividad | Título | Sección | Nivel |', '|---|---|:-:|:-:|']
         for c, b in filas:
             nivel = insignia(b['seccion']['nivel']) if b['seccion'] else ''
             o.append(f"| {enlace_caja(c, b)} | {celda(nombre_caja(b))} | {enlace_seccion(c, b['seccion'])} | {nivel} |")
         o.append('')
     # --- Por capítulo
-    o += ['## Por capítulo {#por-capitulo}', '']
+    o += ['## Por capítulo {.unnumbered #por-capitulo}', '']
     for c in caps:
         if not c['cajas']:
             continue
-        o += [f"### {c['numero']}. {c['titulo']} {{#a-cap-{c['numero']}}}", '',
+        o += [f"### {c['numero']}. {c['titulo']} {{.unnumbered #a-cap-{c['numero']}}}", '',
               '| Actividad | Título | Sección | Herramienta | Nivel |', '|---|---|:-:|---|:-:|']
         for b in c['cajas']:
             nivel = insignia(b['seccion']['nivel']) if b['seccion'] else ''
@@ -260,8 +311,27 @@ def escribir(nombre, texto):
     print(f'indices.py: {nombre} actualizado')
 
 
+def numeracion(caps):
+    datos = {'capitulos': {}, 'secciones': {}, 'cajas': {}}
+    for c in caps:
+        datos['capitulos'][c['id']] = {'archivo': c['archivo'], 'numero': str(c['numero'])}
+        for s in c['secciones']:
+            datos['secciones'][s['ancla']] = {'archivo': c['archivo'], 'numero': s['num'],
+                                              'capitulo': str(c['numero'])}
+        for b in c['cajas']:
+            if b['numero']:
+                if b['ancla'] in datos['cajas']:
+                    raise ErrorNumeracion(f'identificador repetido: #{b["ancla"]}')
+                datos['cajas'][b['ancla']] = {'archivo': c['archivo'], 'numero': b['numero'], 'tipo': b['tipo']}
+    return json.dumps(datos, ensure_ascii=False, indent=1, sort_keys=True)
+
+
 def main():
-    caps = [leer(a) for a in capitulos()]
+    try:
+        caps = [leer(a, n) for n, a in enumerate(capitulos(), 1)]
+    except ErrorNumeracion as e:
+        sys.exit(f'indices.py: {e}')
+    escribir('_numeracion.json', numeracion(caps))
     escribir('indice.qmd', indice_general(caps))
     escribir('actividades.qmd', indice_actividades(caps))
 

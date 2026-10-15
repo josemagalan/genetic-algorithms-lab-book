@@ -20,15 +20,15 @@ Al terminar el recorrido básico de este capítulo podrás:
 - razonar qué ocurre si la probabilidad de mutación es demasiado baja o demasiado alta.
 :::
 
-## 7.1 ¿Para qué mutar? [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#para-que-mutar}
+## ¿Para qué mutar? [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sec-mutacion-para-que-mutar}
 
 El cruce combina lo que ya tienen los padres. ¿De dónde salen los valores que no tiene nadie en la población?
 
-En el [capítulo de cruce](06-cruce.qmd#sec-cruce) vimos que, donde los dos padres coinciden, los hijos también coinciden ([ejemplo 6.2](06-cruce.qmd#ejemplo-6-2)). La selección copia individuos y el cruce recombina sus genes, pero ninguno de los dos crea valores nuevos. Si en una posición todos los individuos tienen el mismo valor, ningún cruce lo puede cambiar. Además, la selección reduce la diversidad de la población generación tras generación, como vimos en el [capítulo de selección](05-seleccion.qmd#sec-seleccion).
+En el [capítulo de cruce](#sec-cruce) vimos que, donde los dos padres coinciden, los hijos también coinciden (ejemplo [](#ejemplo-cruce-uno-y-dos-puntos)). La selección copia individuos y el cruce recombina sus genes, pero ninguno de los dos crea valores nuevos. Si en una posición todos los individuos tienen el mismo valor, ningún cruce lo puede cambiar. Además, la selección reduce la diversidad de la población generación tras generación, como vimos en el [capítulo de selección](#sec-seleccion).
 
 La **mutación** es un operador que actúa sobre un solo individuo y le hace un cambio pequeño y aleatorio en el cromosoma [@talbi2009, p. 208]. Introduce valores nuevos y recupera los que se habían perdido, de modo que ningún punto del espacio de búsqueda quede fuera de alcance [@herrera1998; @whitley1994].
 
-En los algoritmos genéticos de Holland, la mutación tiene un papel secundario. El cruce es la principal fuente de combinaciones nuevas, y la mutación garantiza que ningún valor desaparezca para siempre de la población; si se pierde, el cruce no tiene forma de recuperarlo [@holland1992, pp. 110–111]. @goldberg1989 [p. 14] la compara con una póliza de seguro contra la pérdida prematura de material genético útil. En otros métodos evolutivos, como la programación evolutiva y las primeras estrategias evolutivas, la mutación era la única fuente de variación [@mitchell1998, apartado 5.5]. Volveremos sobre este debate en la [sección 7.10](#ampliaciones).
+En los algoritmos genéticos de Holland, la mutación tiene un papel secundario. El cruce es la principal fuente de combinaciones nuevas, y la mutación garantiza que ningún valor desaparezca para siempre de la población; si se pierde, el cruce no tiene forma de recuperarlo [@holland1992, pp. 110–111]. @goldberg1989 [p. 14] la compara con una póliza de seguro contra la pérdida prematura de material genético útil. En otros métodos evolutivos, como la programación evolutiva y las primeras estrategias evolutivas, la mutación era la única fuente de variación [@mitchell1998, apartado 5.5]. Volveremos sobre este debate en la sección -@sec-mutacion-ampliaciones.
 
 La mutación se aplica después del cruce, a todos los individuos de la nueva población: a los hijos de las parejas que se han cruzado y también a las copias de las que no se han cruzado. A cada uno se le da una probabilidad baja de cambiar. Si una mutación empeora un individuo, lo más probable es que la selección lo descarte; si lo mejora, la selección tenderá a extender ese cambio por la población.
 
@@ -42,11 +42,11 @@ Como el cruce, la mutación actúa sobre el genotipo, así que cada representaci
 
 **Notación.** Seguimos la de la herramienta: el individuo que se muta es el **Padre** y el resultado, el **Mutante**. Las posiciones se numeran desde 1. La probabilidad de mutación es *pm*.
 
-:::: {.callout-note .ejercicio #ejercicio-7-1 title="Ejercicio 7.1 · Predice"}
-En una población de 50 cadenas de bits, todos los individuos tienen un 0 en la posición 3. Si solo se aplican selección y cruce, ¿puede algún descendiente tener un 1 en esa posición? ¿Y si además se aplica una mutación que invierta bits al azar? Anota tu predicción: la comprobarás en la [sección 7.2](#inversion-bits).
+:::: {.callout-note .ejercicio #ejercicio-mutacion-para-que-mutar title="Ejercicio · Predice"}
+En una población de 50 cadenas de bits, todos los individuos tienen un 0 en la posición 3. Si solo se aplican selección y cruce, ¿puede algún descendiente tener un 1 en esa posición? ¿Y si además se aplica una mutación que invierta bits al azar? Anota tu predicción: la comprobarás en la sección -@sec-mutacion-inversion-bits.
 ::::
 
-## 7.2 Binaria: inversión de bits [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#inversion-bits}
+## Binaria: inversión de bits [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sec-mutacion-inversion-bits}
 
 ¿Cómo se cambia un poco una cadena de bits?
 
@@ -58,7 +58,7 @@ La mutación clásica de la representación binaria es la **inversión de bits**
 
 El número de bits que cambian no es fijo. En promedio cambian $\mathit{pm} \times n$, donde *n* es la longitud del cromosoma, pero unas veces cambian más, otras menos y otras ninguno.
 
-::: {.callout-tip .ejemplo #ejemplo-7-2 title="Ejemplo reproducible 7.2 · Un sorteo por posición"}
+::: {.callout-tip .ejemplo #ejemplo-mutacion-inversion-bits title="Ejemplo reproducible · Un sorteo por posición"}
 **Datos.** El padre 1 1 0 1 0 0 1 0 y $\mathit{pm} = 0{,}15$. Números aleatorios de las posiciones 1 a 8:
 
 | Posición | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
@@ -90,9 +90,9 @@ Han cambiado 2 bits. Se esperaban $0{,}15 \times 8 = 1{,}2$, pero el número de 
 <!-- Comprobado el 2026-10-08: la herramienta muestra en el paso 12 de 12 el mutante 1 0 0 1 0 1 1 0 y «Resultado: han cambiado 2 bits (posiciones 2, 6), así que el mutante está a distancia de Hamming 2 del padre. Lo esperado era pm · n = 1,2…». -->
 :::
 
-Con $\mathit{pm} > 0$, cualquier bit puede cambiar, así que cualquier cadena puede salir, aunque sea con una probabilidad muy pequeña. Esto responde al [ejercicio 7.1](#ejercicio-7-1): sin mutación, el 0 de la posición 3 no puede cambiar nunca; con ella, sí.
+Con $\mathit{pm} > 0$, cualquier bit puede cambiar, así que cualquier cadena puede salir, aunque sea con una probabilidad muy pequeña. Esto responde al ejercicio [](#ejercicio-mutacion-para-que-mutar): sin mutación, el 0 de la posición 3 no puede cambiar nunca; con ella, sí.
 
-:::: {.callout-note .ejercicio #ejercicio-7-2 title="Ejercicio 7.2 · ¿Cuántos bits cambian?"}
+:::: {.callout-note .ejercicio #ejercicio-mutacion-inversion-bits title="Ejercicio · ¿Cuántos bits cambian?"}
 Un cromosoma tiene 8 bits y se muta con $\mathit{pm} = 1/8$. ¿Cuántos bits cambian en promedio? ¿Con qué probabilidad no cambia ninguno? ¿Y exactamente uno?
 
 <details>
@@ -111,7 +111,7 @@ En promedio cambia $8 \times 1/8 = 1$ bit. Cada bit se queda igual con probabili
 - Pulsa **Practicar**: la herramienta te da los números sorteados y tú escribes el mutante.
 :::
 
-## 7.3 Enteros: reinicio aleatorio y deslizamiento [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#enteros}
+## Enteros: reinicio aleatorio y deslizamiento [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sec-mutacion-enteros}
 
 Si cada gen es un número entero, ¿da igual cambiarlo por cualquier otro valor?
 
@@ -120,9 +120,9 @@ En la **representación entera**, cada gen es un entero dentro de un rango. En m
 - **Reinicio aleatorio** (*random resetting*). Si la posición muta, el gen toma un valor cualquiera del rango, todos con la misma probabilidad. Es la mutación tal como la definió @holland1992 [pp. 109–110] para cualquier alfabeto: el valor nuevo se elige al azar entre todos los posibles, con la misma probabilidad. @talbi2009 [p. 209] la describe como cambiar el valor del gen por otro del alfabeto. En la herramienta se sortea un segundo número *s* y el valor nuevo es $\lfloor 10\, s \rfloor$, la parte entera de $10\,s$. Puede coincidir con el que había.
 - **Deslizamiento** (*creep*). Si la posición muta, al gen se le suma un paso pequeño, positivo o negativo, de como mucho *s* unidades (el **paso máximo**). Con $s = 1$ se sortea un segundo número *u*: si $u < 0{,}5$, el gen baja una unidad; si no, sube una. Si el valor se sale del rango, se queda en el extremo. La idea de deslizar un gen hacia arriba o hacia abajo una cantidad pequeña, con un deslizamiento máximo fijado por el usuario, procede de los números reales [@herrera1998, apartado 4.4].
 
-Cuál conviene depende de lo que signifique cada gen [@eiben2015]. Si los valores son **categorías sin orden**, como la máquina que hace cada tarea o el proveedor que atiende cada pedido, la máquina 3 no se parece más a la 4 que a la 9, y cualquier valor es un cambio tan razonable como otro: conviene el reinicio aleatorio. Si los valores son **cantidades ordenadas**, como las unidades de un lote o los operarios de un turno, un valor próximo suele dar una solución parecida, y el deslizamiento cambia poco, como pide la [sección 7.1](#para-que-mutar).
+Cuál conviene depende de lo que signifique cada gen [@eiben2015]. Si los valores son **categorías sin orden**, como la máquina que hace cada tarea o el proveedor que atiende cada pedido, la máquina 3 no se parece más a la 4 que a la 9, y cualquier valor es un cambio tan razonable como otro: conviene el reinicio aleatorio. Si los valores son **cantidades ordenadas**, como las unidades de un lote o los operarios de un turno, un valor próximo suele dar una solución parecida, y el deslizamiento cambia poco, como pide la sección -@sec-mutacion-para-que-mutar.
 
-::: {.callout-tip .ejemplo #ejemplo-7-3 title="Ejemplo reproducible 7.3 · Saltar o deslizarse"}
+::: {.callout-tip .ejemplo #ejemplo-mutacion-enteros title="Ejemplo reproducible · Saltar o deslizarse"}
 **Datos.** El padre 3 7 1 4 9 0 6 2, con genes de 0 a 9. Los números se sortean por orden y, cuando una posición muta, el siguiente número es el de la mutación. Por eso, con el mismo sorteo, los *r* de las dos mutaciones dejan de coincidir después de la primera posición que muta.
 
 Reinicio aleatorio con $\mathit{pm} = 0{,}2$:
@@ -167,7 +167,7 @@ Con el reinicio, el gen 6 ha saltado de 0 a 9 de golpe. Con el deslizamiento, ni
 <!-- Comprobado el 2026-10-08: la herramienta muestra en el último paso los mutantes 3 7 1 2 9 9 6 2 (reinicio, «el mayor ha sido de 9 y la media, de 5,5») y 3 7 0 5 9 0 6 2 (deslizamiento, «han cambiado 2 genes (posiciones 3, 4), y ninguno se ha movido más de 1»). La posición 5 del deslizamiento usa la narración «drawClampSame» (código). -->
 :::
 
-:::: {.callout-note .ejercicio #ejercicio-7-3 title="Ejercicio 7.3 · Elegir y calcular"}
+:::: {.callout-note .ejercicio #ejercicio-mutacion-enteros title="Ejercicio · Elegir y calcular"}
 1. Con el reinicio aleatorio, $\mathit{pm} = 0{,}2$ y genes de 0 a 9, ¿con qué probabilidad cambia el valor de un gen?
 2. Una empresa asigna cada pedido a uno de sus diez proveedores, numerados del 0 al 9. ¿Qué mutación usarías? ¿Y si cada gen fuera el número de camiones, de 0 a 9, que se envían cada día?
 
@@ -187,7 +187,7 @@ Con el reinicio, el gen 6 ha saltado de 0 a 9 de golpe. Con el deslizamiento, ni
 - Pasa a **Reinicio aleatorio** con el mismo padre (el selector de operadores de la parte superior lo conserva) y compara el tamaño de los saltos.
 :::
 
-## 7.4 Reales: mutación gaussiana [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#gaussiana}
+## Reales: mutación gaussiana [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sec-mutacion-gaussiana}
 
 Con números reales, ¿cómo damos pasos pequeños casi siempre y, de vez en cuando, uno grande?
 
@@ -199,9 +199,9 @@ $$
 
 Cada posición muta con probabilidad *pm*. Los saltos pequeños son los más probables: unos 68 de cada 100 son menores que σ y unos 95, menores que 2σ. Los grandes son raros, pero posibles. Es la mutación propia de las estrategias evolutivas [@herrera1998, apartado 4.1], y σ, el tamaño del paso, hay que elegirlo bien [@talbi2009, pp. 211–212]. Si el mutante se sale del intervalo permitido, hay que repararlo. En mutation-ga los genes van de 0 a 10, y un valor que se sale se recorta al extremo.
 
-La herramienta obtiene *z* a partir de dos números aleatorios (lo veremos en la [sección 7.8](#otras-mutaciones)). En el ejemplo te damos *z* directamente.
+La herramienta obtiene *z* a partir de dos números aleatorios (lo veremos en la sección -@sec-mutacion-otras-mutaciones). En el ejemplo te damos *z* directamente.
 
-::: {.callout-tip .ejemplo #ejemplo-7-4 title="Ejemplo reproducible 7.4 · El tamaño del paso"}
+::: {.callout-tip .ejemplo #ejemplo-mutacion-gaussiana title="Ejemplo reproducible · El tamaño del paso"}
 **Datos.** El padre 2,0 8,5 4,0 1,5 6,0, con genes entre 0 y 10, y $\mathit{pm} = 0{,}25$. Con este sorteo mutan las posiciones 2 y 3, con $z = 1{,}2288$ y $z = -0{,}0551$. Lo aplicamos con σ = 1 y con σ = 2, con los mismos números.
 
 **Predice.** ¿Cuál es el mutante con cada σ? ¿Se sale algún gen del intervalo [0, 10]?
@@ -229,7 +229,7 @@ Con σ = 1, $8{,}5 + 1{,}2288 = 9{,}73$ y $4{,}0 - 0{,}0551 = 3{,}94$. Con σ = 
 <!-- Comprobado el 2026-10-08: la herramienta muestra en el paso 9 de 9 los mutantes 2,0 9,73 3,94 1,5 6,0 (σ = 1) y 2,0 10,0 3,89 1,5 6,0 (σ = 2). Los r de las posiciones 2 y 3 son 0,07 y 0,15; z se calcula con u1 = 0,5801, u2 = 0,9413 y u1 = 0,0136, u2 = 0,696 (código). -->
 :::
 
-:::: {.callout-note .ejercicio #ejercicio-7-4 title="Ejercicio 7.4 · ¿Hasta dónde llega?"}
+:::: {.callout-note .ejercicio #ejercicio-mutacion-gaussiana title="Ejercicio · ¿Hasta dónde llega?"}
 Un gen vale 5,0 y muta con la mutación gaussiana. ¿Entre qué valores caerán unos 95 de cada 100 mutantes si σ = 0,5? ¿Y si σ = 2? ¿Con cuál afinarías mejor una solución que ya es casi óptima?
 
 <details>
@@ -247,13 +247,13 @@ Unos 95 de cada 100 saltos son menores que 2σ. Con σ = 0,5, los mutantes caer�
 - Pulsa **Sortear de nuevo** varias veces y compara los saltos con σ.
 :::
 
-## 7.5 Permutaciones: por qué no sirve el reinicio aleatorio [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#permutaciones}
+## Permutaciones: por qué no sirve el reinicio aleatorio [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sec-mutacion-permutaciones}
 
 En una ruta del viajante, ¿podemos mutar cambiando una ciudad por otra elegida al azar?
 
-En la representación de permutación, cada número es una ciudad (o una tarea) y debe aparecer exactamente una vez. Probemos con el reinicio aleatorio de la [sección 7.3](#enteros): cada posición muta con probabilidad *pm* y, si muta, toma un valor al azar entre 1 y *n*.
+En la representación de permutación, cada número es una ciudad (o una tarea) y debe aparecer exactamente una vez. Probemos con el reinicio aleatorio de la sección -@sec-mutacion-enteros: cada posición muta con probabilidad *pm* y, si muta, toma un valor al azar entre 1 y *n*.
 
-::: {.callout-tip .ejemplo #ejemplo-7-5 title="Ejemplo reproducible 7.5 · Cambiar ciudades al azar"}
+::: {.callout-tip .ejemplo #ejemplo-mutacion-permutaciones title="Ejemplo reproducible · Cambiar ciudades al azar"}
 **Datos.** El padre 1 2 3 4 5 6 7 8 9 y $\mathit{pm} = 0{,}25$. Si una posición muta, su valor nuevo es $1 + \lfloor 9\, s \rfloor$.
 
 | Posición | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
@@ -280,7 +280,7 @@ No es una permutación: visita dos veces las ciudades 1 y 5 y nunca la 2 ni la 3
 <!-- Comprobado el 2026-10-08: la herramienta muestra en el paso 13 de 13 el mutante 1 5 1 4 5 6 7 8 9 y «el mutante no es una permutación: tiene genes repetidos (1, 5) y otros que faltan (2, 3)». -->
 :::
 
-Con permutaciones no se pueden cambiar los valores de los genes uno a uno: casi siempre aparecen repetidos [@eiben2015]. Se podría reparar el mutante o castigarlo en la función de evaluación, pero lo natural es usar mutaciones que solo recoloquen los genes, sin cambiar ningún valor, para que se cumpla la condición de validez de la [sección 7.1](#para-que-mutar). Con el cruce pasaba lo mismo ([sección 6.5](06-cruce.qmd#permutaciones)).
+Con permutaciones no se pueden cambiar los valores de los genes uno a uno: casi siempre aparecen repetidos [@eiben2015]. Se podría reparar el mutante o castigarlo en la función de evaluación, pero lo natural es usar mutaciones que solo recoloquen los genes, sin cambiar ningún valor, para que se cumpla la condición de validez de la sección -@sec-mutacion-para-que-mutar. Con el cruce pasaba lo mismo (sección -@sec-cruce-permutaciones).
 
 ::: {.callout-note .en-app title="En la aplicación · mutation-ga, «Contraejemplo: reinicio aleatorio»"}
 [Explorar en mutation-ga](https://josemagalan.github.io/mutation-ga/#op=reset-perm&lang=es){.explorar target="_blank"}
@@ -289,7 +289,7 @@ Con permutaciones no se pueden cambiar los valores de los genes uno a uno: casi 
 - Pulsa **Sortear de nuevo** varias veces. ¿Cuántas veces sale una permutación válida? ¿Qué tiene que pasar para que salga?
 :::
 
-## 7.6 Intercambio, inserción e inversión [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#intercambio-insercion-inversion}
+## Intercambio, inserción e inversión [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sec-mutacion-intercambio-insercion-inversion}
 
 ¿Cómo se cambia un poco una permutación sin repetir ninguna ciudad?
 
@@ -303,7 +303,7 @@ Las tres solo recolocan genes, así que el mutante es siempre una permutación v
 
 En una permutación los genes no se pueden mutar uno a uno, por eso *pm* se interpreta como la probabilidad de que el individuo mute, no cada gen [@eiben2015]. En la herramienta, cada operador se aplica una vez, con las posiciones elegidas al azar o arrastradas a mano.
 
-::: {.callout-tip .ejemplo #ejemplo-7-6 title="Ejemplo reproducible 7.6 · Tres formas de recolocar"}
+::: {.callout-tip .ejemplo #ejemplo-mutacion-intercambio-insercion-inversion title="Ejemplo reproducible · Tres formas de recolocar"}
 **Datos.** El padre 1 2 3 4 5 6 7 8 9.
 
 - Intercambio de las posiciones 3 y 7.
@@ -336,7 +336,7 @@ El intercambio solo mueve dos genes: siguen en su sitio 7 de los 9. La inserció
 <!-- Comprobado el 2026-10-08: la herramienta muestra en el paso 5 de 5 los mutantes 1 2 7 4 5 6 3 8 9 («Conserva 7 de las 9 posiciones…»), 1 2 4 5 6 7 3 8 9 («…solo se ha movido el 3. Conserva 4 de las 9 posiciones…») y 1 2 7 6 5 4 3 8 9 («…solo 5 de las 9 posiciones siguen igual»). En la URL, c= da las posiciones en base 0 (intercambio, inserción) o el tramo como huecos [a, b) (inversión). -->
 :::
 
-:::: {.callout-note .ejercicio #ejercicio-7-6 title="Ejercicio 7.6 · Recolocar a mano"}
+:::: {.callout-note .ejercicio #ejercicio-mutacion-intercambio-insercion-inversion title="Ejercicio · Recolocar a mano"}
 Aplica las tres mutaciones al padre 9 4 5 2 6 3 8 1 7: el intercambio de las posiciones 2 y 6, la inserción del gen de la posición 2 en la posición 6 y la inversión del tramo de las posiciones 2–6.
 
 <details>
@@ -358,7 +358,7 @@ Puedes comprobarlo en la herramienta escribiendo el padre en **Introducir el pad
 - Usa **Practicar** con **Padre aleatorio** hasta acertar los mutantes a la primera.
 :::
 
-## 7.7 ¿Cuánto mutar? [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#cuanto-mutar}
+## ¿Cuánto mutar? [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sec-mutacion-cuanto-mutar}
 
 Si la mutación aporta diversidad, ¿por qué no mutar mucho?
 
@@ -366,7 +366,7 @@ Normalmente *pm* es pequeña. @goldberg1989 [p. 14] habla de una mutación por c
 
 En la inversión de bits, el caso extremo es $\mathit{pm} = 0{,}5$: cada bit del mutante es un 0 o un 1 con la misma probabilidad, sea cual sea el del padre. En las otras representaciones, el tamaño del cambio depende también de otros parámetros, como el paso máximo *s* del deslizamiento o σ en la mutación gaussiana.
 
-::: {.callout-tip .ejemplo #ejemplo-7-7 title="Ejemplo reproducible 7.7 · Poca o mucha mutación"}
+::: {.callout-tip .ejemplo #ejemplo-mutacion-cuanto-mutar title="Ejemplo reproducible · Poca o mucha mutación"}
 **Datos.** La pantalla «Comparar operadores» de mutation-ga aplica todas las mutaciones de una representación y resume cuánto cambia cada una. Con «Media con: padres al azar» promedia sobre 1000 padres de la misma longitud, con 10 mutaciones de cada uno. Usamos cadenas de 10 bits y la inversión de bits con $\mathit{pm} = 0{,}1$ y con $\mathit{pm} = 0{,}5$.
 
 **Predice.** ¿En cuántos bits difiere en promedio el mutante del padre con cada *pm*? ¿Qué porcentaje de mutantes son copias del padre?
@@ -384,13 +384,13 @@ La media con padres al azar tarda unos segundos en calcularse.
 | $\mathit{pm} = 0{,}1$ | 1,01 | 34 % |
 | $\mathit{pm} = 0{,}5$ | 5,00 | 0 % |
 
-La **distancia de Hamming** es el número de bits en que difieren el mutante y el padre. Con $\mathit{pm} = 0{,}1 = 1/n$ cambia en promedio $10 \times 0{,}1 = 1$ bit, y un tercio de los mutantes son copias: la probabilidad teórica es $0{,}9^{10} \approx 0{,}35$. Con $\mathit{pm} = 0{,}5$ cambia la mitad de los bits y el mutante no guarda ninguna relación con el padre: es una cadena al azar. La fila «Mutación de un bit» de la tabla se explica en la [sección 7.8](#otras-mutaciones).
+La **distancia de Hamming** es el número de bits en que difieren el mutante y el padre. Con $\mathit{pm} = 0{,}1 = 1/n$ cambia en promedio $10 \times 0{,}1 = 1$ bit, y un tercio de los mutantes son copias: la probabilidad teórica es $0{,}9^{10} \approx 0{,}35$. Con $\mathit{pm} = 0{,}5$ cambia la mitad de los bits y el mutante no guarda ninguna relación con el padre: es una cadena al azar. La fila «Mutación de un bit» de la tabla se explica en la sección -@sec-mutacion-otras-mutaciones.
 </details>
 
 <!-- Comprobado el 2026-10-08: la tabla de la interfaz, con «Media con: padres al azar», muestra «Inversión de bits 1,01 … 34 %» (pm = 0,1) y «5,00 … 0 %» (pm = 0,5), y para «Mutación de un bit» 1,00 y 0 %. Los mismos valores se obtienen con compare.randomMean (1000 padres, 10 mutaciones, semilla 1): copias 33,8 % y 0,18 %. Entre paréntesis, la interfaz muestra los del ejemplo de la parte superior, que no se usan aquí. -->
 :::
 
-:::: {.callout-note .ejercicio #ejercicio-7-7 title="Ejercicio 7.7 · ¿Cuántos quedan igual?"}
+:::: {.callout-note .ejercicio #ejercicio-mutacion-cuanto-mutar title="Ejercicio · ¿Cuántos quedan igual?"}
 Una población tiene 100 individuos de 10 bits. Tras el cruce, se aplica la inversión de bits a todos. ¿Cuántos individuos quedan sin ningún cambio, en promedio, con $\mathit{pm} = 0{,}01$? ¿Y con $\mathit{pm} = 0{,}1$?
 
 <details>
@@ -408,15 +408,15 @@ Un individuo queda igual si no muta ninguno de sus 10 bits. Con $\mathit{pm} = 0
 - Despliega «Qué mide cada columna» para ver la definición exacta de cada medida.
 :::
 
-## 7.8 Otras mutaciones [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#otras-mutaciones}
+## Otras mutaciones [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-mutacion-otras-mutaciones}
 
-Esta sección amplía el recorrido básico. Requiere las mutaciones de las secciones [7.2](#inversion-bits) a [7.6](#intercambio-insercion-inversion).
+Esta sección amplía el recorrido básico. Requiere las mutaciones de las secciones -@sec-mutacion-inversion-bits a -@sec-mutacion-intercambio-insercion-inversion.
 
-**Mutación de un bit.** Se elige una sola posición al azar y se invierte su bit. El mutante difiere siempre del padre en exactamente un bit, y nunca es una copia, como se ve en el [ejemplo 7.7](#ejemplo-7-7). Es el cambio más pequeño posible en una cadena de bits, el mismo que define los vecinos en una búsqueda local binaria [@talbi2009, p. 209].
+**Mutación de un bit.** Se elige una sola posición al azar y se invierte su bit. El mutante difiere siempre del padre en exactamente un bit, y nunca es una copia, como se ve en el ejemplo [](#ejemplo-mutacion-cuanto-mutar). Es el cambio más pequeño posible en una cadena de bits, el mismo que define los vecinos en una búsqueda local binaria [@talbi2009, p. 209].
 
-**Alelo aleatorio.** Algunos textos describen la mutación binaria como «sustituir el bit por uno elegido al azar», no como «invertirlo». La definición original de @holland1992 [pp. 109–110] es de este tipo. No es lo mismo: el bit sorteado coincide con el que había la mitad de las veces, así que cada bit cambia solo con probabilidad *pm*/2. Como señala @whitley1994, la diferencia es solo de escala, siempre que se sepa cuál de las dos se está usando. Es la variante «Alelo aleatorio» de la inversión de bits, y corresponde al reinicio aleatorio con dos valores (en el [ejercicio 7.3](#ejercicio-7-3), con diez valores, el gen cambiaba con probabilidad $\mathit{pm} \times 9/10$).
+**Alelo aleatorio.** Algunos textos describen la mutación binaria como «sustituir el bit por uno elegido al azar», no como «invertirlo». La definición original de @holland1992 [pp. 109–110] es de este tipo. No es lo mismo: el bit sorteado coincide con el que había la mitad de las veces, así que cada bit cambia solo con probabilidad *pm*/2. Como señala @whitley1994, la diferencia es solo de escala, siempre que se sepa cuál de las dos se está usando. Es la variante «Alelo aleatorio» de la inversión de bits, y corresponde al reinicio aleatorio con dos valores (en el ejercicio [](#ejercicio-mutacion-enteros), con diez valores, el gen cambiaba con probabilidad $\mathit{pm} \times 9/10$).
 
-**Deslizamiento circular.** La variante «Dar la vuelta» del deslizamiento trata el rango como un círculo: después del 9 viene el 0. Con los datos del [ejemplo 7.3](#ejemplo-7-3), el gen 5 pasa de 9 a 0, y el mutante es 3 7 0 5 **0** 0 6 2: un salto de 9 unidades con un paso máximo de 1. Solo tiene sentido si la variable es cíclica, como la hora del día o el día de la semana.
+**Deslizamiento circular.** La variante «Dar la vuelta» del deslizamiento trata el rango como un círculo: después del 9 viene el 0. Con los datos del ejemplo [](#ejemplo-mutacion-enteros), el gen 5 pasa de 9 a 0, y el mutante es 3 7 0 5 **0** 0 6 2: un salto de 9 unidades con un paso máximo de 1. Solo tiene sentido si la variable es cíclica, como la hora del día o el día de la semana.
 
 **Mutación uniforme.** Con probabilidad *pm*, el gen real se sustituye por un valor sorteado de manera uniforme en todo su intervalo, sin tener en cuenta el que tenía [@michalewicz1996; @herrera1998]. Es el equivalente real del reinicio aleatorio: puede llegar a cualquier valor, pero no cambia poco. Ojo con el nombre: @talbi2009 [p. 211] llama «uniforme» a sumar al gen un número uniforme entre −*b* y *b*, que sí es una perturbación local.
 
@@ -428,8 +428,8 @@ $$
 
 donde *u* es un número aleatorio, *t* la generación actual, *T* el número máximo de generaciones y *b* un parámetro que decide lo deprisa que se estrecha el salto. Al principio la búsqueda es uniforme en todo el hueco y, al final, muy local [@herrera1998]. Como Δ nunca supera el hueco, el mutante nunca se sale del intervalo.
 
-::: {.callout-tip .ejemplo #ejemplo-7-8 title="Ejemplo reproducible 7.8 · Saltos que se estrechan"}
-**Datos.** El padre 2,0 8,5 4,0 1,5 6,0 del [ejemplo 7.4](#ejemplo-7-4), con el mismo sorteo: mutan las posiciones 2 y 3. Sus números son τ = 0,5801 y *u* = 0,9413 en la posición 2, y τ = 0,0136 y *u* = 0,696 en la 3. Con *b* = 5, comparamos el principio de la búsqueda (*t*/*T* = 0) con la mitad (*t*/*T* = 0,5).
+::: {.callout-tip .ejemplo #ejemplo-mutacion-otras-mutaciones title="Ejemplo reproducible · Saltos que se estrechan"}
+**Datos.** El padre 2,0 8,5 4,0 1,5 6,0 del ejemplo [](#ejemplo-mutacion-gaussiana), con el mismo sorteo: mutan las posiciones 2 y 3. Sus números son τ = 0,5801 y *u* = 0,9413 en la posición 2, y τ = 0,0136 y *u* = 0,696 en la 3. Con *b* = 5, comparamos el principio de la búsqueda (*t*/*T* = 0) con la mitad (*t*/*T* = 0,5).
 
 **Predice.** ¿Hacia dónde se mueve cada gen? ¿Cuál es el mutante en cada momento de la búsqueda?
 
@@ -450,7 +450,7 @@ Con los mismos números aleatorios, a mitad de la búsqueda los saltos son unas 
 <!-- Comprobado el 2026-10-08: la herramienta muestra en el paso 9 de 9 los mutantes 2,0 8,0 5,82 1,5 6,0 («salto medio de 1,16») y 2,0 8,48 4,07 1,5 6,0 («salto medio de 0,04»). Δ exactos (código): 0,49895 y 1,824; 0,01605 y 0,06757. -->
 :::
 
-**Mutación polinómica.** La mutación polinómica de @deb1996 suele acompañar al cruce SBX de la [sección 6.9](06-cruce.qmd#otros-cruces). El gen se perturba con $v' = v + \delta\,(U - L)$, donde *L* y *U* son los límites del intervalo y δ, entre −1 y 1, sale de una distribución polinómica centrada en 0. El **índice de distribución** η controla su forma: cuanto mayor es η, más se concentra δ cerca de 0 y más se parece el mutante al padre. Se suele usar η ≈ 20 [@talbi2009, p. 212].
+**Mutación polinómica.** La mutación polinómica de @deb1996 suele acompañar al cruce SBX de la sección -@sec-cruce-otros-cruces. El gen se perturba con $v' = v + \delta\,(U - L)$, donde *L* y *U* son los límites del intervalo y δ, entre −1 y 1, sale de una distribución polinómica centrada en 0. El **índice de distribución** η controla su forma: cuanto mayor es η, más se concentra δ cerca de 0 y más se parece el mutante al padre. Se suele usar η ≈ 20 [@talbi2009, p. 212].
 
 **Cómo se obtiene *z*.** En la mutación gaussiana, mutation-ga calcula el número normal *z* a partir de dos números uniformes, $u_1$ y $u_2$, con la transformación de Box-Muller: $z = \sqrt{-2 \ln(1 - u_1)}\, \cos(2\pi u_2)$.
 
@@ -459,16 +459,16 @@ Con los mismos números aleatorios, a mitad de la búsqueda los saltos son unas 
 ::: {.callout-note .en-app title="En la aplicación · mutation-ga"}
 - Abre [Mutación de un bit](https://josemagalan.github.io/mutation-ga/#op=one-bit&lang=es){target="_blank"} y arrastra el marcador ◆ para elegir la posición.
 - En [Inversión de bits](https://josemagalan.github.io/mutation-ga/#op=bit-flip&lang=es&v=random){target="_blank"}, con la **Variante** «Alelo aleatorio», busca una posición que mute sin cambiar.
-- En [Mutación por deslizamiento](https://josemagalan.github.io/mutation-ga/#op=creep&lang=es&v=wrap&r=4&pm=0.3&smax=1&p=3-7-1-4-9-0-6-2){target="_blank"}, con los datos del [ejemplo 7.3](#ejemplo-7-3), cambia la **Variante** entre «Recortar en los límites» y «Dar la vuelta».
+- En [Mutación por deslizamiento](https://josemagalan.github.io/mutation-ga/#op=creep&lang=es&v=wrap&r=4&pm=0.3&smax=1&p=3-7-1-4-9-0-6-2){target="_blank"}, con los datos del ejemplo [](#ejemplo-mutacion-enteros), cambia la **Variante** entre «Recortar en los límites» y «Dar la vuelta».
 - Compara el panel «Distribución del valor mutado» en [Mutación uniforme](https://josemagalan.github.io/mutation-ga/#op=uniform-real&lang=es){target="_blank"}, [Mutación no uniforme](https://josemagalan.github.io/mutation-ga/#op=non-uniform&lang=es){target="_blank"} (mueve **Avance de la búsqueda t/T**) y [Mutación polinómica](https://josemagalan.github.io/mutation-ga/#op=polynomial&lang=es){target="_blank"} (mueve el **Índice de distribución η**).
 - En [Mutación por mezcla](https://josemagalan.github.io/mutation-ga/#op=scramble&lang=es){target="_blank"}, deja un tramo de dos genes y pulsa **Sortear de nuevo** varias veces. ¿Cuántas veces queda igual?
 :::
 
-## 7.9 Qué cambia y qué conserva cada operador [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#que-conserva}
+## Qué cambia y qué conserva cada operador [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-mutacion-que-conserva}
 
-Esta sección requiere las mutaciones de permutación de las secciones [7.6](#intercambio-insercion-inversion) y [7.8](#otras-mutaciones).
+Esta sección requiere las mutaciones de permutación de las secciones -@sec-mutacion-intercambio-insercion-inversion y -@sec-mutacion-otras-mutaciones.
 
-La condición de cambiar poco de la [sección 7.1](#para-que-mutar) se puede medir. Con bits, por la distancia de Hamming. Con enteros y reales, por el porcentaje de genes que cambian y el tamaño de los saltos. Con permutaciones, «cambiar poco» depende de lo que importe en el problema, como pasaba con la herencia en el cruce ([sección 6.10](06-cruce.qmd#que-conserva)):
+La condición de cambiar poco de la sección -@sec-mutacion-para-que-mutar se puede medir. Con bits, por la distancia de Hamming. Con enteros y reales, por el porcentaje de genes que cambian y el tamaño de los saltos. Con permutaciones, «cambiar poco» depende de lo que importe en el problema, como pasaba con la herencia en el cruce (sección -@sec-cruce-que-conserva):
 
 - **Posición:** el gen sigue en la misma posición. El intercambio solo mueve dos genes.
 - **Orden relativo:** los genes se recorren en el mismo orden. La inserción solo cambia la colocación del gen que se mueve respecto a los que salta.
@@ -476,7 +476,7 @@ La condición de cambiar poco de la [sección 7.1](#para-que-mutar) se puede med
 
 En los problemas de secuenciación importa sobre todo el orden relativo, y en el viajante, las adyacencias [@talbi2009, p. 92].
 
-::: {.callout-tip .ejemplo #ejemplo-7-9 title="Ejemplo reproducible 7.9 · Comparar las mutaciones de permutación"}
+::: {.callout-tip .ejemplo #ejemplo-mutacion-que-conserva title="Ejemplo reproducible · Comparar las mutaciones de permutación"}
 **Datos.** La pantalla «Comparar operadores» de permutación, con «Media con: padres al azar»: 1000 padres de longitud 9, con 10 mutaciones de cada operador por padre, en posiciones y tramos al azar. Las adyacencias y el orden relativo se miden leyendo el cromosoma como una ruta circular.
 
 **Predice.** ¿Qué operador conserva más posiciones? ¿Cuál, más orden relativo? ¿Y más adyacencias?
@@ -502,8 +502,8 @@ Entre las mutaciones válidas, el intercambio es el que más posiciones conserva
 <!-- Comprobado el 2026-10-08: la tabla de la interfaz, con «Media con: padres al azar», muestra estos porcentajes (en negrita). Los mismos valores se obtienen con compare.randomMean (1000 padres, 10 mutaciones, semilla 1). Entre paréntesis, la interfaz muestra los del ejemplo de la parte superior, que no se usan aquí. -->
 :::
 
-:::: {.callout-note .ejercicio #ejercicio-7-9 title="Ejercicio 7.9 · Contar adyacencias"}
-Lee como rutas circulares el padre y los mutantes del [ejemplo 7.6](#ejemplo-7-6): el último gen es vecino del primero, y el padre tiene las 9 adyacencias 1–2, 2–3, …, 8–9 y 9–1. ¿Cuántas adyacencias del padre conserva cada mutante?
+:::: {.callout-note .ejercicio #ejercicio-mutacion-que-conserva title="Ejercicio · Contar adyacencias"}
+Lee como rutas circulares el padre y los mutantes del ejemplo [](#ejemplo-mutacion-intercambio-insercion-inversion): el último gen es vecino del primero, y el padre tiene las 9 adyacencias 1–2, 2–3, …, 8–9 y 9–1. ¿Cuántas adyacencias del padre conserva cada mutante?
 
 <details>
 <summary>**Ver la solución**</summary>
@@ -523,13 +523,13 @@ Lee como rutas circulares el padre y los mutantes del [ejemplo 7.6](#ejemplo-7-6
 - Haz la misma comparación con [las mutaciones enteras](https://josemagalan.github.io/mutation-ga/#cmp=integer&lang=es){target="_blank"} y [las reales](https://josemagalan.github.io/mutation-ga/#cmp=real&lang=es){target="_blank"}, y fíjate en las columnas «Salto medio» y «Saltos pequeños». ¿Qué mutación real da los saltos más grandes?
 :::
 
-## 7.10 Ampliaciones [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas} {#ampliaciones}
+## Ampliaciones [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas} {#sec-mutacion-ampliaciones}
 
-**Las tres propiedades, con su nombre.** @talbi2009 [p. 209] llama a las tres condiciones de la [sección 7.1](#para-que-mutar) **ergodicidad** (poder llegar a cualquier solución), **validez** y **localidad**. La localidad se mide en la solución, no en el cromosoma: una mutación es muy local si un cambio pequeño en el genotipo produce un cambio pequeño en el fenotipo. Si no es así, la búsqueda se acerca a una búsqueda aleatoria. Talbi pone un ejemplo con problemas de agrupamiento: si cada gen indica el grupo de un elemento, cambiar un solo gen de AAACCC da AAABCC, que tiene un grupo de un solo elemento. Es un cambio mínimo en el cromosoma, pero puede convertir una buena solución en una muy mala. Por eso, como en la [sección 7.3](#enteros), la mutación adecuada depende de lo que signifiquen los genes.
+**Las tres propiedades, con su nombre.** @talbi2009 [p. 209] llama a las tres condiciones de la sección -@sec-mutacion-para-que-mutar **ergodicidad** (poder llegar a cualquier solución), **validez** y **localidad**. La localidad se mide en la solución, no en el cromosoma: una mutación es muy local si un cambio pequeño en el genotipo produce un cambio pequeño en el fenotipo. Si no es así, la búsqueda se acerca a una búsqueda aleatoria. Talbi pone un ejemplo con problemas de agrupamiento: si cada gen indica el grupo de un elemento, cambiar un solo gen de AAACCC da AAABCC, que tiene un grupo de un solo elemento. Es un cambio mínimo en el cromosoma, pero puede convertir una buena solución en una muy mala. Por eso, como en la sección -@sec-mutacion-enteros, la mutación adecuada depende de lo que signifiquen los genes.
 
 **Mutación y búsqueda local.** La mutación está emparentada con los vecindarios de las metaheurísticas que trabajan con una sola solución, como el recocido simulado: los operadores de vecindario de una representación sirven como mutaciones [@talbi2009, p. 209]. El intercambio, la inserción y la inversión son vecindarios clásicos de las permutaciones [@talbi2009, pp. 91–93]. La inversión de un tramo es el movimiento **2-opt** del viajante [@croes1958]: quita dos aristas de la ruta y vuelve a unir los dos trozos en el otro sentido. En el viajante produce un cambio pequeño, pero en un problema de secuenciación, donde importa el orden, el mismo movimiento produce un cambio grande [@talbi2009, p. 92].
 
-::: {.callout-tip .ejemplo #ejemplo-7-10 title="Ejemplo reproducible 7.10 · Invertir casi todo"}
+::: {.callout-tip .ejemplo #ejemplo-mutacion-ampliaciones title="Ejemplo reproducible · Invertir casi todo"}
 **Datos.** El padre 1 2 3 4 5 6 7 8 9, visto como una ruta del viajante. Se invierte el tramo de las posiciones 2–9.
 
 **Predice.** ¿Cuántos genes siguen en su posición? ¿Cuántos tramos nuevos tiene la ruta del mutante? ¿Cambia su longitud?
@@ -549,14 +549,14 @@ El mutante es **1 9 8 7 6 5 4 3 2**. Solo el 1 sigue en su posición, pero la ru
 
 **Un tamaño de paso que se adapta.** Por eso se han propuesto algoritmos que ajustan sus propias probabilidades de mutación y de cruce durante la búsqueda [@mitchell1998, apartado 5.6]. En la mutación gaussiana, σ puede mantenerse fija durante toda la búsqueda o ajustarse según lo que va ocurriendo [@talbi2009, p. 212]. En las estrategias evolutivas, cada individuo lleva junto a sus genes sus propios valores de σ, que también mutan: es la **autoadaptación** [@herrera1998, apartado 4.1]. Así, los pasos que funcionan bien se transmiten junto con las soluciones que los producen [@talbi2009, pp. 212–213].
 
-## Resumen {#resumen}
+## Resumen {.unnumbered #resumen}
 
 - La mutación cambia al azar una pequeña parte de un individuo. Introduce valores que la selección y el cruce no pueden crear, y debe poder llegar a cualquier solución, cambiar poco y dar soluciones válidas.
 - En binaria, cada bit se invierte con probabilidad *pm*. En entera, el reinicio aleatorio sirve para categorías y el deslizamiento, para cantidades ordenadas. En real, la mutación gaussiana suma un ruido de tamaño σ.
 - Las permutaciones necesitan mutaciones que solo recoloquen genes: intercambio, inserción e inversión.
 - Ni poca ni mucha: con *pm* pequeña la mayoría de los individuos no cambia; con *pm* demasiado alta, la búsqueda se vuelve aleatoria.
 
-## Referencias del capítulo {#referencias}
+## Referencias del capítulo {.unnumbered #referencias}
 
 <!-- Seguimiento interno: ampliada la bibliografía el 2026-10-08 a petición del autor. Cotejados con Recursos: holland1992 (pp. 109–111, texto del PDF), mitchell1998 (apartados 1.5, 1.10, 5.5 y 5.6; el PDF es una conversión sin la paginación impresa, por eso se cita por apartados), goldberg1989 (p. 14, con OCR de las pp. 1–22 del PDF escaneado), whitley1994 (apartados 2 y 4.1, con OCR del borrador de Recursos, sin la paginación de la revista) y davis1985 (p. 163). Las afirmaciones de Spears y Mühlenbein se citan a través de Mitchell. talbi2009 cotejada el 2026-10-08 con el PDF de Recursos (pp. 91–93 y 208–213: apartado 3.3.2.1; las herramientas citan por error el apartado 3.3.2.2, que es el de cruce). herrera1998: contenido cotejado con el preprint de Recursos (download.pdf, apartados 2.4.2 y 4.4); revista, volumen y páginas pendientes. eiben2015, michalewicz1996, deb1996 y croes1958: pendientes de cotejo (sin PDF en Recursos). La afirmación de eiben2015 sobre pm en permutaciones (apartado 4.5.1) procede de la memoria del asistente y de la documentación de mutation-ga; pendiente de cotejo. La lista se genera con las obras citadas en el capítulo. -->
 

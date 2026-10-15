@@ -6,7 +6,7 @@ El libro tiene 11 capítulos y 107 secciones: 73 de nivel [[Básico]{.largo}[B]{
 
 Las actividades —67 ejemplos reproducibles, 54 cajas «En la aplicación» y 88 ejercicios— están listadas en el [índice de actividades](actividades.qmd), por capítulo y por herramienta.
 
-## El libro de un vistazo {#vistazo}
+## El libro de un vistazo {.unnumbered #vistazo}
 
 | Capítulo | B | A | + | Ejemplos | En la aplicación | Ejercicios |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|
@@ -23,142 +23,142 @@ Las actividades —67 ejemplos reproducibles, 54 cajas «En la aplicación» y 8
 | [11. Recapitulación](11-recapitulacion.qmd) | 4 | 0 | 1 | 0 | 1 | 5 |
 | **Total** | **73** | **23** | **11** | **67** | **54** | **88** |
 
-## 1. Evolución y optimización {#cap-1}
+## 1. Evolución y optimización {.unnumbered #cap-1}
 
-- [1.1 La idea de Darwin](01-evolucion.qmd#darwin) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [1.2 ¿Qué hace evolutivo a un sistema?](01-evolucion.qmd#sistema-evolutivo) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [1.3 Dos fuerzas que tiran en sentidos opuestos](01-evolucion.qmd#dos-fuerzas) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [1.4 Optimizar es buscar](01-evolucion.qmd#optimizar) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [1.5 De la evolución natural a la artificial](01-evolucion.qmd#evolucion-artificial) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [1.6 Ampliaciones](01-evolucion.qmd#ampliaciones) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
+- [1.1 La idea de Darwin](01-evolucion.qmd#sec-evolucion-darwin) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [1.2 ¿Qué hace evolutivo a un sistema?](01-evolucion.qmd#sec-evolucion-sistema-evolutivo) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [1.3 Dos fuerzas que tiran en sentidos opuestos](01-evolucion.qmd#sec-evolucion-dos-fuerzas) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [1.4 Optimizar es buscar](01-evolucion.qmd#sec-evolucion-optimizar) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [1.5 De la evolución natural a la artificial](01-evolucion.qmd#sec-evolucion-evolucion-artificial) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [1.6 Ampliaciones](01-evolucion.qmd#sec-evolucion-ampliaciones) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
 
-## 2. El ciclo y las decisiones de diseño {#cap-2}
+## 2. El ciclo y las decisiones de diseño {.unnumbered #cap-2}
 
-- [2.1 Una población de soluciones](02-ciclo.qmd#poblacion) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [2.2 El ciclo](02-ciclo.qmd#ciclo) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [2.3 Del ciclo al pseudocódigo](02-ciclo.qmd#pseudocodigo) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [2.4 Una generación a mano: representar y evaluar](02-ciclo.qmd#a-mano) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [2.5 Seleccionar con la ruleta](02-ciclo.qmd#seleccionar) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [2.6 Cruzar y mutar](02-ciclo.qmd#variar) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [2.7 Reemplazar y comparar](02-ciclo.qmd#reemplazar) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [2.8 Las nueve decisiones de diseño](02-ciclo.qmd#decisiones) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [2.9 De una generación a una ejecución](02-ciclo.qmd#ejecucion) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [2.10 Variantes del ciclo](02-ciclo.qmd#variantes) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [2.11 Ampliaciones](02-ciclo.qmd#ampliaciones) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
+- [2.1 Una población de soluciones](02-ciclo.qmd#sec-ciclo-poblacion) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [2.2 El ciclo](02-ciclo.qmd#sec-ciclo-ciclo) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [2.3 Del ciclo al pseudocódigo](02-ciclo.qmd#sec-ciclo-pseudocodigo) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [2.4 Una generación a mano: representar y evaluar](02-ciclo.qmd#sec-ciclo-a-mano) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [2.5 Seleccionar con la ruleta](02-ciclo.qmd#sec-ciclo-seleccionar) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [2.6 Cruzar y mutar](02-ciclo.qmd#sec-ciclo-variar) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [2.7 Reemplazar y comparar](02-ciclo.qmd#sec-ciclo-reemplazar) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [2.8 Las nueve decisiones de diseño](02-ciclo.qmd#sec-ciclo-decisiones) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [2.9 De una generación a una ejecución](02-ciclo.qmd#sec-ciclo-ejecucion) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [2.10 Variantes del ciclo](02-ciclo.qmd#sec-ciclo-variantes) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [2.11 Ampliaciones](02-ciclo.qmd#sec-ciclo-ampliaciones) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
 
-## 3. Representar soluciones {#cap-3}
+## 3. Representar soluciones {.unnumbered #cap-3}
 
-- [3.1 Genotipo y fenotipo](03-representacion.qmd#genotipo-fenotipo) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [3.2 Binaria: enteros y reales](03-representacion.qmd#binaria) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [3.3 Binaria: cuántos bits hacen falta](03-representacion.qmd#precision) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [3.4 Entera: un número por decisión](03-representacion.qmd#entera) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [3.5 Permutaciones: un orden](03-representacion.qmd#permutaciones) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [3.6 Real: el cromosoma es el punto](03-representacion.qmd#real) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [3.7 Cromosomas válidos y soluciones factibles](03-representacion.qmd#validez) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [3.8 Binaria: saltos de Hamming y código Gray](03-representacion.qmd#gray) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [3.9 Matriz binaria: una restricción que no se absorbe](03-representacion.qmd#matriz) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [3.10 Qué hacer con los cromosomas infactibles](03-representacion.qmd#infactibles) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [3.11 Reales fuera de la caja](03-representacion.qmd#fuera-caja) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [3.12 Qué hace buena a una representación](03-representacion.qmd#propiedades) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [3.13 Ampliaciones](03-representacion.qmd#ampliaciones) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
+- [3.1 Genotipo y fenotipo](03-representacion.qmd#sec-representacion-genotipo-fenotipo) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [3.2 Binaria: enteros y reales](03-representacion.qmd#sec-representacion-binaria) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [3.3 Binaria: cuántos bits hacen falta](03-representacion.qmd#sec-representacion-precision) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [3.4 Entera: un número por decisión](03-representacion.qmd#sec-representacion-entera) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [3.5 Permutaciones: un orden](03-representacion.qmd#sec-representacion-permutaciones) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [3.6 Real: el cromosoma es el punto](03-representacion.qmd#sec-representacion-real) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [3.7 Cromosomas válidos y soluciones factibles](03-representacion.qmd#sec-representacion-validez) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [3.8 Binaria: saltos de Hamming y código Gray](03-representacion.qmd#sec-representacion-gray) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [3.9 Matriz binaria: una restricción que no se absorbe](03-representacion.qmd#sec-representacion-matriz) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [3.10 Qué hacer con los cromosomas infactibles](03-representacion.qmd#sec-representacion-infactibles) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [3.11 Reales fuera de la caja](03-representacion.qmd#sec-representacion-fuera-caja) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [3.12 Qué hace buena a una representación](03-representacion.qmd#sec-representacion-propiedades) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [3.13 Ampliaciones](03-representacion.qmd#sec-representacion-ampliaciones) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
 
-## 4. Inicializar y evaluar {#cap-4}
+## 4. Inicializar y evaluar {.unnumbered #cap-4}
 
-- [4.1 Una población al azar](04-inicializar-evaluar.qmd#uniforme) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [4.2 Barajar una permutación](04-inicializar-evaluar.qmd#fisher-yates) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [4.3 Diversidad y factibilidad de la población inicial](04-inicializar-evaluar.qmd#diversidad) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [4.4 Sembrar con una heurística: un contraejemplo](04-inicializar-evaluar.qmd#sembrar) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [4.5 Del cromosoma a la aptitud](04-inicializar-evaluar.qmd#evaluar) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [4.6 Minimizar un coste: del objetivo a la aptitud](04-inicializar-evaluar.qmd#objetivo-aptitud) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [4.7 Restricciones como penalización](04-inicializar-evaluar.qmd#penalizacion) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [4.8 El coste de evaluar](04-inicializar-evaluar.qmd#coste) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [4.9 Cubrir mejor la caja: cuasialeatoria e hipercubo latino](04-inicializar-evaluar.qmd#cuasialeatoria) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [4.10 Diversificación secuencial](04-inicializar-evaluar.qmd#inhibicion) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [4.11 Inicialización factible](04-inicializar-evaluar.qmd#factible) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [4.12 Paisaje de aptitud](04-inicializar-evaluar.qmd#paisaje) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [4.13 Aptitud con ruido](04-inicializar-evaluar.qmd#ruido) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [4.14 Ampliaciones](04-inicializar-evaluar.qmd#ampliaciones) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
+- [4.1 Una población al azar](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-uniforme) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [4.2 Barajar una permutación](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-fisher-yates) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [4.3 Diversidad y factibilidad de la población inicial](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-diversidad) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [4.4 Sembrar con una heurística: un contraejemplo](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-sembrar) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [4.5 Del cromosoma a la aptitud](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-evaluar) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [4.6 Minimizar un coste: del objetivo a la aptitud](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-objetivo-aptitud) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [4.7 Restricciones como penalización](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-penalizacion) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [4.8 El coste de evaluar](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-coste) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [4.9 Cubrir mejor la caja: cuasialeatoria e hipercubo latino](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-cuasialeatoria) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [4.10 Diversificación secuencial](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-inhibicion) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [4.11 Inicialización factible](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-factible) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [4.12 Paisaje de aptitud](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-paisaje) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [4.13 Aptitud con ruido](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-ruido) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [4.14 Ampliaciones](04-inicializar-evaluar.qmd#sec-inicializar-evaluar-ampliaciones) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
 
-## 5. Seleccionar a los padres {#cap-5}
+## 5. Seleccionar a los padres {.unnumbered #cap-5}
 
-- [5.1 ¿Quién se reproduce?](05-seleccion.qmd#quien-se-reproduce) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [5.2 Torneo](05-seleccion.qmd#torneo) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [5.3 Ruleta](05-seleccion.qmd#ruleta) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [5.4 Cuando la ruleta deja de distinguir](05-seleccion.qmd#ruleta-deja-de-distinguir) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [5.5 Truncamiento: un contraejemplo](05-seleccion.qmd#truncamiento) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [5.6 Selección y diversidad a lo largo de generaciones](05-seleccion.qmd#seleccion-y-diversidad) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [5.7 Otros mecanismos de selección](05-seleccion.qmd#otros-mecanismos) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [5.8 Ampliaciones](05-seleccion.qmd#ampliaciones) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
+- [5.1 ¿Quién se reproduce?](05-seleccion.qmd#sec-seleccion-quien-se-reproduce) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [5.2 Torneo](05-seleccion.qmd#sec-seleccion-torneo) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [5.3 Ruleta](05-seleccion.qmd#sec-seleccion-ruleta) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [5.4 Cuando la ruleta deja de distinguir](05-seleccion.qmd#sec-seleccion-ruleta-deja-de-distinguir) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [5.5 Truncamiento: un contraejemplo](05-seleccion.qmd#sec-seleccion-truncamiento) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [5.6 Selección y diversidad a lo largo de generaciones](05-seleccion.qmd#sec-seleccion-seleccion-y-diversidad) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [5.7 Otros mecanismos de selección](05-seleccion.qmd#sec-seleccion-otros-mecanismos) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [5.8 Ampliaciones](05-seleccion.qmd#sec-seleccion-ampliaciones) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
 
-## 6. Cruzar {#cap-6}
+## 6. Cruzar {.unnumbered #cap-6}
 
-- [6.1 ¿Para qué cruzar?](06-cruce.qmd#para-que-cruzar) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [6.2 Cruce en un punto y en dos puntos](06-cruce.qmd#uno-y-dos-puntos) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [6.3 Cruce uniforme](06-cruce.qmd#uniforme) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [6.4 Cruzar números reales](06-cruce.qmd#reales) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [6.5 Permutaciones: por qué no sirve el cruce en un punto](06-cruce.qmd#permutaciones) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [6.6 Cruce OX](06-cruce.qmd#ox) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [6.7 Cruce PMX](06-cruce.qmd#pmx) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [6.8 Cruce CX](06-cruce.qmd#cx) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [6.9 Otros cruces](06-cruce.qmd#otros-cruces) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [6.10 Qué conserva cada operador](06-cruce.qmd#que-conserva) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [6.11 Ampliaciones](06-cruce.qmd#ampliaciones) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
+- [6.1 ¿Para qué cruzar?](06-cruce.qmd#sec-cruce-para-que-cruzar) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [6.2 Cruce en un punto y en dos puntos](06-cruce.qmd#sec-cruce-uno-y-dos-puntos) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [6.3 Cruce uniforme](06-cruce.qmd#sec-cruce-uniforme) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [6.4 Cruzar números reales](06-cruce.qmd#sec-cruce-reales) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [6.5 Permutaciones: por qué no sirve el cruce en un punto](06-cruce.qmd#sec-cruce-permutaciones) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [6.6 Cruce OX](06-cruce.qmd#sec-cruce-ox) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [6.7 Cruce PMX](06-cruce.qmd#sec-cruce-pmx) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [6.8 Cruce CX](06-cruce.qmd#sec-cruce-cx) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [6.9 Otros cruces](06-cruce.qmd#sec-cruce-otros-cruces) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [6.10 Qué conserva cada operador](06-cruce.qmd#sec-cruce-que-conserva) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [6.11 Ampliaciones](06-cruce.qmd#sec-cruce-ampliaciones) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
 
-## 7. Mutar {#cap-7}
+## 7. Mutar {.unnumbered #cap-7}
 
-- [7.1 ¿Para qué mutar?](07-mutacion.qmd#para-que-mutar) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [7.2 Binaria: inversión de bits](07-mutacion.qmd#inversion-bits) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [7.3 Enteros: reinicio aleatorio y deslizamiento](07-mutacion.qmd#enteros) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [7.4 Reales: mutación gaussiana](07-mutacion.qmd#gaussiana) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [7.5 Permutaciones: por qué no sirve el reinicio aleatorio](07-mutacion.qmd#permutaciones) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [7.6 Intercambio, inserción e inversión](07-mutacion.qmd#intercambio-insercion-inversion) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [7.7 ¿Cuánto mutar?](07-mutacion.qmd#cuanto-mutar) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [7.8 Otras mutaciones](07-mutacion.qmd#otras-mutaciones) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [7.9 Qué cambia y qué conserva cada operador](07-mutacion.qmd#que-conserva) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [7.10 Ampliaciones](07-mutacion.qmd#ampliaciones) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
+- [7.1 ¿Para qué mutar?](07-mutacion.qmd#sec-mutacion-para-que-mutar) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [7.2 Binaria: inversión de bits](07-mutacion.qmd#sec-mutacion-inversion-bits) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [7.3 Enteros: reinicio aleatorio y deslizamiento](07-mutacion.qmd#sec-mutacion-enteros) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [7.4 Reales: mutación gaussiana](07-mutacion.qmd#sec-mutacion-gaussiana) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [7.5 Permutaciones: por qué no sirve el reinicio aleatorio](07-mutacion.qmd#sec-mutacion-permutaciones) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [7.6 Intercambio, inserción e inversión](07-mutacion.qmd#sec-mutacion-intercambio-insercion-inversion) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [7.7 ¿Cuánto mutar?](07-mutacion.qmd#sec-mutacion-cuanto-mutar) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [7.8 Otras mutaciones](07-mutacion.qmd#sec-mutacion-otras-mutaciones) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [7.9 Qué cambia y qué conserva cada operador](07-mutacion.qmd#sec-mutacion-que-conserva) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [7.10 Ampliaciones](07-mutacion.qmd#sec-mutacion-ampliaciones) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
 
-## 8. Reemplazar y parar {#cap-8}
+## 8. Reemplazar y parar {.unnumbered #cap-8}
 
-- [8.1 ¿Quién pasa a la generación siguiente?](08-reemplazo.qmd#quien-sobrevive) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [8.2 Reemplazo generacional](08-reemplazo.qmd#generacional) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [8.3 Elitismo](08-reemplazo.qmd#elitismo) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [8.4 Estado estacionario](08-reemplazo.qmd#estacionario) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [8.5 El elitismo a lo largo de una ejecución](08-reemplazo.qmd#elitismo-ejecucion) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [8.6 ¿Cuándo parar?](08-reemplazo.qmd#cuando-parar) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [8.7 Variantes del estado estacionario](08-reemplazo.qmd#variantes-estacionario) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [8.8 (μ + λ), (μ, λ) y élites mayores](08-reemplazo.qmd#mu-lambda) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [8.9 Ampliaciones](08-reemplazo.qmd#ampliaciones) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
+- [8.1 ¿Quién pasa a la generación siguiente?](08-reemplazo.qmd#sec-reemplazo-quien-sobrevive) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [8.2 Reemplazo generacional](08-reemplazo.qmd#sec-reemplazo-generacional) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [8.3 Elitismo](08-reemplazo.qmd#sec-reemplazo-elitismo) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [8.4 Estado estacionario](08-reemplazo.qmd#sec-reemplazo-estacionario) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [8.5 El elitismo a lo largo de una ejecución](08-reemplazo.qmd#sec-reemplazo-elitismo-ejecucion) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [8.6 ¿Cuándo parar?](08-reemplazo.qmd#sec-reemplazo-cuando-parar) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [8.7 Variantes del estado estacionario](08-reemplazo.qmd#sec-reemplazo-variantes-estacionario) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [8.8 (μ + λ), (μ, λ) y élites mayores](08-reemplazo.qmd#sec-reemplazo-mu-lambda) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [8.9 Ampliaciones](08-reemplazo.qmd#sec-reemplazo-ampliaciones) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
 
-## 9. Parámetros y aleatoriedad {#cap-9}
+## 9. Parámetros y aleatoriedad {.unnumbered #cap-9}
 
-- [9.1 Un algoritmo que depende del azar](09-experimentos.qmd#azar) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [9.2 Probabilidad de cruce y de mutación](09-experimentos.qmd#pc-pm) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [9.3 Una ejecución no basta](09-experimentos.qmd#replicas) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [9.4 Comparar dos configuraciones](09-experimentos.qmd#comparar) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [9.5 Ajustar con casos parecidos](09-experimentos.qmd#casos-parecidos) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [9.6 ¿Qué buscas?](09-experimentos.qmd#objetivo) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [9.7 Presión selectiva y diversidad](09-experimentos.qmd#diversidad) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [9.8 ¿Cuántas réplicas?](09-experimentos.qmd#numero-replicas) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [9.9 Parámetros que interactúan](09-experimentos.qmd#interaccion) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [9.10 Operadores, representación y localidad](09-experimentos.qmd#operadores) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [9.11 Ampliaciones](09-experimentos.qmd#ampliaciones) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
+- [9.1 Un algoritmo que depende del azar](09-experimentos.qmd#sec-experimentos-azar) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [9.2 Probabilidad de cruce y de mutación](09-experimentos.qmd#sec-experimentos-pc-pm) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [9.3 Una ejecución no basta](09-experimentos.qmd#sec-experimentos-replicas) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [9.4 Comparar dos configuraciones](09-experimentos.qmd#sec-experimentos-comparar) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [9.5 Ajustar con casos parecidos](09-experimentos.qmd#sec-experimentos-casos-parecidos) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [9.6 ¿Qué buscas?](09-experimentos.qmd#sec-experimentos-objetivo) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [9.7 Presión selectiva y diversidad](09-experimentos.qmd#sec-experimentos-diversidad) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [9.8 ¿Cuántas réplicas?](09-experimentos.qmd#sec-experimentos-numero-replicas) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [9.9 Parámetros que interactúan](09-experimentos.qmd#sec-experimentos-interaccion) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [9.10 Operadores, representación y localidad](09-experimentos.qmd#sec-experimentos-operadores) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [9.11 Ampliaciones](09-experimentos.qmd#sec-experimentos-ampliaciones) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
 
-## 10. El viajante de principio a fin {#cap-10}
+## 10. El viajante de principio a fin {.unnumbered #cap-10}
 
-- [10.1 Primero, observa](10-viajante.qmd#observa) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [10.2 El problema y su representación](10-viajante.qmd#problema) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [10.3 Una generación a mano](10-viajante.qmd#a-mano) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [10.4 Qué pasó en la ejecución](10-viajante.qmd#interpretar) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [10.5 La élite en el reemplazo](10-viajante.qmd#elite) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [10.6 Del ensayo al caso real](10-viajante.qmd#caso-real) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [10.7 EvoTraveller por dentro](10-viajante.qmd#por-dentro) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [10.8 Mejorar el algoritmo](10-viajante.qmd#mejorar) [[A]{.corto}]{.nivel .avanzado .solo-corto}
-- [10.9 Ampliaciones](10-viajante.qmd#ampliaciones) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
+- [10.1 Primero, observa](10-viajante.qmd#sec-viajante-observa) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [10.2 El problema y su representación](10-viajante.qmd#sec-viajante-problema) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [10.3 Una generación a mano](10-viajante.qmd#sec-viajante-a-mano) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [10.4 Qué pasó en la ejecución](10-viajante.qmd#sec-viajante-interpretar) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [10.5 La élite en el reemplazo](10-viajante.qmd#sec-viajante-elite) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [10.6 Del ensayo al caso real](10-viajante.qmd#sec-viajante-caso-real) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [10.7 EvoTraveller por dentro](10-viajante.qmd#sec-viajante-por-dentro) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [10.8 Mejorar el algoritmo](10-viajante.qmd#sec-viajante-mejorar) [[A]{.corto}]{.nivel .avanzado .solo-corto}
+- [10.9 Ampliaciones](10-viajante.qmd#sec-viajante-ampliaciones) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
 
-## 11. Recapitulación {#cap-11}
+## 11. Recapitulación {.unnumbered #cap-11}
 
-- [11.1 Las nueve decisiones, de un vistazo](11-recapitulacion.qmd#decisiones) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [11.2 Un mapa por representación](11-recapitulacion.qmd#mapa) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [11.3 Errores frecuentes](11-recapitulacion.qmd#errores) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [11.4 Diseñar para un problema nuevo](11-recapitulacion.qmd#problema-nuevo) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [11.5 Lo que queda fuera](11-recapitulacion.qmd#fuera) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
+- [11.1 Las nueve decisiones, de un vistazo](11-recapitulacion.qmd#sec-recapitulacion-decisiones) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [11.2 Un mapa por representación](11-recapitulacion.qmd#sec-recapitulacion-mapa) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [11.3 Errores frecuentes](11-recapitulacion.qmd#sec-recapitulacion-errores) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [11.4 Diseñar para un problema nuevo](11-recapitulacion.qmd#sec-recapitulacion-problema-nuevo) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [11.5 Lo que queda fuera](11-recapitulacion.qmd#sec-recapitulacion-fuera) [[+]{.corto}]{.nivel .saber-mas .solo-corto}

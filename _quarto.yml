@@ -1,7 +1,7 @@
 project:
   type: book
   output-dir: _book
-  pre-render: python3 filtros/indices.py    # genera indice.qmd y actividades.qmd a partir de los capítulos
+  pre-render: python3 filtros/indices.py    # numera ejemplos y ejercicios (_numeracion.json) y genera indice.qmd y actividades.qmd
   post-render: python3 filtros/e-ante-i.py   # «y» → «e» ante i-/hi- (Galán e Izquierdo)
   resources:
     - vendor/
@@ -42,6 +42,13 @@ bibliography: referencias.bib     # entradas pendientes de cotejo (ver la cabece
 csl: vendor/csl/apa.csl           # APA 7.ª ed. (CC BY-SA 3.0), en local y adaptada al castellano (vendor/csl/LEEME.md)
 link-citations: true
 
+filters:
+  - filtros/numeracion.lua   # número de ejemplos y ejercicios y referencias a ellos
+
+crossref:
+  fig-title: Figura
+  title-delim: "."
+
 format:
   html:
     theme: default          # sin fuentes de Google: el libro no depende de CDN, como las herramientas
@@ -51,4 +58,5 @@ format:
       url: "vendor/katex/"   # KaTeX 0.19.0 (MIT) copiado en local
     toc: true
     toc-title: "En esta página"
-    number-sections: false
+    number-sections: true   # capítulos, secciones y figuras, con Quarto (D031)
+    number-depth: 2         # los apartados de nivel 3 no llevan número
