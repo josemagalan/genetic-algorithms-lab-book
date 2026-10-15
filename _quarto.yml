@@ -1,6 +1,7 @@
 project:
   type: book
   output-dir: _book
+  pre-render: python3 filtros/indices.py    # genera indice.qmd y actividades.qmd a partir de los capítulos
   post-render: python3 filtros/e-ante-i.py   # «y» → «e» ante i-/hi- (Galán e Izquierdo)
   resources:
     - vendor/
@@ -21,6 +22,7 @@ book:
   language: es
   chapters:
     - index.qmd
+    - indice.qmd            # generado por filtros/indices.py
     - 01-evolucion.qmd
     - 02-ciclo.qmd
     - 03-representacion.qmd
@@ -32,6 +34,7 @@ book:
     - 09-experimentos.qmd
     - 10-viajante.qmd
     - 11-recapitulacion.qmd
+    - actividades.qmd       # generado por filtros/indices.py
     - avisos.qmd            # siempre al final: los capítulos nuevos van antes
 
 lang: es

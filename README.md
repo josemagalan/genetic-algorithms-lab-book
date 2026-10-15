@@ -31,6 +31,7 @@ El manual está en construcción: su contenido y estructura pueden cambiar. / Th
 | Capítulo | Estado |
 |---|---|
 | Cómo leer este libro | Borrador |
+| Índice general | Generado (`filtros/indices.py`) |
 | 1. Evolución y optimización | Borrador completo, pendiente de revisión |
 | 2. El ciclo y las decisiones de diseño | Borrador completo, pendiente de revisión |
 | 3. Representar soluciones | Borrador completo, pendiente de revisión |
@@ -42,6 +43,7 @@ El manual está en construcción: su contenido y estructura pueden cambiar. / Th
 | 9. Parámetros y aleatoriedad | Borrador completo, pendiente de revisión |
 | 10. El viajante de principio a fin | Borrador completo, pendiente de revisión |
 | 11. Recapitulación | Borrador completo, pendiente de revisión |
+| Índice de actividades | Generado (`filtros/indices.py`) |
 | Agradecimientos y avisos | Texto aprobado |
 
 El resto de capítulos está en preparación.
@@ -50,6 +52,7 @@ El resto de capítulos está en preparación.
 
 - Libro de [Quarto](https://quarto.org) (`_quarto.yml`); cada capítulo es un archivo `.qmd`.
 - Cada capítulo combina explicaciones, ejemplos reproducibles que abren la herramienta en un estado fijado, instrucciones para explorar en la aplicación y ejercicios. Las secciones se marcan por nivel: Básico, Avanzado y Para saber más.
+- `indice.qmd` (índice general) y `actividades.qmd` (índice de actividades) los genera `filtros/indices.py` en cada `quarto render`, a partir de los encabezados de sección y de las cajas de los capítulos. No se editan a mano.
 - Bibliografía en `referencias.bib`, con estilo APA en castellano (`vendor/csl/`).
 - Sin dependencias externas en la página: KaTeX va en local (`vendor/katex/`).
 - Al hacer *push* a `main`, GitHub Actions genera el libro y lo publica en GitHub Pages (`.github/workflows/publish.yml`).

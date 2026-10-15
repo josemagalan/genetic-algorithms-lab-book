@@ -24,4 +24,6 @@ Lo que podrás hacer al terminar el recorrido básico del capítulo.
 
 Las secciones llevan una etiqueta de nivel: [[Básico]{.largo}[B]{.corto}]{.nivel .basico}, [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} y [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas}. En el índice lateral «En esta página» aparecen abreviadas como [[B]{.corto}]{.nivel .basico .solo-corto}, [[A]{.corto}]{.nivel .avanzado .solo-corto} y [[+]{.corto}]{.nivel .saber-mas .solo-corto}. El recorrido básico puede leerse de forma continua sin las ampliaciones.
 
+El [índice general](indice.qmd) muestra todas las secciones con su nivel, y el [índice de actividades](actividades.qmd) reúne los ejemplos, las cajas «En la aplicación» y los ejercicios, por capítulo y por herramienta.
+
 Todas las herramientas se abren desde el portal [Algoritmos genéticos, paso a paso](https://josemagalan.github.io/genetic-algorithms-lab/).
