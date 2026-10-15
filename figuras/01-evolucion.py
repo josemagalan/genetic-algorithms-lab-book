@@ -61,7 +61,7 @@ def sube(s, vecinos, f):
 
 
 # ----------------------------------------------------------------------------------------------
-# Figura 1.4: óptimos locales en un paisaje de una dimensión
+# fig-optimos-locales: óptimos locales en un paisaje de una dimensión
 # ----------------------------------------------------------------------------------------------
 
 N = 21
@@ -134,7 +134,7 @@ def figura_paisaje():
 
 
 # ----------------------------------------------------------------------------------------------
-# Figura 1.5: el cubo de las cadenas de 3 bits
+# fig-cubo-vecinos: el cubo de las cadenas de 3 bits
 # ----------------------------------------------------------------------------------------------
 
 F_CUBO = {'000': 3, '001': 1, '010': 2, '011': 5, '100': 4, '101': 0, '110': 6, '111': 2}
@@ -209,12 +209,12 @@ if __name__ == '__main__':
     svg1, d1 = figura_paisaje()
     with open('01-paisaje.svg', 'w', encoding='utf-8') as fh:
         fh.write(svg1)
-    print('Figura 1.4: óptimos locales', d1['optimos'])
+    print('fig-optimos-locales: óptimos locales', d1['optimos'])
     for c in d1['caminos']:
         print('  camino', c)
     print('  f(x):', d1['f'])
     svg2, d2 = figura_cubo()
     with open('01-cubo-vecinos.svg', 'w', encoding='utf-8') as fh:
         fh.write(svg2)
-    print('Figura 1.5: mejor vecino', d2['flecha'])
+    print('fig-cubo-vecinos: mejor vecino', d2['flecha'])
     print('  final', d2['final'])

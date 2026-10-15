@@ -65,6 +65,8 @@ quarto render      # resultado en _book/
 quarto preview     # vista previa que se actualiza al guardar
 ```
 
+Las figuras propias están en `figuras/`, junto al guion de Python que las genera. Los SVG se versionan, así que para generar el libro no hace falta ejecutar los guiones. Para regenerar una figura, se ejecuta su guion desde `figuras/` (por ejemplo, `python3 03-representacion.py`). Casi todos usan solo la biblioteca estándar; `03-himmelblau.py` necesita además matplotlib y NumPy.
+
 ## Comentarios
 
 Cada página del libro tiene enlaces «Informar sobre problema» y «Editar esta página». Los comentarios sobre el texto pueden abrirse como *issues*.

@@ -1,4 +1,4 @@
-"""Figuras 3.1, 3.2 y 3.3 del libro «Algoritmos genéticos, paso a paso»: genotipo y fenotipo, la rejilla de
+"""Figuras fig-genotipo-fenotipo, fig-rejilla y fig-saltos-hamming del libro «Algoritmos genéticos, paso a paso»: genotipo y fenotipo, la rejilla de
 puntos que puede escribir una cadena binaria y los saltos de Hamming entre enteros consecutivos.
 
 Todo se calcula con las fórmulas del capítulo, sin usar la herramienta:
@@ -84,7 +84,7 @@ def llave(x0, x1, y, color):
 
 
 # ----------------------------------------------------------------------------------------------
-# Figura 3.1: genotipo y fenotipo
+# fig-genotipo-fenotipo: genotipo y fenotipo
 # ----------------------------------------------------------------------------------------------
 
 def figura_genotipo_fenotipo():
@@ -139,7 +139,7 @@ def figura_genotipo_fenotipo():
 
 
 # ----------------------------------------------------------------------------------------------
-# Figura 3.2: la rejilla de puntos representables
+# fig-rejilla: la rejilla de puntos representables
 # ----------------------------------------------------------------------------------------------
 
 def figura_rejilla(ks=(3, 4, 5)):
@@ -191,7 +191,7 @@ def figura_rejilla(ks=(3, 4, 5)):
 
 
 # ----------------------------------------------------------------------------------------------
-# Figura 3.3: saltos de Hamming entre enteros consecutivos
+# fig-saltos-hamming: saltos de Hamming entre enteros consecutivos
 # ----------------------------------------------------------------------------------------------
 
 def figura_saltos(k=4):
@@ -237,16 +237,16 @@ if __name__ == '__main__':
     svg1, d1 = figura_genotipo_fenotipo()
     with open('03-genotipo-fenotipo.svg', 'w', encoding='utf-8') as fh:
         fh.write(svg1)
-    print('Figura 3.1: z =', d1['z'], '· x =', tuple(round(v, 4) for v in d1['x']), '· f =', round(d1['f'], 4))
+    print('fig-genotipo-fenotipo: z =', d1['z'], '· x =', tuple(round(v, 4) for v in d1['x']), '· f =', round(d1['f'], 4))
     svg2, d2 = figura_rejilla()
     with open('03-rejilla.svg', 'w', encoding='utf-8') as fh:
         fh.write(svg2)
-    print('Figura 3.2 (k, puntos, Δ, mejor f, mejor punto):')
+    print('fig-rejilla (k, puntos, Δ, mejor f, mejor punto):')
     for k, pts, delta, v, bx, by in d2:
         print(' ', k, pts, round(delta, 4), round(v, 4), (round(bx, 4), round(by, 4)))
     svg3, (est, gr) = figura_saltos()
     with open('03-saltos-hamming.svg', 'w', encoding='utf-8') as fh:
         fh.write(svg3)
-    print('Figura 3.3: bits que cambian de z a z + 1 (z = 0…14)')
+    print('fig-saltos-hamming: bits que cambian de z a z + 1 (z = 0…14)')
     print('  estándar', est, 'suma', sum(est), 'media', round(sum(est) / len(est), 4))
     print('  Gray    ', gr, 'suma', sum(gr), 'media', round(sum(gr) / len(gr), 4))
