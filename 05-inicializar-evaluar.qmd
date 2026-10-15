@@ -1,0 +1,964 @@
+# Inicializar y evaluar {#sec-inicializar-evaluar}
+
+<!-- Seguimiento interno (no visible): redactado el 2026-10-15. Los ejemplos reproducibles se comprobaron en initialization-and-evaluation-ga (commit 49c1e2e, 2026-10-14) el 2026-10-15, con su código y en la interfaz publicada. Guiones: memoria/verificaciones/2026-10-15-inicializar-evaluar.js y 2026-10-15-inicializar-evaluar-interfaz.py. Registro en memoria/sesiones/2026-10-15-02-capitulo-5-inicializar-evaluar.md. En la herramienta, la URL guarda todo el estado: `item` (pantalla), `enc` (codificación), `n` y `m` (tamaño), `N` (individuos), `s` (semilla de la instancia), `ps` (semilla de la población), los parámetros de cada pantalla y `step` (empieza en 0). Las instancias salen de la semilla `s`, no se pueden escribir: la mochila de este capítulo es la de `s=21` con 6 objetos y la asignación, la de `s=1` con 5 tareas y 3 máquinas. Los números aleatorios de una misma `ps` son los mismos en todas las pantallas. -->
+
+**Herramientas:** [initialization-and-evaluation-ga](https://josemagalan.github.io/initialization-and-evaluation-ga/#lang=es), accesible desde el [portal](https://josemagalan.github.io/genetic-algorithms-lab/).
+
+::: {.callout-warning .objetivos title="Objetivos del capítulo"}
+Al terminar el recorrido básico de este capítulo podrás:
+
+- generar a mano los individuos de una población inicial uniforme a partir de números aleatorios dados, también cuando son permutaciones;
+- medir la diversidad de una población con distancias y contar cuántos de sus individuos son factibles;
+- explicar por qué sembrar la población inicial con una solución heurística suele ser una mala idea;
+- calcular la aptitud de un individuo: decodificarlo, calcular el objetivo y la violación de las restricciones, y penalizarla;
+- transformar un coste en una aptitud que sirva para la ruleta y calcular las probabilidades que resultan;
+- contar las evaluaciones que hace una ejecución y explicar cuándo ahorra trabajo una caché.
+:::
+
+## 5.1 Una población al azar [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#uniforme}
+
+Un algoritmo genético necesita individuos sobre los que actuar desde la primera generación. ¿De dónde salen?
+
+Un algoritmo genético no empieza con una solución, sino con una **población inicial** de *N* individuos. Lo habitual es generarlos al azar [@talbi2009, p. 194; @mitchell1998, apartado 1.6]. La población inicial no tiene que ser buena: tiene que ser **diversa**, para que la selección, el cruce y la mutación tengan material variado con el que trabajar. Si está poco diversificada, el algoritmo puede converger antes de tiempo, es decir, quedarse estancado en una zona del espacio de búsqueda que no tiene por qué contener el óptimo [@talbi2009, p. 193].
+
+**Uniforme** quiere decir que todos los cromosomas tienen la misma probabilidad de salir. Para conseguirlo basta con sortear cada gen por separado, con una regla que depende de su tipo. En todas, *u* es un número aleatorio uniforme entre 0 y 1:
+
+- **Un bit** vale 1 si $u < 0{,}5$ y 0 en caso contrario.
+- **Un entero** de 1 a *m* vale $1 + \lfloor u\,m \rfloor$, donde $\lfloor\cdot\rfloor$ es la parte entera. Cada valor sale con probabilidad $1/m$.
+- **Un real** del intervalo $[a, b]$ vale $a + u\,(b - a)$ [@talbi2009, p. 194].
+
+Como los genes se sortean de forma independiente, cada combinación de genes tiene la misma probabilidad. La herramienta muestra cada número aleatorio con dos o tres decimales, para que se pueda comprobar cada gen a mano.
+
+Usaremos un problema de asignación como el del [capítulo 4](04-representacion.qmd#entera), con 5 tareas y 3 máquinas, pero con otros tiempos:
+
+| Tarea | Máquina 1 | Máquina 2 | Máquina 3 |
+|:---:|:---:|:---:|:---:|
+| 1 | 5 | 5 | 8 |
+| 2 | 9 | 2 | 7 |
+| 3 | 2 | 9 | 1 |
+| 4 | 7 | 2 | 1 |
+| 5 | 3 | 3 | 5 |
+
+El cromosoma es un vector de enteros: el gen *i* es la máquina que hace la tarea *i*. Se minimiza el **makespan**, la mayor de las cargas de las máquinas. El óptimo de este problema vale 5.
+
+::: {.callout-tip .ejemplo #ejemplo-5-1 title="Ejemplo reproducible 5.1 · Una asignación al azar"}
+**Datos.** Los tiempos de la tabla. Para el primer individuo se han sorteado los números $u$ = 0,087; 0,277; 0,454; 0,226 y 0,980, uno por tarea.
+
+**Predice.** ¿Qué máquina recibe cada tarea? ¿Cuánto vale el makespan de ese individuo?
+
+[Abrir: el primer individuo](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=uniform&lang=es&enc=assignment-int&n=5&m=3&N=6&s=1&ps=1&step=7){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+Con $m = 3$, cada gen es $1 + \lfloor 3u \rfloor$:
+
+| Tarea | *u* | $3u$ | Máquina |
+|:---:|:---:|:---:|:---:|
+| 1 | 0,087 | 0,261 | 1 |
+| 2 | 0,277 | 0,831 | 1 |
+| 3 | 0,454 | 1,362 | 2 |
+| 4 | 0,226 | 0,678 | 1 |
+| 5 | 0,980 | 2,940 | 3 |
+
+El individuo es **(1, 1, 2, 1, 3)**. La máquina 1 hace las tareas 1, 2 y 4, con carga $5 + 9 + 7 = 21$; la 2 hace la tarea 3, con carga 9, y la 3 hace la tarea 5, con carga 5. El makespan es **21**, cuatro veces el óptimo.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (el primer individuo)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/initialization-and-evaluation-ga/#item=uniform&lang=es&enc=assignment-int&n=5&m=3&N=6&s=1&ps=1&step=7" loading="lazy" title="initialization-and-evaluation-ga: aleatoria uniforme, asignación"></iframe>
+</details>
+
+<!-- Comprobado el 2026-10-15: en los pasos 3–7 de 17 la herramienta muestra «Tarea 1: u = 0,087; 1 + ⌊0,087 · 3⌋ = 1 + 0 = 1» … «Tarea 5: u = 0,980; 1 + ⌊0,980 · 3⌋ = 1 + 2 = 3», y en el paso 8, «Primer individuo completo: (1, 1, 2, 1, 3). Su makespan es 21». Los individuos 2–6 (pasos 9–13) son (2, 3, 1, 1, 2) con 9, (1, 2, 3, 3, 1) con 8, (2, 1, 1, 3, 1), (1, 2, 2, 1, 2) y (3, 1, 1, 3, 1), los tres con 14. Las cargas 21, 9 y 5 se comprobaron con el código. -->
+:::
+
+Los otros cinco individuos de esa población se generan igual, con números nuevos: sus makespans son 9, 8, 14, 14 y 14. Ninguno llega al óptimo, 5, y no tienen por qué: mejorar la población es trabajo de los operadores que vienen después.
+
+:::: {.callout-note .ejercicio #ejercicio-5-1 title="Ejercicio 5.1 · Las mismas cifras, otras reglas"}
+Usa los números del [ejemplo 5.1](#ejemplo-5-1). (a) Con los cinco primeros, redondeados a dos decimales (0,08; 0,27; 0,45; 0,22; 0,98), genera una cadena de 5 bits. (b) Con los dos primeros, 0,087 y 0,277, genera un punto real de la caja $[-5, 5]^2$. (c) Si hubiera 4 máquinas en lugar de 3, ¿a qué máquina iría la tarea 5?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+(a) Los cuatro primeros son menores que 0,5 y el último no: **1 1 1 1 0**.
+
+(b) $x_1 = -5 + 0{,}087 \times 10 = -4{,}13$ y $x_2 = -5 + 0{,}277 \times 10 = -2{,}23$. El punto es $(-4{,}13;\ -2{,}23)$.
+
+(c) $1 + \lfloor 0{,}980 \times 4 \rfloor = 1 + \lfloor 3{,}92 \rfloor = 4$: a la máquina 4.
+
+El azar es el mismo; lo que cambia es la regla con la que cada representación convierte un número en un gen.
+</details>
+::::
+
+::: {.callout-note .en-app title="En la aplicación · initialization-and-evaluation-ga, «Aleatoria uniforme»"}
+[Explorar en initialization-and-evaluation-ga](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=uniform&lang=es&enc=assignment-int){.explorar target="_blank"}
+
+- Avanza con **Siguiente** por las etapas y comprueba cada gen con su número *u*.
+- Cambia el **Problema y codificación** a la mochila, a la función con vector de reales y a la función con cadena binaria. ¿Qué regla se usa en cada caso?
+- Pulsa **Sortear la población** varias veces. ¿Sale alguna vez un individuo con el makespan óptimo?
+:::
+
+## 5.2 Barajar una permutación [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#fisher-yates}
+
+En el problema del viajante, el cromosoma es un orden de visita. ¿Se puede sortear gen a gen, como un vector de enteros?
+
+No: una ciudad que ya ha salido no puede volver a salir, así que los genes de una permutación no son independientes. Si se sortea cada gen de 1 a *n* sin más, la mayoría de los resultados repiten ciudades y no son permutaciones, como vimos en la [sección 4.5](04-representacion.qmd#permutaciones). La misma idea de inicialización uniforme sirve para permutaciones [@talbi2009, p. 195], pero hace falta otro procedimiento.
+
+El método estándar para barajar es el de Fisher y Yates [-@fisher1938], en la versión de @durstenfeld1964:
+
+1. Se parte de la permutación $(1, 2, \dots, n)$.
+2. Para $k = n, n - 1, \dots, 2$, se sortea una posición $j = 1 + \lfloor u\,k \rfloor$, entre 1 y *k*, y se intercambian las posiciones *j* y *k*. Desde ese momento, la posición *k* queda fija.
+
+Con $n - 1$ números aleatorios, cada una de las $n!$ permutaciones sale con la misma probabilidad.
+
+::: {.callout-tip .ejemplo #ejemplo-5-2 title="Ejemplo reproducible 5.2 · Un circuito de cinco ciudades"}
+**Datos.** Un viajante con *n* = 5 ciudades. Se han sorteado los números $u$ = 0,087; 0,277; 0,454 y 0,226, uno para cada valor de *k*, de 5 a 2.
+
+**Predice.** ¿Qué posición *j* sale en cada paso? ¿Qué permutación queda al final?
+
+[Abrir: barajar 1 2 3 4 5](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=uniform&lang=es&enc=tsp-perm&n=5&N=6&s=1&ps=1&step=6){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+| *k* | *u* | $j = 1 + \lfloor u\,k \rfloor$ | Intercambio | Permutación |
+|:---:|:---:|:---:|:---:|:---:|
+| | | | | 1 2 3 4 5 |
+| 5 | 0,087 | 1 | posiciones 1 y 5 | 5 2 3 4 **1** |
+| 4 | 0,277 | 2 | posiciones 2 y 4 | 5 4 3 **2 1** |
+| 3 | 0,454 | 2 | posiciones 2 y 3 | 5 3 **4 2 1** |
+| 2 | 0,226 | 1 | posiciones 1 y 2 | **3 5 4 2 1** |
+
+En negrita, las posiciones que ya han quedado fijas. El individuo es **3 5 4 2 1**, un circuito que mide 240,8.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (barajar 1 2 3 4 5)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/initialization-and-evaluation-ga/#item=uniform&lang=es&enc=tsp-perm&n=5&N=6&s=1&ps=1&step=6" loading="lazy" title="initialization-and-evaluation-ga: aleatoria uniforme, viajante"></iframe>
+</details>
+
+<!-- Comprobado el 2026-10-15: en los pasos 3–6 de 16 la herramienta muestra «k = 5: u = 0,087 y j = 1 + ⌊0,087 · 5⌋ = 1. Se intercambian las posiciones 1 y 5: la ciudad 1 queda fija en la posición 5» … «k = 2: u = 0,226 y j = 1 + ⌊0,226 · 2⌋ = 1. Se intercambian las posiciones 1 y 2: la ciudad 5 queda fija en la posición 2»; en el paso 7, «Primer individuo completo: (3, 5, 4, 2, 1). El circuito mide 240,8». En el paso 12, el individuo 6 es otra vez (3, 5, 4, 2, 1), y en el 15, «5 de los 6 individuos son distintos». -->
+:::
+
+Son los mismos números que en el [ejemplo 5.1](#ejemplo-5-1): la herramienta usa la misma sucesión de números aleatorios en todas las pantallas con la misma semilla de población. En esa población de seis circuitos, el sexto individuo vuelve a ser 3 5 4 2 1. No es un error: con 5 ciudades solo hay $4!/2 = 12$ circuitos distintos, y al sacar seis al azar es fácil que alguno se repita.
+
+Hay formas de barajar que parecen equivalentes y no lo son. Una muy tentadora es intercambiar, en cada paso, la posición *k* con una posición cualquiera de 1 a *n*, en lugar de 1 a *k*.
+
+:::: {.callout-note .ejercicio #ejercicio-5-2 title="Ejercicio 5.2 · Un barajado que parece bueno"}
+Con *n* = 3, el procedimiento «para $k = 1, 2, 3$, intercambia la posición *k* con una posición *j* sorteada entre 1 y 3» usa tres sorteos de 3 valores cada uno. (a) ¿Cuántas sucesiones de sorteos distintas hay, todas igual de probables? ¿Cuántas permutaciones de 3 elementos? (b) ¿Puede salir cada permutación con la misma probabilidad? (c) ¿Cuántos sorteos usa Fisher–Yates con *n* = 3, y cuántas sucesiones distintas tiene?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+(a) Hay $3^3 = 27$ sucesiones y $3! = 6$ permutaciones.
+
+(b) No. Para que las 6 permutaciones fueran igual de probables, cada una tendría que salir en el mismo número de sucesiones, y 27 no es divisible por 6. Haciendo las 27 cuentas, las permutaciones 1 3 2, 2 1 3 y 2 3 1 salen 5 veces cada una, y 1 2 3, 3 1 2 y 3 2 1, 4 veces.
+
+(c) Fisher–Yates hace dos sorteos: *j* entre 1 y 3 para *k* = 3 y *j* entre 1 y 2 para *k* = 2. Son $3 \times 2 = 6$ sucesiones, una por permutación.
+</details>
+::::
+
+## 5.3 Diversidad y factibilidad de la población inicial [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#diversidad}
+
+¿Cómo se mide si una población es variada? ¿Y cuántos de sus individuos describen soluciones que se pueden llevar a cabo?
+
+Para medir la diversidad se usa una **distancia** entre dos individuos, que la herramienta normaliza entre 0 (iguales) y 1 (lo más distintos posible):
+
+- En las cadenas de bits y de enteros, la proporción de genes distintos, que es la **distancia de Hamming** dividida por la longitud.
+- En el viajante, la proporción de tramos de un circuito que no están en el otro. Así, los $2n$ cromosomas de un mismo circuito están a distancia 0.
+- En la función, la distancia entre los dos puntos dividida por la diagonal de la caja.
+
+Con ella se resume la población: la **distancia media** entre todos los pares, la **distancia mínima** (si es 0, hay dos individuos iguales) y el número de **individuos distintos**. Para individuos uniformes, la distancia media esperada es 0,5 en los bits, $1 - 1/m$ en los enteros y unos 0,37 en la función.
+
+Que haya individuos repetidos no es raro. Con 64 cromosomas posibles y una población de 10, la probabilidad de que salgan todos distintos es
+$$
+\frac{64}{64} \times \frac{63}{64} \times \dots \times \frac{55}{64} \approx 0{,}48,
+$$
+menos de la mitad. Es la paradoja del cumpleaños.
+
+Hay algo más importante: una población **uniforme sobre los cromosomas no es uniforme sobre las soluciones factibles**. Si la mitad de los cromosomas no cumplen las restricciones, más o menos la mitad de la población inicial tampoco las cumplirá. Lo veremos con un problema de la mochila (capacidad *W* = 13) que usaremos en el resto del capítulo:
+
+| Objeto | 1 | 2 | 3 | 4 | 5 | 6 |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|
+| Peso $w_i$ | 4 | 3 | 5 | 8 | 4 | 2 |
+| Valor $v_i$ | 5 | 4 | 9 | 4 | 7 | 4 |
+
+De sus $2^6 = 64$ cromosomas, 34 caben en la mochila (el 53,1 %). El óptimo es **1 0 1 0 1 0**: los objetos 1, 3 y 5, que pesan justo 13 y valen 21.
+
+::: {.callout-tip .ejemplo #ejemplo-5-3 title="Ejemplo reproducible 5.3 · Ocho mochilas al azar"}
+**Datos.** La mochila de la tabla y una población uniforme de *N* = 8 individuos:
+
+| I1 | I2 | I3 | I4 | I5 | I6 | I7 | I8 |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| 011011 | 111101 | 100000 | 010010 | 001011 | 100100 | 111110 | 110110 |
+
+**Predice.** ¿Cuántos caben en la mochila? ¿Cuál es el mejor de los que caben? ¿Hay dos individuos que se parezcan mucho?
+
+[Abrir: factibilidad](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=uniform&lang=es&enc=knapsack-bits&n=6&N=8&s=21&ps=5&step=17){.abrir target="_blank"}
+[Abrir: diversidad](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=uniform&lang=es&enc=knapsack-bits&n=6&N=8&s=21&ps=5&step=18){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+| Individuo | Objetos | Peso | Valor | ¿Cabe? |
+|:---:|:---:|:---:|:---:|:---:|
+| I1 | 2, 3, 5, 6 | 14 | 24 | No |
+| I2 | 1, 2, 3, 4, 6 | 22 | 26 | No |
+| I3 | 1 | 4 | 5 | Sí |
+| I4 | 2, 5 | 7 | 11 | Sí |
+| I5 | 3, 5, 6 | 11 | 20 | Sí |
+| I6 | 1, 4 | 12 | 9 | Sí |
+| I7 | 1, 2, 3, 4, 5 | 24 | 29 | No |
+| I8 | 1, 2, 4, 5 | 19 | 20 | No |
+
+Caben **4 de los 8** (el 50 %), cerca del 53,1 % de todo el espacio. El mejor de los que caben es I5, que vale 20; el óptimo, 21, no está en la población. La distancia media entre dos individuos es **0,55**, cerca del 0,5 esperado, y la mínima, **0,17**: I1 y I5 solo se diferencian en el objeto 2, un bit de seis. Los 8 son distintos.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (factibilidad)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/initialization-and-evaluation-ga/#item=uniform&lang=es&enc=knapsack-bits&n=6&N=8&s=21&ps=5&step=17" loading="lazy" title="initialization-and-evaluation-ga: aleatoria uniforme, mochila"></iframe>
+</details>
+
+<!-- Comprobado el 2026-10-15: en el paso 1 de 20 la herramienta muestra «La mochila tiene 6 objetos y capacidad 13 […] hay 2ⁿ = 64 cromosomas, de los que 34 (53,1 %) caben en la mochila»; en el 18, «Factibilidad: 4 de los 8 individuos (50 %) cumplen las restricciones; en todo el espacio lo hacen el 53,1 % de los cromosomas»; en el 19, «Diversidad: la distancia media entre dos individuos es 0,55 y la mínima, 0,17 […] 8 de los 8 individuos son distintos. Para individuos uniformes, la media esperada es 0,50»; en el 20, «Calidad: entre los factibles, el mejor vale 20, la media 11,25 y el peor 5; el óptimo es 21». Los pesos y valores de la tabla, el óptimo 101010 y que I1 e I5 son el par a distancia 1/6 se comprobaron con el código. -->
+:::
+
+En otras representaciones la diferencia es mucho mayor. En la asignación escrita como matriz binaria ([sección 4.9](04-representacion.qmd#matriz)), una fila tiene exactamente un 1 con probabilidad $3/8$, y las cinco filas a la vez, con probabilidad $(3/8)^5 \approx 0{,}0074$: solo 243 de las 32 768 matrices son asignaciones válidas. Una población uniforme de 8 matrices tiene alguna válida con probabilidad $1 - (1 - 0{,}0074)^8 \approx 0{,}06$. Con el vector de enteros o con la permutación, en cambio, todos los cromosomas son válidos: es una ventaja de esas representaciones.
+
+:::: {.callout-note .ejercicio #ejercicio-5-3 title="Ejercicio 5.3 · Distancias a mano"}
+Calcula las distancias normalizadas entre los tres primeros individuos del [ejemplo 5.3](#ejemplo-5-3): I1 = 011011, I2 = 111101 e I3 = 100000. ¿Cuánto valen la distancia media y la mínima de esa población de tres?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+- I1 y I2 se diferencian en los bits 1, 4 y 5: $3/6 = 0{,}5$.
+- I1 e I3 se diferencian en los bits 1, 2, 3, 5 y 6: $5/6 \approx 0{,}83$.
+- I2 e I3 se diferencian en los bits 2, 3, 4 y 6: $4/6 \approx 0{,}67$.
+
+La media de los tres pares es $(0{,}5 + 0{,}83 + 0{,}67)/3 = 2/3 \approx 0{,}67$ y la mínima, 0,5.
+</details>
+::::
+
+::: {.callout-note .en-app title="En la aplicación · initialization-and-evaluation-ga, «Aleatoria uniforme»"}
+[Explorar en initialization-and-evaluation-ga](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=uniform&lang=es&enc=knapsack-bits){.explorar target="_blank"}
+
+- Al final del paso a paso, mira la tabla **Diversidad y calidad de la población**. Pulsa **Sortear la población** varias veces: ¿cuánto varía la distancia media? ¿Y el número de factibles?
+- Cambia a **Asignación · matriz binaria** y comprueba cuántos individuos son asignaciones válidas.
+- Cambia a **Viajante · permutación** con 5 ciudades y 20 individuos. ¿Cuántos circuitos distintos salen?
+:::
+
+## 5.4 Sembrar con una heurística: un contraejemplo [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sembrar}
+
+Si ya tenemos una solución razonable, obtenida con otro método, ¿no conviene meterla en la población inicial?
+
+Parece buena idea, y en métodos que parten de una sola solución, como la búsqueda local, es lo habitual. En un algoritmo genético, en cambio, Talbi advierte de que la convergencia prematura puede ocurrir precisamente si la población inicial se genera con una heurística voraz o con una búsqueda local [@talbi2009, p. 193]. El motivo es la diversidad. Una buena solución mezclada con individuos aleatorios, mucho peores, gana todas las comparaciones: la selección la copia una y otra vez, y en pocas generaciones sus copias ocupan toda la población. Si esa solución no es el óptimo, el algoritmo se queda atrapado cerca de ella.
+
+Una **heurística voraz** construye una solución tomando en cada paso la decisión que parece mejor. En la mochila, se ordenan los objetos por su relación valor/peso, de mayor a menor, y se mete cada uno si cabe. En nuestra mochila, el orden es 6 (4/2 = 2), 3 (9/5 = 1,8), 5 (7/4 = 1,75), 2, 1 y 4. Entran el 6, el 3 y el 5, que pesan 11; los demás ya no caben. La solución voraz es **0 0 1 0 1 1**, que vale 20: buena, pero no la óptima, que vale 21.
+
+¿Cuánto tarda en invadir la población? Supongamos que hay *k* copias de la mejor solución entre *N* individuos y que solo actúa la selección por **torneo binario** con reemplazo, que elige dos individuos al azar y se queda con el mejor (lo verás en la [sección 6.2](06-seleccion.qmd#torneo)). Un torneo deja escapar la solución solo si sus dos contendientes son otros, lo que ocurre con probabilidad $(1 - k/N)^2$. El número esperado de copias en la generación siguiente es
+$$
+k' = N\left[1 - \left(1 - \frac{k}{N}\right)^2\right].
+$$
+El número de generaciones hasta que toda la población es la misma solución es el **tiempo de toma de control** (*takeover time*) [@goldberg1991].
+
+::: {.callout-tip .ejemplo #ejemplo-5-4 title="Ejemplo reproducible 5.4 · Basta una copia"}
+**Datos.** La mochila de la [sección 5.3](#diversidad), una población de *N* = 10 individuos: 9 aleatorios uniformes, el mejor de los cuales vale 18, y una copia de la solución voraz, 001011.
+
+**Predice.** Con selección por torneo binario, sin cruce ni mutación, ¿cuántas copias de la solución voraz habrá de media tras cada generación? ¿En cuántas generaciones ocupará casi toda la población?
+
+[Abrir: una copia sembrada](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=seeded&lang=es&enc=knapsack-bits&n=6&N=10&s=21&ps=2&K=1&step=12){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+| Generación | 0 | 1 | 2 | 3 | 4 | 5 | 6 |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Copias esperadas | 1 | 1,9 | 3,4 | 5,7 | 8,1 | 9,7 | 10,0 |
+
+En **unas 5 generaciones**, casi toda la población es la solución voraz, que vale 20 y no es el óptimo. Con una sola copia, la diversidad inicial apenas cambia (la distancia media es 0,49 en las dos poblaciones). El problema no está en la población inicial, sino en lo que hace con ella la selección.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (una copia sembrada)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/initialization-and-evaluation-ga/#item=seeded&lang=es&enc=knapsack-bits&n=6&N=10&s=21&ps=2&K=1&step=12" loading="lazy" title="initialization-and-evaluation-ga: sembrar con una heurística, mochila"></iframe>
+</details>
+
+<!-- Comprobado el 2026-10-15: en el paso 1 de 13 la herramienta muestra «Heurística voraz: se ordenan los objetos por relación valor/peso de mayor a menor (6, 3, 5, 2, 1, 4) y cada uno entra si cabe. Resultado: 001011, que vale 20; el óptimo es 21»; en el 3, «ningún individuo aleatorio llega a su nivel» (dice «1 copias»: errata de la herramienta); en el 4, «Diversidad: con una sola copia apenas cambia (distancia media 0,49 en la población uniforme y 0,49 en la sembrada)»; en los pasos 5–10, «unas 1,9 / 3,4 / 5,7 / 8,1 / 9,7 / 10,0 copias de 10»; en el 13, «En unas 5 generaciones, casi toda la población serían copias de la solución heurística». Que el mejor aleatorio vale 18 se comprobó con el código. -->
+:::
+
+A cualquier mejor individuo le pasaría lo mismo con la selección sola. La diferencia es qué invade la población. En una población aleatoria, los mejores individuos son solo algo mejores que los demás y se parecen poco entre sí, y el cruce y la mutación tienen tiempo de combinarlos antes de que uno domine. La semilla heurística, en cambio, es una solución elegida de antemano y muy superior al resto, que gana todos los torneos desde la primera generación.
+
+Sembrar no está prohibido, pero tiene que ser una decisión consciente. Si se hace, Talbi recomienda «aleatorizar» la heurística para obtener soluciones distintas, porque el principal inconveniente es que la población pierde diversidad y se estanca [@talbi2009, p. 198]. En un primer diseño, lo recomendable es una población aleatoria uniforme.
+
+:::: {.callout-note .ejercicio #ejercicio-5-4 title="Ejercicio 5.4 · La invasión, a mano"}
+(a) Con *N* = 10 y una copia, comprueba con la fórmula los valores de las generaciones 1, 2 y 3 del [ejemplo 5.4](#ejemplo-5-4). (b) ¿Cuántas copias esperadas hay tras una generación si se siembran 5 copias? (c) En la población del ejemplo, ¿qué objeto habría que cambiar en la solución voraz para llegar al óptimo?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+(a) Generación 1: $10\,[1 - (0{,}9)^2] = 10 \times 0{,}19 = 1{,}9$. Generación 2: $1 - 1{,}9/10 = 0{,}81$ y $10\,[1 - 0{,}81^2] = 10 \times 0{,}3439 \approx 3{,}44$. Generación 3: $1 - 0{,}3439 = 0{,}6561$ y $10\,[1 - 0{,}6561^2] \approx 10 \times 0{,}5695 \approx 5{,}7$.
+
+(b) $10\,[1 - (0{,}5)^2] = 7{,}5$ copias: tres cuartos de la población en una sola generación.
+
+(c) La solución voraz mete los objetos 3, 5 y 6 (001011) y el óptimo, los objetos 1, 3 y 5 (101010). Hay que cambiar dos genes a la vez: sacar el objeto 6 y meter el 1. Cambiando uno solo, o no cabe (meter el 1 sin sacar el 6 da peso 15) o se pierde valor (sacar el 6 deja 16).
+</details>
+::::
+
+::: {.callout-note .en-app title="En la aplicación · initialization-and-evaluation-ga, «Sembrar con una heurística (contraejemplo)»"}
+[Explorar en initialization-and-evaluation-ga](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=seeded&lang=es&enc=knapsack-bits){.explorar target="_blank"}
+
+- Sube las **Copias de la solución heurística (K)** y observa en la etapa de **Diversidad** cómo bajan los individuos distintos.
+- Cambia a **Asignación · vector de enteros** y a **Viajante · permutación**: la heurística es otra (cada tarea a la máquina en la que acabaría antes; el vecino más cercano). ¿Da el óptimo?
+- Pulsa **Nueva instancia** hasta encontrar una mochila en la que la solución voraz sí es la óptima. ¿Cambia algo en la curva de copias?
+:::
+
+## 5.5 Del cromosoma a la aptitud [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#evaluar}
+
+Una vez creada la población, ¿cómo sabe el algoritmo lo bueno que es cada individuo?
+
+**Evaluar** un individuo es pasar de su cromosoma a un número, su **aptitud** (*fitness*), que dice lo bueno que es. La función objetivo asocia a cada solución un valor real que describe su calidad, y antes puede hacer falta una decodificación que pase del cromosoma a la solución [@talbi2009, p. 43]. La aptitud es lo único que ve la selección: dos individuos con la misma aptitud son igual de buenos para el algoritmo, aunque representen soluciones muy distintas.
+
+La evaluación es una cadena de cuatro eslabones:
+
+1. **Decodificar** el genotipo en el fenotipo, la solución que representa ([sección 4.1](04-representacion.qmd#genotipo-fenotipo)). En la mochila, cada 1 mete su objeto.
+2. Calcular el **objetivo** sobre esa solución, aunque no cumpla las restricciones. En la mochila, el valor total.
+3. Medir la **violación** de las restricciones: 0 si se cumplen y, si no, cuánto se incumplen. En la mochila, el exceso de peso $e = \max(0,\ \text{peso} - W)$.
+4. Combinar las dos cosas en la **aptitud**. Si el individuo es factible, su aptitud es el objetivo. Si no, hay que decidir qué hacer con él. En esta sección usamos una penalización sencilla, la que usa la herramienta por defecto: $F = \text{valor} - e$. En la [sección 5.7](#penalizacion) veremos cómo elegirla.
+
+::: {.callout-tip .ejemplo #ejemplo-5-5 title="Ejemplo reproducible 5.5 · Evaluar una mochila que no cabe"}
+**Datos.** La mochila de la [sección 5.3](#diversidad) (*W* = 13) y el individuo I1 = 011011 del [ejemplo 5.3](#ejemplo-5-3). La aptitud de un infactible es $F = \text{valor} - e$.
+
+**Predice.** ¿Qué objetos lleva? ¿Cuánto valen y cuánto pesan? ¿Cuál es su aptitud? ¿Será el mejor de la población por aptitud?
+
+[Abrir: aptitud de I1](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=pipeline&lang=es&enc=knapsack-bits&n=6&N=8&s=21&ps=5&step=4){.abrir target="_blank"}
+[Abrir: la población evaluada](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=pipeline&lang=es&enc=knapsack-bits&n=6&N=8&s=21&ps=5&step=12){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+1. Decodificar: los unos están en las posiciones 2, 3, 5 y 6, así que lleva los objetos 2, 3, 5 y 6.
+2. Objetivo: valor $= 4 + 9 + 7 + 4 = 24$.
+3. Violación: peso $= 3 + 5 + 4 + 2 = 14 > 13$. No cabe, con un exceso $e = 1$.
+4. Aptitud: $F = 24 - 1 = 23$.
+
+Con esa aptitud, **I1 es el mejor de la población**, por delante de I5, que cabe y vale 20. La selección preferiría una solución que no se puede llevar a cabo: la penalización es demasiado pequeña.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (aptitud de I1)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/initialization-and-evaluation-ga/#item=pipeline&lang=es&enc=knapsack-bits&n=6&N=8&s=21&ps=5&step=4" loading="lazy" title="initialization-and-evaluation-ga: del genotipo a la aptitud, mochila"></iframe>
+</details>
+
+<!-- Comprobado el 2026-10-15: en los pasos 2–5 de 15 la herramienta muestra «Decodificar el individuo 1, 011011 […] El fenotipo es el conjunto de objetos: 2, 3, 5, 6», «valor = 4 + 9 + 7 + 4 = 24 […] el peso, 3 + 5 + 4 + 2 = 14», «la violación es el exceso, e = 14 − 13 = 1» y «F = 24 − 1 · 1 = 23»; en el 13, «El mejor por aptitud es I1, con F = 23, ¡y es infactible!». En los pasos 7–10, la narración dice «Misma cadena que el primero» para los individuos factibles: es una traducción poco clara de «Same chain of steps» (no son la misma cadena de bits); no se cita. -->
+:::
+
+El objetivo no siempre es la mejor guía. En los problemas de satisfacibilidad, por ejemplo, hay que encontrar valores de unas variables lógicas que hagan verdaderas todas las cláusulas de una fórmula. El objetivo natural vale 1 si la fórmula se cumple y 0 si no, y no distingue entre una solución a la que le falla una cláusula y otra a la que le fallan todas. Contar las cláusulas que se cumplen da una aptitud que sí guía la búsqueda [@talbi2009, p. 44].
+
+La aptitud tampoco tiene por qué ser una fórmula. Puede ser el resultado de una simulación, de un experimento o de la valoración de una persona, y entonces cada evaluación es lenta y cara [@talbi2009, pp. 46–47].
+
+:::: {.callout-note .ejercicio #ejercicio-5-5 title="Ejercicio 5.5 · Evaluar a mano"}
+Con la misma mochila y la misma aptitud, $F = \text{valor} - e$, evalúa I7 = 111110 e I8 = 110110. ¿Quedan por delante o por detrás de I5 = 001011, que vale 20?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+I7 lleva los objetos 1–5: valor $5 + 4 + 9 + 4 + 7 = 29$, peso $4 + 3 + 5 + 8 + 4 = 24$, exceso $e = 11$ y $F = 29 - 11 = 18$.
+
+I8 lleva los objetos 1, 2, 4 y 5: valor $5 + 4 + 4 + 7 = 20$, peso $4 + 3 + 8 + 4 = 19$, exceso $e = 6$ y $F = 20 - 6 = 14$.
+
+Los dos quedan por detrás de I5 (20). Con esta penalización, el problema es I1: se pasa solo una unidad de peso, pero vale mucho.
+</details>
+::::
+
+::: {.callout-note .en-app title="En la aplicación · initialization-and-evaluation-ga, «Del genotipo a la aptitud»"}
+[Explorar en initialization-and-evaluation-ga](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=pipeline&lang=es&enc=knapsack-bits){.explorar target="_blank"}
+
+- Avanza por las etapas **Decodificar**, **Objetivo y restricciones** y **Aptitud** y escribe cada eslabón del primer individuo antes de verlo.
+- Cambia a **Función 2D · cadena binaria**: ¿qué hace ahora el eslabón de decodificar? Compáralo con el [ejemplo 4.1](04-representacion.qmd#ejemplo-4-1).
+- Cambia a **Asignación · matriz binaria**: ¿cómo se mide ahí la violación?
+:::
+
+## 5.6 Minimizar un coste: del objetivo a la aptitud [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#objetivo-aptitud}
+
+En la asignación queremos el makespan más pequeño. ¿Puede servir el makespan, tal cual, como aptitud?
+
+Depende de cómo se elijan los padres. Una forma muy usada es la **ruleta**, que da a cada individuo una probabilidad de ser elegido proporcional a su aptitud,
+$$
+p_i = \frac{F_i}{\sum_j F_j},
+$$
+y que estudiarás en la [sección 6.3](06-seleccion.qmd#ruleta). Para ella, la aptitud tiene que cumplir dos condiciones: cuanto mayor, mejor, y nunca negativa. Un coste que se minimiza no cumple la primera. En investigación operativa, para pasar de minimizar a maximizar basta con cambiar el signo, $F = -f$, pero así las aptitudes salen negativas y la ruleta no se puede construir [@goldberg1989, pp. 75–76]. Hay varias transformaciones que conservan el orden y dan aptitudes no negativas:
+
+- $F = C - f$, con *C* el mayor coste de la población actual (o de las últimas generaciones, o un valor fijo). Es la que propone @goldberg1989 [p. 76]. El peor individuo recibe $F = 0$ y no sale nunca en la ruleta.
+- $F = 1/(1 + f)$, siempre positiva si $f \ge 0$.
+- La aptitud por **rango**: se ordenan los individuos del peor (puesto 1) al mejor (puesto *N*), y *F* es el puesto; si hay empates, la media de los puestos. Solo usa el orden, no los valores [@talbi2009, p. 206]. Es la idea de la selección por rango de @baker1985, que evita que un individuo extraordinario se lleve casi toda la ruleta y mantiene la presión cuando las aptitudes se parecen [@mitchell1998, apartado 5.4].
+
+Si el problema es de maximizar pero el objetivo puede ser negativo, como el valor de una mochila tras restarle una penalización, Goldberg propone sumar una constante, $F = u + C$, con *C* el valor absoluto del peor [@goldberg1989, p. 76].
+
+::: {.callout-tip .ejemplo #ejemplo-5-6 title="Ejemplo reproducible 5.6 · Seis asignaciones en la ruleta"}
+**Datos.** La población del [ejemplo 5.1](#ejemplo-5-1), con makespans $f$ = 21, 9, 8, 14, 14 y 14 (individuos I1 a I6).
+
+**Predice.** Con $F = C - f$, ¿qué probabilidad de salir en una tirada tiene el mejor, I3? ¿Y con el rango? ¿Qué le pasa al peor, I1?
+
+[Abrir: F = C − f](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=objective&lang=es&enc=assignment-int&n=5&m=3&N=6&s=1&ps=1&tr=cmax&step=5){.abrir target="_blank"}
+[Abrir: F = 1/(1 + f)](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=objective&lang=es&enc=assignment-int&n=5&m=3&N=6&s=1&ps=1&tr=inv&step=5){.abrir target="_blank"}
+[Abrir: rango](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=objective&lang=es&enc=assignment-int&n=5&m=3&N=6&s=1&ps=1&tr=rank&step=5){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+Con $C = 21$, las aptitudes $C - f$ son 0, 12, 13, 7, 7 y 7, que suman 46. Con el rango, los tres empatados con 14 ocupan los puestos 2, 3 y 4 y reciben la media, 3; la suma es 21.
+
+| Individuo | *f* | $C - f$ | *p* | $1/(1+f)$ | *p* | Rango | *p* |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| I1 | 21 | 0 | 0 % | 0,045 | 10,0 % | 1 | 4,8 % |
+| I2 | 9 | 12 | 26,1 % | 0,100 | 21,9 % | 5 | 23,8 % |
+| I3 | 8 | 13 | **28,3 %** | 0,111 | **24,3 %** | 6 | **28,6 %** |
+| I4, I5, I6 | 14 | 7 | 15,2 % | 0,067 | 14,6 % | 3 | 14,3 % |
+
+Las tres transformaciones ordenan igual, pero reparten la ruleta de forma distinta. Con $C - f$, el peor no sale nunca, aunque pueda llevar genes útiles. Con el rango, el mejor recibe $2/(N + 1) = 2/7 \approx 28{,}6$ % sea cual sea su ventaja sobre el segundo. En *N* = 6 tiradas, el mejor saldría de media 1,70 veces con $C - f$, 1,46 con $1/(1 + f)$ y 1,71 con el rango.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (F = C − f)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/initialization-and-evaluation-ga/#item=objective&lang=es&enc=assignment-int&n=5&m=3&N=6&s=1&ps=1&tr=cmax&step=5" loading="lazy" title="initialization-and-evaluation-ga: objetivo frente a aptitud, asignación"></iframe>
+</details>
+
+<!-- Comprobado el 2026-10-15: con tr=cmax, en el paso 2 de 9 la herramienta muestra «C = 21»; en el 5, «con ΣF = 46»; en el 6, «El mejor, I3 (f = 8), tiene p = 28,3 %: en N = 6 tiradas saldría 1,70 veces de media»; en el 7, «El peor, I1 (f = 21), tiene F = 0 y p = 0»; en el 8, «el mejor se lleva el 28,3 % de la ruleta con C − f, el 24,3 % con 1/(1 + f) y el 28,6 % con el rango». Con tr=rank, paso 6: «tiene p = 28,6 %: en N = 6 tiradas saldría 1,71 veces»; paso 7: «El peor, I1 (f = 21), tiene p = 4,8 %». Con tr=inv, paso 7: «El peor, I1 (f = 21), tiene p = 10,0 %. El mejor sale 2,4 veces más que él». Con tr=neg, paso 5: «la ruleta no se puede construir». Las demás probabilidades de la tabla se calcularon con el código (función table de objective.js). -->
+:::
+
+Las cuatro transformaciones conservan el orden. Una selección que solo compara individuos, como el torneo, elegiría exactamente igual con cualquiera de ellas; con la ruleta, en cambio, elegir la aptitud es elegir la **presión selectiva**: cuánto favorece la selección a los mejores. Demasiada lleva a la convergencia prematura; demasiado poca, a una búsqueda casi al azar. Volveremos a ello en los capítulos [6](06-seleccion.qmd#ruleta-deja-de-distinguir) y [10](10-experimentos.qmd#diversidad).
+
+:::: {.callout-note .ejercicio #ejercicio-5-6 title="Ejercicio 5.6 · Sumar una constante"}
+Supón que todos los makespans del [ejemplo 5.6](#ejemplo-5-6) llevaran sumados 100 unidades de tiempo de preparación, iguales en todas las soluciones: 121, 109, 108, 114, 114 y 114. El problema es el mismo. (a) Con $F = 1/(1 + f)$, ¿cuántas veces más probable es el mejor que el peor? Compáralo con el 2,4 del problema original. (b) ¿Cambian las probabilidades con $C - f$? ¿Y con el rango?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+(a) El cociente entre la aptitud del mejor y la del peor es $(1 + 121)/(1 + 108) = 122/109 \approx 1{,}12$, frente a $22/9 \approx 2{,}4$ antes. Sumar una constante, que no cambia el problema, casi anula la presión selectiva.
+
+(b) Con $C - f$, *C* pasa a ser 121 y las aptitudes siguen siendo 0, 12, 13, 7, 7 y 7: no cambia nada, porque solo cuentan las diferencias. Con el rango tampoco, porque el orden es el mismo. Es el mismo fenómeno que verás en la [sección 6.4](06-seleccion.qmd#ruleta-deja-de-distinguir) con la ruleta.
+</details>
+::::
+
+::: {.callout-note .en-app title="En la aplicación · initialization-and-evaluation-ga, «Objetivo frente a aptitud»"}
+[Explorar en initialization-and-evaluation-ga](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=objective&lang=es&enc=assignment-int){.explorar target="_blank"}
+
+- Cambia la **Aptitud a partir del coste f** a $F = -f$ y lee lo que pasa en la etapa **Ruleta**.
+- En la tabla **Las cuatro transformaciones con esta población**, compara la columna **Mejor / peor**. ¿Cuál reparte la ruleta de forma más igualada?
+- Cambia a **Viajante · permutación**. Las longitudes de los circuitos son números grandes y parecidos: ¿qué le ocurre a $1/(1 + f)$?
+:::
+
+## 5.7 Restricciones como penalización [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#penalizacion}
+
+En el [ejemplo 5.5](#ejemplo-5-5), un individuo que no cabe en la mochila ganó a todos los que caben. ¿Cuánto hay que castigar a un infactible?
+
+Cuando la representación produce soluciones que no cumplen las restricciones, hay varias estrategias: rechazarlas, repararlas, usar un decodificador o preservar la factibilidad con los operadores, como vimos en la [sección 4.10](04-representacion.qmd#infactibles); o dejarlas en la población con una aptitud peor. Esta última, la **penalización**, es la más usada [@talbi2009, p. 49]. El objetivo se amplía con un término que crece con la violación:
+$$
+F = \text{valor} - P \quad \text{(maximizar)}, \qquad F = f + P \quad \text{(minimizar)}.
+$$
+
+Hay dos decisiones. La primera es cómo medir la violación. Contar cuántas restricciones se incumplen no dice si la solución está cerca de ser factible; es mejor una **distancia a la factibilidad**, que da una idea de lo que costaría repararla [@talbi2009, p. 50]. En la mochila, el exceso de peso *e*. La segunda es la forma y el peso del término:
+
+- **Lineal**, $P = \lambda\, e$: cada unidad de exceso cuesta λ unidades de valor.
+- **Cuadrática**, $P = (\lambda\, e)^2$: un exceso pequeño casi no se castiga y uno grande, mucho.
+
+El **peso λ** es la decisión difícil. Si es demasiado pequeño, la búsqueda puede terminar en soluciones infactibles; si es demasiado grande, puede converger a soluciones factibles que no son óptimas [@talbi2009, p. 50], porque los infactibles quedan todos al fondo y se pierden los que están cerca del límite, que es donde suele estar el óptimo [@talbi2009, p. 49]. Para una población concreta se puede calcular el **peso crítico** λ\*: el menor peso con el que ningún infactible iguala ni supera al mejor factible. Si *B* es el valor del mejor factible, cada infactible con valor $z_i > B$ y exceso $e_i$ queda por detrás si $z_i - \lambda e_i < B$, así que, con la penalización lineal,
+$$
+\lambda^* = \max_i \frac{z_i - B}{e_i}.
+$$
+
+::: {.callout-tip .ejemplo #ejemplo-5-7 title="Ejemplo reproducible 5.7 · ¿Cuánto debe costar pasarse?"}
+**Datos.** La población del [ejemplo 5.3](#ejemplo-5-3). Los cuatro infactibles son:
+
+| Individuo | Valor $z_i$ | Peso | Exceso $e_i$ |
+|:---:|:---:|:---:|:---:|
+| I1 = 011011 | 24 | 14 | 1 |
+| I2 = 111101 | 26 | 22 | 9 |
+| I7 = 111110 | 29 | 24 | 11 |
+| I8 = 110110 | 20 | 19 | 6 |
+
+El mejor factible es I5 = 001011, con *B* = 20.
+
+**Predice.** Con la penalización lineal, ¿cuánto vale λ\*? ¿Quién es el mejor con λ = 1 y con λ = 5?
+
+[Abrir: λ = 1](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=penalty&lang=es&enc=knapsack-bits&n=6&N=8&s=21&ps=5&pt=linear&l=1&step=5){.abrir target="_blank"}
+[Abrir: λ = 5](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=penalty&lang=es&enc=knapsack-bits&n=6&N=8&s=21&ps=5&pt=linear&l=5&step=5){.abrir target="_blank"}
+[Abrir: el peso crítico](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=penalty&lang=es&enc=knapsack-bits&n=6&N=8&s=21&ps=5&pt=linear&l=1&step=6){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+| Individuo | $(z_i - B)/e_i$ |
+|:---:|:---:|
+| I1 | $(24 - 20)/1 = 4$ |
+| I2 | $(26 - 20)/9 \approx 0{,}67$ |
+| I7 | $(29 - 20)/11 \approx 0{,}82$ |
+| I8 | $(20 - 20)/6 = 0$ |
+
+El peso crítico es **λ\* = 4**, y lo fija I1, el que menos se pasa. Con λ = 1 gana I1, con $F = 24 - 1 = 23$. Con λ = 5, su aptitud baja a $24 - 5 = 19$ y gana **I5**, que cabe, con $F = 20$. Para dejar atrás a un infactible que casi cabe y vale mucho hace falta un peso grande; a los que se pasan mucho, cualquier peso los aparta.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (el peso crítico)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/initialization-and-evaluation-ga/#item=penalty&lang=es&enc=knapsack-bits&n=6&N=8&s=21&ps=5&pt=linear&l=1&step=6" loading="lazy" title="initialization-and-evaluation-ga: restricciones como penalización, mochila"></iframe>
+</details>
+
+<!-- Comprobado el 2026-10-15: con λ = 1, en el paso 1 de 8 la herramienta muestra «4 de los 8 individuos caben en la mochila (W = 13) […] 3 de ellos valen más que el mejor que cabe (20)»; en el 4, «Primer infactible, I1: valor 24 y exceso e = 1. F = 24 − 1 · 1 = 23»; en el 6, «El mejor por aptitud es I1, que no cabe en la mochila: F = 23 supera al mejor que cabe (20)»; en el 7, «Con λ por encima de λ* = 4,00, el mejor es factible. Ahora λ = 1: por debajo». Con λ = 5, paso 4: «F = 24 − 5 · 1 = 19»; paso 6: «El mejor por aptitud es I5, factible, con F = 20». Con la cuadrática y λ = 1, paso 7: «λ* = 2,00». En el paso 3 la herramienta escribe «Cada unidad de exceso cuesta 1 unidades de valor» (errata). Los λᵢ de la tabla se comprobaron con el código (criticalLambda de penalty.js). -->
+:::
+
+La figura 5.1 dibuja la aptitud de los ocho individuos según λ. Los factibles son líneas horizontales; los infactibles bajan, más deprisa cuanto mayor es su exceso.
+
+[]{#figura-5-1}
+
+![**Figura 5.1.** Aptitud de los ocho individuos del [ejemplo 5.7](#ejemplo-5-7) en función del peso λ, con la penalización lineal. Por debajo de λ\* = 4, el mejor es I1, que no cabe en la mochila; por encima, el mejor es I5, que sí cabe. Figura propia, generada con `figuras/05-inicializar-evaluar.py`, en el repositorio del libro.](figuras/05-penalizacion.svg){fig-alt="Gráfico de líneas. En el eje horizontal, el peso lambda de 0 a 5; en el vertical, la aptitud. Cuatro líneas horizontales son los individuos que caben: I5 a la altura 20, I4 a 11, I6 a 9 e I3 a 5. Cuatro líneas descendentes son los que no caben: I1 empieza en 24 y baja con pendiente 1, I2 empieza en 26 con pendiente 9, I7 empieza en 29 con pendiente 11 e I8 empieza en 20 con pendiente 6. I2, I7 e I8 caen por debajo de I5 antes de lambda igual a 1. La línea de I1 corta a la de I5 en lambda igual a 4, marcada con una línea vertical discontinua."}
+
+<details>
+<summary>Ver los datos de la figura</summary>
+
+| Individuo | ¿Cabe? | Aptitud con λ | λ = 0 | λ = 1 | λ = 4 | λ = 5 |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| I1 | No | $24 - \lambda$ | 24 | 23 | 20 | 19 |
+| I2 | No | $26 - 9\lambda$ | 26 | 17 | −10 | −19 |
+| I3 | Sí | 5 | 5 | 5 | 5 | 5 |
+| I4 | Sí | 11 | 11 | 11 | 11 | 11 |
+| I5 | Sí | 20 | 20 | 20 | 20 | 20 |
+| I6 | Sí | 9 | 9 | 9 | 9 | 9 |
+| I7 | No | $29 - 11\lambda$ | 29 | 18 | −15 | −26 |
+| I8 | No | $20 - 6\lambda$ | 20 | 14 | −4 | −10 |
+</details>
+
+λ\* depende de la población, que cambia en cada generación. Por eso existen penalizaciones **dinámicas**, cuyo peso cambia con el tiempo, y **adaptativas**, que lo ajustan según lo que va encontrando la búsqueda; por ejemplo, subiéndolo si aparecen muchos infactibles y bajándolo si aparecen muchos factibles [@talbi2009, pp. 50–51]. Además, con λ = 5 la aptitud de I2, I7 e I8 es negativa: si se quisiera usar la ruleta, habría que sumar una constante, como en la [sección 5.6](#objetivo-aptitud).
+
+:::: {.callout-note .ejercicio #ejercicio-5-7 title="Ejercicio 5.7 · La penalización cuadrática"}
+Con la misma población y la penalización cuadrática, $F = \text{valor} - (\lambda\, e)^2$: (a) ¿cuánto vale el peso crítico? (b) Con λ = 3, ¿cuál es la aptitud de I1 y quién es el mejor? (c) Con la penalización lineal y λ = 2, ¿quién es el mejor?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+(a) I1 queda por detrás de I5 si $24 - (\lambda \times 1)^2 < 20$, es decir, si $\lambda^2 > 4$: $\lambda^* = \sqrt{4}/1 = 2$. Para los demás infactibles, $\sqrt{z_i - B}/e_i$ vale $\sqrt{6}/9 \approx 0{,}27$, $\sqrt{9}/11 \approx 0{,}27$ y 0. El peso crítico es **2**.
+
+(b) $F = 24 - 3^2 = 15$. Los otros infactibles quedan muy abajo (por ejemplo, I2: $26 - 27^2 = -703$). El mejor es I5, con 20.
+
+(c) Con la lineal, λ = 2 está por debajo de λ\* = 4: I1 tiene $F = 24 - 2 = 22 > 20$ y sigue siendo el mejor.
+</details>
+::::
+
+::: {.callout-note .en-app title="En la aplicación · initialization-and-evaluation-ga, «Restricciones como penalización»"}
+[Explorar en initialization-and-evaluation-ga](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=penalty&lang=es&enc=knapsack-bits){.explorar target="_blank"}
+
+- Mueve el **Peso λ** y fíjate en la tabla **Penalización en esta población**: ¿en qué valor cambia el mejor individuo?
+- Cambia la **Penalización** a cuadrática y compara la forma de las líneas en la etapa **El peso λ**.
+- Cambia a **Asignación · matriz binaria**, donde se minimiza. Si la población no tiene ningún factible, ¿qué pasa con λ\*?
+:::
+
+## 5.8 El coste de evaluar [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#coste}
+
+Hasta ahora hemos evaluado una población. ¿Cuánto cuesta evaluar a lo largo de toda una ejecución?
+
+En muchos problemas, evaluar es lo que más tiempo consume de una metaheurística [@talbi2009, p. 47]. En el diseño aerodinámico, por ejemplo, evaluar una estructura es ejecutar una simulación de dinámica de fluidos que puede durar más de un día, incluso en un ordenador paralelo [@talbi2009, p. 47]. Seleccionar, cruzar y mutar cuesta muy poco a su lado.
+
+Un algoritmo genético generacional evalúa los *N* individuos de cada generación. Con *G* generaciones, contando la población inicial, son
+$$
+N\,(G + 1)
+$$
+evaluaciones. Ese número es el **presupuesto** del algoritmo. Para comparar dos algoritmos de forma justa se cuentan evaluaciones, no generaciones ni segundos de un ordenador concreto; por eso un número máximo de evaluaciones es uno de los criterios de parada habituales ([sección 9.6](09-reemplazo.qmd#cuando-parar)).
+
+Muchas de esas evaluaciones se repiten. La selección copia a los buenos individuos, y la mutación deja a muchos hijos iguales que su padre: con una probabilidad de mutación de $1/L$ por gen, un hijo sale sin ningún cambio con probabilidad $(1 - 1/L)^L$, que se acerca a $1/e \approx 0{,}37$ cuando *L* crece. Una **caché**, una tabla que guarda el cromosoma y su aptitud, evita volver a evaluar un individuo ya visto: antes de evaluar, se busca en la tabla.
+
+::: {.callout-tip .ejemplo #ejemplo-5-8 title="Ejemplo reproducible 5.8 · Lo que ahorra una caché"}
+**Datos.** La población del [ejemplo 5.3](#ejemplo-5-3) (*N* = 8) evoluciona *G* = 6 generaciones con un algoritmo mínimo: torneo binario y mutación de cada gen con probabilidad $1/L$ (1/6 con 6 objetos), sin cruce. Se cuentan las evaluaciones sin caché y con caché.
+
+**Predice.** ¿Cuál es el presupuesto? ¿Cuántas evaluaciones crees que ahorra la caché? Con el mismo presupuesto, ¿hasta qué generación se podría llegar con caché? ¿Ahorraría lo mismo con una mochila de 12 objetos?
+
+[Abrir: 6 objetos](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=cost&lang=es&enc=knapsack-bits&n=6&N=8&s=21&ps=5&G=6&step=8){.abrir target="_blank"}
+[Abrir: 12 objetos](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=cost&lang=es&enc=knapsack-bits&n=12&N=8&s=21&ps=5&G=6&step=8){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+El presupuesto es $8 \times (6 + 1) = 56$ evaluaciones. Con la caché, la mochila de 6 objetos solo necesita **25**: se ahorran 31 (el 55 %). Con el mismo presupuesto de 56 se llegaría hasta la generación 55, porque solo hay 64 cromosomas distintos y la caché nunca puede necesitar más de 64 evaluaciones. Es un caso extremo: con 12 objetos ($2^{12} = 4\,096$ cromosomas), la caché necesita 40 evaluaciones, ahorra 16 (el 29 %) y permite llegar a la generación 9.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (6 objetos)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/initialization-and-evaluation-ga/#item=cost&lang=es&enc=knapsack-bits&n=6&N=8&s=21&ps=5&G=6&step=8" loading="lazy" title="initialization-and-evaluation-ga: coste de evaluar, mochila"></iframe>
+</details>
+
+<!-- Comprobado el 2026-10-15: con 6 objetos, en el paso 1 de 11 la herramienta muestra «Con N = 8 y G = 6 generaciones, N · (G + 1) = 56 evaluaciones»; en el 3, «5 de los 8 individuos ya estaban en la caché y solo 3 se evalúan. Acumulado: 16 evaluaciones sin caché y 11 con caché»; en el 9, «En 6 generaciones, la caché ha evitado 31 de las 56 evaluaciones (55 %)»; en el 10, «la caché deja llegar hasta la generación 55, en lugar de la 6». Con 12 objetos, paso 9: «la caché ha evitado 16 de las 56 evaluaciones (29 %)»; paso 10: «hasta la generación 9». -->
+:::
+
+La caché tiene condiciones. Solo vale si la aptitud es **determinista**, es decir, si evaluar dos veces el mismo individuo da lo mismo; lo veremos en la [sección 5.13](#ruido). Ocupa memoria, una entrada por cada individuo distinto. Y la clave importa: en el viajante, los $2n$ cromosomas de un mismo circuito tienen la misma longitud, y una caché por circuito ahorraría más que una por cromosoma. Otras formas de ahorrar son evaluar en paralelo o sustituir parte de las evaluaciones por un modelo aproximado, que verás en las [ampliaciones](#ampliaciones).
+
+:::: {.callout-note .ejercicio #ejercicio-5-8 title="Ejercicio 5.8 · Presupuestos"}
+(a) Un algoritmo con *N* = 50 individuos se ejecuta durante 100 generaciones. ¿Cuántas evaluaciones hace? Si cada una es una simulación de un minuto, ¿cuánto tarda? (b) Con mutación de probabilidad $1/L$ por gen, ¿qué probabilidad tiene un hijo de salir sin ningún cambio si *L* = 6? ¿Y si *L* = 100?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+(a) $50 \times 101 = 5\,050$ evaluaciones, unos 5 050 minutos: más de 84 horas, casi tres días y medio sin parar.
+
+(b) Con *L* = 6, $(5/6)^6 \approx 0{,}33$. Con *L* = 100, $(0{,}99)^{100} \approx 0{,}37$. En los dos casos, alrededor de un tercio de los hijos que no se cruzan son copias exactas de su padre.
+</details>
+::::
+
+::: {.callout-note .en-app title="En la aplicación · initialization-and-evaluation-ga, «Coste de evaluar»"}
+[Explorar en initialization-and-evaluation-ga](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=cost&lang=es&enc=knapsack-bits){.explorar target="_blank"}
+
+- Avanza generación a generación y anota cuántos individuos ya estaban en la caché. ¿Aumentan o disminuyen?
+- Cambia las **Generaciones (G)** y el **Problema y codificación**. ¿En qué problema ahorra menos la caché?
+:::
+
+## 5.9 Cubrir mejor la caja: cuasialeatoria e hipercubo latino [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#cuasialeatoria}
+
+Una población uniforme reparte los individuos por igual *en promedio*. ¿Lo hace también en cada población concreta, cuando solo hay ocho?
+
+No. Con pocos individuos, el azar deja huecos grandes en unas zonas y amontona individuos en otras. Si cada eje de la caja se divide en *N* franjas iguales, un punto al azar cae fuera de una franja dada con probabilidad $1 - 1/N$, y *N* puntos la dejan vacía con probabilidad $(1 - 1/N)^N$. Con *N* = 8, eso es 0,34: en promedio, un tercio de las franjas de cada eje quedan vacías. Cuando *N* crece, esa probabilidad se acerca a $1/e \approx 0{,}37$.
+
+Hay dos familias de métodos que reparten mejor la población [@talbi2009, pp. 194–196]:
+
+- Las **secuencias cuasialeatorias**, o de baja discrepancia, no solo buscan que los números sean independientes, sino también que se dispersen: cada punto nuevo cae en los huecos que dejan los anteriores. En general, dan más diversidad que los números pseudoaleatorios [@talbi2009, p. 195]. La de @halton1960 usa, en cada coordenada, el **inverso radical** de *i* en una base prima distinta (2 y 3 en el plano): se escribe *i* en esa base y se dan la vuelta a sus cifras detrás de la coma. En base 2, $i = 1, 2, 3, 4$ dan 0,5; 0,25; 0,75 y 0,125: primero la mitad, luego los cuartos que faltan, luego los octavos. La de @sobol1967 usa la base 2 en todas las coordenadas, combinadas de otra forma. Las dos son deterministas: dan siempre la misma población.
+- El **muestreo por hipercubo latino** [@mckay1979] sí es aleatorio. Cada eje se divide en *N* estratos iguales, y dos permutaciones al azar deciden en qué estrato cae cada individuo en cada eje; dentro del estrato, la posición se sortea. Así, cada estrato de cada eje recibe exactamente un individuo, como *N* torres en un tablero de $N \times N$ que no se amenazan. Talbi lo presenta como un ejemplo de **diversificación en paralelo**, porque genera todas las soluciones a la vez y de forma independiente, sin evaluar la función objetivo [@talbi2009, pp. 195–196].
+
+::: {.callout-tip .ejemplo #ejemplo-5-9 title="Ejemplo reproducible 5.9 · Halton a mano"}
+**Datos.** La función de Himmelblau en la caja $[-5, 5]^2$ y *N* = 8 individuos de la secuencia de Halton, con $x_j = -5 + 10\,u_j$, redondeado a centésimas. La herramienta los compara con la población uniforme de 8 individuos de la misma semilla.
+
+**Predice.** ¿Qué puntos dan $i = 1, 2, 3$ y 4? ¿Cuántas de las 8 franjas de cada eje ocupa Halton? ¿Y la población uniforme?
+
+[Abrir: el segundo punto](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=quasi&lang=es&enc=function-real&fn=himmelblau&N=8&s=1&ps=1&m=halton&step=5){.abrir target="_blank"}
+[Abrir: las franjas ocupadas](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=quasi&lang=es&enc=function-real&fn=himmelblau&N=8&s=1&ps=1&m=halton&step=14){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+| *i* | En base 2 | $u_1$ | En base 3 | $u_2$ | Punto |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| 1 | 1 | 0,1₂ = 0,5 | 1 | 0,1₃ = 1/3 | (0,00; −1,67) |
+| 2 | 10 | 0,01₂ = 0,25 | 2 | 0,2₃ = 2/3 | (−2,50; 1,67) |
+| 3 | 11 | 0,11₂ = 0,75 | 10 | 0,01₃ = 1/9 | (2,50; −3,89) |
+| 4 | 100 | 0,001₂ = 0,125 | 11 | 0,11₃ = 4/9 | (−3,75; −0,56) |
+
+Los 8 puntos de Halton ocupan **las 8 franjas** de cada eje; la población uniforme, solo 4 en $x_1$ y 6 en $x_2$. El mayor hueco, la distancia desde el punto de la caja más alejado de todos los individuos al más cercano, es 0,31 diagonales con Halton y 0,43 con la uniforme. La distancia mínima entre dos individuos sube de 0,05 a 0,12, pero la media apenas cambia (0,38 frente a 0,43): lo que mejora es el reparto, no la separación típica.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (las franjas ocupadas)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/initialization-and-evaluation-ga/#item=quasi&lang=es&enc=function-real&fn=himmelblau&N=8&s=1&ps=1&m=halton&step=14" loading="lazy" title="initialization-and-evaluation-ga: cuasialeatoria e hipercubo latino, función"></iframe>
+</details>
+
+<!-- Comprobado el 2026-10-15: en los pasos 3–5 de 17 la herramienta muestra «x₁ del individuo 1: i = 1 se escribe 1 en base 2 […] u = 0,1 en base 2 = 1/2 ≈ 0,500. x₁ = -5 + 0,500 · 10 = 0,00», «x₂ del individuo 1: […] u = 0,1 en base 3 = 1/3 ≈ 0,333. x₂ = -5 + 0,333 · 10 = -1,67»; en los pasos 6–8, «Individuo 2: u = (0,250; 0,667), el punto (-2,50; 1,67)», «Individuo 3: u = (0,750; 0,111), el punto (2,50; -3,89)», «Individuo 4: u = (0,125; 0,444), el punto (-3,75; -0,56)»; en el 14, «Mayor hueco: […] 0,31 […] con Halton y a 0,43 en la población uniforme»; en el 15, «Halton ocupa 8 en x₁ y 8 en x₂; la población uniforme, 4 y 6»; en el 16, «la mínima entre dos individuos es 0,12 con Halton frente a 0,05 en la uniforme, y la media, 0,38 frente a 0,43». La herramienta escribe el signo menos con un guion. -->
+:::
+
+La figura 5.2 compara las tres poblaciones de ocho individuos.
+
+[]{#figura-5-2}
+
+![**Figura 5.2.** Tres poblaciones de 8 individuos en la caja $[-5, 5]^2$, con cada eje dividido en 8 franjas: uniforme (a), secuencia de Halton (b) e hipercubo latino (c). La uniforme deja vacías 4 franjas verticales y 2 horizontales; Halton y el hipercubo latino ocupan todas. Figura propia, generada con `figuras/05-inicializar-evaluar.py`, en el repositorio del libro, con los puntos que da initialization-and-evaluation-ga con la semilla de población 1.](figuras/05-cobertura.svg){fig-alt="Tres cuadrados iguales, cada uno con una rejilla de 8 por 8 franjas y 8 puntos. En el primero, población uniforme, los puntos se amontonan junto a los bordes izquierdo y derecho: quedan sin ningún punto cuatro columnas, casi todas en el centro, y dos filas. En el segundo, secuencia de Halton, los puntos se reparten con regularidad y hay uno en cada columna y en cada fila. En el tercero, hipercubo latino, también hay un punto en cada columna y en cada fila, pero con una disposición menos regular, y varios puntos siguen la diagonal de abajo a la izquierda."}
+
+<details>
+<summary>Ver los datos de la figura</summary>
+
+| Individuo | Uniforme | Halton | Hipercubo latino |
+|:---:|:---:|:---:|:---:|
+| 1 | (−4,13; −2,23) | (0,00; −1,67) | (3,85; 0,50) |
+| 2 | (−0,46; −2,74) | (−2,50; 1,67) | (1,40; −1,17) |
+| 3 | (4,80; 1,37) | (2,50; −3,89) | (1,16; 1,67) |
+| 4 | (4,68; −4,79) | (−3,75; −0,56) | (−1,07; 2,97) |
+| 5 | (−3,00; −0,89) | (1,25; 2,78) | (3,09; 4,15) |
+| 6 | (−4,74; −1,39) | (−1,25; −2,78) | (−1,70; −1,29) |
+| 7 | (3,83; 3,14) | (3,75; 0,56) | (−3,57; −3,48) |
+| 8 | (−4,18; −0,98) | (−4,37; 3,89) | (−4,11; −4,74) |
+</details>
+
+En un algoritmo genético, la ventaja es modesta y se nota sobre todo con poblaciones pequeñas y problemas continuos de pocas variables. El hipercubo latino no garantiza que el plano quede bien cubierto: los ocho puntos podrían caer en la diagonal y seguirían ocupando todas las franjas. Y Halton y Sobol, tal como están, dan siempre la misma población, así que para hacer varias ejecuciones independientes ([sección 10.3](10-experimentos.qmd#replicas)) hay que aleatorizarlos.
+
+:::: {.callout-note .ejercicio #ejercicio-5-9 title="Ejercicio 5.9 · Más puntos de Halton"}
+Calcula $u_1$ y $u_2$ de la secuencia de Halton para $i = 5$, 6 y 7, y los puntos correspondientes en $[-5, 5]^2$.
+
+<details>
+<summary>**Ver la solución**</summary>
+
+| *i* | En base 2 | $u_1$ | En base 3 | $u_2$ | Punto |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| 5 | 101 | 0,101₂ = 5/8 = 0,625 | 12 | 0,21₃ = 2/3 + 1/9 = 7/9 | (1,25; 2,78) |
+| 6 | 110 | 0,011₂ = 3/8 = 0,375 | 20 | 0,02₃ = 2/9 | (−1,25; −2,78) |
+| 7 | 111 | 0,111₂ = 7/8 = 0,875 | 21 | 0,12₃ = 1/3 + 2/9 = 5/9 | (3,75; 0,56) |
+
+Por ejemplo, para $i = 5$: $x_1 = -5 + 0{,}625 \times 10 = 1{,}25$ y $x_2 = -5 + 0{,}778 \times 10 \approx 2{,}78$. Son los puntos de la tabla de la figura 5.2.
+</details>
+::::
+
+::: {.callout-note .en-app title="En la aplicación · initialization-and-evaluation-ga, «Cuasialeatoria e hipercubo latino»"}
+[Explorar en initialization-and-evaluation-ga](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=quasi&lang=es&enc=function-real){.explorar target="_blank"}
+
+- Cambia el **Método** a **Secuencia de Sobol** y a **Hipercubo latino**, y compara las franjas ocupadas y el mayor hueco.
+- Con Halton, pulsa **Sortear la población**: ¿cambia algo? ¿Y con el hipercubo latino?
+- Pulsa **Comparar estrategias**: la herramienta genera 1 000 poblaciones con cada estrategia. ¿Cuál ocupa más franjas de media? ¿Y cuál da el mejor individuo inicial?
+:::
+
+## 5.10 Diversificación secuencial [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#inhibicion}
+
+En la población del [ejemplo 5.1](#ejemplo-5-1), los individuos I4 = (2, 1, 1, 3, 1) e I6 = (3, 1, 1, 3, 1) solo se diferencian en un gen. ¿Se puede impedir que entren dos individuos tan parecidos?
+
+En una **diversificación secuencial**, las soluciones se generan una tras otra de forma que la diversidad se optimice [@talbi2009, p. 195]. La más sencilla es la **inhibición secuencial simple** (*simple sequential inhibition*, SSI), que viene de la estadística: se genera un candidato al azar, con la regla uniforme, y solo entra en la población si está a una distancia de al menos δ de todos los individuos que ya están; si no, se descarta y se genera otro. Se repite hasta completar la población [@talbi2009, p. 195].
+
+Así, la población final tiene, por construcción, una distancia mínima entre individuos de δ o más. El inconveniente es el coste, relativamente alto, y que no se sabe de antemano cuántos candidatos harán falta [@talbi2009, p. 195]. Si δ es demasiado grande para el tamaño del espacio y de la población, puede que no quepan *N* individuos tan separados y el proceso no termine; la herramienta, tras 50*N* candidatos, acepta los siguientes sin comprobar la distancia. En la práctica, δ se elige algo por debajo de la distancia media de una población uniforme. A diferencia de las secuencias cuasialeatorias y del hipercubo latino, solo necesita una distancia, así que vale para cualquier representación.
+
+::: {.callout-tip .ejemplo #ejemplo-5-10 title="Ejemplo reproducible 5.10 · Seis asignaciones separadas"}
+**Datos.** La asignación de la [sección 5.1](#uniforme), *N* = 6 y δ = 0,6: dos individuos tienen que diferenciarse en al menos 3 de sus 5 genes. Los candidatos salen en el mismo orden que la población del [ejemplo 5.1](#ejemplo-5-1): (1, 1, 2, 1, 3), (2, 3, 1, 1, 2), (1, 2, 3, 3, 1), (2, 1, 1, 3, 1), (1, 2, 2, 1, 2), (3, 1, 1, 3, 1)…
+
+**Predice.** ¿Cuáles de esos seis candidatos entran en la población? ¿Cuántos candidatos crees que harán falta en total?
+
+[Abrir: el quinto candidato](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=ssi&lang=es&enc=assignment-int&n=5&m=3&N=6&s=1&ps=1&d=0.6&step=5){.abrir target="_blank"}
+[Abrir: el coste](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=ssi&lang=es&enc=assignment-int&n=5&m=3&N=6&s=1&ps=1&d=0.6&step=11){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+Entran los cuatro primeros: el más cercano a cada uno de los ya aceptados está a 0,80, 0,80 y 0,60. El quinto, (1, 2, 2, 1, 2), está a **0,40** de I1 (se diferencian en las tareas 2 y 5) y se descarta. El sexto, (3, 1, 1, 3, 1), está a **0,20** del cuarto y también se descarta. Hacen falta **11 candidatos** para reunir 6 individuos: se descartan 5. La distancia mínima de la población pasa de 0,20 en la uniforme a 0,60, y la media, de 0,71 a 0,76.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (el coste)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/initialization-and-evaluation-ga/#item=ssi&lang=es&enc=assignment-int&n=5&m=3&N=6&s=1&ps=1&d=0.6&step=11" loading="lazy" title="initialization-and-evaluation-ga: diversificación secuencial, asignación"></iframe>
+</details>
+
+<!-- Comprobado el 2026-10-15: en los pasos 3–5 de 13 la herramienta muestra «Candidato 2: (2, 3, 1, 1, 2). El individuo más cercano es I1, a 0,80 ≥ δ = 0,60: entra como individuo 2», «Candidato 3 […] I1, a 0,80», «Candidato 4: (2, 1, 1, 3, 1). El individuo más cercano es I2, a 0,60 ≥ δ = 0,60»; en el 6, «Candidato 5: (1, 2, 2, 1, 2). Está a 0,40 de I1, menos que δ = 0,60: se descarta»; en el 7, «Candidato 6: (3, 1, 1, 3, 1). Está a 0,20 de I4»; en el 10, «tras generar 11 candidatos y descartar 5»; en el 11, «la distancia mínima entre dos individuos es 0,60 […] frente a 0,20 en la población uniforme […]; la media, 0,76 frente a 0,71»; en el 12, «ha generado 11 candidatos (1,8 por individuo) y ha calculado 37 distancias». -->
+:::
+
+La inhibición secuencial no mira la calidad de los individuos ni reparte la población de forma pareja por todo el espacio: solo impide que dos individuos estén demasiado cerca.
+
+:::: {.callout-note .ejercicio #ejercicio-5-10 title="Ejercicio 5.10 · ¿Entra o no entra?"}
+(a) Calcula la distancia del quinto candidato del [ejemplo 5.10](#ejemplo-5-10), (1, 2, 2, 1, 2), a cada uno de los cuatro individuos aceptados. (b) ¿Habría entrado con δ = 0,4? (c) ¿Con qué valores de δ la población sería exactamente la uniforme del [ejemplo 5.1](#ejemplo-5-1)?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+(a) Frente a I1 = (1, 1, 2, 1, 3) cambian las tareas 2 y 5: $2/5 = 0{,}4$. Frente a I2 = (2, 3, 1, 1, 2) cambian las tareas 1, 2 y 3: 0,6. Frente a I3 = (1, 2, 3, 3, 1) cambian las tareas 3, 4 y 5: 0,6. Frente a I4 = (2, 1, 1, 3, 1), las cinco: 1. La más cercana es 0,4.
+
+(b) Sí: 0,4 ≥ 0,4.
+
+(c) La población uniforme es la de los seis primeros candidatos, y su distancia mínima es 0,20 (entre el cuarto y el sexto). Con cualquier δ de 0,20 o menos, los seis primeros candidatos entran y la población es la uniforme, porque la regla es «al menos δ». Con δ = 0, la inhibición secuencial es la inicialización uniforme.
+</details>
+::::
+
+## 5.11 Inicialización factible [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#factible}
+
+Si con algunas representaciones casi todos los cromosomas al azar son infactibles, ¿se puede generar directamente una población que cumpla las restricciones?
+
+Sí, si se cambia lo que se sortea. En la **mochila**, se baraja el orden de los objetos con Fisher–Yates y se recorren en ese orden, metiendo cada uno si cabe en lo que queda de capacidad. El resultado siempre es factible y, además, está lleno: no cabe ningún objeto más. @chu1998 usaron una inicialización de este tipo en su algoritmo genético para la mochila multidimensional. En la **matriz binaria** de la asignación basta con sortear la máquina de cada tarea, $j = 1 + \lfloor u\,m \rfloor$, y poner un único 1 en esa columna de la fila: es la inicialización uniforme del vector de enteros, escrita como matriz. La factibilidad de la población inicial depende tanto de la representación como del método.
+
+Inicializar de forma factible no es gratis. La mochila llena sesga la población: nunca salen soluciones con pocos objetos, que son factibles y pueden tener genes valiosos, y los individuos se parecen más entre sí. Y en problemas con restricciones complicadas, encontrar una sola solución factible puede ser tan difícil como resolver el problema; entonces es más práctico tratar las restricciones al evaluar, con penalizaciones ([sección 5.7](#penalizacion)), o con reparaciones y decodificadores ([sección 4.10](04-representacion.qmd#infactibles)). Rechazar los infactibles solo es razonable si son una parte muy pequeña del espacio de búsqueda [@talbi2009, p. 49].
+
+::: {.callout-tip .ejemplo #ejemplo-5-11 title="Ejemplo reproducible 5.11 · Mochilas llenas"}
+**Datos.** La mochila de la [sección 5.3](#diversidad) (*W* = 13). Para el primer individuo, el orden barajado de los objetos es 2, 4, 3, 5, 1, 6.
+
+**Predice.** ¿Qué objetos entran? ¿Cuánto pesa y cuánto vale la mochila? ¿Está llena?
+
+[Abrir: el primer individuo](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=feasible&lang=es&enc=knapsack-bits&n=6&N=8&s=21&ps=5&step=9){.abrir target="_blank"}
+[Abrir: la calidad de la población](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=feasible&lang=es&enc=knapsack-bits&n=6&N=8&s=21&ps=5&step=20){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+| Objeto | Peso | Peso acumulado | ¿Entra? |
+|:---:|:---:|:---:|:---:|
+| 2 | 3 | 3 | Sí |
+| 4 | 8 | 11 | Sí |
+| 3 | 5 | 16 | No |
+| 5 | 4 | 15 | No |
+| 1 | 4 | 15 | No |
+| 6 | 2 | 13 | Sí |
+
+El individuo es **0 1 0 1 0 1**: pesa 13, justo la capacidad, y vale 12. Está lleno, pero es malo, porque el objeto 4 pesa mucho y vale poco. En la población de 8, todos caben (frente a 4 de 8 en la uniforme con la misma semilla) y la media de los valores sube de 11,3 a 14,4, pero hay un individuo repetido: 7 distintos frente a 8.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (el primer individuo)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/initialization-and-evaluation-ga/#item=feasible&lang=es&enc=knapsack-bits&n=6&N=8&s=21&ps=5&step=9" loading="lazy" title="initialization-and-evaluation-ga: inicialización factible, mochila"></iframe>
+</details>
+
+<!-- Comprobado el 2026-10-15: en el paso 3 de 22 la herramienta muestra «el orden barajado de los objetos es 2, 4, 3, 5, 1, 6»; en los pasos 4–9, «Objeto 2 (peso 3): 0 + 3 = 3 ≤ 13, cabe» … «Objeto 6 (peso 2): 11 + 2 = 13 ≤ 13, cabe»; en el 10, «Primer individuo completo: 010101. Pesa 13 ≤ 13: cabe, y vale 12»; en el 19, «8 de 8 con la inicialización factible, frente a 4 de 8 en la población uniforme»; en el 20, «la distancia media es 0,55 frente a 0,55 en la uniforme, y hay 7 individuos distintos frente a 8»; en el 21, «el mejor vale 20 y la media de los factibles 14,4, frente a 20 y 11,3 en la uniforme; el óptimo es 21». -->
+:::
+
+La pantalla «Comparar estrategias» de la herramienta repite cada estrategia en 1 000 poblaciones de la misma mochila, con *N* = 8. De media, la inicialización factible da un 100 % de factibles (frente al 53 % de la uniforme) y un mejor individuo inicial de 20,4 (frente a 17,3), pero solo el 68 % de individuos distintos (frente al 95 %). Sembrar media población con la solución voraz da un 61 % de distintos y una distancia mínima de 0. La inhibición secuencial es la única que sube la diversidad, a cambio de generar 1,6 veces más candidatos.
+
+<!-- Comprobado el 2026-10-15: en #cmp=init&lang=es&enc=knapsack-bits&n=6&N=8&s=21 la tabla muestra, para «Aleatoria uniforme», distancia media 0,50, mínima 0,11, distintos 95 %, factibles 53 %, mejor objetivo 17,3 y coste 1,0×; «Sembrada con media población (K = 4)», 0,39, 0,00, 61 %, 76 %, 20,1; «Inhibición secuencial (δ = 0,30)», 0,54, 0,33, 100 %, 53 %, 17,3, 1,6×; «Factible», 0,49, 0,00, 68 %, 100 %, 20,4, 1,0×. Nota: «1000 réplicas con N = 8 individuos. Óptimo de la instancia: 21». -->
+
+:::: {.callout-note .ejercicio #ejercicio-5-11 title="Ejercicio 5.11 · El orden decide"}
+Con la misma mochila: (a) ¿qué individuo sale si el orden barajado es 3, 5, 1, 2, 6, 4? (b) ¿Puede salir el individuo 1 0 0 0 0 0 con esta inicialización? (c) ¿Y la solución voraz, 0 0 1 0 1 1?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+(a) Entran el 3 (peso 5), el 5 (9) y el 1 (13); el 2, el 6 y el 4 ya no caben. Sale **1 0 1 0 1 0**, el óptimo.
+
+(b) No: con solo el objeto 1 (peso 4) todavía caben otros, y el procedimiento los habría metido. Solo salen mochilas llenas.
+
+(c) Sí. Con los objetos 3, 5 y 6 la mochila pesa 11 y le quedan 2 unidades libres, en las que no cabe ningún otro objeto (el más ligero que falta pesa 3): está llena. Sale, por ejemplo, con el orden 6, 3, 5, 1, 2, 4.
+</details>
+::::
+
+::: {.callout-note .en-app title="En la aplicación · initialization-and-evaluation-ga, «Inicialización factible» y «Comparar estrategias»"}
+[Explorar en initialization-and-evaluation-ga](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=feasible&lang=es&enc=knapsack-bits){.explorar target="_blank"}
+
+- Cambia a **Asignación · matriz binaria** y compara la factibilidad con la de la inicialización uniforme.
+- Abre [Comparar estrategias con esta mochila](https://josemagalan.github.io/initialization-and-evaluation-ga/#cmp=init&lang=es&enc=knapsack-bits&n=6&N=8&s=21){target="_blank"} y busca la estrategia con más individuos distintos y la que da el mejor individuo inicial. ¿Coinciden?
+:::
+
+## 5.12 Paisaje de aptitud [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#paisaje}
+
+Hay problemas en los que unos pocos cambios llevan siempre al óptimo y otros en los que cualquier búsqueda se queda atascada. ¿De qué depende?
+
+Si se imagina cada cromosoma a una altura igual a su aptitud, aparecen valles, picos, mesetas y acantilados: es el **paisaje de aptitud**. La idea viene de la biología: la usó Wright en 1932 para estudiar la evolución de las especies [@talbi2009, p. 104]. Lo definen tres cosas: la representación, la **vecindad**, que dice qué cromosomas se alcanzan desde uno con un cambio pequeño, y la función objetivo [@talbi2009, p. 104]. El paisaje no es, por tanto, una propiedad del problema solo: con otra representación u otra vecindad, el mismo problema tiene otro paisaje.
+
+Un **óptimo local** es un cromosoma sin ningún vecino mejor. Una búsqueda local que pasa siempre al mejor vecino acaba en el óptimo local de la **cuenca** en la que empezó. Si hay muchos óptimos locales (un paisaje **rugoso**), cada punto de partida acaba en uno distinto y casi nunca en el óptimo global. Un algoritmo genético se mueve por el paisaje con una población entera, y el cruce puede saltar entre cuencas, pero la forma del paisaje sigue decidiendo lo difícil que es el problema; por eso una población inicial diversa empieza en muchas cuencas a la vez.
+
+Para resumir la forma del paisaje sin dibujarlo, @jones1995 propusieron la **correlación aptitud-distancia** (FDC): la correlación entre la aptitud de muchos cromosomas y su distancia al óptimo global más cercano [@talbi2009, pp. 114–115]. En un problema de minimizar, una correlación positiva y grande indica un problema relativamente fácil (al acercarse al óptimo, la aptitud mejora); una negativa y grande, un problema engañoso; y una cercana a cero, que la aptitud no orienta. Su gran limitación es que hay que conocer el óptimo, lo que no es realista en muchos problemas [@talbi2009, p. 115].
+
+::: {.callout-tip .ejemplo #ejemplo-5-12 title="Ejemplo reproducible 5.12 · Subir por los vecinos"}
+**Datos.** La asignación de la [sección 5.1](#uniforme) y su vecindad a un gen: dos asignaciones son vecinas si se pasa de una a otra moviendo una tarea a otra máquina. La búsqueda local parte de I1 = (1, 1, 2, 1, 3), con makespan 21, y en cada paso pasa al mejor vecino.
+
+**Predice.** ¿Cuántos vecinos tiene cada asignación? ¿Cuántos son mejores que I1? ¿Llegará la búsqueda local al óptimo, 5?
+
+[Abrir: los vecinos de I1](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=landscape&lang=es&enc=assignment-int&n=5&m=3&N=6&s=1&ps=1&step=1){.abrir target="_blank"}
+[Abrir: la búsqueda local](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=landscape&lang=es&enc=assignment-int&n=5&m=3&N=6&s=1&ps=1&step=2){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+Cada tarea puede ir a otras dos máquinas: $5 \times 2 = 10$ vecinos. De los vecinos de I1, **6 son mejores**; el mejor pasa la tarea 2 a la máquina 2 y baja el makespan a 12. La búsqueda local sigue así:
+
+| Paso | Asignación | Movimiento | Makespan |
+|:---:|:---:|:---:|:---:|
+| 0 | (1, 1, 2, 1, 3) | | 21 |
+| 1 | (1, 2, 2, 1, 3) | tarea 2 a la máquina 2 | 12 |
+| 2 | (1, 2, 2, 3, 3) | tarea 4 a la máquina 3 | 11 |
+| 3 | (1, 2, 1, 3, 3) | tarea 3 a la máquina 1 | **7** |
+
+Se detiene en un **óptimo local**, con makespan 7, sin llegar al óptimo, 5. Desde los seis individuos de la población, las búsquedas acaban en 5 óptimos locales distintos y solo una llega al óptimo. En todo el espacio, de 243 asignaciones, hay 25 óptimos locales, y solo uno es el global. La correlación aptitud-distancia, sobre 500 asignaciones al azar, es 0,39: la aptitud orienta algo, pero no mucho.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (la búsqueda local)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/initialization-and-evaluation-ga/#item=landscape&lang=es&enc=assignment-int&n=5&m=3&N=6&s=1&ps=1&step=2" loading="lazy" title="initialization-and-evaluation-ga: paisaje de aptitud, asignación"></iframe>
+</details>
+
+<!-- Comprobado el 2026-10-15: en el paso 1 de 6 la herramienta muestra «cada uno tiene 10 vecinos»; en el 2, «Vecinos del individuo 1, (1, 1, 2, 1, 3) (F = 21). De sus 10 vecinos, mejores que él: 6. El mejor es el de T2→M2, con F = 12»; en el 3, «pasa 3 veces al mejor vecino, de F = 21 a F = 7, y se queda en un óptimo local […] el óptimo del problema es 5»; en el 4, «acaban en 5 óptimos locales distintos y solo 1 de los 6 llegan a un óptimo del problema»; en el 5, «r = 0,39»; en el 6, «El espacio entero tiene 243 cromosomas y 25 óptimos locales, de los que 1 tienen la mejor aptitud». Los pasos intermedios de la búsqueda (12, 11 y 7) se comprobaron con el código (localSearch de landscape.js). -->
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-5-12 title="Ejercicio 5.12 · ¿Es un óptimo local?"}
+Comprueba que la asignación (1, 2, 1, 3, 3), donde termina la búsqueda del [ejemplo 5.12](#ejemplo-5-12), es un óptimo local. (a) Calcula sus cargas. (b) ¿Qué tarea habría que mover para bajar de 7? ¿Basta con mover una? (c) ¿Cuántos de sus vecinos tienen también makespan 7?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+(a) La máquina 1 hace las tareas 1 y 3: $5 + 2 = 7$. La 2 hace la tarea 2: 2. La 3 hace las tareas 4 y 5: $1 + 5 = 6$. El makespan es 7.
+
+(b) Para bajar de 7 hay que aliviar la máquina 1, sacando la tarea 1 o la 3. Si la tarea 1 va a la máquina 2, esta pasa a $2 + 5 = 7$; si va a la 3, a $6 + 8 = 14$. Si la tarea 3 va a la máquina 2, esta pasa a $2 + 9 = 11$; si va a la 3, a $6 + 1 = 7$. Ningún movimiento de una sola tarea baja de 7, así que es un óptimo local. Para llegar al óptimo, (1, 2, 3, 3, 2), hay que mover dos tareas: la 3 a la máquina 3 y la 5 a la 2.
+
+(c) Cuatro vecinos tienen también makespan 7: la tarea 1 a la máquina 2, la 3 a la 3, la 4 a la 2 y la 5 a la 2. Es una **meseta**: la búsqueda local que solo acepta vecinos mejores se para en ella.
+</details>
+::::
+
+::: {.callout-note .en-app title="En la aplicación · initialization-and-evaluation-ga, «Paisaje de aptitud»"}
+[Explorar en initialization-and-evaluation-ga](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=landscape&lang=es&enc=function-real&fn=himmelblau){.explorar target="_blank"}
+
+- Con la función de Himmelblau, mira cuántas búsquedas locales llegan a un mínimo. Cambia la **Función** a Rastrigin y repite. ¿Cuál de los dos paisajes es rugoso?
+- Cambia a **Función 2D · cadena binaria**: con la misma función, ¿cuántos óptimos locales aparecen ahora? Recuerda los saltos de la [sección 4.8](04-representacion.qmd#gray).
+:::
+
+## 5.13 Aptitud con ruido [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#ruido}
+
+¿Qué pasa si evaluar dos veces el mismo individuo no da el mismo número?
+
+En muchos problemas reales, los datos tienen **ruido**. Ocurre cuando la aptitud sale de un simulador estocástico o de un sensor, o cuando los datos son inciertos, como los tiempos de proceso variables en una planificación o las demandas aleatorias en una ruta [@talbi2009, p. 15]. Se puede escribir como
+$$
+\tilde F(x) = f(x) + z,
+$$
+con *z* un ruido que se suele suponer normal, de media 0 y desviación σ. En la práctica, se aproxima con la media de varias evaluaciones [@talbi2009, p. 15].
+
+Con ruido, la selección compara números que no son la aptitud real. Si la diferencia real Δ entre dos individuos es pequeña frente a σ, su orden aparente es casi una moneda al aire. La media de *R* evaluaciones tiene el mismo valor esperado y una desviación $\sigma/\sqrt{R}$, así que la diferencia entre las medias de dos individuos tiene desviación $\sigma\sqrt{2/R}$ y los dos se ordenan mal con probabilidad
+$$
+\Phi\!\left(-\frac{\Delta\sqrt{R}}{\sigma\sqrt{2}}\right),
+$$
+donde Φ es la función de distribución de la normal estándar. Reevaluar cuesta: *N* individuos con *R* evaluaciones cada uno son $N \times R$ evaluaciones por generación, y para reducir el error a la mitad hacen falta cuatro veces más.
+
+::: {.callout-tip .ejemplo #ejemplo-5-13 title="Ejemplo reproducible 5.13 · Dos individuos que se confunden"}
+**Datos.** Una población uniforme de 8 puntos de la función de Himmelblau, que se minimiza. Los dos mejores son I1, con aptitud real 52,555, e I7, con 91,112: una diferencia Δ ≈ 38,56. Cada evaluación suma un ruido normal de σ = 30. Se compara una evaluación por individuo con la media de *R* = 5.
+
+**Predice.** ¿Con qué probabilidad quedan mal ordenados I1 e I7 con una evaluación? ¿Y con la media de 5? ¿Cuántas evaluaciones cuesta cada opción?
+
+[Abrir: el coste](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=noise&lang=es&enc=function-real&fn=himmelblau&N=8&s=1&ps=1&sg=30&R=5&step=5){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+Con una evaluación, $\Delta/(\sigma\sqrt 2) = 38{,}56/42{,}43 \approx 0{,}91$ y $\Phi(-0{,}91) \approx$ **18,2 %**. Con la media de 5, el argumento se multiplica por $\sqrt 5$: $\Phi(-2{,}03) \approx$ **2,1 %**. El precio son 40 evaluaciones en lugar de 8. Para bajar del 5 % basta con 4 evaluaciones por individuo. En esta población, los pares mal ordenados bajan de 5 a 2 de los 28.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (el coste)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/initialization-and-evaluation-ga/#item=noise&lang=es&enc=function-real&fn=himmelblau&N=8&s=1&ps=1&sg=30&R=5&step=5" loading="lazy" title="initialization-and-evaluation-ga: aptitud con ruido, función"></iframe>
+</details>
+
+<!-- Comprobado el 2026-10-15: en el paso 1 de 7 la herramienta muestra «El mejor es I1, con 52,56 […] un ruido normal de desviación σ = 30»; en el 3, «5 de los 28 pares de individuos quedan mal ordenados»; en el 5, «Los pares mal ordenados bajan de 5 a 2 de 28»; en el 6, «Coste: 40 evaluaciones en lugar de 8. Los dos mejores, I1 e I7, se diferencian en 38,56: con una evaluación se ordenan mal con probabilidad 18,2 %; con la media de 5, 2,1 %. Para bajar del 5 % harían falta 4 evaluaciones por individuo». Las aptitudes reales de I1 e I7 con tres decimales, 52,555 y 91,112, se comprobaron con el código (la herramienta las muestra con dos). -->
+:::
+
+El ruido cambia otras decisiones. La caché de la [sección 5.8](#coste) ya no sirve, porque guardaría para siempre una evaluación con suerte; el elitismo ([sección 9.3](09-reemplazo.qmd#elitismo)) puede quedarse con un individuo que solo parecía bueno; y conviene evaluar la solución final varias veces antes de darla por buena. Hay alternativas más baratas que reevaluar a todos, como aumentar el tamaño de la población, que promedia el ruido de forma implícita, o reevaluar solo a los individuos cuyas comparaciones están reñidas; @jin2005 revisan estas técnicas.
+
+:::: {.callout-note .ejercicio #ejercicio-5-13 title="Ejercicio 5.13 · ¿Cuántas evaluaciones?"}
+Con los datos del [ejemplo 5.13](#ejemplo-5-13) (Δ = 38,56, σ = 30), ¿cuántas evaluaciones por individuo hacen falta para que I1 e I7 se ordenen mal con una probabilidad menor del 5 %? Usa que $\Phi(-1{,}645) = 0{,}05$.
+
+<details>
+<summary>**Ver la solución**</summary>
+
+Hace falta $\Delta\sqrt{R}/(\sigma\sqrt 2) \ge 1{,}645$, es decir, $0{,}909\,\sqrt R \ge 1{,}645$, $\sqrt R \ge 1{,}81$ y $R \ge 3{,}27$. Como *R* es entero, **R = 4**. Con *N* = 8, son 32 evaluaciones por generación en lugar de 8.
+</details>
+::::
+
+::: {.callout-note .en-app title="En la aplicación · initialization-and-evaluation-ga, «Aptitud con ruido»"}
+[Explorar en initialization-and-evaluation-ga](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=noise&lang=es&enc=function-real){.explorar target="_blank"}
+
+- Cambia el **Ruido (σ)** y las **Evaluaciones por individuo (R)**, y observa cuántos pares quedan mal ordenados.
+- Cambia a **Viajante · permutación**: ¿qué σ hace falta para que el mejor aparente deje de ser el real?
+:::
+
+## 5.14 Ampliaciones [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas} {#ampliaciones}
+
+**Aptitud aproximada.** Cuando una evaluación cuesta horas, se puede sustituir parte de ellas por un **metamodelo**: una función barata que aproxima la función objetivo a partir de una muestra de soluciones ya evaluadas. También se llama modelo sustituto (*surrogate*) o aptitud aproximada. Redes neuronales, superficies de respuesta, *kriging* o procesos gaussianos son metamodelos habituales [@talbi2009, pp. 47–48]. El compromiso es el de siempre: una evaluación exacta y cara frente a una barata y con error, y se pueden alternar las dos [@talbi2009, p. 48]. Un uso típico es la **preselección**: el metamodelo elige, de muchos candidatos, los que parecen mejores, y solo esos se evalúan de verdad. En la pantalla «[Aptitud aproximada](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=surrogate&lang=es&enc=function-real&fn=himmelblau&N=8&s=1&ps=1&sm=idw&step=4){target="_blank"}» de la herramienta, un metamodelo de ponderación por la inversa de la distancia, construido con los 8 individuos de la población inicial, ordena regular 8 candidatos nuevos (correlación de rangos de 0,26), pero si se evalúan de verdad solo los 4 que estima mejores, se ahorran 4 evaluaciones y entre ellos está el mejor candidato real.
+
+<!-- Comprobado el 2026-10-15: en el paso 4 de 6 de la pantalla «Aptitud aproximada» (sm=idw) la herramienta muestra «La correlación de rangos es ρ = 0,26»; en el 5, «Se ahorran 4 de 8 evaluaciones y entre ellos está el mejor candidato real, C6». -->
+
+**Varios objetivos.** Muchos problemas reales tienen objetivos en conflicto: una mochila con más valor pesa más. Entonces no hay una solución mejor que todas, sino un conjunto de compromisos. Una solución **domina** a otra si no es peor en ningún objetivo y es mejor en alguno; las soluciones a las que no domina ninguna son **óptimos de Pareto** [@talbi2009, p. 311]. Hay dos formas de evaluar. La **suma ponderada** normaliza los objetivos y los combina con unos pesos, lo que convierte el problema en uno de un solo objetivo; su inconveniente es que solo encuentra soluciones **soportadas**, y las que están en una parte no convexa del frente no las elige ningún peso [@talbi2009, pp. 324–325]. La alternativa es asignar la aptitud según la dominancia: los no dominados forman el primer frente; si se quitan, los no dominados que quedan forman el segundo, y así sucesivamente. En la pantalla «[Varios objetivos](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=multi&lang=es&enc=knapsack-bits&n=6&N=8&s=21&ps=5&w=0.5&step=3){target="_blank"}», con la población del [ejemplo 5.3](#ejemplo-5-3) y la mochila sin capacidad (el valor se maximiza y el peso se minimiza), el primer frente tiene 6 individuos, y 2 de ellos no los elige ningún peso.
+
+<!-- Comprobado el 2026-10-15: en el paso 4 de 6 de «Varios objetivos» (w = 0,5) la herramienta muestra «los 6 no dominados (I1, I2, I3, I4, I5, I7) forman el primer frente […] salen 2 frentes en total»; en el 5, «la suma ponderada solo elige a I1, I3, I5, I7 […] I2, I4 están en el primer frente pero ningún w los elige»; en el 6, «El frente de Pareto verdadero de esta instancia […] tiene 14 puntos». -->
+
+:::: {.callout-note .ejercicio #ejercicio-5-14 title="Ejercicio 5.14 · ¿Quién domina a quién?"}
+Sin la restricción de capacidad, cada individuo del [ejemplo 5.3](#ejemplo-5-3) tiene dos objetivos: el valor, que se maximiza, y el peso, que se minimiza. ¿Qué individuos están dominados, y por quién?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+Los pares (valor; peso) son: I1 (24; 14), I2 (26; 22), I3 (5; 4), I4 (11; 7), I5 (20; 11), I6 (9; 12), I7 (29; 24) e I8 (20; 19). Están dominados I6, por I4 (más valor y menos peso) y por I5, e I8, por I5 (el mismo valor y menos peso) y por I1. Los otros seis forman el primer frente.
+</details>
+::::
+
+**Una población diversa por construcción.** Se puede plantear la generación de la población inicial como un problema de optimización: elegir *N* soluciones que maximicen una medida de diversidad, como la menor distancia entre dos de ellas. Puede ser tan difícil como el problema original, así que se resuelve de forma aproximada, por ejemplo generando primero una parte de la población al azar y añadiendo después, una a una, las soluciones más alejadas de las que ya hay [@talbi2009, pp. 194, 197–198].
+
+**Aptitudes relativas.** En algunos problemas no hay un valor absoluto que medir, como en un juego en el que la estrategia A gana a la B, la B a la C y la C a la A. Entonces la aptitud se obtiene comparando a los individuos entre sí, por puesto o mediante competiciones, y a los algoritmos de población les basta, porque la selección solo necesita saber quién es mejor [@talbi2009, p. 47].
+
+**Más lecturas.** @kazimipour2014 revisan las técnicas de inicialización de la población en algoritmos evolutivos, y @coello2002, las formas de tratar las restricciones.
+
+## Resumen {#resumen}
+
+- La población inicial se genera al azar y de forma uniforme: los bits, los enteros y los reales, gen a gen; las permutaciones, barajando con Fisher–Yates. No tiene que ser buena, sino diversa.
+- La diversidad se mide con distancias normalizadas entre individuos. Una población uniforme sobre los cromosomas no es uniforme sobre las soluciones factibles: puede tener muchos infactibles.
+- Sembrar la población con una solución heurística es un contraejemplo: la selección la copia y, en pocas generaciones, la población pierde la diversidad.
+- Evaluar es decodificar, calcular el objetivo, medir la violación y combinarlo todo en la aptitud. Con una penalización, el peso λ no debe ser ni demasiado pequeño, porque ganan los infactibles, ni demasiado grande.
+- Para la ruleta, un coste se transforma en aptitud ($C - f$, $1/(1 + f)$ o el rango): todas conservan el orden, pero reparten la ruleta de forma distinta. El esfuerzo se mide en evaluaciones, $N\,(G + 1)$, y una caché evita repetirlas si la aptitud es determinista.
+
+## Referencias del capítulo {#referencias}
+
+<!-- Seguimiento interno: cotejado el 2026-10-15 con los PDF de Recursos (texto extraído con pdftotext; Goldberg, con OCR). talbi2009: p. 15 (apartado 1.2.1, ruido), pp. 43–48 (apartado 1.4.2: función objetivo y decodificación, p. 43; SAT, p. 44; optimización interactiva, pp. 46–47; aptitud relativa, p. 47; metamodelos, pp. 47–48, con el ejemplo aerodinámico de más de un día en p. 47), pp. 48–51 (apartado 1.5: estrategias, p. 48; rechazar y óptimo en la frontera, p. 49; penalizar, contar frente a distancia y λ pequeño o grande, p. 50; dinámicas y adaptativas, pp. 50–51), pp. 103–104 y 114–115 (apartado 2.2: paisaje, Wright 1932, FDC), pp. 193–198 (apartado 3.1.1: diversificación, p. 193; tabla 3.2 y maximizar la distancia mínima, p. 194; aleatoria, cuasialeatoria, permutaciones y SSI, p. 195; hipercubo latino, pp. 195–196; problema de optimización y enfoque híbrido, pp. 197–198; heurística, p. 198), p. 206 (aptitud por rango), p. 311 (dominancia de Pareto) y pp. 324–325 (suma ponderada y soluciones soportadas). goldberg1989: pp. 75–76 («Mapping objective functions to fitness form»: −g insuficiente, C_max − g, u + C_min), OCR de las pp. 93–94 del PDF escaneado. mitchell1998: apartados 1.6 (población inicial aleatoria) y 5.4 (selección por rango de Baker); el PDF no tiene la paginación impresa. goldberg1991 y baker1985: ya en el libro; se citan como atribución. Entradas nuevas, tomadas de la bibliografía de initialization-and-evaluation-ga (commit 49c1e2e) y PENDIENTES DE COTEJO (sin PDF en Recursos; no se pudo consultar Crossref desde el entorno): fisher1938, durstenfeld1964, halton1960, sobol1967, mckay1979, chu1998, jones1995, jin2005 (Jin y Branke), kazimipour2014 y coello2002. Diggle (1983) y Wright (1932) se citan a través de Talbi y no figuran en la lista. La lista se genera con las obras citadas en el capítulo. -->
+
+::: {.referencias-capitulo #refs}
+:::
