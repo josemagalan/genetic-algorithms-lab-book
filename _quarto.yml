@@ -31,6 +31,7 @@ book:
     - 09-reemplazo.qmd
     - 10-experimentos.qmd
     - 11-viajante.qmd
+    - 12-recapitulacion.qmd
     - avisos.qmd            # siempre al final: los capítulos nuevos van antes
 
 lang: es

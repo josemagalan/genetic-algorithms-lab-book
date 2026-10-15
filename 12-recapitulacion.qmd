@@ -1,0 +1,281 @@
+# Recapitulación {#sec-recapitulacion}
+
+<!-- Seguimiento interno (no visible): redactado el 2026-10-15 a petición del autor («vamos con el tema final. Indicar que dejamos fuera, pero quizá se avance en futuras ediciones los algoritmos multicriterio, etc»). Antes de redactar, el autor aceptó la estructura propuesta (12.1–12.4 básicas y 12.5 «Lo que queda fuera», de nivel Para saber más, sin ejemplos reproducibles nuevos), eligió los cuatro grupos de temas que quedan fuera (variantes del algoritmo, otras familias, teoría y parámetros, programar el algoritmo) y pidió anunciarlo también en el recorrido básico (D049). El capítulo no tiene ejemplos reproducibles: recoge lo comprobado en los capítulos 3–11. La caja del portal se comprobó el 2026-10-15 en la interfaz publicada (Chromium sin interfaz); registro en memoria/sesiones/2026-10-15-07-capitulo-12-recapitulacion.md. Los ejercicios siguen la numeración correlativa del capítulo 1 (el 12.4 y el 12.5 están en la sección 12.4). -->
+
+**Herramientas:** el [portal](https://josemagalan.github.io/genetic-algorithms-lab/?lang=es#tools), que reúne todas las herramientas de los capítulos anteriores. Es un capítulo de repaso: casi todas las actividades son ejercicios de papel y lápiz.
+
+::: {.callout-warning .objetivos title="Objetivos del capítulo"}
+Al terminar el recorrido básico de este capítulo podrás:
+
+- enumerar las nueve decisiones de diseño de un algoritmo genético y, para cada una, la opción de partida del recorrido básico;
+- elegir la representación de un problema nuevo y, con ella, la inicialización, el cruce y la mutación;
+- reconocer en un diseño los errores que mostraron los contraejemplos del libro y corregirlos;
+- decidir si un algoritmo genético es una opción razonable para un problema;
+- diseñar un algoritmo genético completo para un problema nuevo y planificar cómo ajustarlo;
+- nombrar los principales temas que este libro deja fuera.
+:::
+
+## 12.1 Las nueve decisiones, de un vistazo [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#decisiones}
+
+Has visto cada pieza de un algoritmo genético por separado. ¿Qué hay que decidir para montarlo entero, y por dónde conviene empezar?
+
+En la [sección 3.8](03-ciclo.qmd#decisiones) reunimos el diseño en nueve decisiones. La tabla las recoge otra vez, ahora con la opción de partida que hemos visto en el recorrido básico de cada capítulo. Es un punto de partida, no una receta: cada opción tiene alternativas y contraejemplos, y los capítulos explican cuándo conviene cambiarla.
+
+| Decisión | Pregunta | Opción de partida | Dónde |
+|---|---|---|:---:|
+| 1. Representación | ¿Cómo se escribe una solución? | La más natural para el problema: bits para decisiones de sí o no, enteros para elegir entre opciones, una permutación para ordenar y reales para variables continuas | [4](04-representacion.qmd#sec-representacion) |
+| 2. Inicialización | ¿Con qué población se empieza? | Al azar y de forma uniforme; las permutaciones, barajando con Fisher–Yates. Tiene que ser diversa, no buena | [5.1–5.3](05-inicializar-evaluar.qmd#uniforme) |
+| 3. Genotipo y fenotipo | ¿Cómo se pasa del cromosoma a la solución? | Directa en la entera, la real y la permutación; en la binaria, leer los bits como un número y llevarlo al intervalo | [4.1–4.6](04-representacion.qmd#genotipo-fenotipo) |
+| 4. Aptitud | ¿Cómo se mide lo buena que es una solución? | A partir de la función objetivo. Si se minimiza un coste, hay que transformarlo para la ruleta; las restricciones que la representación no absorbe, con una penalización | [5.5–5.7](05-inicializar-evaluar.qmd#evaluar) |
+| 5. Mutación | ¿Cómo se introducen cambios pequeños? | Inversión de bits; reinicio aleatorio o deslizamiento en la entera; gaussiana en la real; intercambio, inserción o inversión en la permutación. Con *pm* pequeña | [8](08-mutacion.qmd#sec-mutacion) |
+| 6. Cruce | ¿Cómo se combinan dos padres? | En un punto, en dos puntos o uniforme en la binaria y la entera; uniforme o aritmético en la real; OX, PMX o CX en la permutación | [7](07-cruce.qmd#sec-cruce) |
+| 7. Selección | ¿Quién se reproduce? | Torneo, que solo depende del orden; la ruleta, con cuidado con la escala de la aptitud | [6](06-seleccion.qmd#sec-seleccion) |
+| 8. Reemplazo | ¿Quién pasa a la generación siguiente? | Generacional con una élite pequeña | [9.2–9.3](09-reemplazo.qmd#generacional) |
+| 9. Parada | ¿Cuándo se termina? | Al alcanzar el óptimo, si se conoce; al agotar los recursos; o tras varias generaciones sin mejorar | [9.6](09-reemplazo.qmd#cuando-parar) |
+
+A las decisiones se suman los **parámetros**: el tamaño de la población *N* y las probabilidades de cruce *Pc* y de mutación *pm*. Los estudios clásicos usaron poblaciones de 20 a 100 individuos, *Pc* entre 0,6 y 0,95 y *pm* entre 0,001 y 0,01 por bit, pero esos valores se obtuvieron con problemas concretos, y no existe un conjunto de valores que sea el mejor para todos ([sección 10.5](10-experimentos.qmd#casos-parecidos)). Por eso los parámetros se ajustan con casos parecidos al real y se comparan con varias ejecuciones ([capítulo 10](10-experimentos.qmd#sec-experimentos)).
+
+El orden de la tabla es el del diseño. Primero va la representación, porque la aptitud se calcula sobre la solución decodificada y el cruce y la mutación tienen que estar pensados para el cromosoma ([sección 3.8](03-ciclo.qmd#decisiones)). La selección, el reemplazo y la parada, en cambio, solo miran la aptitud, así que sirven igual para cualquier representación.
+
+:::: {.callout-note .ejercicio #ejercicio-12-1 title="Ejercicio 12.1 · Una descripción incompleta"}
+En un trabajo se lee: «Usamos un algoritmo genético con una población de 100 individuos, una probabilidad de cruce de 0,8 y una probabilidad de mutación de 0,01, durante 200 generaciones». Con esa información, ¿podrías repetir el experimento? ¿Qué decisiones faltan?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+No se podría repetir. Solo se conocen los parámetros y una de las nueve decisiones, la parada (200 generaciones). Faltan:
+
+- la **representación** y la **decodificación**: cómo se escribe cada solución;
+- la **inicialización**;
+- la **aptitud**: cómo se pasa del objetivo a la aptitud y qué se hace con las restricciones;
+- **qué cruce y qué mutación**. Además, «0,01» no dice si es la probabilidad de que mute cada gen o cada individuo, y no es lo mismo ([sección 10.2](10-experimentos.qmd#pc-pm));
+- la **selección**, con sus parámetros, como el tamaño del torneo;
+- el **reemplazo**: si hay élite y de qué tamaño.
+
+Y, para poder comparar resultados, cuántas ejecuciones se hicieron, con qué semillas y sobre qué casos ([sección 10.3](10-experimentos.qmd#replicas)). Los detalles que parecen secundarios pueden cambiar mucho los resultados, como pasó al repetir el modelo de Axelrod con otros mecanismos de selección ([sección 6.8](06-seleccion.qmd#ampliaciones)).
+</details>
+::::
+
+## 12.2 Un mapa por representación [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#mapa}
+
+La tabla anterior dice qué hay que decidir. Pero, una vez elegida la representación, ¿qué opciones quedan para las demás decisiones?
+
+Casi todo lo que depende de la representación son la inicialización, la decodificación y los dos operadores de variación. La tabla reúne, para cada una de las cuatro representaciones del libro, lo que hemos visto en el recorrido básico y, en la última fila, las alternativas de las secciones avanzadas.
+
+| | Binaria | Entera | Real | Permutación |
+|---|---|---|---|---|
+| **Para qué** | Decisiones de sí o no (la mochila) y números en un intervalo | Elegir entre varias opciones (asignar tareas a máquinas) | Variables continuas (la función de Himmelblau) | Ordenar (el viajante, la secuenciación) |
+| **Decodificar** | Bits → entero → intervalo, con precisión $\Delta = (b-a)/(2^k-1)$ ([4.2–4.3](04-representacion.qmd#binaria)) | Directa: el gen es la opción ([4.4](04-representacion.qmd#entera)) | Ninguna: el cromosoma es el punto ([4.6](04-representacion.qmd#real)) | El orden de la permutación; en el viajante, más el origen al principio y al final ([4.5](04-representacion.qmd#permutaciones)) |
+| **Inicializar** | Cada bit, 0 o 1 con la misma probabilidad ([5.1](05-inicializar-evaluar.qmd#uniforme)) | Cada gen, uniforme en su rango | Cada gen, uniforme en su intervalo | Barajar con Fisher–Yates ([5.2](05-inicializar-evaluar.qmd#fisher-yates)) |
+| **Validez y factibilidad** | Toda cadena es válida, pero puede no ser factible (la mochila que se pasa de peso) ([4.7](04-representacion.qmd#validez)) | Válido si cada gen está en su rango | Todo vector es válido; fuera del intervalo, la solución no es factible ([4.11](04-representacion.qmd#fuera-caja)) | Cada elemento una sola vez: los operadores tienen que respetarlo |
+| **Cruce** | Un punto, dos puntos, uniforme ([7.2–7.3](07-cruce.qmd#uno-y-dos-puntos)) | Los mismos que en la binaria | Uniforme y aritmético ([7.4](07-cruce.qmd#reales)) | OX, PMX y CX ([7.6–7.8](07-cruce.qmd#ox)) |
+| **Mutación** | Inversión de bits con *pm* por gen ([8.2](08-mutacion.qmd#inversion-bits)) | Reinicio aleatorio para categorías; deslizamiento para cantidades ordenadas ([8.3](08-mutacion.qmd#enteros)) | Gaussiana, con tamaño σ ([8.4](08-mutacion.qmd#gaussiana)) | Intercambio, inserción e inversión ([8.6](08-mutacion.qmd#intercambio-insercion-inversion)) |
+| **Avanzado** | Código Gray ([4.8](04-representacion.qmd#gray)); cruce en *n* puntos; mutación de un bit | Deslizamiento circular | Inicialización cuasialeatoria e hipercubo latino ([5.9](05-inicializar-evaluar.qmd#cuasialeatoria)); BLX-α y SBX; mutación uniforme, no uniforme y polinómica | Variantes de OX y CX y ERX ([7.9](07-cruce.qmd#otros-cruces)); mutación por mezcla ([8.8](08-mutacion.qmd#otras-mutaciones)) |
+
+Tres ideas recorren la tabla. La primera: los operadores **se eligen por la representación**, no al revés. El cruce en un punto y el reinicio aleatorio funcionan con bits y con enteros, pero repiten ciudades si se aplican a una permutación ([secciones 7.5](07-cruce.qmd#permutaciones) y [8.5](08-mutacion.qmd#permutaciones)). La segunda: dentro de una representación, el operador adecuado depende de **lo que significan los genes**. Si el gen es una categoría, como una máquina, el reinicio aleatorio es natural; si es una cantidad ordenada, el deslizamiento da cambios pequeños ([sección 8.3](08-mutacion.qmd#enteros)). La tercera: un cromosoma **válido** no tiene por qué ser una solución **factible**. Cuando la representación no absorbe una restricción, hay que penalizar, reparar o rechazar ([sección 4.7](04-representacion.qmd#validez) y [sección 5.7](05-inicializar-evaluar.qmd#penalizacion)).
+
+:::: {.callout-note .ejercicio #ejercicio-12-2 title="Ejercicio 12.2 · ¿Qué representación?"}
+Para cada problema, elige la representación, un cruce y una mutación del recorrido básico. ¿Hay alguna restricción que la representación no absorba?
+
+a) Una empresa tiene un presupuesto para publicidad y 25 anuncios posibles, cada uno con su precio y su alcance estimado. ¿Qué anuncios contrata?
+b) Hay que repartir 30 pedidos entre 5 camiones.
+c) Hay que decidir en qué orden se hacen 10 trabajos en una sola máquina para que se retrasen lo menos posible.
+d) Hay que elegir el diámetro, entre 10 y 50 mm, y el espesor, entre 1 y 5 mm, de una tubería.
+
+<details>
+<summary>**Ver la solución**</summary>
+
+| | Representación | Cruce | Mutación | Restricción |
+|---|---|---|---|---|
+| a) | Binaria, un bit por anuncio (como la mochila) | Un punto, dos puntos o uniforme | Inversión de bits | El presupuesto: una cadena puede pasarse de precio. Hay que penalizar o reparar |
+| b) | Entera, un gen por pedido con el camión, de 1 a 5 | Un punto, dos puntos o uniforme | Reinicio aleatorio: el número del camión es una etiqueta, no una cantidad | Si los camiones tienen capacidad, un camión puede quedar sobrecargado: penalización |
+| c) | Permutación de los 10 trabajos | OX, PMX o CX | Intercambio, inserción o inversión | Ninguna, si los operadores respetan la permutación |
+| d) | Real, con dos genes | Uniforme o aritmético | Gaussiana | Los intervalos: la mutación gaussiana puede sacar un gen de su intervalo ([sección 4.11](04-representacion.qmd#fuera-caja)) |
+
+En d) también se podría usar la binaria, con *k* bits por variable ([sección 4.3](04-representacion.qmd#precision)), pero la real es la codificación natural de las variables continuas.
+</details>
+::::
+
+## 12.3 Errores frecuentes [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#errores}
+
+A lo largo del libro han aparecido varios contraejemplos: decisiones que parecen razonables y no lo son. ¿Cuáles conviene recordar al diseñar un algoritmo genético?
+
+| Error | Qué pasa | Qué hacer | Dónde |
+|---|---|---|:---:|
+| Sembrar la población con la solución de una heurística | La selección la copia y, en pocas generaciones, la población pierde la diversidad | Población inicial al azar | [5.4](05-inicializar-evaluar.qmd#sembrar) |
+| Usar un coste como aptitud en la ruleta | La ruleta favorece a los peores, o no se puede construir si hay valores negativos | Transformar el coste ($C - f$, $1/(1+f)$, el rango) o usar el torneo | [5.6](05-inicializar-evaluar.qmd#objetivo-aptitud) |
+| Elegir mal el peso de la penalización | Si λ es pequeño ganan los infactibles; si es muy grande, los infactibles prometedores se pierden | Probar varios pesos con casos parecidos | [5.7](05-inicializar-evaluar.qmd#penalizacion) |
+| Usar la ruleta con aptitudes muy parecidas | Todos tienen casi la misma probabilidad: la selección deja de distinguir | Torneo, ranking o escalado | [6.4](06-seleccion.qmd#ruleta-deja-de-distinguir) |
+| Dejar reproducirse solo a los mejores | El truncamiento reduce la diversidad muy deprisa | Una selección que dé oportunidades a todos | [6.5](06-seleccion.qmd#truncamiento) |
+| Aplicar a una permutación operadores de cadenas | El cruce en un punto y el reinicio aleatorio repiten elementos | Operadores de permutación | [7.5](07-cruce.qmd#permutaciones), [8.5](08-mutacion.qmd#permutaciones) |
+| Mutar demasiado | La búsqueda se vuelve aleatoria | *pm* pequeña, por ejemplo $1/k$ por gen | [8.7](08-mutacion.qmd#cuanto-mutar) |
+| Reemplazo generacional sin élite | La mejor solución puede perderse | Una élite pequeña | [9.3](09-reemplazo.qmd#elitismo) |
+| Comparar generaciones entre algoritmos distintos | Una generación estacionaria evalúa un hijo, y una generacional, *N* | Contar evaluaciones | [5.8](05-inicializar-evaluar.qmd#coste), [9.4](09-reemplazo.qmd#estacionario) |
+| Sacar conclusiones de una sola ejecución | El resultado depende de la semilla | Varias réplicas, medias y desviaciones | [10.3–10.4](10-experimentos.qmd#replicas) |
+| Ajustar y evaluar con los mismos casos | Los parámetros parecen mejores de lo que son | Ajustar con unos casos y comprobar con otros | [10.5](10-experimentos.qmd#casos-parecidos), [11.6](11-viajante.qmd#caso-real) |
+
+Casi todos los errores de la tabla tienen la misma raíz: romper el equilibrio entre las dos fuerzas de la [sección 1.3](01-evolucion.qmd#dos-fuerzas). Sembrar, truncar o quitar la mutación dan demasiada explotación y la población se bloquea; mutar demasiado da demasiada exploración y lo encontrado se pierde. Los demás son errores de medida: una aptitud que no distingue o un experimento que no permite concluir.
+
+:::: {.callout-note .ejercicio #ejercicio-12-3 title="Ejercicio 12.3 · ¿Qué falla en este diseño?"}
+Un equipo diseña un algoritmo genético para un viajante de 30 ciudades:
+
+1. Cada ruta es una permutación de las ciudades.
+2. La población inicial son 50 copias de la ruta del vecino más cercano, cada una con un intercambio al azar.
+3. La aptitud es la longitud de la ruta, y los padres se eligen con la ruleta.
+4. Cruce en un punto, con *Pc* = 0,9.
+5. Mutación por intercambio, con *pm* = 0,05 por individuo.
+6. Los hijos sustituyen a todos los padres.
+7. Se para tras 500 generaciones.
+8. Para elegir entre *pm* = 0,05 y *pm* = 0,2, hacen una ejecución con cada valor y se quedan con el que da la ruta más corta.
+
+¿Qué decisiones están mal? ¿Cómo las corregirías?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+- **2.** Es sembrar con una heurística: las 50 rutas son casi iguales, y la población empieza sin diversidad ([sección 5.4](05-inicializar-evaluar.qmd#sembrar)). Mejor, permutaciones al azar con Fisher–Yates.
+- **3.** La longitud se minimiza, pero la ruleta da más probabilidad a la aptitud mayor: favorecería las rutas más largas ([sección 5.6](05-inicializar-evaluar.qmd#objetivo-aptitud)). Hay que transformarla, por ejemplo con la inversa de la longitud, como EvoTraveller, o usar el torneo.
+- **4.** El cruce en un punto da hijos con ciudades repetidas ([sección 7.5](07-cruce.qmd#permutaciones)). Hay que usar OX, PMX o CX.
+- **6.** Sin élite, la mejor ruta puede perderse ([sección 9.3](09-reemplazo.qmd#elitismo)). Conviene pasar el mejor individuo sin cambios.
+- **8.** Una ejecución por valor no basta: la diferencia puede deberse a la semilla ([sección 10.4](10-experimentos.qmd#comparar)). Hay que comparar las medias de varias réplicas, en mapas parecidos al real.
+
+Las decisiones 1, 5 y 7 son razonables.
+</details>
+::::
+
+## 12.4 Diseñar para un problema nuevo [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#problema-nuevo}
+
+Tienes un problema que nadie te ha planteado como ejercicio. ¿Por dónde empiezas?
+
+**Primero, ¿merece la pena?** Un algoritmo genético no es la mejor opción para todo. Mitchell recoge una intuición que comparten muchos investigadores, aunque no es una regla rigurosa: un algoritmo genético tiene buenas posibilidades de competir con otros métodos generales cuando el espacio de búsqueda es grande, no es suave ni tiene una sola cima, o se conoce mal, cuando la aptitud tiene ruido y cuando basta con encontrar pronto una solución lo bastante buena. En cambio, si el espacio es pequeño, se puede revisar entero; si es suave o tiene una sola cima, un método que sube por la pendiente es mucho más eficiente; y si el problema se conoce bien, como el viajante, los métodos que usan heurísticas específicas suelen dar mejores resultados [@mitchell1998, apartado 5.1]. Lo vimos al estimar el tamaño de un espacio de búsqueda ([sección 1.4](01-evolucion.qmd#optimizar)) y al combinar el algoritmo genético con una búsqueda local ([sección 11.9](11-viajante.qmd#ampliaciones)).
+
+**Después, el diseño.** Si la respuesta es sí, se recorren las nueve decisiones en el orden de la [sección 12.1](#decisiones):
+
+1. Escribe una solución: elige la representación con la tabla de la [sección 12.2](#mapa) y cuenta cuántos cromosomas hay.
+2. Escribe el objetivo y las restricciones. Decide cuáles absorbe la representación y cómo tratarás las demás.
+3. Elige la inicialización, el cruce y la mutación que corresponden a la representación y al significado de los genes.
+4. Elige la selección, el reemplazo y la parada.
+5. Fija unos parámetros de partida y ajústalos con casos parecidos al real, con varias réplicas por configuración. Comprueba el resultado con casos nuevos.
+6. Repasa la tabla de errores de la [sección 12.3](#errores).
+
+::: {.callout-note .en-app title="En la aplicación · Portal genetic-algorithms-lab"}
+[Explorar el portal](https://josemagalan.github.io/genetic-algorithms-lab/?lang=es#tools){.explorar target="_blank"}
+
+- En **Cinco módulos. Un mismo proceso.**, relaciona cada módulo con las decisiones de la [sección 12.1](#decisiones). ¿Qué decisiones no tienen un módulo propio?
+- Baja hasta **Así encajan en el algoritmo** y compara el ciclo con la [figura 3.1](03-ciclo.qmd#figura-3-1). ¿Por qué hay que evaluar a los hijos antes de reemplazar, si el reemplazo compara padres e hijos?
+- En **Experimenta a lo largo de generaciones**, elige el simulador con el que comprobarías el efecto de la presión selectiva durante muchas generaciones y el que usarías para ajustar *pm* en el viajante.
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-12-4 title="Ejercicio 12.4 · ¿Un algoritmo genético?"}
+¿Usarías un algoritmo genético en estos casos? Razona la respuesta.
+
+a) Elegir, entre 15 proyectos, cuáles financiar sin pasarse del presupuesto. Un ordenador evalúa un millón de combinaciones por segundo.
+b) Encontrar el mínimo de una función suave, con un solo mínimo y cuya derivada se conoce.
+c) Ajustar seis parámetros reales de una simulación de una fábrica. Cada evaluación tarda un minuto, da un resultado con ruido y hay muchos óptimos locales. Basta con una buena configuración.
+d) Encontrar una ruta muy corta para un viajante de 1 000 ciudades, con distancias en línea recta.
+
+<details>
+<summary>**Ver la solución**</summary>
+
+a) **No.** Con 15 proyectos hay $2^{15} = 32\,768$ combinaciones, que se revisan todas en unas centésimas de segundo, y así se encuentra la mejor con seguridad.
+
+b) **No.** Un método que sube (o baja) por la pendiente aprovecha la derivada y llega al mínimo mucho antes.
+
+c) **Sí, es un buen candidato.** El espacio es continuo y tiene muchos óptimos locales, la aptitud tiene ruido y basta con una solución lo bastante buena. Pero cada evaluación es cara: hay que contar el presupuesto de evaluaciones ([sección 5.8](05-inicializar-evaluar.qmd#coste)) y decidir cómo tratar el ruido ([sección 5.13](05-inicializar-evaluar.qmd#ruido)).
+
+d) **No como único método.** El viajante es un problema muy estudiado y hay heurísticas específicas que suelen funcionar mejor. Si se usa un algoritmo genético, lo razonable es combinarlo con una búsqueda local, como 2-opt ([sección 11.9](11-viajante.qmd#ampliaciones)).
+</details>
+::::
+
+:::: {.callout-note .ejercicio #ejercicio-12-5 title="Ejercicio 12.5 · Un calendario de exámenes"}
+Un centro tiene que colocar 40 exámenes en 8 franjas horarias. Algunos pares de exámenes tienen alumnos en común y no pueden coincidir en la misma franja. Además, por las aulas disponibles, en una franja no puede haber más de 6 exámenes. Se busca el calendario con menos conflictos.
+
+a) Con 12 exámenes y 4 franjas, ¿usarías un algoritmo genético? ¿Y con 40 exámenes y 8 franjas?
+b) Diseña un algoritmo genético para el caso de 40 exámenes: las nueve decisiones y unos parámetros de partida.
+c) ¿Cómo comprobarías que el diseño funciona antes de usarlo con el calendario real?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+a) Con 12 exámenes y 4 franjas hay $4^{12} = 16\,777\,216$ calendarios: a un millón por segundo, se revisan todos en unos 17 segundos. **No hace falta un algoritmo genético.** Con 40 exámenes y 8 franjas hay $8^{40} = 2^{120} \approx 1{,}3 \times 10^{36}$, y revisarlos todos llevaría unos $4 \times 10^{22}$ años. Aquí **sí tiene sentido**.
+
+b) Una propuesta:
+
+| Decisión | Propuesta |
+|---|---|
+| 1. Representación | Entera: 40 genes, uno por examen, con la franja, de 1 a 8. Todo cromosoma es válido, pero puede no ser factible |
+| 2. Inicialización | Cada gen, uniforme entre 1 y 8 |
+| 3. Genotipo y fenotipo | Directa: el gen *i* es la franja del examen *i* |
+| 4. Aptitud | Se minimiza el número de pares de exámenes con alumnos comunes en la misma franja más λ por cada examen de más en una franja. El valor 0 es un calendario sin conflictos que cabe en las aulas |
+| 5. Mutación | Reinicio aleatorio: para los conflictos, la franja es una etiqueta, y no hay motivo para preferir las franjas cercanas. Con *pm* = 1/40 por gen |
+| 6. Cruce | Uniforme: la numeración de los exámenes es arbitraria, así que no hay motivo para conservar juntos los genes vecinos |
+| 7. Selección | Torneo binario: solo depende del orden, así que no hace falta transformar el coste |
+| 8. Reemplazo | Generacional con una élite de 1 |
+| 9. Parada | Cuando la aptitud llega a 0, o al agotar un número máximo de evaluaciones, o tras muchas generaciones sin mejorar |
+
+Parámetros de partida: una población de 50 a 100 y *Pc* = 0,8, dentro de los valores clásicos. Otras opciones son razonables si se justifican: por ejemplo, la ruleta con una aptitud transformada, o tratar la capacidad con una reparación que mueva exámenes de las franjas llenas.
+
+c) Con calendarios de cursos anteriores, que son casos parecidos al real: probar varios valores de λ, *pm* y del tamaño del torneo, con 30 réplicas por configuración, y comparar las medias y las desviaciones. Después, comprobar la configuración elegida con calendarios que no se usaron para ajustarla ([capítulo 10](10-experimentos.qmd#casos-parecidos)).
+</details>
+::::
+
+**Lo que no hemos visto.** Este libro cubre el algoritmo genético básico, con un solo objetivo y una sola población. Deja fuera, entre otras cosas, la optimización con varios objetivos, las poblaciones repartidas en islas, otras familias de algoritmos evolutivos y la programación del algoritmo. La [sección 12.5](#fuera) los presenta en breve, con lecturas para seguir; quizá se traten con más detalle en ediciones futuras.
+
+## 12.5 Lo que queda fuera [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas} {#fuera}
+
+Un libro de iniciación tiene que elegir. Estos son los temas más importantes que quedan fuera de esta edición. Algunos ya han asomado en las ampliaciones de los capítulos anteriores.
+
+### Varios objetivos {#fuera-objetivos}
+
+Muchos problemas reales tienen varios objetivos en conflicto: al diseñar un producto, se quiere a la vez reducir su coste, mejorar su calidad y reducir su impacto ambiental. En estos problemas, los términos **multiobjetivo** y **multicriterio** se usan como sinónimos [@talbi2009, p. 308]. No hay una solución mejor que todas, sino un conjunto de **óptimos de Pareto**: soluciones en las que no se puede mejorar un objetivo sin empeorar otro. Con una metaheurística, la meta es aproximar ese conjunto con dos propiedades: que las soluciones estén cerca del frente de Pareto verdadero y que se repartan de manera uniforme a lo largo de él. La elección final entre ellas la hace quien decide [@talbi2009, pp. 308–309].
+
+En la [sección 5.14](05-inicializar-evaluar.qmd#ampliaciones) vimos la dominancia, los frentes y el inconveniente de la suma ponderada. Un algoritmo multiobjetivo añade tres componentes al diseño: una **asignación de la aptitud** que convierta el vector de objetivos en un número, por agregación, por criterios separados, por dominancia o con indicadores de calidad; un mecanismo que **preserve la diversidad** a lo largo del frente; y una forma de **elitismo** que conserve las mejores soluciones encontradas [@talbi2009, p. 323]. Los algoritmos de población encajan bien, porque pueden encontrar muchos óptimos de Pareto en una sola ejecución [@talbi2009, p. 337]. El más conocido es NSGA-II [@deb2002]. Ordena la población por frentes de no dominancia y, dentro de cada frente, prefiere las soluciones más aisladas según su **distancia de apiñamiento**. En cada generación junta padres e hijos y se queda con la mejor mitad, y elige a los padres con un torneo binario que compara primero el frente y, si empatan, la distancia [@talbi2009, p. 346]. Otro muy usado es SPEA2 [@talbi2009, p. 337]. La pantalla «[Varios objetivos](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=multi&lang=es&enc=knapsack-bits&n=6&N=8&s=21&ps=5&w=0.5&step=3){target="_blank"}» de initialization-and-evaluation-ga es una primera puerta de entrada.
+
+### Variantes del algoritmo {#fuera-variantes}
+
+**Nichos y especiación.** El algoritmo genético de este libro tiende a llevar toda la población a una misma cima. Para repartirla entre varias, De Jong propuso el apiñamiento (*crowding*), en el que cada hijo sustituye al individuo más parecido ([sección 9.9](09-reemplazo.qmd#ampliaciones)). Goldberg y Richardson propusieron la **compartición de la aptitud** (*fitness sharing*): la aptitud de cada individuo baja cuantos más individuos parecidos tiene alrededor, de modo que se premia ser distinto y la población puede repartirse entre varias cimas. También se ha restringido el cruce, permitiendo solo el de individuos parecidos, para que se formen «especies», o prohibiéndolo, para mantener la diversidad [@mitchell1998, apartado 5.5]. La compartición divide la aptitud de cada individuo por su número de vecinos en un radio σ, ponderados por su distancia [@talbi2009, p. 344].
+
+**Poblaciones estructuradas y paralelas.** En el algoritmo de este libro, cualquier individuo puede cruzarse con cualquier otro. En el **modelo de islas**, la población se divide en subpoblaciones que evolucionan por separado, cada una incluso con sus propios parámetros u operadores, y de vez en cuando intercambian algunos individuos (**migración**). El objetivo es retrasar la convergencia de toda la población y fomentar la diversidad. En el **modelo celular**, cada individuo ocupa una celda de una rejilla y solo se selecciona entre sus vecinos, así que la presión selectiva es menor [@talbi2009, pp. 468–469]. Los dos modelos permiten, además, repartir el trabajo entre varios procesadores.
+
+**Algoritmos híbridos.** Combinar el algoritmo genético con una búsqueda local da los algoritmos meméticos ([sección 11.9](11-viajante.qmd#ampliaciones)). También se combina con métodos exactos de programación matemática, con programación con restricciones y con técnicas de aprendizaje automático [@talbi2009, capítulo «5»].
+
+**Problemas que cambian.** En la **optimización dinámica**, la función objetivo cambia con el tiempo: en un problema de rutas pueden aparecer clientes nuevos mientras se busca. El algoritmo tiene que detectar el cambio y seguir al óptimo, que también se mueve [@talbi2009, p. 16]. Es distinto de la aptitud con ruido de la [sección 5.13](05-inicializar-evaluar.qmd#ruido), en la que el óptimo no cambia, pero cada evaluación lo mide con error. En la **coevolución** evolucionan a la vez varias poblaciones cuya aptitud depende de las demás, como un depredador y su presa [@talbi2009, p. 228]. Algo parecido ocurre en la teoría evolutiva de juegos, en la que la aptitud de una estrategia depende de las demás estrategias de la población ([sección 1.6](01-evolucion.qmd#ampliaciones)).
+
+### Otras familias {#fuera-familias}
+
+Los algoritmos genéticos son una de las familias de la computación evolutiva ([sección 3.11](03-ciclo.qmd#ampliaciones)), y hay otras metaheurísticas de población que se usan mucho:
+
+- **Estrategias evolutivas.** Trabajan con vectores reales y mutación gaussiana, y en ellas cada individuo puede llevar sus propios tamaños de paso, que también evolucionan ([sección 8.10](08-mutacion.qmd#ampliaciones)). Una de sus variantes, CMA-ES, adapta además la matriz de covarianzas de la mutación, es decir, su forma y no solo su tamaño [@hansen2001].
+- **Programación genética.** Hace evolucionar programas, representados como árboles [@koza1992].
+- **Evolución diferencial.** Para problemas continuos, crea individuos nuevos perturbando los de la población con diferencias entre otros individuos [@storn1997]. Talbi la considera uno de los enfoques con más éxito en optimización continua [@talbi2009, p. 225].
+- **Algoritmos de estimación de distribuciones.** Sustituyen el cruce y la mutación por un modelo de probabilidad que se estima con los mejores individuos y del que se sortean los nuevos [@talbi2009, p. 222].
+- **Inteligencia de enjambre.** Se inspiran en el comportamiento colectivo de los animales. Las **colonias de hormigas** se han aplicado sobre todo a problemas combinatorios, como las rutas [@talbi2009, p. 240], y los **enjambres de partículas** se diseñaron para problemas continuos [@kennedy1995; @talbi2009, p. 247].
+
+### Teoría y parámetros {#fuera-teoria}
+
+**¿Por qué funciona?** La teoría clásica, la de los esquemas y los bloques constructivos de Holland, asomó en las [secciones 3.11](03-ciclo.qmd#ampliaciones) y [7.11](07-cruce.qmd#ampliaciones). No describe por completo el comportamiento de un algoritmo genético, y se han desarrollado otros enfoques, como los modelos matemáticos exactos, los basados en la mecánica estadística o los de la genética de poblaciones [@mitchell1998, capítulo «6»].
+
+**Ningún algoritmo es el mejor para todo.** El teorema *no free lunch* demuestra que, bajo ciertas condiciones, ningún algoritmo de optimización es mejor que otro en todos los problemas posibles: si *A* es mejor que *B* en un problema, hay otro en el que *B* es mejor que *A* [@wolpert1997]. Preguntar si un algoritmo es mejor que otro solo tiene sentido para una clase de problemas o de instancias [@talbi2009, p. 103]. Es la razón de fondo para ajustar con casos parecidos al real ([sección 10.5](10-experimentos.qmd#casos-parecidos)).
+
+**Parámetros que se ajustan solos.** Los parámetros pueden cambiar durante la ejecución, según un calendario fijo, según el progreso de la búsqueda o codificados en el propio cromosoma ([sección 10.11](10-experimentos.qmd#ampliaciones)). Mitchell lo señalaba como una de las direcciones más prometedoras: la evolución natural también adapta sus propios parámetros [@mitchell1998, capítulo «6»].
+
+### Programar el algoritmo {#fuera-programar}
+
+Las herramientas del portal permiten seguir cada paso con su código en Python y en JavaScript, pero este libro no enseña a programar un algoritmo genético completo. Para hacerlo, además de escribirlo desde cero, se puede usar una biblioteca. Las bibliotecas ahorran trabajo y facilitan repetir y ampliar los experimentos, y, si los algoritmos que se comparan están programados con la misma, la comparación es más justa [@talbi2009, p. 67]. Algunas conocidas en Python son DEAP, para algoritmos evolutivos en general [@fortin2012], y pymoo, para la optimización multiobjetivo [@blank2020]. Con cualquiera de ellas, las nueve decisiones de la [sección 12.1](#decisiones) siguen siendo las mismas: la biblioteca las facilita, pero no las toma por nosotros.
+
+**Más lecturas.** Para seguir, @eiben2015 es un manual completo de computación evolutiva. @talbi2009 dedica capítulos enteros a la optimización multiobjetivo (capítulo «4»), a los algoritmos híbridos (capítulo «5») y a los paralelos (capítulo «6»). Y el último capítulo de @mitchell1998 recoge las preguntas abiertas que veía en el campo, como incorporar interacciones ecológicas entre individuos, más mecanismos de la genética, el desarrollo y el aprendizaje, codificaciones que se adapten y parámetros que evolucionen.
+
+## Resumen {#resumen}
+
+- Diseñar un algoritmo genético es tomar nueve decisiones, empezando por la representación, y fijar unos parámetros que se ajustan con casos parecidos al real y varias réplicas.
+- La representación determina la inicialización, la decodificación y los operadores. La selección, el reemplazo y la parada solo miran la aptitud y sirven para cualquier representación.
+- La mayoría de los errores frecuentes rompen el equilibrio entre exploración y explotación (sembrar, truncar, mutar demasiado, quitar la élite) o impiden medir bien (una aptitud que no distingue, una sola ejecución).
+- Un algoritmo genético conviene cuando el espacio es grande y difícil y basta con una buena solución; si el espacio es pequeño, suave o muy conocido, suele haber métodos mejores.
+- Quedan fuera de esta edición la optimización multiobjetivo, los nichos, las poblaciones en islas, los híbridos, otras familias evolutivas, la teoría y la programación del algoritmo.
+
+## Referencias del capítulo {#referencias}
+
+<!-- Seguimiento interno: cotejado el 2026-10-15. talbi2009, con pdftotext del PDF de Recursos: pp. 16 (optimización dinámica), 67 (marcos de software), 103 (NFL), 222 (EDA), 225 (evolución diferencial), 228 (coevolución), 240 (ACO), 247 (PSO), 308–309 (multiobjetivo y multicriterio como sinónimos, nota 2; convergencia y diversidad; el decisor), 323 (tres componentes y cuatro enfoques), 337 (dominancia; NSGA-II y SPEA2), 344 (compartición de la aptitud), 346 (NSGA-II, ejemplo 4.14), 468–469 (islas y celular); capítulos 4, 5 y 6 según el índice. mitchell1998, con pdftotext: apartados 5.1 (cuándo usar un algoritmo genético), 5.5 («Other Operators and Mating Strategies»: crowding, sharing de Goldberg y Richardson, restricciones de cruce) y capítulo 6 (teoría de Holland incompleta y otros enfoques; direcciones futuras). deb2002, wolpert1997, storn1997, kennedy1995, hansen2001 y blank2020: datos bibliográficos comprobados en Crossref; CMA-ES como «covariance matrix adaptation evolution strategy» según el glosario de Talbi; fortin2012, en la página de JMLR; koza1992, en la ficha de MIT Press; ninguno de sus textos se ha leído, y lo que se afirma de ellos procede de Talbi, de Mitchell o de su título. eiben2015 sigue PENDIENTE DE COTEJO (capítulo 6). Los valores clásicos de los parámetros de 12.1 son los de la sección 10.5 (De Jong, Grefenstette y Schaffer et al., según Mitchell, apartado 5.6). La lista se genera con las obras citadas en el capítulo. -->
+
+::: {.referencias-capitulo #refs}
+:::
