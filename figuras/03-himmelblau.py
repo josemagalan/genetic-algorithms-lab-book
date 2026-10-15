@@ -1,4 +1,4 @@
-"""Figura de la función de Himmelblau del capítulo 3 del libro «Algoritmos genéticos, paso a paso»:
+"""Figura de la función de Himmelblau del capítulo 3 del libro «Evolución a la vista»:
 la superficie en 3D y el mapa de curvas de nivel en la caja [−5, 5]².
 
   - f(x₁, x₂) = (x₁² + x₂ − 11)² + (x₁ + x₂² − 7)², la misma de 03-representacion.py.

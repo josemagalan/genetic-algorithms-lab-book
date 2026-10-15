@@ -1,4 +1,4 @@
-"""Figuras 4.1 y 4.2 del libro «Algoritmos genéticos, paso a paso»: la aptitud penalizada de una población
+"""Figuras 4.1 y 4.2 del libro «Evolución a la vista»: la aptitud penalizada de una población
 de la mochila en función del peso λ y la cobertura de la caja con tres poblaciones de 8 individuos.
 
 Figura 4.1. Mochila de 6 objetos (pesos 4 3 5 8 4 2, valores 5 4 9 4 7 4, capacidad 13) y la población

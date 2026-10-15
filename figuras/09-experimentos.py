@@ -1,4 +1,4 @@
-"""Figuras 9.1 a 9.4 del libro «Algoritmos genéticos, paso a paso»: varias ejecuciones, comparación de
+"""Figuras 9.1 a 9.4 del libro «Evolución a la vista»: varias ejecuciones, comparación de
 valores de la probabilidad de mutación, tamaño del problema e interacción con el torneo.
 
 Algoritmo genético mínimo para el viajante (TSP), con el mismo diseño que EvoTraveller (representación

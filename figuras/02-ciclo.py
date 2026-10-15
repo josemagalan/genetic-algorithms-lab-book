@@ -1,4 +1,4 @@
-"""Figura 2.1 del libro «Algoritmos genéticos, paso a paso»: el ciclo de un algoritmo genético.
+"""Figura 2.1 del libro «Evolución a la vista»: el ciclo de un algoritmo genético.
 
 Esquema propio. Sigue el orden del portal genetic-algorithms-lab («Así encajan en el algoritmo»):
 antes del ciclo, representar el problema y crear la población inicial; en cada generación,

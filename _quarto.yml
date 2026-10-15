@@ -7,7 +7,8 @@ project:
     - vendor/
 
 book:
-  title: "Algoritmos genéticos, paso a paso"
+  title: "Evolución a la vista"
+  subtitle: "Algoritmos genéticos en un laboratorio interactivo"
   site-url: https://josemagalan.github.io/genetic-algorithms-lab-book/
   repo-url: https://github.com/josemagalan/genetic-algorithms-lab-book
   repo-branch: main

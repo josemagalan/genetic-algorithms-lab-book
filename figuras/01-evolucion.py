@@ -1,4 +1,4 @@
-"""Figuras propias del capítulo 1 del libro «Algoritmos genéticos, paso a paso»: un paisaje con un óptimo
+"""Figuras propias del capítulo 1 del libro «Evolución a la vista»: un paisaje con un óptimo
 local y uno global, y el cubo de las cadenas de 3 bits del ejercicio «Subir por los vecinos».
 
   - Paisaje: 21 soluciones, x = 0, 1, …, 20, vecinas si se diferencian en 1. Se maximiza

@@ -1,8 +1,10 @@
-# Algoritmos genéticos, paso a paso
+# Evolución a la vista
+
+*Algoritmos genéticos en un laboratorio interactivo*
 
 > **Estado: en construcción (work in progress).** Borrador de trabajo de los autores, todavía sin revisar. El contenido, la estructura y el índice pueden cambiar.
 
-Libro para aprender algoritmos genéticos de forma práctica, con actividades sobre las herramientas interactivas del portal [genetic-algorithms-lab](https://josemagalan.github.io/genetic-algorithms-lab/). Está pensado para estudiantes de grado que empiezan.
+Libro para aprender algoritmos genéticos de forma práctica, con actividades sobre las herramientas interactivas del [Laboratorio de algoritmos genéticos](https://josemagalan.github.io/genetic-algorithms-lab/) (*genetic-algorithms-lab*). Está pensado para estudiantes de grado que empiezan.
 
 **Versión para leer:** <https://josemagalan.github.io/genetic-algorithms-lab-book/>
 
@@ -13,7 +15,7 @@ Libro para aprender algoritmos genéticos de forma práctica, con actividades so
 
 | Resource / Recurso | Use or read / Usar o leer | Repository / Repositorio |
 | --- | --- | --- |
-| Portal / Índice de materiales | [Open / Abrir](https://josemagalan.github.io/genetic-algorithms-lab/) | [GitHub](https://github.com/josemagalan/genetic-algorithms-lab) |
+| Portal: Genetic Algorithms Lab / Laboratorio de algoritmos genéticos | [Open / Abrir](https://josemagalan.github.io/genetic-algorithms-lab/) | [GitHub](https://github.com/josemagalan/genetic-algorithms-lab) |
 | Representation / Representación | [Open / Abrir](https://josemagalan.github.io/representation-ga/) | [GitHub](https://github.com/josemagalan/representation-ga) |
 | Initialisation and evaluation / Inicialización y evaluación | [Open / Abrir](https://josemagalan.github.io/initialization-and-evaluation-ga/) | [GitHub](https://github.com/josemagalan/initialization-and-evaluation-ga) |
 | Selection / Selección | [Open / Abrir](https://josemagalan.github.io/selection-ga/) | [GitHub](https://github.com/josemagalan/selection-ga) |
@@ -21,9 +23,9 @@ Libro para aprender algoritmos genéticos de forma práctica, con actividades so
 | Mutation / Mutación | [Open / Abrir](https://josemagalan.github.io/mutation-ga/) | [GitHub](https://github.com/josemagalan/mutation-ga) |
 | EvoTraveller | [Open / Abrir](https://evotraveller.streamlit.app/) | [GitHub](https://github.com/jismartin/evotraveller) |
 | SelectionMechanisms | [Open / Abrir](https://josemagalan.shinyapps.io/SelectionMechanisms/) | [GitHub](https://github.com/josemagalan/SelectionMechanisms) |
-| Learning handbook / Manual de aprendizaje | [Read / Leer](https://josemagalan.github.io/genetic-algorithms-lab-book/) | [GitHub](https://github.com/josemagalan/genetic-algorithms-lab-book) |
+| Book / Libro: *Evolución a la vista* | [Read / Leer](https://josemagalan.github.io/genetic-algorithms-lab-book/) | [GitHub](https://github.com/josemagalan/genetic-algorithms-lab-book) |
 
-El manual está en construcción: su contenido y estructura pueden cambiar. / The handbook is a work in progress: its content and structure may change.
+El libro está en construcción: su contenido y estructura pueden cambiar. / The book, in Spanish, is a work in progress: its content and structure may change.
 <!-- ga-series-links:end -->
 
 ## Qué hay ahora

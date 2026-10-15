@@ -1,4 +1,4 @@
-"""Figura 8.1 del libro «Algoritmos genéticos, paso a paso»: el elitismo a lo largo de una ejecución
+"""Figura 8.1 del libro «Evolución a la vista»: el elitismo a lo largo de una ejecución
 y dónde pararía cada criterio de parada.
 
 Algoritmo genético mínimo sobre OneMax (maximizar el número de unos de una cadena de 40 bits):

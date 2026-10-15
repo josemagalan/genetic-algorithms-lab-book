@@ -26,4 +26,4 @@ Las secciones llevan una etiqueta de nivel: [[Básico]{.largo}[B]{.corto}]{.nive
 
 El [índice general](indice.qmd) muestra todas las secciones con su nivel, y el [índice de actividades](actividades.qmd) reúne los ejemplos, las cajas «En la aplicación» y los ejercicios, por capítulo y por herramienta.
 
-Todas las herramientas se abren desde el portal [Algoritmos genéticos, paso a paso](https://josemagalan.github.io/genetic-algorithms-lab/).
+Todas las herramientas se abren desde el portal [Laboratorio de algoritmos genéticos](https://josemagalan.github.io/genetic-algorithms-lab/) (*genetic-algorithms-lab*).

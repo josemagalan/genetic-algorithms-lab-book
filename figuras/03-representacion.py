@@ -1,4 +1,4 @@
-"""Figuras fig-genotipo-fenotipo, fig-rejilla y fig-saltos-hamming del libro «Algoritmos genéticos, paso a paso»: genotipo y fenotipo, la rejilla de
+"""Figuras fig-genotipo-fenotipo, fig-rejilla y fig-saltos-hamming del libro «Evolución a la vista»: genotipo y fenotipo, la rejilla de
 puntos que puede escribir una cadena binaria y los saltos de Hamming entre enteros consecutivos.
 
 Todo se calcula con las fórmulas del capítulo, sin usar la herramienta:

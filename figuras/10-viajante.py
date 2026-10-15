@@ -1,4 +1,4 @@
-"""Figuras 10.1 y 10.2 del libro «Algoritmos genéticos, paso a paso»: el mapa de seis lugares del capítulo 11
+"""Figuras 10.1 y 10.2 del libro «Evolución a la vista»: el mapa de seis lugares del capítulo 11
 y la generación a mano de la sección 10.3.
 
 El mapa es el que genera EvoTraveller (https://evotraveller.streamlit.app/) con Number of places = 6 y
