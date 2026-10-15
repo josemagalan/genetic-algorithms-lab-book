@@ -31,6 +31,7 @@ El manual está en construcción: su contenido y estructura pueden cambiar. / Th
 | Capítulo | Estado |
 |---|---|
 | Cómo leer este libro | Borrador |
+| 4. Representar soluciones | Borrador completo, pendiente de revisión |
 | 6. Seleccionar a los padres | Borrador completo, en revisión |
 | 7. Cruzar | Borrador completo, en revisión |
 | 8. Mutar | Borrador completo, en revisión |

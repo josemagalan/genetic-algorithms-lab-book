@@ -21,6 +21,7 @@ book:
   language: es
   chapters:
     - index.qmd
+    - 04-representacion.qmd
     - 06-seleccion.qmd
     - 07-cruce.qmd
     - 08-mutacion.qmd
