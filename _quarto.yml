@@ -22,16 +22,16 @@ book:
   chapters:
     - index.qmd
     - 01-evolucion.qmd
-    - 03-ciclo.qmd
-    - 04-representacion.qmd
-    - 05-inicializar-evaluar.qmd
-    - 06-seleccion.qmd
-    - 07-cruce.qmd
-    - 08-mutacion.qmd
-    - 09-reemplazo.qmd
-    - 10-experimentos.qmd
-    - 11-viajante.qmd
-    - 12-recapitulacion.qmd
+    - 02-ciclo.qmd
+    - 03-representacion.qmd
+    - 04-inicializar-evaluar.qmd
+    - 05-seleccion.qmd
+    - 06-cruce.qmd
+    - 07-mutacion.qmd
+    - 08-reemplazo.qmd
+    - 09-experimentos.qmd
+    - 10-viajante.qmd
+    - 11-recapitulacion.qmd
     - avisos.qmd            # siempre al final: los capítulos nuevos van antes
 
 lang: es

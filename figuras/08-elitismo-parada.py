@@ -1,4 +1,4 @@
-"""Figura 9.1 del libro «Algoritmos genéticos, paso a paso»: el elitismo a lo largo de una ejecución
+"""Figura 8.1 del libro «Algoritmos genéticos, paso a paso»: el elitismo a lo largo de una ejecución
 y dónde pararía cada criterio de parada.
 
 Algoritmo genético mínimo sobre OneMax (maximizar el número de unos de una cadena de 40 bits):
@@ -8,7 +8,7 @@ que ocupa el lugar del peor hijo, como en selection-ga. Las dos ejecuciones part
 población inicial (misma semilla), pero desde la primera generación consumen los números
 aleatorios de forma distinta.
 
-Uso: python3 09-elitismo-parada.py   → escribe 09-elitismo-parada.svg y muestra los datos y el
+Uso: python3 08-elitismo-parada.py   → escribe 08-elitismo-parada.svg y muestra los datos y el
 resumen de 30 semillas. Solo usa la biblioteca estándar de Python 3.
 """
 import random
@@ -128,7 +128,7 @@ if __name__ == '__main__':
     gopt = primera(con, L)
     marcas = [(g10, f'10 sin mejora (gen. {g10})', 'end'), (gopt, f'óptimo alcanzado (gen. {gopt})', 'start'),
               (g20, f'20 sin mejora (gen. {g20})', 'start')]
-    with open('09-elitismo-parada.svg', 'w', encoding='utf-8') as fh:
+    with open('08-elitismo-parada.svg', 'w', encoding='utf-8') as fh:
         fh.write(svg(sin, con, marcas))
     print('Semilla', SEMILLA)
     print('con élite: óptimo en la generación', gopt, '| 10 sin mejora →', (g10, r10), '| 20 sin mejora →', (g20, r20))

@@ -1,4 +1,4 @@
-"""Figuras 4.1, 4.2 y 4.3 del libro «Algoritmos genéticos, paso a paso»: genotipo y fenotipo, la rejilla de
+"""Figuras 3.1, 3.2 y 3.3 del libro «Algoritmos genéticos, paso a paso»: genotipo y fenotipo, la rejilla de
 puntos que puede escribir una cadena binaria y los saltos de Hamming entre enteros consecutivos.
 
 Todo se calcula con las fórmulas del capítulo, sin usar la herramienta:
@@ -9,8 +9,8 @@ Todo se calcula con las fórmulas del capítulo, sin usar la herramienta:
 Los valores que se citan en el texto (Δ, mejor punto de la rejilla y su valor) salen de este guion y
 coinciden con los de la herramienta (memoria/verificaciones/2026-10-15-representacion.js).
 
-Uso: python3 04-representacion.py   → escribe 04-genotipo-fenotipo.svg, 04-rejilla.svg y
-04-saltos-hamming.svg, y muestra los datos. Solo usa la biblioteca estándar de Python 3.
+Uso: python3 03-representacion.py   → escribe 03-genotipo-fenotipo.svg, 03-rejilla.svg y
+03-saltos-hamming.svg, y muestra los datos. Solo usa la biblioteca estándar de Python 3.
 """
 
 A, B = -5.0, 5.0
@@ -84,7 +84,7 @@ def llave(x0, x1, y, color):
 
 
 # ----------------------------------------------------------------------------------------------
-# Figura 4.1: genotipo y fenotipo
+# Figura 3.1: genotipo y fenotipo
 # ----------------------------------------------------------------------------------------------
 
 def figura_genotipo_fenotipo():
@@ -139,7 +139,7 @@ def figura_genotipo_fenotipo():
 
 
 # ----------------------------------------------------------------------------------------------
-# Figura 4.2: la rejilla de puntos representables
+# Figura 3.2: la rejilla de puntos representables
 # ----------------------------------------------------------------------------------------------
 
 def figura_rejilla(ks=(3, 4, 5)):
@@ -191,7 +191,7 @@ def figura_rejilla(ks=(3, 4, 5)):
 
 
 # ----------------------------------------------------------------------------------------------
-# Figura 4.3: saltos de Hamming entre enteros consecutivos
+# Figura 3.3: saltos de Hamming entre enteros consecutivos
 # ----------------------------------------------------------------------------------------------
 
 def figura_saltos(k=4):
@@ -235,18 +235,18 @@ def figura_saltos(k=4):
 
 if __name__ == '__main__':
     svg1, d1 = figura_genotipo_fenotipo()
-    with open('04-genotipo-fenotipo.svg', 'w', encoding='utf-8') as fh:
+    with open('03-genotipo-fenotipo.svg', 'w', encoding='utf-8') as fh:
         fh.write(svg1)
-    print('Figura 4.1: z =', d1['z'], '· x =', tuple(round(v, 4) for v in d1['x']), '· f =', round(d1['f'], 4))
+    print('Figura 3.1: z =', d1['z'], '· x =', tuple(round(v, 4) for v in d1['x']), '· f =', round(d1['f'], 4))
     svg2, d2 = figura_rejilla()
-    with open('04-rejilla.svg', 'w', encoding='utf-8') as fh:
+    with open('03-rejilla.svg', 'w', encoding='utf-8') as fh:
         fh.write(svg2)
-    print('Figura 4.2 (k, puntos, Δ, mejor f, mejor punto):')
+    print('Figura 3.2 (k, puntos, Δ, mejor f, mejor punto):')
     for k, pts, delta, v, bx, by in d2:
         print(' ', k, pts, round(delta, 4), round(v, 4), (round(bx, 4), round(by, 4)))
     svg3, (est, gr) = figura_saltos()
-    with open('04-saltos-hamming.svg', 'w', encoding='utf-8') as fh:
+    with open('03-saltos-hamming.svg', 'w', encoding='utf-8') as fh:
         fh.write(svg3)
-    print('Figura 4.3: bits que cambian de z a z + 1 (z = 0…14)')
+    print('Figura 3.3: bits que cambian de z a z + 1 (z = 0…14)')
     print('  estándar', est, 'suma', sum(est), 'media', round(sum(est) / len(est), 4))
     print('  Gray    ', gr, 'suma', sum(gr), 'media', round(sum(gr) / len(gr), 4))

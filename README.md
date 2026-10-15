@@ -32,16 +32,16 @@ El manual está en construcción: su contenido y estructura pueden cambiar. / Th
 |---|---|
 | Cómo leer este libro | Borrador |
 | 1. Evolución y optimización | Borrador completo, pendiente de revisión |
-| 3. El ciclo y las decisiones de diseño | Borrador completo, pendiente de revisión |
-| 4. Representar soluciones | Borrador completo, pendiente de revisión |
-| 5. Inicializar y evaluar | Borrador completo, pendiente de revisión |
-| 6. Seleccionar a los padres | Borrador completo, en revisión |
-| 7. Cruzar | Borrador completo, en revisión |
-| 8. Mutar | Borrador completo, en revisión |
-| 9. Reemplazar y parar | Borrador completo, pendiente de revisión |
-| 10. Parámetros y aleatoriedad | Borrador completo, pendiente de revisión |
-| 11. El viajante de principio a fin | Borrador completo, pendiente de revisión |
-| 12. Recapitulación | Borrador completo, pendiente de revisión |
+| 2. El ciclo y las decisiones de diseño | Borrador completo, pendiente de revisión |
+| 3. Representar soluciones | Borrador completo, pendiente de revisión |
+| 4. Inicializar y evaluar | Borrador completo, pendiente de revisión |
+| 5. Seleccionar a los padres | Borrador completo, en revisión |
+| 6. Cruzar | Borrador completo, en revisión |
+| 7. Mutar | Borrador completo, en revisión |
+| 8. Reemplazar y parar | Borrador completo, pendiente de revisión |
+| 9. Parámetros y aleatoriedad | Borrador completo, pendiente de revisión |
+| 10. El viajante de principio a fin | Borrador completo, pendiente de revisión |
+| 11. Recapitulación | Borrador completo, pendiente de revisión |
 | Agradecimientos y avisos | Texto aprobado |
 
 El resto de capítulos está en preparación.

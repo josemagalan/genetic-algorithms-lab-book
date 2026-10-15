@@ -1,4 +1,4 @@
-"""Figura 3.1 del libro «Algoritmos genéticos, paso a paso»: el ciclo de un algoritmo genético.
+"""Figura 2.1 del libro «Algoritmos genéticos, paso a paso»: el ciclo de un algoritmo genético.
 
 Esquema propio. Sigue el orden del portal genetic-algorithms-lab («Así encajan en el algoritmo»):
 antes del ciclo, representar el problema y crear la población inicial; en cada generación,
@@ -7,7 +7,7 @@ pseudocódigo del capítulo, la población inicial se evalúa una vez antes de e
 hijo se evalúa al crearse (antes de reemplazar) y el criterio de parada se comprueba al empezar
 cada generación.
 
-Uso: python3 03-ciclo.py   → escribe 03-ciclo.svg. Solo usa la biblioteca estándar de Python 3.
+Uso: python3 02-ciclo.py   → escribe 02-ciclo.svg. Solo usa la biblioteca estándar de Python 3.
 """
 from pathlib import Path
 
@@ -98,6 +98,6 @@ def figura():
 
 
 if __name__ == '__main__':
-    destino = Path(__file__).with_name('03-ciclo.svg')
+    destino = Path(__file__).with_name('02-ciclo.svg')
     destino.write_text(figura() + '\n', encoding='utf-8')
     print('Escrito', destino.name)

@@ -1,5 +1,5 @@
-"""Figuras 11.1 y 11.2 del libro «Algoritmos genéticos, paso a paso»: el mapa de seis lugares del capítulo 11
-y la generación a mano de la sección 11.3.
+"""Figuras 10.1 y 10.2 del libro «Algoritmos genéticos, paso a paso»: el mapa de seis lugares del capítulo 11
+y la generación a mano de la sección 10.3.
 
 El mapa es el que genera EvoTraveller (https://evotraveller.streamlit.app/) con Number of places = 6 y
 Seed = 1111: el origen (0, 0) y cinco lugares en puntos enteros de una cuadrícula de 10 × 10. Las
@@ -9,7 +9,7 @@ coordenadas se obtuvieron con el código de la herramienta (repositorio jismarti
 Una ruta se escribe como el orden de visita de los lugares 1–5 (el cromosoma); la ruta completa sale y
 vuelve al origen. La longitud es la suma de las distancias euclídeas, como en EvoTraveller.
 
-Uso: python3 11-viajante.py   → escribe 11-mapa.svg y 11-generacion.svg, y muestra la tabla de distancias,
+Uso: python3 10-viajante.py   → escribe 10-mapa.svg y 10-generacion.svg, y muestra la tabla de distancias,
 las longitudes de las rutas del capítulo y la mejor ruta (por enumeración de las 120 permutaciones).
 Solo usa la biblioteca estándar de Python 3.
 """
@@ -20,7 +20,7 @@ from pathlib import Path
 LUGARES = {1: (7, 8), 2: (5, 6), 3: (1, 4), 4: (2, 8), 5: (4, 6)}
 ORIGEN = (0, 0)
 
-# Generación a mano de la sección 11.3
+# Generación a mano de la sección 10.3
 POBLACION = {'A': (5, 2, 1, 3, 4), 'B': (3, 1, 2, 4, 5), 'C': (2, 1, 3, 5, 4), 'D': (1, 5, 4, 2, 3)}
 SIGUIENTE = {'B (élite)': (3, 1, 2, 4, 5), 'D (copia)': (1, 5, 4, 2, 3),
              'H1 (cruce)': (4, 1, 2, 5, 3), 'H2 (cruce y mutación)': (5, 2, 1, 4, 3)}
@@ -145,5 +145,5 @@ if __name__ == '__main__':
     m0 = sum(map(longitud, POBLACION.values())) / 4
     m1 = sum(map(longitud, SIGUIENTE.values())) / 4
     print('Media inicial', coma(m0, 4), '| media siguiente', coma(m1, 4))
-    (aqui / '11-mapa.svg').write_text(fig_mapa(mejor), encoding='utf-8')
-    (aqui / '11-generacion.svg').write_text(fig_generacion(), encoding='utf-8')
+    (aqui / '10-mapa.svg').write_text(fig_mapa(mejor), encoding='utf-8')
+    (aqui / '10-generacion.svg').write_text(fig_generacion(), encoding='utf-8')

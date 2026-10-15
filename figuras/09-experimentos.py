@@ -1,4 +1,4 @@
-"""Figuras 10.1 a 10.4 del libro «Algoritmos genéticos, paso a paso»: varias ejecuciones, comparación de
+"""Figuras 9.1 a 9.4 del libro «Algoritmos genéticos, paso a paso»: varias ejecuciones, comparación de
 valores de la probabilidad de mutación, tamaño del problema e interacción con el torneo.
 
 Algoritmo genético mínimo para el viajante (TSP), con el mismo diseño que EvoTraveller (representación
@@ -10,8 +10,8 @@ Los mapas son puntos enteros distintos de una cuadrícula de 10 × 10; el origen
 Ejecuciones: el generador de cada réplica es random.Random(semilla), con semillas 1–30 (REPLICAS).
 Cada comparación usa el mismo mapa y las mismas semillas para todas las configuraciones.
 
-Uso: python3 10-experimentos.py   → escribe 10-replicas.svg, 10-comparar-pm.svg, 10-tamano.svg y
-10-interaccion.svg, y muestra los datos y los resúmenes, también los que se citan en el texto sin figura
+Uso: python3 09-experimentos.py   → escribe 09-replicas.svg, 09-comparar-pm.svg, 09-tamano.svg y
+09-interaccion.svg, y muestra los datos y los resúmenes, también los que se citan en el texto sin figura
 (efecto de Pc, diversidad, élite, mutación por inversión, escalador, localidad de los operadores y
 tipo de cruce). Solo usa la biblioteca estándar de Python 3.
 """
@@ -20,7 +20,7 @@ import random
 import statistics as st
 
 REPLICAS = 30
-MAPA = 7                      # semilla del mapa de 20 ciudades de las figuras 10.1, 10.2 y 10.4
+MAPA = 7                      # semilla del mapa de 20 ciudades de las figuras 9.1, 9.2 y 9.4
 N, G, K, PC, E = 30, 100, 3, 0.6, 1   # población, generaciones, torneo, Pc y tamaño de la élite
 PM_BASE = 0.05
 
@@ -365,9 +365,9 @@ if __name__ == '__main__':
     pts20 = mapa(20, MAPA)
     series = [ejecutar(pts20, s) for s in semillas]
     fin = [s[-1] for s in series]
-    with open('10-replicas.svg', 'w', encoding='utf-8') as fh:
+    with open('09-replicas.svg', 'w', encoding='utf-8') as fh:
         fh.write(fig_replicas(series))
-    print('FIGURA 10.1: 20 ciudades, N=30, G=100, torneo 3, Pc=0,6, pm=0,05, élite 1; semillas 1-30')
+    print('FIGURA 9.1: 20 ciudades, N=30, G=100, torneo 3, Pc=0,6, pm=0,05, élite 1; semillas 1-30')
     print('  finales ordenados:', [round(x, 1) for x in sorted(fin)])
     print(f'  media {st.mean(fin):.2f}  desv. típica {st.stdev(fin):.2f}  mín {min(fin):.2f} (semilla {fin.index(min(fin)) + 1})  '
           f'máx {max(fin):.2f} (semilla {fin.index(max(fin)) + 1})  mediana {st.median(fin):.2f}')
@@ -379,9 +379,9 @@ if __name__ == '__main__':
     print('  inicial (gen 0) media', round(st.mean(s[0] for s in series), 1), '| gen 50 media', round(st.mean(s[50] for s in series), 1))
     pms = [0, 0.05, 0.2]
     res = {pm: [ejecutar(pts20, s, pm=pm)[-1] for s in semillas] for pm in pms}
-    with open('10-comparar-pm.svg', 'w', encoding='utf-8') as fh:
+    with open('09-comparar-pm.svg', 'w', encoding='utf-8') as fh:
         fh.write(fig_comparar(res, pms, [AZUL, NARANJA, AQUA]))
-    print('FIGURA 10.2')
+    print('FIGURA 9.2')
     for pm in pms:
         v = res[pm]
         print(f'  pm={pm}: media {st.mean(v):.2f} desv. típica {st.stdev(v):.2f} error típico {st.stdev(v) / math.sqrt(len(v)):.2f} '
@@ -408,9 +408,9 @@ if __name__ == '__main__':
     for n in tam:
         p = mapa(n, MAPA)
         tabla3[n] = {pm: st.mean(ejecutar(p, s, pm=pm)[-1] for s in semillas) for pm in pms3}
-    with open('10-tamano.svg', 'w', encoding='utf-8') as fh:
+    with open('09-tamano.svg', 'w', encoding='utf-8') as fh:
         fh.write(fig_tamano(tabla3, pms3, tam, [AZUL, NARANJA, AQUA]))
-    print('FIGURA 10.3: media de 30 ejecuciones (mapa de cada tamaño con semilla 7)')
+    print('FIGURA 9.3: media de 30 ejecuciones (mapa de cada tamaño con semilla 7)')
     for n in tam:
         mejor = min(tabla3[n].values())
         print(f'  {n} ciudades:', {pm: (round(tabla3[n][pm], 1), f'+{100 * (tabla3[n][pm] / mejor - 1):.0f} %') for pm in pms3})
@@ -423,9 +423,9 @@ if __name__ == '__main__':
         for pm in pms4:
             v = [ejecutar(pts20, s, pm=pm, k=k)[-1] for s in semillas]
             tabla4[k][pm] = (st.mean(v), st.stdev(v) / math.sqrt(len(v)))
-    with open('10-interaccion.svg', 'w', encoding='utf-8') as fh:
+    with open('09-interaccion.svg', 'w', encoding='utf-8') as fh:
         fh.write(fig_interaccion(tabla4, pms4, ks, [AZUL, NARANJA]))
-    print('FIGURA 10.4: 20 ciudades, media (error típico) de 30 ejecuciones')
+    print('FIGURA 9.4: 20 ciudades, media (error típico) de 30 ejecuciones')
     for k in ks:
         print(f'  torneo {k}:', {pm: f'{tabla4[k][pm][0]:.1f} ({tabla4[k][pm][1]:.1f})' for pm in pms4})
     # --- efecto de Pc (solo se muestra; no hay figura)
@@ -488,7 +488,7 @@ if __name__ == '__main__':
     mejor_conocida = min(busqueda_local(random.Random(s).sample(range(20), 20), pts20)[1] for s in range(300))
     print(f'  mejor ruta encontrada (búsqueda local con inversiones, 300 inicios): {mejor_conocida:.2f}')
 
-    # --- localidad de los operadores: qué conservan de una buena ruta (sección 10.10)
+    # --- localidad de los operadores: qué conservan de una buena ruta (sección 9.10)
     print('LOCALIDAD: 20 ciudades; rutas buenas = 60 óptimos locales distintos de la búsqueda local con inversiones')
     r = random.Random(1)
     azar = [r.sample(range(20), 20) for _ in range(60)]
@@ -530,7 +530,7 @@ if __name__ == '__main__':
             print(f'  cruce {cr}, padres {nombre}: el hijo hereda el {st.mean(heredadas):.0f} % de sus aristas de los padres '
                   f'y es un {st.mean(sobre):+.0f} % más largo que el mejor padre')
 
-    # --- tipo de cruce y de mutación en el algoritmo genético (sección 10.10)
+    # --- tipo de cruce y de mutación en el algoritmo genético (sección 9.10)
     print('CRUCE x MUTACIÓN: 20 ciudades, torneo 3, élite 1, media (error típico) de 30 ejecuciones; Pc = 0,6 salvo «sin cruce»')
     for op in ('intercambio', 'inversion'):
         for pm in (0.05, 0.2, 0.5, 1.0):

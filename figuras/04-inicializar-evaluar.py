@@ -1,17 +1,17 @@
-"""Figuras 5.1 y 5.2 del libro «Algoritmos genéticos, paso a paso»: la aptitud penalizada de una población
+"""Figuras 4.1 y 4.2 del libro «Algoritmos genéticos, paso a paso»: la aptitud penalizada de una población
 de la mochila en función del peso λ y la cobertura de la caja con tres poblaciones de 8 individuos.
 
-Figura 5.1. Mochila de 6 objetos (pesos 4 3 5 8 4 2, valores 5 4 9 4 7 4, capacidad 13) y la población
-uniforme de 8 individuos del ejemplo 5.3 (initialization-and-evaluation-ga, s = 21, ps = 5). Penalización
+Figura 4.1. Mochila de 6 objetos (pesos 4 3 5 8 4 2, valores 5 4 9 4 7 4, capacidad 13) y la población
+uniforme de 8 individuos del ejemplo 4.3 (initialization-and-evaluation-ga, s = 21, ps = 5). Penalización
 lineal: F = valor − λ · e, con e = máx(0, peso − 13). Todo se calcula aquí a partir de los cromosomas.
 
-Figura 5.2. Caja [−5, 5]² dividida en 8 franjas por eje y tres poblaciones de N = 8:
+Figura 4.2. Caja [−5, 5]² dividida en 8 franjas por eje y tres poblaciones de N = 8:
   - Uniforme e hipercubo latino: los puntos que da initialization-and-evaluation-ga (commit 49c1e2e) con
     la semilla de población 1, copiados de la herramienta (su generador de números aleatorios no se
     reproduce aquí).
   - Halton: se calcula aquí, u = (φ₂(i), φ₃(i)) para i = 1, …, 8 y x = −5 + 10 u redondeado a centésimas.
 
-Uso: python3 05-inicializar-evaluar.py   → escribe 05-penalizacion.svg y 05-cobertura.svg, y muestra
+Uso: python3 04-inicializar-evaluar.py   → escribe 04-penalizacion.svg y 04-cobertura.svg, y muestra
 los datos. Solo usa la biblioteca estándar de Python 3.
 """
 
@@ -52,7 +52,7 @@ def texto(x, y, s, size=13, color=INK2, ancla='start', peso=None):
 
 
 # ----------------------------------------------------------------------------------------------
-# Figura 5.1: aptitud penalizada en función de λ
+# Figura 4.1: aptitud penalizada en función de λ
 # ----------------------------------------------------------------------------------------------
 
 def evaluar(c):
@@ -114,7 +114,7 @@ def figura_penalizacion():
 
 
 # ----------------------------------------------------------------------------------------------
-# Figura 5.2: cobertura de la caja
+# Figura 4.2: cobertura de la caja
 # ----------------------------------------------------------------------------------------------
 
 def inverso_radical(i, b):
@@ -189,13 +189,13 @@ if __name__ == '__main__':
     import os
     aqui = os.path.dirname(os.path.abspath(__file__))
     svg, d = figura_penalizacion()
-    with open(os.path.join(aqui, '05-penalizacion.svg'), 'w', encoding='utf-8') as fh:
+    with open(os.path.join(aqui, '04-penalizacion.svg'), 'w', encoding='utf-8') as fh:
         fh.write(svg)
-    print(f"Figura 5.1: mejor factible B = {d['B']}, λ* = {d['lam_star']}")
+    print(f"Figura 4.1: mejor factible B = {d['B']}, λ* = {d['lam_star']}")
     for n, p, v, e, f in d['datos']:
         print(f'  {n}: peso {p}, valor {v}, exceso {e}, F(λ = 0, 1, 4, 5) = {f}')
     svg, d = figura_cobertura()
-    with open(os.path.join(aqui, '05-cobertura.svg'), 'w', encoding='utf-8') as fh:
+    with open(os.path.join(aqui, '04-cobertura.svg'), 'w', encoding='utf-8') as fh:
         fh.write(svg)
     for nombre, pts, c, f in d:
-        print(f'Figura 5.2 {nombre}: franjas {c} y {f}; puntos {pts}')
+        print(f'Figura 4.2 {nombre}: franjas {c} y {f}; puntos {pts}')
