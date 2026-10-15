@@ -1,0 +1,285 @@
+# Evolución y optimización {#sec-evolucion}
+
+<!-- Seguimiento interno (no visible): redactado el 2026-10-15 a petición del autor, que pidió citar el apartado 2.3 de la tesis de Luis R. Izquierdo (Recursos/thesis.pdf) al hablar de qué es un sistema evolutivo más allá de la biología, e incluir a Holland, Darwin y Lamarck. Decisiones del autor antes de redactar (D048): Darwin y Lamarck antes de generalizar con los tres rasgos de Izquierdo; ejercicios de papel, con uno sobre si la economía es evolutiva; Lamarck y la epigenética en «Ampliaciones». La caja de selection-ga se comprobó el 2026-10-15 en la interfaz publicada (Chromium sin interfaz): la pantalla «Comparar mecanismos» muestra el apartado «Varias generaciones solo con selección» (50 individuos, 40 generaciones, 50 repeticiones) y, al abrirla, la tabla da para el torneo 4,5 individuos distintos en la generación 5 y 1,1 en la 20, los mismos valores de «El mejor se pierde» que el capítulo 6 (48 % la ruleta, 8 % el torneo). Registro en memoria/sesiones/2026-10-15-06-capitulo-1-evolucion.md. -->
+
+**Herramientas:** [selection-ga](https://josemagalan.github.io/selection-ga/#lang=es), accesible desde el [portal](https://josemagalan.github.io/genetic-algorithms-lab/). Es un capítulo de ideas: la mayoría de las actividades son ejercicios de papel y lápiz.
+
+::: {.callout-warning .objetivos title="Objetivos del capítulo"}
+Al terminar el recorrido básico de este capítulo podrás:
+
+- explicar los tres ingredientes de la selección natural de Darwin y en qué se diferencia de la explicación de Lamarck;
+- reconocer los tres rasgos de un sistema evolutivo (diversidad, selección y replicación) en sistemas biológicos, económicos y culturales, y decir cuál falta cuando un sistema no es evolutivo;
+- explicar por qué la selección reduce la diversidad y qué le pasa a un sistema si nada la renueva;
+- definir un problema de optimización, su espacio de búsqueda y sus óptimos local y global, y estimar el tamaño de un espacio de búsqueda;
+- relacionar la exploración y la explotación con las dos fuerzas de un sistema evolutivo;
+- describir qué toma un algoritmo genético de la evolución natural.
+:::
+
+## 1.1 La idea de Darwin [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#darwin}
+
+En la naturaleza hay seres muy bien adaptados a su medio, y nadie los ha diseñado. ¿Cómo puede un proceso que nadie dirige producirlos?
+
+En 1859, Charles Darwin publicó *El origen de las especies*. Su respuesta cabe en un párrafo de la introducción [@darwin1859, p. 5, traducción propia]:
+
+> Como nacen muchos más individuos de cada especie de los que pueden sobrevivir, y como, en consecuencia, la lucha por la existencia se repite con frecuencia, se sigue que cualquier ser que varíe, aunque sea ligeramente, de algún modo provechoso para él, en las condiciones complejas y a veces cambiantes de la vida, tendrá más probabilidades de sobrevivir y será así seleccionado de forma natural. Por el poderoso principio de la herencia, toda variedad seleccionada tenderá a propagar su forma nueva y modificada.
+
+En el párrafo están los tres ingredientes del mecanismo:
+
+- **Variación.** Los individuos de una especie no son iguales: varían, aunque sea poco.
+- **Selección.** Nacen más individuos de los que pueden sobrevivir, y las variaciones deciden quién tiene más probabilidades de hacerlo y de reproducirse. Darwin llamó **selección natural** a «esta conservación de las variaciones favorables y el rechazo de las perjudiciales» [@darwin1859, p. 81, traducción propia].
+- **Herencia.** Los descendientes se parecen a sus padres, así que las variaciones que ayudaron a sobrevivir pasan a la generación siguiente.
+
+Ninguno de los tres persigue un objetivo. Para la teoría evolutiva actual, las variaciones genéticas aparecen al azar, no porque hagan falta [@mitchell1998, apartado 3.1]; la selección solo hace que unos se reproduzcan más que otros. Pero, repetido durante muchas generaciones, el proceso acumula los cambios favorables.
+
+Darwin no fue el primero en proponer que las especies cambian. Medio siglo antes, Jean-Baptiste Lamarck había defendido en su *Filosofía zoológica* dos leyes: los órganos que se usan mucho se fortalecen y los que no se usan se debilitan hasta desaparecer, y lo que un individuo adquiere o pierde de este modo lo conserva la reproducción en sus descendientes [@lamarck1809, capítulo «VII»]. Es la **herencia de los caracteres adquiridos**. La diferencia con Darwin está en el origen de los cambios: para Lamarck, el propio individuo los produce durante su vida, y se heredan; para Darwin, la variación ya está ahí y la selección decide cuál se conserva. La biología acabó rechazando la herencia de los caracteres adquiridos [@mitchell1998, apartado 3.1], aunque, como veremos en las [ampliaciones](#ampliaciones), la epigenética ha matizado ese rechazo.
+
+Un algoritmo genético toma la idea de Darwin: una población de soluciones que varían, una selección que favorece a las mejores y una herencia que pasa sus rasgos a la generación siguiente. Es el ciclo del [capítulo 3](03-ciclo.qmd#ciclo).
+
+:::: {.callout-note .ejercicio #ejercicio-1-1 title="Ejercicio 1.1 · El cuello de las jirafas"}
+¿Por qué tienen las jirafas el cuello tan largo? Explícalo como lo haría Lamarck y como lo haría Darwin. ¿En qué se diferencian las dos explicaciones?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+**Lamarck.** Los antepasados de las jirafas estiraban el cuello para alcanzar las hojas altas de los árboles. Con el uso, el cuello de cada uno se alargaba un poco durante su vida, y ese alargamiento lo heredaban sus crías. Generación tras generación, los cuellos se fueron alargando.
+
+**Darwin.** En la población de antepasados había cuellos algo más largos y algo más cortos, por variación, no por esfuerzo. Cuando escaseaba el alimento, los de cuello más largo alcanzaban más hojas, sobrevivían más y dejaban más crías, que heredaban cuellos largos. Generación tras generación, el cuello medio se fue alargando.
+
+**La diferencia** está en de dónde sale el cambio y qué se hereda. Para Lamarck, el cambio lo produce el uso durante la vida del individuo y se hereda. Para Darwin, la variación existe antes de la selección y no la provoca la necesidad; lo que se hereda es lo que el individuo traía al nacer, y la selección decide qué variantes abundan más.
+</details>
+::::
+
+## 1.2 ¿Qué hace evolutivo a un sistema? [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sistema-evolutivo}
+
+Hablamos de la evolución de las especies, pero también de la evolución de la economía, de una lengua o de la tecnología. ¿Es solo una forma de hablar, o tienen algo en común?
+
+Luis R. Izquierdo lo resume así: muchos sistemas biológicos y socioeconómicos están gobernados, al menos en parte, por presiones evolutivas. Sus entidades pueden ser de naturaleza muy distinta, como moléculas, células, genes, animales, organizaciones, ideas o comportamientos, pero todos comparten los tres rasgos que caracterizan a cualquier sistema evolutivo: **diversidad**, **selección** y **replicación** [@izquierdo2008, p. 22].
+
+- **Diversidad.** Las entidades del sistema no son todas iguales, y sus diferencias afectan a su **aptitud** (*fitness*). La aptitud es un indicador medible que determina cómo evoluciona la población: las entidades con más aptitud tienden a extenderse relativamente más que las demás [@izquierdo2008, p. 22].
+- **Selección.** Es una fuerza que discrimina: favorece a unas entidades frente a otras, según su aptitud. Al quedarse solo con algunas, reduce la heterogeneidad del sistema [@izquierdo2008, pp. 22–23].
+- **Replicación, herencia o conservación.** Las propiedades de las entidades, o las propias entidades, se conservan, se replican o se heredan, al menos en parte, de una generación a la siguiente. Puede ocurrir por transmisión genética, en los sistemas biológicos, o por aprendizaje social, como la imitación, en algunos sistemas socioeconómicos [@izquierdo2008, p. 23].
+
+La idea de fondo es que las entidades que tienen más éxito en un momento dado son las que más probabilidades tienen de seguir presentes en el futuro. Y ese éxito es **relativo**: no importa lo buena que sea una entidad, sino lo buena que es comparada con las demás [@izquierdo2008, p. 23 y nota 4]. En biología y en economía, la ventaja suele venir de la competencia por recursos escasos o por cuota de mercado. En los sistemas sociales se habla de **evolución cultural**: cambios en los comportamientos, las creencias o las normas sociales a lo largo del tiempo [@izquierdo2008, p. 23].
+
+Son los tres ingredientes de Darwin, pero sin nada que sea exclusivo de la biología. No hacen falta ADN ni organismos que nazcan y mueran. Basta con entidades distintas entre sí, un criterio que favorezca a unas frente a otras y un mecanismo que conserve lo que se ha seleccionado. Por eso un algoritmo, que no tiene nada de vivo, puede ser un sistema evolutivo.
+
+:::: {.callout-note .ejercicio #ejercicio-1-2 title="Ejercicio 1.2 · ¿Es evolutiva la economía?"}
+Piensa en los restaurantes de una ciudad.
+
+a) ¿Qué entidades forman el sistema? ¿Qué las hace distintas entre sí, y de dónde salen las diferencias nuevas?
+b) ¿Qué hace de selección? ¿Qué sería la aptitud? ¿Es absoluta o relativa?
+c) ¿Qué conserva o replica lo que tiene éxito?
+d) ¿Es, entonces, un sistema evolutivo? ¿Qué diferencias ves con la evolución biológica?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+a) Las entidades pueden ser los restaurantes o, mejor aún, sus formas de hacer las cosas: la carta, los precios, el local, el servicio. La **diversidad** es evidente: no hay dos iguales. Las diferencias nuevas llegan con los restaurantes que abren con ideas nuevas (**innovación**), con los cambios que prueban los que ya existen y también con los errores: una receta mal copiada puede salir mejor que la original.
+
+b) La **selección** la hacen los clientes y la competencia. Los restaurantes con pocos clientes cierran; los que funcionan crecen o abren otros locales. La aptitud podría medirse con el beneficio o con la cuota de mercado. Es **relativa**: un restaurante bueno puede cerrar si los de su calle son mejores, y uno mediocre puede sobrevivir si no tiene competencia.
+
+c) Lo que tiene éxito se **conserva** porque el restaurante sigue abierto, y se **replica** porque otros lo imitan (un plato de moda acaba en muchas cartas), porque las cadenas y franquicias copian un negocio entero y porque los cocineros que cambian de trabajo se llevan lo que aprendieron.
+
+d) Sí: tiene los tres rasgos. Pero con diferencias importantes. La variación no es ciega: un empresario innova a propósito, intentando anticipar lo que funcionará. Lo que un restaurante aprende durante su vida puede copiarse; se parece más a la herencia que imaginaba Lamarck que a la genética ([sección 1.1](#darwin)). La replicación es por imitación, no genética, y no hay generaciones bien definidas. Además, lo que favorece la selección cambia con las modas: la aptitud no es fija.
+</details>
+::::
+
+:::: {.callout-note .ejercicio #ejercicio-1-3 title="Ejercicio 1.3 · ¿Evolutivo o no?"}
+Para cada sistema, di si tiene los tres rasgos de un sistema evolutivo. Si no, ¿cuál le falta?
+
+a) Las bacterias de un paciente que toma un antibiótico.
+b) Los cantos rodados de una playa. Las olas desgastan y rompen antes las piedras blandas, y con los años quedan sobre todo piedras duras.
+c) Las palabras de una lengua.
+d) Un termostato que enciende la calefacción cuando la temperatura baja de 20 °C.
+e) Una población de plantas idénticas que se reproducen por esquejes, sin mutaciones.
+f) Los chistes que circulan por los grupos de mensajería.
+
+<details>
+<summary>**Ver la solución**</summary>
+
+a) **Sí.** Hay diversidad: por mutación, algunas bacterias resisten mejor el antibiótico. Hay selección: el antibiótico mata antes a las sensibles. Y hay replicación: las resistentes se dividen y sus descendientes heredan la resistencia.
+
+b) **No.** Hay diversidad (piedras duras y blandas) y una especie de selección (las olas eliminan antes las blandas), pero **no hay replicación**: una piedra dura no hace copias de sí misma. La composición de la playa cambia, pero no se acumula nada nuevo, y cuando solo quedan piedras duras el proceso se detiene.
+
+c) **Sí.** Aparecen palabras nuevas y variantes de las existentes (diversidad); unas se usan y se copian más que otras, y algunas caen en desuso (selección); y los hablantes las aprenden de otros hablantes (replicación por imitación). Es un ejemplo de evolución cultural.
+
+d) **No.** El termostato reacciona a su entorno, pero no hay una población de entidades distintas, ni selección, ni replicación: siempre aplica la misma regla. Es un sistema que se ajusta al entorno, pero no evoluciona.
+
+e) **No**, porque le falta **diversidad**. Si todas las plantas son iguales, la selección no tiene nada que elegir: pueden morir más o menos plantas, pero la población no cambia de composición. En cuanto aparece una mutación, aparece la diversidad.
+
+f) **Sí.** Hay chistes nuevos y versiones que cambian al contarlos (diversidad); los más graciosos se reenvían más (selección); y cada reenvío es una copia (replicación). Richard Dawkins llamó **memes** a estas unidades culturales que se copian de una persona a otra [@dawkins2006, capítulo «11»] (véanse las [ampliaciones](#ampliaciones)).
+</details>
+::::
+
+## 1.3 Dos fuerzas que tiran en sentidos opuestos [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#dos-fuerzas}
+
+Si la selección favorece una y otra vez a las mismas entidades, ¿qué le pasa a la diversidad del sistema?
+
+La selección **reduce** la diversidad, porque favorece a unas entidades frente a otras. Si nada la renueva, el sistema acaba formado por copias de unas pocas entidades, o de una sola, y ya no puede cambiar más: queda **bloqueado** (*lock-in*). Por eso la mayoría de los sistemas evolutivos tienen procesos que **crean y mantienen** la diversidad. Este mecanismo generador de diversidad actúa en sentido contrario a la selección, y es el único que puede impedir que el sistema se bloquee [@izquierdo2008, p. 22].
+
+En biología, la diversidad suele venir de las mutaciones genéticas. En muchos sistemas socioeconómicos, de las innovaciones, de que la información no llega a todos por igual o, sencillamente, de los errores. Por eso el proceso por el que aparecen entidades nuevas se llama **mutación** en biología y **experimentación** o **innovación** en los contextos socioeconómicos [@izquierdo2008, p. 22].
+
+En un algoritmo genético pasa lo mismo. La selección no crea individuos nuevos: elige, entre los que ya hay, cuáles se copian. Si se repite generación tras generación sin nada más, la población se queda sin diversidad.
+
+::: {.callout-note .en-app title="En la aplicación · selection-ga, «Comparar mecanismos»"}
+[Explorar en selection-ga](https://josemagalan.github.io/selection-ga/#cmp=all&lang=es){.explorar target="_blank"}
+
+- Baja hasta **Varias generaciones solo con selección**. La simulación parte de poblaciones de 50 individuos y encadena 40 generaciones sin cruce ni mutación: cada población es la de los padres elegidos en la anterior.
+- En la gráfica **Individuos distintos**, sigue la curva del torneo. Empieza en 50. ¿Cuántos quedan en la generación 20? En la simulación que aparece al abrir la pantalla, la tabla de debajo da 4,5 de media en la generación 5 y 1,1 en la 20.
+- Mira la gráfica **Aptitud media**. ¿Sigue subiendo cuando casi no quedan individuos distintos? ¿Por qué?
+- Pulsa **Simular de nuevo** varias veces. ¿Cambia la conclusión?
+:::
+
+La población queda bloqueada en pocas generaciones: es la versión artificial de lo que describe Izquierdo. Lo estudiaremos con detalle en la [sección 6.6](06-seleccion.qmd#seleccion-y-diversidad). Para evitarlo, un algoritmo genético tiene operadores que generan diversidad: el **cruce**, que combina los genes de dos padres en individuos nuevos ([capítulo 7](07-cruce.qmd#sec-cruce)), y la **mutación**, que introduce valores que no tiene nadie en la población ([capítulo 8](08-mutacion.qmd#para-que-mutar)).
+
+Holland vio en esta tensión un problema común a la evolución, la economía, el aprendizaje o el control. En todos ellos hay que mejorar sin conocer de antemano todas las opciones. Como encontrar la mejor puede llevar mucho tiempo, o no acabarse nunca, hay que **explotar** en cada paso la mejor de las opciones ya probadas; pero, a la vez, hay que reducir pronto la incertidumbre, es decir, conocer opciones nuevas [@holland1992, p. 1]. En el diseño de cualquier método de búsqueda aparecen los mismos dos criterios contradictorios: la **exploración** del espacio de búsqueda (diversificación) y la **explotación** de las mejores soluciones encontradas (intensificación). En un extremo está la búsqueda al azar, que solo explora; en el otro, la búsqueda local que pasa siempre al mejor vecino, que solo explota [@talbi2009, pp. 24–25].
+
+En un sistema evolutivo, la selección explota lo que ya funciona y la generación de diversidad explora. Si domina la selección, el sistema se bloquea antes de encontrar algo bueno: en un algoritmo genético se llama **convergencia prematura** ([sección 10.7](10-experimentos.qmd#diversidad)). Si domina la variación, lo que se encuentra se pierde antes de aprovecharlo, y la búsqueda se parece a una búsqueda al azar. Buena parte de las decisiones de diseño de un algoritmo genético consisten en equilibrar estas dos fuerzas, como la **presión selectiva** del [capítulo 6](06-seleccion.qmd#quien-se-reproduce).
+
+:::: {.callout-note .ejercicio #ejercicio-1-4 title="Ejercicio 1.4 · ¿Explorar o explotar?"}
+a) Llevas un mes viviendo en una ciudad nueva y cada viernes cenas fuera. ¿Qué es explorar y qué es explotar? ¿Qué te pasa si solo haces una de las dos cosas?
+b) En un algoritmo genético, ¿qué esperas que pase si la mutación cambia casi todos los genes de cada hijo? ¿Y si no hay ni cruce ni mutación?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+a) **Explotar** es volver al mejor restaurante que conoces; **explorar**, probar uno nuevo. Si solo explotas, te quedas con el mejor de los pocos que probaste al principio y nunca sabrás si había otro mejor. Si solo exploras, cada viernes cenas en un sitio desconocido, a veces bueno y a veces malo, y nunca aprovechas lo que has aprendido. Lo razonable es explorar más al principio, cuando sabes poco, y explotar más cuando ya conoces bien las opciones.
+
+b) Si la mutación cambia casi todos los genes, los hijos apenas se parecen a sus padres: lo que la selección había encontrado se pierde en cada generación, y el algoritmo se comporta casi como una búsqueda al azar. Es **demasiada exploración**. Si no hay ni cruce ni mutación, el algoritmo solo copia individuos que ya existen, y en pocas generaciones la población está formada por copias de uno solo, como en la caja «En la aplicación». Es **demasiada explotación**: la población queda bloqueada.
+</details>
+::::
+
+## 1.4 Optimizar es buscar [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#optimizar}
+
+¿Qué tiene que ver la evolución con resolver un problema?
+
+Un **problema de optimización** tiene dos partes: un conjunto *S* de soluciones factibles, el **espacio de búsqueda**, y una **función objetivo** *f* que asigna a cada solución un número que dice cuánto vale. Resolverlo es encontrar una solución con el mejor valor posible, un **óptimo global** [@talbi2009, p. 3]. Según el problema, «mejor» será el menor valor (el coste de una ruta) o el mayor (el valor de lo que cabe en una mochila).
+
+La evolución puede verse como un método para buscar entre un número enorme de posibilidades. En biología, las posibilidades son las secuencias genéticas, y las «soluciones», organismos capaces de sobrevivir y reproducirse en su entorno [@mitchell1998, apartado 1.2].
+
+**¿Por qué no probarlas todas?** Porque suelen ser demasiadas. Una proteína es una cadena de aminoácidos, y en cada posición puede haber uno de 20. Mitchell propone buscar una proteína con una forma determinada limitándose a las cadenas de 100 aminoácidos o menos [@mitchell1998, apartado 1.4]; solo las de 100 ya son $20^{100}$, más de $10^{130}$ posibilidades. Con muchos problemas, el número de soluciones crece de forma exponencial con el tamaño del problema, y revisarlas todas llevaría siglos o más [@talbi2009, pp. 10–11]. Goldberg distingue tres familias de métodos clásicos y señala el punto débil de cada una [@goldberg1989, pp. 2–5]:
+
+- Los **métodos basados en el cálculo** suben por la pendiente de la función. Son locales, porque buscan lo mejor cerca del punto en el que están, y necesitan derivadas, que muchos problemas no tienen.
+- Los **métodos enumerativos** revisan las soluciones una a una. Son sencillos, pero ineficientes cuando el espacio es grande.
+- Las **búsquedas al azar** prueban soluciones al azar y se quedan con la mejor. A la larga, no lo hacen mejor que la enumeración.
+
+Un algoritmo genético también usa el azar, pero para guiar la búsqueda, no para dar palos de ciego: una búsqueda con azar no tiene por qué ser una búsqueda sin rumbo [@goldberg1989, p. 5].
+
+**Óptimos locales.** Muchos métodos se mueven de una solución a otra **vecina**, parecida a ella. Una solución es un **óptimo local** si no tiene ningún vecino mejor [@talbi2009, p. 91]. Un método que pasa siempre al mejor vecino se para en el primer óptimo local que encuentra, que puede no ser el global: si la función tiene varias cimas, ¿por cuál subir? [@goldberg1989, pp. 3–4]. Lo veremos con más detalle en la [sección 5.12](05-inicializar-evaluar.qmd#paisaje).
+
+**Una solución o una población.** Los métodos como la búsqueda local o el recocido simulado transforman una sola solución; los algoritmos evolutivos hacen evolucionar una población entera. Los primeros tienden a explotar, intensificando la búsqueda en una zona; los segundos, a explorar, repartiéndola por todo el espacio [@talbi2009, p. 25]. Es la misma tensión de la [sección 1.3](#dos-fuerzas). Una población que empieza repartida por el espacio de búsqueda no depende de un único punto de partida.
+
+**Mejorar antes que alcanzar el óptimo.** Goldberg recuerda que optimizar tiene dos partes: mejorar y acercarse a un óptimo. Para los sistemas complejos, lo más importante es mejorar: llegar pronto a una solución lo bastante buena. Alcanzar el óptimo importa mucho menos [@goldberg1989, pp. 6–7]. El propio Holland, quince años después de su libro, escribió que pondría más énfasis en la mejora y menos en la optimización [@holland1992, p. x]. Con un algoritmo genético no solemos saber si hemos llegado al óptimo, pero sí si hemos mejorado.
+
+:::: {.callout-note .ejercicio #ejercicio-1-5 title="Ejercicio 1.5 · ¿Cuántas rutas?"}
+Un repartidor sale de su almacén, tiene que pasar por 19 clientes y volver al almacén. Con 20 lugares, contando el almacén, hay $19!/2$ rutas distintas ([sección 11.2](11-viajante.qmd#problema)).
+
+a) ¿Cuántas rutas son, aproximadamente? Si un ordenador calcula la longitud de un millón de rutas por segundo, ¿cuánto tardaría en revisarlas todas?
+b) ¿Y con 25 lugares?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+a) $19!/2 = 60\,822\,550\,204\,416\,000$, unas $6{,}1 \times 10^{16}$ rutas. A un millón por segundo son $6{,}1 \times 10^{10}$ segundos. Un año tiene unos $3{,}16 \times 10^{7}$ segundos, así que harían falta **unos 1 900 años**.
+
+b) Con 25 lugares, $24!/2 \approx 3{,}1 \times 10^{23}$ rutas: **casi 10 000 millones de años**. Cinco lugares más multiplican el tiempo por unos cinco millones. Por eso, salvo en problemas pequeños, no se puede revisar todo el espacio de búsqueda.
+</details>
+::::
+
+:::: {.callout-note .ejercicio #ejercicio-1-6 title="Ejercicio 1.6 · Subir por los vecinos"}
+Las soluciones de un problema son las cadenas de 3 bits, y queremos maximizar *f*:
+
+| Cadena | 000 | 001 | 010 | 011 | 100 | 101 | 110 | 111 |
+|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| *f* | 3 | 1 | 2 | 5 | 4 | 0 | 6 | 2 |
+
+Dos cadenas son **vecinas** si se diferencian en un solo bit: los vecinos de 000 son 100, 010 y 001.
+
+a) ¿Cuál es el óptimo global? ¿Hay algún otro óptimo local?
+b) Un método empieza en una cadena y pasa siempre al mejor de sus vecinos, mientras sea mejor que la cadena actual. ¿Dónde termina si empieza en 001? ¿Y si empieza en 010?
+c) ¿Qué ventaja tendría empezar con una población de cuatro cadenas al azar?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+a) El óptimo global es **110**, con *f* = 6. También es óptimo local **011**, con *f* = 5: sus vecinos, 111, 001 y 010, valen 2, 1 y 2. Las demás cadenas tienen algún vecino mejor.
+
+b) Desde **001** (1), los vecinos son 101 (0), 011 (5) y 000 (3): pasa a 011, que no tiene ningún vecino mejor. **Termina en 011, con 5**, y no llega al óptimo. Desde **010** (2), los vecinos son 110 (6), 000 (3) y 011 (5): pasa a 110, el óptimo global. El resultado depende del punto de partida.
+
+c) Con varias cadenas repartidas por el espacio es más difícil que todas empiecen cerca del mismo óptimo local: es más probable que alguna esté cerca de 110. Y en un algoritmo genético, el cruce puede combinar partes de cadenas que están en zonas distintas.
+</details>
+::::
+
+## 1.5 De la evolución natural a la artificial [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#evolucion-artificial}
+
+¿Qué hay que tomar de la evolución para que un ordenador resuelva problemas?
+
+John Holland partió de la idea de **adaptación**. En biología, adaptación es cualquier proceso por el que una estructura se modifica poco a poco para funcionar mejor en su entorno, ya sea una proteína, la pata de un caballo o un cerebro humano. Pero también hay procesos adaptativos en la psicología (el aprendizaje), la economía (la planificación), el control o la inteligencia artificial, y todos son, en el fondo, procesos de optimización [@holland1992, p. xiii]. Por eso su libro empieza con preguntas de campos muy distintos: cómo produce la evolución organismos cada vez más aptos en entornos inciertos, o qué planes económicos pueden mejorar el rendimiento de una economía aunque los datos se vayan conociendo sobre la marcha [@holland1992, p. 1]. En todos ellos hay unas **estructuras** que se modifican, unos **operadores** que las modifican y una **medida del rendimiento**: en genética, cromosomas, mutación y recombinación, y aptitud; en la planificación económica, combinaciones de bienes, actividades de producción y utilidad; en la teoría de juegos, estrategias, reglas para aproximarse a la estrategia óptima y pago [@holland1992, pp. 4–5].
+
+Holland y sus estudiantes y colegas de la Universidad de Míchigan tenían dos objetivos: explicar con rigor los procesos adaptativos de los sistemas naturales y diseñar sistemas artificiales que conservaran sus mecanismos importantes [@goldberg1989, p. 1]. Holland los desarrolló en los años sesenta y setenta y los presentó en 1975, en *Adaptation in Natural and Artificial Systems* [@mitchell1998, apartado 1.1]. Allí los llamaba **planes genéticos**; fueron sus estudiantes de doctorado quienes empezaron a decir **algoritmo genético** [@holland1992, p. x]. Goldberg los define así [@goldberg1989, p. 1, traducción propia]:
+
+> Los algoritmos genéticos son algoritmos de búsqueda basados en la mecánica de la selección natural y de la genética natural.
+
+No fueron los únicos. En los años sesenta, Rechenberg propuso las **estrategias evolutivas** para optimizar parámetros reales, y Fogel, Owens y Walsh, la **programación evolutiva**. Junto con los algoritmos genéticos, forman la base de la **computación evolutiva** [@mitchell1998, apartado 1.1]; volveremos a ellas en la [sección 3.11](03-ciclo.qmd#ampliaciones).
+
+Las palabras de la biología (cromosoma, gen, alelo, aptitud) se usan en un algoritmo genético por analogía: lo que designan es mucho más sencillo que en un ser vivo [@mitchell1998, apartado 1.3]. Y hay diferencias de fondo. En la naturaleza nadie fija el objetivo; en un algoritmo genético, la aptitud la elige quien lo diseña, a partir de la función objetivo del problema ([capítulo 5](05-inicializar-evaluar.qmd#evaluar)). Goldberg resume en cuatro rasgos lo que distingue a los algoritmos genéticos de los métodos de optimización tradicionales [@goldberg1989, p. 7]:
+
+1. Trabajan con una **codificación** de las soluciones, no con las soluciones mismas ([capítulo 4](04-representacion.qmd#genotipo-fenotipo)).
+2. Buscan desde una **población** de puntos, no desde uno solo.
+3. Solo usan el valor de la función objetivo, sin derivadas ni otro conocimiento auxiliar.
+4. Usan reglas de transición **probabilísticas**, no deterministas.
+
+:::: {.callout-note .ejercicio #ejercicio-1-7 title="Ejercicio 1.7 · El algoritmo genético como sistema evolutivo"}
+Completa la última columna de la tabla. Puedes ayudarte con el ciclo de la [sección 3.2](03-ciclo.qmd#ciclo).
+
+| | Biología | Economía | Algoritmo genético |
+|---|---|---|---|
+| **Entidades** | Organismos y sus genes | Empresas y sus formas de hacer las cosas | ? |
+| **Aptitud** | Supervivencia y número de descendientes | Beneficio o cuota de mercado | ? |
+| **Diversidad** | Mutación y recombinación genéticas | Innovación, experimentación y errores | ? |
+| **Selección** | Selección natural | Competencia en el mercado | ? |
+| **Replicación** | Herencia genética | Imitación, franquicias | ? |
+
+<details>
+<summary>**Ver la solución**</summary>
+
+| | Algoritmo genético |
+|---|---|
+| **Entidades** | Los individuos de la población: cada uno es una solución del problema, escrita como un cromosoma ([capítulo 4](04-representacion.qmd#sec-representacion)). |
+| **Aptitud** | La función de aptitud, que se calcula a partir de la función objetivo del problema ([capítulo 5](05-inicializar-evaluar.qmd#sec-inicializar-evaluar)). |
+| **Diversidad** | La población inicial, generada al azar; el cruce, que crea combinaciones nuevas de genes, y la mutación, que crea valores nuevos ([capítulos 7](07-cruce.qmd#sec-cruce) y [8](08-mutacion.qmd#sec-mutacion)). |
+| **Selección** | La selección de los padres, que favorece a los más aptos ([capítulo 6](06-seleccion.qmd#sec-seleccion)), y el reemplazo, que decide quién pasa a la generación siguiente ([capítulo 9](09-reemplazo.qmd#sec-reemplazo)). |
+| **Replicación** | Los hijos heredan los genes de sus padres, copiados y recombinados por el cruce; con elitismo, los mejores pasan a la generación siguiente sin cambios. |
+
+Fíjate en que el cruce aparece dos veces: genera diversidad, porque produce combinaciones que no existían, y también replica, porque los genes de los hijos son copias de los de sus padres.
+</details>
+::::
+
+## 1.6 Ampliaciones [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas} {#ampliaciones}
+
+**Lamarck, otra vez.** A finales del siglo XX, la herencia de los caracteres adquiridos estaba rechazada por casi todos los biólogos, ante la abrumadora evidencia en contra; era difícil imaginar un mecanismo que llevara lo adquirido durante la vida al código genético [@mitchell1998, apartado 3.1]. La **epigenética** ha matizado esa conclusión. Las marcas epigenéticas, como la metilación del ADN, cambian qué genes se expresan sin cambiar la secuencia del ADN, y algunas pasan a la descendencia. @jablonka2009 reunieron más de cien casos de herencia epigenética entre generaciones en bacterias, protistas, hongos, plantas y animales, y defienden un marco que reconoce los aspectos lamarckianos de la herencia. @heard2014 concluyen que esta herencia existe, sobre todo en las plantas, pero que todavía no está claro hasta qué punto la provoca el entorno ni hasta qué punto ocurre en los seres humanos. En ratones, @takahashi2023 metilaron en el laboratorio la región reguladora de dos genes del metabolismo y comprobaron que ese cambio, y sus efectos en el metabolismo, pasaban a las generaciones siguientes por vía paterna y materna; el cambio no lo produjo el entorno, sino los investigadores. Y hay casos en los que lo adquirido sí llega a los genes: según @koonin2009, el sistema CRISPR-Cas, con el que bacterias y arqueas incorporan a su genoma fragmentos de los virus que las atacan y transmiten así la defensa a sus descendientes, funciona mediante un mecanismo lamarckiano genuino. Su conclusión es que las dos modalidades, la darwiniana y la lamarckiana, son importantes en la evolución. No se ha recuperado el mecanismo general de Lamarck, el uso y el desuso como motor de la adaptación, pero la regla de que nada de lo adquirido se hereda tiene excepciones: en algo, Lamarck tenía razón.
+
+**Algoritmos lamarckianos.** En la evolución artificial, Lamarck no está prohibido. Muchos algoritmos genéticos se combinan con una búsqueda local que mejora a cada individuo. Si el individuo se sustituye por la solución mejorada, que sus hijos heredarán, el algoritmo es **lamarckiano**; si la solución mejorada solo sirve para calcular su aptitud y el cromosoma no cambia, se habla de modelo **de Baldwin** [@talbi2009, p. 390]. Es la misma pregunta que aparece al reparar cromosomas infactibles ([sección 4.13](04-representacion.qmd#ampliaciones)) y en los algoritmos meméticos ([sección 11.9](11-viajante.qmd#ampliaciones)). El segundo nombre recuerda el **efecto Baldwin**: aunque lo aprendido no se herede, la capacidad de aprender puede guiar la evolución, porque los individuos que aprenden mejor sobreviven más. Hinton y Nowlan lo mostraron en 1987 con un modelo que usaba precisamente un algoritmo genético [@mitchell1998, apartado 3.1].
+
+**El punto de vista del gen.** @dawkins2006 propone mirar la evolución desde los genes, que son lo que se copia de una generación a otra, en lugar de desde los organismos que los llevan. Y extiende la idea más allá de la biología: llama **memes** a las unidades de transmisión cultural, como una melodía, una idea o una moda, que se replican pasando de un cerebro a otro por imitación [@dawkins2006, capítulo «11»]. Encaja con las ideas y los comportamientos de la lista de Izquierdo ([sección 1.2](#sistema-evolutivo)) y con el [ejercicio 1.3](#ejercicio-1-3).
+
+**Economía evolutiva.** @nelson1982 propusieron una teoría evolutiva del cambio económico. En ella, las **rutinas** de las empresas hacen el papel de los genes: se conservan y se imitan; el mercado selecciona a las empresas, y la búsqueda de rutinas nuevas hace de mutación. Es una forma de precisar lo que hicimos en el [ejercicio 1.2](#ejercicio-1-2).
+
+**Teoría evolutiva de juegos.** En la teoría evolutiva de juegos, las entidades que evolucionan son estrategias, que pueden verse como fenotipos de comportamiento, y la aptitud es el pago que obtiene cada una al jugar contra las demás [@izquierdo2008, pp. 23–24]. A diferencia de lo que ocurre en un algoritmo genético con una función objetivo fija, la aptitud de una estrategia depende de las demás estrategias de la población; también en biología la aptitud de un organismo depende de los que le rodean [@mitchell1998, apartado 1.4]. Una de las conclusiones de la tesis de Izquierdo es que las estrategias que surgen y se mantienen en contextos evolutivos dependen mucho de supuestos que se solían considerar secundarios, como el número de jugadores, la tasa de mutación o la estructura de la población [@izquierdo2008, resumen]. Es una advertencia que conviene recordar al elegir los parámetros de un algoritmo genético ([capítulo 10](10-experimentos.qmd#sec-experimentos)).
+
+**Más lecturas.** @mitchell1998 [apartados 1.1–1.4] cuenta la historia de la computación evolutiva y por qué la evolución es una buena fuente de inspiración. @goldberg1989 [pp. 1–7] compara los algoritmos genéticos con los métodos de optimización tradicionales. @holland1992 [capítulo «1»] plantea el marco general de la adaptación en los sistemas naturales y artificiales. Y @izquierdo2008 [apartado 2.3] presenta los rasgos de los sistemas evolutivos y la teoría evolutiva de juegos.
+
+## Resumen {#resumen}
+
+- La selección natural de Darwin tiene tres ingredientes: variación entre los individuos, selección de los que sobreviven y se reproducen más, y herencia. Lamarck proponía, en cambio, que se heredan los cambios adquiridos durante la vida.
+- Cualquier sistema con **diversidad**, **selección** y **replicación** es evolutivo, sea biológico, económico o cultural. La aptitud es relativa: importa ser mejor que los demás.
+- La selección reduce la diversidad y, si nada la renueva, el sistema se bloquea. La generación de diversidad (mutación, innovación) actúa en sentido contrario. Equilibrar las dos fuerzas es equilibrar exploración y explotación.
+- Optimizar es buscar en un espacio de soluciones que suele ser demasiado grande para revisarlo entero. Un método que pasa siempre al mejor vecino puede quedarse en un óptimo local; un algoritmo genético busca con una población.
+- Holland propuso los algoritmos genéticos para estudiar la adaptación natural y llevar sus mecanismos a los sistemas artificiales. Un algoritmo genético es un sistema evolutivo cuyas entidades son soluciones de un problema.
+
+## Referencias del capítulo {#referencias}
+
+<!-- Seguimiento interno: cotejado el 2026-10-15. izquierdo2008: PDF de Recursos (thesis.pdf), apartado 2.3, pp. 22–24 (tres rasgos, entidades, mecanismo generador de diversidad, lock-in, mutación frente a experimentación o innovación, replicación por imitación, éxito relativo en la nota 4, evolución cultural según Alexander, 2003) y resumen (sin número de página); año 2008 según el portal de investigación de la UBU y la portada (entregada en septiembre de 2007, defendida en abril de 2008). holland1992: PDF de Recursos, prefacio de 1992 (p. x: «genetic plan» → «genetic algorithm»; más énfasis en la mejora), prefacio de 1975 (p. xiii, deducida de la paginación del PDF: definición de adaptación, «adaptive processes are optimization processes»), capítulo 1 (p. 1: preguntas y explotar/reducir la incertidumbre; pp. 4–5: tabla 1 y medidas de rendimiento). goldberg1989: OCR (Tesseract) de las pp. 1–7 del extracto Claude outputs/tmp-ocr/goldberg-18-40.pdf. mitchell1998: apartados 1.1–1.4 y 3.1, con pdftotext (sin la paginación impresa). talbi2009: pp. 3, 10–11, 24–25, 91 y 390 (nota 3). darwin1859: pp. 5 y 81 comprobadas en Darwin Online (Variorum, edición de 1859). lamarck1809: las dos leyes, según la traducción inglesa de Ian Johnston del capítulo VII de la primera parte; falta comprobar la página en la edición de 1809 (p. 235 según fuentes secundarias). jablonka2009, heard2014, takahashi2023 y koonin2009: comprobados en la página del editor o en el repositorio (resumen y datos bibliográficos); el texto completo de heard2014 y takahashi2023 no se ha leído. dawkins2006 y nelson1982: PENDIENTES DE COTEJO (sin PDF en Recursos); dawkins2006 es la edición que citan las transparencias del Tema 5d. Wright, Rechenberg, Fogel, Owens y Walsh, Baldwin, Hinton y Nowlan se citan a través de Mitchell; Alexander (2003) y Maynard Smith, a través de Izquierdo. Las traducciones de Darwin y Goldberg son propias. La lista se genera con las obras citadas en el capítulo. -->
+
+::: {.referencias-capitulo #refs}
+:::

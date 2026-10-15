@@ -31,6 +31,7 @@ El manual está en construcción: su contenido y estructura pueden cambiar. / Th
 | Capítulo | Estado |
 |---|---|
 | Cómo leer este libro | Borrador |
+| 1. Evolución y optimización | Borrador completo, pendiente de revisión |
 | 3. El ciclo y las decisiones de diseño | Borrador completo, pendiente de revisión |
 | 4. Representar soluciones | Borrador completo, pendiente de revisión |
 | 5. Inicializar y evaluar | Borrador completo, pendiente de revisión |
