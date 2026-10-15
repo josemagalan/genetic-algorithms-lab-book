@@ -25,7 +25,7 @@ Hay dos estrategias básicas [@talbi2009, p. 221; @mitchell1998, apartado 5.4]:
 - **Reemplazo generacional.** Los hijos sustituyen a toda la población de padres. Es el del algoritmo genético canónico de Holland y el más extendido.
 - **Estado estacionario** (*steady state*). En cada paso solo entran uno o unos pocos hijos, que sustituyen a otros tantos miembros de la población. El resto sigue igual.
 
-Después de reemplazar se vuelve a empezar el ciclo, hasta que se cumple un **criterio de parada**. Lo veremos en la [sección 9.6](#cuando-parar).
+Después de reemplazar se vuelve a empezar el ciclo ([sección 3.2](03-ciclo.qmd#ciclo)), hasta que se cumple un **criterio de parada**. Lo veremos en la [sección 9.6](#cuando-parar).
 
 **Notación.** Seguimos la de la herramienta. Los padres son A, B, C… y su número es μ (*mu*); los hijos son a, b, c… y su número es λ (*lambda*). En el [capítulo 6](06-seleccion.qmd#torneo) hablamos de sortear «con reemplazo» en el sentido de devolver al individuo para que pueda volver a salir; en este capítulo, *reemplazo* significa sustituir a unos individuos de la población por otros.
 

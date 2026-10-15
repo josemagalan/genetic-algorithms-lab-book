@@ -1,0 +1,462 @@
+# El ciclo y las decisiones de diseño {#sec-ciclo}
+
+<!-- Seguimiento interno (no visible): redactado el 2026-10-15. Los ejemplos reproducibles se comprobaron el 2026-10-15 con el código y en la interfaz publicada de selection-ga (commit 7b7d8a9, 2026-10-14), crossover-ga (commit 9848d5d, 2026-10-14) y mutation-ga (commit 6f346a0, 2026-10-14); el portal, en el commit 8596e78 (2026-10-14); EvoTraveller, en el commit 41205ad (2026-10-15), cuyo algorithm.py no cambia desde b301b34, el que se usó en el capítulo 10. Guiones: memoria/verificaciones/2026-10-15-ciclo.js, 2026-10-15-ciclo-interfaz.py y 2026-10-15-ciclo-evotraveller.py. La figura 3.1 es propia: figuras/03-ciclo.py (Python 3, solo biblioteca estándar) genera figuras/03-ciclo.svg. Registro en memoria/sesiones/2026-10-15-03-capitulo-3-ciclo.md. El hilo del capítulo es la simulación a mano de Goldberg (1989, pp. 15–17, tabla 1.2), que selection-ga trae como ejemplo (ex=goldberg). -->
+
+**Herramientas:** el [portal](https://josemagalan.github.io/genetic-algorithms-lab/?lang=es#algorithm), [selection-ga](https://josemagalan.github.io/selection-ga/#lang=es), [crossover-ga](https://josemagalan.github.io/crossover-ga/#lang=es), [mutation-ga](https://josemagalan.github.io/mutation-ga/#lang=es) y [EvoTraveller](https://evotraveller.streamlit.app/), todas accesibles desde el portal. EvoTraveller está en inglés.
+
+::: {.callout-warning .objetivos title="Objetivos del capítulo"}
+Al terminar el recorrido básico de este capítulo podrás:
+
+- describir el ciclo de un algoritmo genético y distinguir lo que se hace una sola vez de lo que se repite en cada generación;
+- leer el pseudocódigo de un algoritmo genético y señalar en qué línea actúa cada operador;
+- simular a mano una generación completa de un algoritmo genético sencillo y calcular cómo cambian la aptitud media y la mejor;
+- enumerar las nueve decisiones de diseño de un algoritmo genético y decir en qué paso del ciclo interviene cada una;
+- reconocer esas decisiones en un algoritmo ya programado.
+:::
+
+## 3.1 Una población de soluciones [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#poblacion}
+
+Muchos métodos de optimización mejoran una solución cada vez: parten de una, prueban cambios y se quedan con el mejor. ¿Qué cambia si trabajamos con muchas soluciones a la vez?
+
+Un algoritmo genético mantiene un conjunto de soluciones, la **población**, y la hace cambiar paso a paso. En cada paso crea soluciones nuevas a partir de las que ya tiene y decide cuáles siguen. Repite el proceso hasta que se cumple una condición de parada [@talbi2009, p. 191]. Es una idea tomada de la evolución natural: en una población, los individuos mejor adaptados tienen más descendencia, y los descendientes heredan, mezclados y con pequeños cambios, los rasgos de sus padres [@goldberg1989, pp. 1, 10–11].
+
+Para hablar de ello usaremos el vocabulario de la genética [@talbi2009, pp. 200, 205; @mitchell1998, apartado 1.6]:
+
+| Término | En el algoritmo |
+|---|---|
+| **Individuo** | Una solución candidata del problema. |
+| **Cromosoma** | La forma en que se escribe esa solución; por ejemplo, una cadena de bits. |
+| **Gen** y **alelo** | Cada posición del cromosoma, y el valor que toma. En una cadena de bits, cada gen tiene dos alelos posibles, 0 y 1. |
+| **Locus** | El lugar que ocupa un gen en el cromosoma. |
+| **Aptitud** (*fitness*) | Un número que mide lo buena que es la solución. Cuanto mayor, mejor. |
+| **Generación** | Una vuelta completa del ciclo: de una población a la siguiente. |
+
+El cromosoma y la solución no son lo mismo: el primero es lo que manipulan los operadores y la segunda, lo que se evalúa. Lo veremos con detalle en el [capítulo 4](04-representacion.qmd#genotipo-fenotipo). En este capítulo trabajaremos con cadenas de bits que representan números enteros.
+
+:::: {.callout-note .ejercicio #ejercicio-3-1 title="Ejercicio 3.1 · El vocabulario"}
+Una población tiene cuatro individuos, escritos como cadenas de 5 bits: 01101, 11000, 01000 y 10011. ¿Cuántos cromosomas hay? ¿Cuántos genes tiene cada uno? ¿Qué alelo tiene el segundo individuo en el primer locus?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+Hay **cuatro cromosomas**, uno por individuo, y cada uno tiene **cinco genes**. El segundo individuo es 11000: en el primer locus tiene el alelo **1**.
+</details>
+::::
+
+## 3.2 El ciclo [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#ciclo}
+
+¿En qué orden se hacen las cosas, y cuáles se repiten?
+
+Antes de empezar hay que **representar** el problema, es decir, decidir cómo se escribe una solución como cromosoma, y **crear la población inicial**, normalmente al azar. Estas dos cosas se hacen una sola vez. Después, la población entra en un ciclo que se repite en cada generación [@talbi2009, p. 200; @goldberg1989, pp. 10–14]:
+
+1. **Evaluar:** calcular la aptitud de cada individuo.
+2. **Seleccionar:** elegir a los padres, de modo que los individuos con más aptitud tengan más probabilidad de reproducirse.
+3. **Cruzar:** combinar los genes de dos padres para formar hijos.
+4. **Mutar:** cambiar al azar, con una probabilidad pequeña, algún gen de los hijos.
+5. **Reemplazar:** decidir quiénes forman la población de la generación siguiente.
+
+Y vuelta a empezar, hasta que se cumple el **criterio de parada**. Al terminar, el algoritmo devuelve la mejor solución que ha encontrado. La [figura 3.1](#figura-3-1) resume el ciclo.
+
+[]{#figura-3-1}
+
+![**Figura 3.1.** El ciclo de un algoritmo genético. Representar el problema y crear la población inicial se hace una sola vez; seleccionar, cruzar, mutar, evaluar y reemplazar se repite en cada generación hasta que se cumple el criterio de parada. Figura propia, generada con `figuras/03-ciclo.py`, en el repositorio del libro.](figuras/03-ciclo.svg){fig-alt="Esquema de flujo. A la izquierda, bajo el rótulo Antes del ciclo, una vez, tres cajas grises en columna: Representar, que define los cromosomas; Crear P(0), la población inicial; y Evaluar P(0), que mide su aptitud. Una flecha lleva a un rombo con la pregunta ¿Parar? Si la respuesta es no, una flecha sube a la caja Seleccionar, que elige los padres; de ahí, con los padres, a Cruzar, que combina los genes; con los hijos, a Mutar, que introduce cambios; con los hijos mutados, a Evaluar, que mide la aptitud de los hijos; y a Reemplazar, que forma P(t + 1) y vuelve al rombo. Estas cinco cajas azules están dentro de un recuadro discontinuo rotulado En cada generación. Si la respuesta es sí, una flecha baja a la caja Devolver la mejor solución encontrada."}
+
+Hay dos decisiones que se parecen y conviene no confundir. La **selección** decide quién se reproduce; el **reemplazo** decide quién sigue en la población. Por eso la selección va al principio de la generación, con la población actual, y el reemplazo al final, cuando ya hay hijos.
+
+En la figura, la evaluación de cada generación aparece después de mutar: se evalúa a los hijos en cuanto se crean. Si el reemplazo compara la aptitud de padres e hijos, hay que conocerla antes de reemplazar. Si los hijos sustituyen a todos los padres, da igual evaluarlos al final de una generación o al principio de la siguiente: es la misma evaluación. Así lo cuenta el portal, que pone «Evaluar» al principio del ciclo.
+
+::: {.callout-note .en-app title="En la aplicación · portal, «Así encajan en el algoritmo»"}
+[Explorar en el portal](https://josemagalan.github.io/genetic-algorithms-lab/?lang=es#algorithm){.explorar target="_blank"}
+
+- Busca el apartado **Así encajan en el algoritmo** y lee qué pasos están en **Antes del ciclo · Una sola vez** y cuáles en **En cada generación**.
+- Cada paso es un enlace a la herramienta que lo explica. ¿Qué herramienta abren a la vez **Seleccionar** y **Reemplazar**? ¿Por qué crees que es la misma?
+- Lee la nota final, que empieza por «Seleccionar elige los padres». ¿Cuándo hay que evaluar a los hijos antes de reemplazar?
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-3-2 title="Ejercicio 3.2 · Ordena"}
+Estos son los pasos de un algoritmo genético, desordenados: *mutar a los hijos*, *crear la población inicial*, *reemplazar*, *seleccionar a los padres*, *representar el problema*, *evaluar a los hijos*, *cruzar a los padres*, *evaluar la población inicial*. Ordénalos e indica cuáles se hacen una sola vez y cuáles en cada generación.
+
+<details>
+<summary>**Ver la solución**</summary>
+
+Una sola vez: **representar el problema**, **crear la población inicial** y **evaluar la población inicial**. En cada generación: **seleccionar a los padres**, **cruzar a los padres**, **mutar a los hijos**, **evaluar a los hijos** y **reemplazar**. Después de reemplazar, se comprueba el criterio de parada y, si no se cumple, empieza otra generación.
+</details>
+::::
+
+## 3.3 Del ciclo al pseudocódigo [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#pseudocodigo}
+
+¿Cómo se escribe el ciclo para que un ordenador pueda seguirlo?
+
+El ciclo cabe en unas pocas líneas de **pseudocódigo**, una descripción del algoritmo que no depende de ningún lenguaje de programación. Llamamos *P*(*t*) a la población de la generación *t*, que tiene *N* individuos:
+
+```text
+ 1  t ← 0
+ 2  P(0) ← crear N individuos al azar
+ 3  evaluar cada individuo de P(0)
+ 4  mejor ← el individuo con más aptitud de P(0)
+ 5  mientras no se cumpla el criterio de parada:
+ 6      padres ← seleccionar N padres de P(t)
+ 7      hijos ← cruzar los padres por parejas
+ 8      hijos ← mutar los hijos
+ 9      evaluar cada hijo; si alguno supera a mejor, guardarlo en mejor
+10      P(t + 1) ← reemplazar(P(t), hijos)
+11      t ← t + 1
+12  devolver mejor
+```
+
+Las líneas 1–4 se ejecutan una vez. Las líneas 6–11 son una generación y se repiten mientras no se cumpla el criterio de la línea 5. Es el esquema general de los algoritmos evolutivos que da @talbi2009 [p. 200], con dos detalles que conviene hacer explícitos.
+
+- **Cada individuo se evalúa una vez.** La población inicial, en la línea 3; cada hijo, en la línea 9, en cuanto se crea. Evaluar suele ser lo más caro del algoritmo, así que no se repite. Lo veremos en la [sección 5.8](05-inicializar-evaluar.qmd#coste).
+- **El algoritmo recuerda la mejor solución encontrada.** La variable *mejor* guarda el mejor individuo visto hasta ese momento, aunque luego desaparezca de la población. Es lo que devuelve al final [@luke2013, algoritmo 20].
+
+Los nombres de las líneas 6–10 son las decisiones que todavía no hemos tomado: cómo seleccionar ([capítulo 6](06-seleccion.qmd#sec-seleccion)), cómo cruzar ([capítulo 7](07-cruce.qmd#sec-cruce)), cómo mutar ([capítulo 8](08-mutacion.qmd#sec-mutacion)) y cómo reemplazar ([capítulo 9](09-reemplazo.qmd#sec-reemplazo)). El pseudocódigo es el mismo; lo que cambia de un algoritmo genético a otro es qué hay dentro de cada línea.
+
+:::: {.callout-note .ejercicio #ejercicio-3-3 title="Ejercicio 3.3 · Lee el pseudocódigo"}
+Con una población de *N* = 50 individuos y un criterio de parada de 100 generaciones:
+
+a) ¿Cuántas veces se ejecuta la línea 6?
+b) Si cada pareja de padres da dos hijos, ¿cuántas parejas hay que formar en cada generación? ¿Qué problema aparece si *N* es impar?
+c) ¿Cuántas veces se evalúa la aptitud en toda la ejecución?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+a) **100 veces**, una por generación.
+
+b) Para tener 50 hijos hacen falta **25 parejas**, *N*/2. Si *N* fuera impar, la última pareja daría un hijo de más; habría que descartar uno [@mitchell1998, apartado 1.6] o pedir que *N* sea par, como hace @luke2013 [algoritmo 20].
+
+c) 50 evaluaciones de la población inicial y 50 en cada una de las 100 generaciones: $50 + 50 \times 100 = 5050$. En general, $N\,(G + 1)$ con *G* generaciones.
+</details>
+::::
+
+## 3.4 Una generación a mano: representar y evaluar [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#a-mano}
+
+¿Qué ocurre, número a número, en una generación?
+
+Vamos a seguir una generación completa con un ejemplo clásico, la «simulación a mano» de @goldberg1989 [pp. 15–17]. El problema es sencillo a propósito: buscar el número entero *x* entre 0 y 31 que hace máxima la función
+
+$$
+f(x) = x^2 .
+$$
+
+La respuesta es evidente, *x* = 31, pero el algoritmo no lo sabe: solo puede proponer soluciones y preguntar cuánto valen. Así podremos comprobar si avanza en la dirección correcta.
+
+**Representar.** Cada solución se escribe como un número binario sin signo de 5 bits, que permite escribir los números del 0 (00000) al 31 (11111). El primer bit es el de más peso. Por ejemplo, la cadena 01101 se lee así:
+
+$$
+0 \times 16 + 1 \times 8 + 1 \times 4 + 0 \times 2 + 1 \times 1 = 13 .
+$$
+
+**Crear la población inicial.** Goldberg toma una población de *N* = 4 individuos y la crea lanzando una moneda 20 veces, una por bit [@goldberg1989, p. 15]: 01101, 11000, 01000 y 10011. Los llamaremos A, B, C y D, como en la herramienta.
+
+**Evaluar.** La aptitud de cada individuo es el valor de la función: se decodifica la cadena para obtener *x* y se calcula $x^2$. Para 01101, *x* = 13 y su aptitud es $13^2 = 169$.
+
+:::: {.callout-note .ejercicio #ejercicio-3-4 title="Ejercicio 3.4 · Decodifica y evalúa"}
+Calcula *x* y la aptitud $f(x) = x^2$ de los individuos B = 11000, C = 01000 y D = 10011. ¿Cuánto suman las cuatro aptitudes? ¿Cuál es la aptitud media y cuál la mejor?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+| Individuo | Cromosoma | *x* | Aptitud $x^2$ |
+|---|:---:|:---:|:---:|
+| A | 01101 | 13 | 169 |
+| B | 11000 | 24 | 576 |
+| C | 01000 | 8 | 64 |
+| D | 10011 | 19 | 361 |
+
+La suma es **1170**, la media **292,5** y la mejor, **576**, la de B [@goldberg1989, p. 16, tabla 1.2]. Goldberg redondea la media a 293.
+</details>
+::::
+
+## 3.5 Seleccionar con la ruleta [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#seleccionar}
+
+Con las aptitudes de la población, ¿quiénes serán los padres?
+
+Goldberg usa la **ruleta**: cada individuo ocupa en una ruleta un sector proporcional a su aptitud, y se gira tantas veces como padres hacen falta, aquí cuatro [@goldberg1989, pp. 11–12]. La probabilidad de que un giro elija al individuo *i* es su parte de la aptitud total,
+
+$$
+p_i = \frac{f_i}{\sum_j f_j} ,
+$$
+
+y el número esperado de copias de *i* entre los *N* padres es $N\,p_i$. Un mismo individuo puede salir varias veces. Estudiaremos la ruleta y otros mecanismos de selección en el [capítulo 6](06-seleccion.qmd#ruleta); aquí basta con esta idea.
+
+| Individuo | A | B | C | D |
+|---|:---:|:---:|:---:|:---:|
+| Aptitud | 169 | 576 | 64 | 361 |
+| Probabilidad *p* | 0,144 | 0,492 | 0,055 | 0,309 |
+| Copias esperadas, 4 *p* | 0,58 | 1,97 | 0,22 | 1,23 |
+
+Para girar la ruleta, la herramienta saca un número aleatorio *r* entre 0 y 1 y lo coloca sobre las **probabilidades acumuladas**: 0,144 para A, 0,637 para A y B juntos, 0,691 hasta C y 1 hasta D. El giro elige al primer individuo cuya probabilidad acumulada supera a *r*.
+
+::: {.callout-tip .ejemplo #ejemplo-3-5 title="Ejemplo reproducible 3.5 · Cuatro giros de la ruleta"}
+**Datos.** La población del [ejercicio 3.4](#ejercicio-3-4), que selection-ga trae como **Ejemplo de Goldberg (x²)**, y los cuatro números aleatorios del sorteo 19: *r* = 0,05, 0,32, 0,45 y 0,75.
+
+**Predice.** ¿A quién elige cada giro? ¿Qué individuo se queda sin copias?
+
+[Abrir: ruleta con el ejemplo de Goldberg](https://josemagalan.github.io/selection-ga/#op=roulette&lang=es&ex=goldberg&r=19){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+Los padres son **A B B D**:
+
+| Giro | 1 | 2 | 3 | 4 |
+|---|:---:|:---:|:---:|:---:|
+| *r* | 0,05 | 0,32 | 0,45 | 0,75 |
+| Elegido | A | B | B | D |
+
+El 0,05 es menor que 0,144, así que elige a A; el 0,32 y el 0,45 caen entre 0,144 y 0,637, que es el sector de B; el 0,75 cae entre 0,691 y 1, el de D. **C**, el peor, se queda sin copias, y **B**, el mejor, tiene dos. La aptitud media pasa de 292,5 en la población a 420,5 entre los padres.
+
+Es el mismo resultado que obtuvo Goldberg con monedas: una copia de A, dos de B, ninguna de C y una de D [@goldberg1989, p. 16]. Como él dice, los mejores reciben más copias, los del medio se mantienen y el peor desaparece. Pero es un sorteo: con otro *r*, el resultado puede ser otro.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (ruleta con el ejemplo de Goldberg)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/selection-ga/#op=roulette&lang=es&ex=goldberg&r=19" loading="lazy" title="selection-ga: ruleta, ejemplo de Goldberg"></iframe>
+</details>
+:::
+
+<!-- Comprobado el 2026-10-15: con op=roulette&ex=goldberg&r=19, la herramienta muestra en el paso 9 de 9 «Resultado: los padres son A B B D. La aptitud media pasa de 292,5 en la población a 420,5 en los padres; 3 de los 4 individuos tienen al menos una copia (sin copia: C) y el mejor, B, tiene 2.» Los números aleatorios 0,05, 0,32, 0,45 y 0,75 y las probabilidades acumuladas 0,144, 0,637, 0,691 y 1 se comprobaron con el código (rouletteSelection) y en la narración de los pasos 5–8. -->
+
+## 3.6 Cruzar y mutar [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#variar}
+
+Ya tenemos cuatro padres. ¿Cómo salen de ellos cuatro hijos distintos?
+
+**Formar parejas.** Goldberg empareja a los padres al azar: el primero con el segundo y el tercero con el cuarto [@goldberg1989, p. 16]. Con los padres A B B D, las parejas son **A con B** (01101 y 11000) y **B con D** (11000 y 10011). Todas las parejas se cruzan: la probabilidad de cruce es 1.
+
+**Cruzar.** Goldberg usa el **cruce en un punto**: se elige al azar un punto de corte entre dos genes y los dos padres intercambian todo lo que queda a la derecha del corte [@goldberg1989, p. 12]. El primer hijo tiene la cabeza del primer padre y la cola del segundo; el otro hijo, al revés. En la simulación, el corte de la primera pareja salió detrás del cuarto gen y el de la segunda, detrás del segundo [@goldberg1989, pp. 16–17, tabla 1.2]. Estudiaremos este y otros cruces en el [capítulo 7](07-cruce.qmd#uno-y-dos-puntos).
+
+::: {.callout-tip .ejemplo #ejemplo-3-6 title="Ejemplo reproducible 3.6 · Dos cruces en un punto"}
+**Datos.** Primera pareja: **Padre 1** 0 1 1 0 1 (A) y **Padre 2** 1 1 0 0 0 (B), con el corte detrás del gen 4. Segunda pareja: **Padre 1** 1 1 0 0 0 (B) y **Padre 2** 1 0 0 1 1 (D), con el corte detrás del gen 2.
+
+**Predice.** Escribe los cuatro hijos. ¿Cuál es su *x* y su aptitud? ¿Ha aparecido algún individuo mejor que B?
+
+[Abrir: primera pareja (corte 4)](https://josemagalan.github.io/crossover-ga/#op=one-point&lang=es&p1=0-1-1-0-1&p2=1-1-0-0-0&c=4){.abrir target="_blank"}
+[Abrir: segunda pareja (corte 2)](https://josemagalan.github.io/crossover-ga/#op=one-point&lang=es&p1=1-1-0-0-0&p2=1-0-0-1-1&c=2){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+| Pareja | Padres | Corte | Hijos | *x* | Aptitud |
+|---|:---:|:---:|:---:|:---:|:---:|
+| 1 | 0110\|1 y 1100\|0 | 4 | **01100** y **11001** | 12 y 25 | 144 y 625 |
+| 2 | 11\|000 y 10\|011 | 2 | **11011** y **10000** | 27 y 16 | 729 y 256 |
+
+Dos hijos superan a B, el mejor padre (576): **11001** (625) y, sobre todo, **11011** (729). Este último junta el principio de B, 11, con el final de D, 11. Ninguno de los dos padres tenía a la vez los dos bits más altos y los dos más bajos a 1 [@goldberg1989, p. 17].
+
+En la primera pareja, detrás del corte solo queda un gen, así que cada hijo es una copia de un padre con el último bit del otro. Cuanto más cerca del final cae el corte, menos genes se intercambian.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (segunda pareja)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/crossover-ga/#op=one-point&lang=es&p1=1-1-0-0-0&p2=1-0-0-1-1&c=2" loading="lazy" title="crossover-ga: cruce en un punto"></iframe>
+</details>
+:::
+
+<!-- Comprobado el 2026-10-15: en el paso 6 de 6, la herramienta muestra los hijos 0 1 1 0 0 y 1 1 0 0 1 (primera pareja; «1 posiciones intercambiadas y 4 conservadas») y 1 1 0 1 1 y 1 0 0 0 0 (segunda; «3 posiciones intercambiadas y 2 conservadas»). En crossover-ga, c=4 es el corte detrás del gen 4, como el «crossing site» 4 de Goldberg. -->
+
+**Mutar.** Por último, cada bit de cada hijo puede invertirse, de 0 a 1 o de 1 a 0, con una probabilidad pequeña, la **probabilidad de mutación** *pm*. Goldberg usa *pm* = 0,001 [@goldberg1989, pp. 14, 16]. Con 20 bits en la población, el número esperado de bits mutados en una generación es $20 \times 0{,}001 = 0{,}02$: lo normal es que no mute ninguno, y en la simulación no mutó ninguno. Los cuatro hijos pasan tal cual. La mutación es la que puede devolver a la población un alelo que se ha perdido [@goldberg1989, p. 14]; la estudiaremos en el [capítulo 8](08-mutacion.qmd#inversion-bits).
+
+:::: {.callout-note .ejercicio #ejercicio-3-6 title="Ejercicio 3.6 · ¿Ninguna mutación?"}
+Con *pm* = 0,001 y 20 bits, ¿qué probabilidad hay de que no mute ningún bit en una generación? ¿Y si *pm* = 1/5 = 0,2, que hace que en promedio mute un bit por hijo?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+Cada bit se queda como está con probabilidad $1 - \mathit{pm}$, y los 20 bits se sortean por separado. La probabilidad de que no mute ninguno es $(1 - 0{,}001)^{20} = 0{,}999^{20} \approx$ **0,980**. Con *pm* = 0,2 es $0{,}8^{20} \approx$ **0,012**: casi seguro que muta alguno, y en promedio mutan $20 \times 0{,}2 = 4$ bits, uno por hijo.
+</details>
+::::
+
+::: {.callout-note .en-app title="En la aplicación · mutation-ga, «Inversión de bits»"}
+[Explorar en mutation-ga](https://josemagalan.github.io/mutation-ga/#op=bit-flip&lang=es&p=1-1-0-1-1){.explorar target="_blank"}
+
+- El enlace abre la inversión de bits con el hijo 1 1 0 1 1. Avanza paso a paso: para cada posición se sortea un *r* y el bit cambia si *r* es menor que **pm**.
+- Pon **pm** en su valor mínimo, 0,01, y pulsa **Sortear de nuevo** varias veces. ¿Cuántas veces cambia algún bit? La herramienta no baja de 0,01, así que no puedes poner el 0,001 de Goldberg; con él, los cambios serían aún diez veces más raros.
+- Pon **pm** = 0,2 y repite. ¿Cuántos bits cambian en cada sorteo?
+:::
+
+## 3.7 Reemplazar y comparar [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#reemplazar}
+
+Tenemos cuatro hijos. ¿Es mejor la nueva población que la anterior?
+
+En el algoritmo de Goldberg, los hijos sustituyen a todos los padres: es el **reemplazo generacional**, el del algoritmo genético canónico [@talbi2009, pp. 202, 221]. La nueva población se decodifica y se evalúa, y la generación ha terminado.
+
+::: {.callout-tip .ejemplo #ejemplo-3-7 title="Ejemplo reproducible 3.7 · La nueva población"}
+**Datos.** Los cuatro padres A–D de la población inicial, con aptitudes 169, 576, 64 y 361, y los cuatro hijos del [ejemplo 3.6](#ejemplo-3-6), que en la herramienta se llaman a–d: a = 01100 (144), b = 11001 (625), c = 11011 (729) y d = 10000 (256). La pantalla se llama «Generacional con elitismo»; con un **Tamaño de la élite e** igual a 0 es el reemplazo generacional puro.
+
+**Predice.** ¿Quiénes forman la población de la generación 1? ¿Cómo cambian la aptitud media y la mejor?
+
+[Abrir: reemplazo generacional, e = 0](https://josemagalan.github.io/selection-ga/#op=elitism&lang=es&elite=0&f=169-576-64-361&g=144-625-729-256){.abrir target="_blank"}
+
+<details>
+<summary>**Ver el resultado**</summary>
+
+La generación 1 es **a b c d**: entran los cuatro hijos y no sigue ningún padre.
+
+| | Generación 0 | Generación 1 |
+|---|:---:|:---:|
+| Población | 01101, 11000, 01000, 10011 | 01100, 11001, 11011, 10000 |
+| Suma de aptitudes | 1170 | 1754 |
+| Aptitud media | 292,5 | 438,5 |
+| Mejor aptitud | 576 (*x* = 24) | 729 (*x* = 27) |
+
+En una sola generación, la media ha subido un 50 % y la mejor solución ha pasado de *x* = 24 a *x* = 27 [@goldberg1989, p. 17, tabla 1.2]. El óptimo, 11111, todavía no ha aparecido.
+</details>
+
+<details class="incrustada">
+<summary>Mostrar aquí la herramienta (reemplazo generacional)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/selection-ga/#op=elitism&lang=es&elite=0&f=169-576-64-361&g=144-625-729-256" loading="lazy" title="selection-ga: generacional con elitismo"></iframe>
+</details>
+:::
+
+<!-- Comprobado el 2026-10-15: la herramienta muestra en el paso 7 de 7 «Siguiente generación: a b c d. Sobreviven 0 padres y 4 hijos; la aptitud media pasa de 292,5 a 438,5 y la mejor, de 576 a 729.» -->
+
+¿Por qué ha mejorado? La selección dio dos copias a B, el mejor, y ninguna a C, el peor. El cruce juntó en 11011 lo bueno de B, que empieza por 11, con lo bueno de D, que acaba en 11 [@goldberg1989, p. 17]. Selección y cruce juntos combinan partes de soluciones buenas para formar otras mejores.
+
+Pero conviene no sacar conclusiones de una sola generación de un proceso aleatorio [@goldberg1989, p. 16]. Con otros números aleatorios, la ruleta podía haber elegido a C o el cruce podía haber roto lo bueno de B. Y nada garantiza que la nueva población conserve al mejor individuo, como muestra el ejercicio siguiente.
+
+:::: {.callout-note .ejercicio #ejercicio-3-7 title="Ejercicio 3.7 · El mejor se pierde"}
+Otro ejemplo clásico [@mitchell1998, apartado 1.6]: cadenas de 8 bits cuya aptitud es su número de unos. La población inicial tiene aptitudes A = 2, B = 6, C = 1 y D = 3. Tras seleccionar, cruzar con probabilidad 0,7 y mutar, los hijos tienen aptitudes 3, 5, 1 y 5. Con reemplazo generacional, ¿qué les pasa a la aptitud media y a la mejor? ¿Qué cambiaría si el mejor padre pasara a la generación siguiente en lugar del peor hijo?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+La media sube de $12/4 = 3$ a $14/4 = 3{,}5$, pero la mejor aptitud **baja de 6 a 5**: el mejor individuo, B, se ha perdido. Si B ocupa el lugar del peor hijo, el que tiene aptitud 1, la generación siguiente tiene aptitudes 6, 3, 5 y 5: la mejor se mantiene en 6 y la media sube a 4,75. Es el **elitismo**, que estudiaremos en la [sección 9.3](09-reemplazo.qmd#elitismo). Puedes comprobar los dos casos en selection-ga: [sin élite](https://josemagalan.github.io/selection-ga/#op=elitism&lang=es&elite=0&f=2-6-1-3&g=3-5-1-5){target="_blank"} y [con un individuo de élite](https://josemagalan.github.io/selection-ga/#op=elitism&lang=es&elite=1&f=2-6-1-3&g=3-5-1-5){target="_blank"}. La herramienta redondea la media a 4,8.
+</details>
+::::
+
+<!-- Comprobado el 2026-10-15: con elite=0, «Siguiente generación: a b c d […] la aptitud media pasa de 3 a 3,5 y la mejor, de 6 a 5. El mejor padre se ha perdido»; con elite=1, «Siguiente generación: B a b d […] la aptitud media pasa de 3 a 4,8 y la mejor, de 6 a 6». Los hijos de Mitchell son E' (3), F (5), C (1) y B' (5). -->
+
+## 3.8 Las nueve decisiones de diseño [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#decisiones}
+
+Para el problema de Goldberg alguien tuvo que decidir los 5 bits, la ruleta, el cruce en un punto… ¿Qué hay que decidir, en general, para construir un algoritmo genético?
+
+Cada caja de la [figura 3.1](#figura-3-1) esconde una o varias decisiones. @talbi2009 [p. 205] las agrupa en siete componentes: representación, inicialización de la población, función objetivo, selección, reproducción (cruce y mutación), reemplazo y criterio de parada. Si separamos el cruce de la mutación y la decodificación de la representación, quedan **nueve decisiones de diseño**:
+
+| Decisión | Pregunta | En el ejemplo de Goldberg | Capítulo |
+|---|---|---|:---:|
+| 1. Representación | ¿Cómo se escribe una solución como cromosoma? | Cadena de 5 bits | [4](04-representacion.qmd#sec-representacion) |
+| 2. Inicialización | ¿Con qué población se empieza? | 4 cadenas al azar | [5](05-inicializar-evaluar.qmd#sec-inicializar-evaluar) |
+| 3. Genotipo y fenotipo | ¿Cómo se pasa del cromosoma a la solución? | Binario sin signo a entero, de 0 a 31 | [4](04-representacion.qmd#genotipo-fenotipo) |
+| 4. Aptitud | ¿Cómo se mide lo buena que es una solución? | $f(x) = x^2$ | [5](05-inicializar-evaluar.qmd#evaluar) |
+| 5. Mutación | ¿Cómo se introducen cambios pequeños? | Inversión de bits, *pm* = 0,001 | [8](08-mutacion.qmd#sec-mutacion) |
+| 6. Cruce | ¿Cómo se combinan dos padres? | En un punto, siempre | [7](07-cruce.qmd#sec-cruce) |
+| 7. Selección | ¿Quién se reproduce? | Ruleta | [6](06-seleccion.qmd#sec-seleccion) |
+| 8. Reemplazo | ¿Quién pasa a la generación siguiente? | Generacional: todos los hijos | [9](09-reemplazo.qmd#sec-reemplazo) |
+| 9. Parada | ¿Cuándo se termina? | Tras una generación, para el ejemplo | [9](09-reemplazo.qmd#cuando-parar) |
+
+A estas decisiones se suman los valores de los **parámetros**, como el tamaño de la población *N* o las probabilidades de cruce y de mutación, que veremos en el [capítulo 10](10-experimentos.qmd#sec-experimentos).
+
+El orden de la tabla es el del diseño, no el de la ejecución. Primero se decide la representación, porque las demás dependen de ella: la aptitud se calcula sobre la solución decodificada, y el cruce y la mutación actúan sobre el cromosoma [@talbi2009, p. 200], así que tienen que estar pensados para él. Por ejemplo, el cruce en un punto funciona con cadenas de bits, pero no con una ruta del viajante escrita como permutación, porque los hijos pueden repetir ciudades ([sección 7.5](07-cruce.qmd#permutaciones)). En cambio, la selección y el reemplazo solo miran la aptitud, así que sirven para cualquier representación.
+
+:::: {.callout-note .ejercicio #ejercicio-3-8 title="Ejercicio 3.8 · ¿Qué decisión es?"}
+Un equipo diseña un algoritmo genético para el problema del viajante. ¿A cuál de las nueve decisiones corresponde cada frase?
+
+a) «Cada ruta será una permutación de las ciudades.»
+b) «La aptitud será la inversa de la longitud de la ruta.»
+c) «Para obtener la ruta, añadimos el almacén al principio y al final de la permutación.»
+d) «Los dos mejores individuos pasarán sin cambios a la generación siguiente.»
+e) «Pararemos tras 100 generaciones sin mejorar.»
+f) «Con probabilidad 0,05, intercambiaremos dos ciudades de un hijo.»
+g) «Los padres se elegirán por torneo entre 4 individuos.»
+
+<details>
+<summary>**Ver la solución**</summary>
+
+a) Representación (1). b) Aptitud (4). c) Genotipo y fenotipo (3): la permutación es el cromosoma y la ruta completa, la solución. d) Reemplazo (8): es elitismo. e) Parada (9). f) Mutación (5). g) Selección (7).
+</details>
+::::
+
+## 3.9 De una generación a una ejecución [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#ejecucion}
+
+Una generación ha mejorado la población de Goldberg. ¿Qué pasa si dejamos que el ciclo siga?
+
+Un algoritmo genético no se detiene tras una generación: repite el ciclo decenas o cientos de veces. El conjunto de todas las generaciones, de la población inicial a la parada, es una **ejecución** [@mitchell1998, apartado 1.6]. El criterio de parada puede fijarse de antemano, como un número de generaciones o de evaluaciones, o depender de lo que pase en la ejecución, como llevar varias generaciones sin mejorar o alcanzar una solución lo bastante buena [@talbi2009, pp. 198–199]. Lo veremos en la [sección 9.6](09-reemplazo.qmd#cuando-parar).
+
+Como casi todos los pasos usan números aleatorios, dos ejecuciones con distinta semilla suelen terminar en sitios distintos [@mitchell1998, apartado 1.6]. Para saber cómo funciona un algoritmo hay que hacer varias ejecuciones; lo veremos en el [capítulo 10](10-experimentos.qmd#azar).
+
+EvoTraveller permite ver una ejecución completa. Resuelve el problema del viajante: un origen en (0, 0) y varios lugares en una cuadrícula, y el algoritmo busca la ruta más corta que pasa por todos y vuelve al origen. Cada individuo es una permutación de los lugares y su aptitud es la inversa de la longitud de la ruta: a mayor aptitud, ruta más corta.
+
+::: {.callout-note .en-app title="En la aplicación · EvoTraveller"}
+[Explorar en EvoTraveller](https://evotraveller.streamlit.app/){.explorar target="_blank"}
+
+- Deja los valores iniciales de la barra lateral y pulsa **Run**. La gráfica **Fitness** muestra la mejor aptitud de cada generación, de la 0 a la 50; **Best solution**, la mejor ruta al final.
+- Bajo **Solutions**, mueve el control **Generation** desde 0 y observa cómo cambian las rutas de la población. ¿Se parecen más entre sí al principio o al final?
+- Busca en la barra lateral, bajo **GA parameters**, qué controles corresponden a la selección, el cruce, la mutación, el reemplazo y la parada. ¿Qué decisiones de diseño no puedes cambiar?
+- Pon **Generations** en 10 y vuelve a pulsar **Run**. ¿Qué decisión has cambiado? ¿Llega la curva al mismo valor que con 50?
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-3-9 title="Ejercicio 3.9 · Las decisiones de EvoTraveller"}
+Según su descripción y su código, EvoTraveller crea la población inicial con permutaciones al azar, elige los padres por torneo, cruza con OX, muta intercambiando dos lugares y pasa los mejores a la generación siguiente sin cambiarlos. Para obtener la ruta, añade el origen al principio y al final de la permutación.
+
+a) Completa la tabla de la [sección 3.8](#decisiones) para EvoTraveller y di qué control de la barra lateral corresponde a cada decisión, si lo hay.
+b) Con los valores iniciales, la curva **Fitness** sube o se queda igual, pero nunca baja. ¿Por qué?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+a)
+
+| Decisión | En EvoTraveller | Control |
+|---|---|---|
+| 1. Representación | Permutación de los lugares | — |
+| 2. Inicialización | Permutaciones al azar | **Population size** fija cuántas |
+| 3. Genotipo y fenotipo | Añadir el origen al principio y al final | — |
+| 4. Aptitud | Inversa de la longitud de la ruta | — |
+| 5. Mutación | Intercambio de dos lugares | **Mutation rate** |
+| 6. Cruce | OX | **Crossover** |
+| 7. Selección | Torneo | **Tournament size** |
+| 8. Reemplazo | Generacional con élite | **Elitism** |
+| 9. Parada | Un número fijo de generaciones | **Generations** |
+
+**Number of places** y **Seed** no son decisiones del algoritmo: definen el problema, es decir, cuántos lugares hay y dónde están.
+
+b) Porque hay **élite**: los mejores individuos pasan a la generación siguiente sin cruzarse ni mutar, así que la mejor ruta de una generación sigue en la siguiente. La mejor aptitud solo puede subir o quedarse igual, como en el [ejercicio 3.7](#ejercicio-3-7) con élite.
+</details>
+::::
+
+<!-- Comprobado el 2026-10-15 con el código de EvoTraveller (algorithm.py y main.py, commit 41205ad): initial_population usa random.sample; random_tournament; ox_crossover; mutate intercambia dos posiciones con probabilidad mutation_rate por individuo; la élite, max(1, int(elitism · N)) redondeada a par, se copia sin mutar; el bucle hace `generations` vueltas; add_extremes añade (0, 0) al principio y al final; fitness = 1/distancia. Con los valores iniciales (10 lugares, semilla 1111), la mejor aptitud pasa de 0,02301 a 0,02932 y no baja nunca (mejora en las generaciones 1, 2 y 3), como en el capítulo 10. La gráfica Fitness tiene 51 puntos (generaciones 0 a 50); el control Generation va de 0 a Generations − 1. -->
+
+## 3.10 Variantes del ciclo [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#variantes}
+
+¿Todos los algoritmos genéticos recorren el ciclo exactamente igual?
+
+El ciclo de la [figura 3.1](#figura-3-1) es el más común, pero hay variantes que cambian detalles importantes.
+
+- **No todas las parejas se cruzan.** En el ejemplo de Goldberg, la probabilidad de cruce es 1. Lo habitual es que sea menor, por ejemplo 0,7: con esa probabilidad, la pareja se cruza; si no, sus hijos son copias de los padres, que después pueden mutar [@mitchell1998, apartado 1.6]. En el [ejercicio 3.7](#ejercicio-3-7), una de las parejas no se cruzó.
+- **Formar parejas.** Goldberg sortea las parejas después de seleccionar a todos los padres [@goldberg1989, p. 16]; otros algoritmos seleccionan directamente cada pareja, padre a padre [@mitchell1998, apartado 1.6; @luke2013, algoritmo 20]. Si la selección elige a cada padre por separado, el resultado es el mismo.
+- **Dónde se evalúa.** El esquema de @talbi2009 [p. 200] evalúa la población al principio de cada generación y también a los hijos antes de reemplazar. Escrito así, cada hijo se evaluaría dos veces: al crearse y al empezar la generación siguiente. Un programa cuidadoso guarda la aptitud de cada individuo y no la vuelve a calcular ([sección 5.8](05-inicializar-evaluar.qmd#coste)).
+- **Generacional o estacionario.** En el reemplazo generacional, en cada generación se crean *N* hijos que sustituyen a toda la población. En el **estado estacionario** (*steady state*) se crea un solo hijo, o unos pocos, que sustituyen, por ejemplo, al peor de la población [@talbi2009, p. 221]. Entonces una «generación» es mucho más corta, y para comparar dos algoritmos hay que contar evaluaciones, no generaciones ([sección 9.4](09-reemplazo.qmd#estacionario)).
+- **Recordar la mejor solución.** La variable *mejor* del pseudocódigo guarda la mejor solución encontrada fuera de la población [@luke2013, algoritmo 20]. El elitismo la guarda dentro, de modo que además puede seguir reproduciéndose ([sección 9.3](09-reemplazo.qmd#elitismo)).
+
+:::: {.callout-note .ejercicio #ejercicio-3-10 title="Ejercicio 3.10 · Contar evaluaciones"}
+Un algoritmo generacional con *N* = 50 hace 100 generaciones. Otro, de estado estacionario y también con *N* = 50, crea un solo hijo en cada paso. ¿Cuántas evaluaciones hace el primero? ¿Cuántos pasos necesita el segundo para hacer las mismas? Si el primero se programara literalmente con el esquema de Talbi, sin guardar las aptitudes, ¿cuántas evaluaciones haría?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+El generacional evalúa los 50 individuos iniciales y 50 hijos en cada generación: $50 + 50 \times 100 =$ **5050** evaluaciones. El estacionario evalúa los 50 iniciales y un hijo por paso, así que necesita **5000 pasos** para llegar a las mismas 5050. Con el esquema de Talbi sin guardar aptitudes, cada generación evalúa la población (50) y los hijos (50), es decir, 100 evaluaciones; en 100 generaciones son **10 000**, casi el doble. Las 4950 de más repiten un cálculo ya hecho: desde la segunda generación, la población que se evalúa al empezar está formada por los hijos de la anterior, que ya estaban evaluados.
+</details>
+::::
+
+## 3.11 Ampliaciones [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas} {#ampliaciones}
+
+**Una familia de algoritmos.** Los algoritmos genéticos son un tipo de **algoritmo evolutivo**, y estos, a su vez, un tipo de metaheurística basada en poblaciones. Todas siguen el mismo esquema: generar una población nueva y seleccionar con cuál seguir [@talbi2009, p. 191]. Lo que distingue a cada familia de algoritmos evolutivos es la representación y los operadores. Los algoritmos genéticos, propuestos por Holland, usaban originalmente cadenas binarias, cruce en *n* puntos o uniforme, mutación por inversión de bits, selección proporcional a la aptitud y reemplazo generacional. Las estrategias evolutivas (Rechenberg y Schwefel) trabajan con vectores de números reales y mutación gaussiana, y reemplazan con (μ, λ) o (μ + λ). La programación evolutiva (Fogel) no usa cruce, y la programación genética (Koza) hace evolucionar programas representados como árboles [@talbi2009, pp. 201–204, tablas 3.4 y 3.5]. Hoy la frontera entre familias es borrosa: hay algoritmos genéticos con representaciones distintas de la binaria [@talbi2009, p. 201], y uno con vectores reales, como los del [capítulo 7](07-cruce.qmd#reales), toma ideas de las estrategias evolutivas.
+
+**¿Por qué funciona?** En el [ejemplo 3.6](#ejemplo-3-6), el mejor hijo juntó dos trozos de cadenas buenas: 11 al principio y 11 al final. @goldberg1989 [p. 17] parte de esta observación para analizar los algoritmos genéticos con la idea de **esquema** o plantilla de semejanza: un patrón como 11\*\*\*, que comparten todas las cadenas que empiezan por 11. Con esa idea empieza el análisis teórico clásico de los algoritmos genéticos [@goldberg1989, p. 1], que no necesitamos para usarlos.
+
+**Más lecturas.** La simulación a mano completa, con más detalle sobre cada operador, está en @goldberg1989 [pp. 10–17]. @mitchell1998 [apartado 1.6] describe el mismo algoritmo como una lista de pasos, con otro ejemplo. @talbi2009 [apartados 3.1–3.3] presenta el esquema común de los algoritmos evolutivos y sus componentes, y @luke2013 [algoritmo 20] da un pseudocódigo del algoritmo genético muy cercano al de la [sección 3.3](#pseudocodigo).
+
+## Resumen {#resumen}
+
+- Un algoritmo genético hace evolucionar una población de soluciones. Representar el problema y crear la población inicial se hace una vez; evaluar, seleccionar, cruzar, mutar y reemplazar se repite en cada generación hasta que se cumple el criterio de parada.
+- La selección decide quién se reproduce y el reemplazo, quién sigue en la población. Cada individuo se evalúa una vez, y el algoritmo devuelve la mejor solución encontrada.
+- En la generación de Goldberg, la ruleta da más copias a los mejores y el cruce combina partes buenas de dos padres: la aptitud media pasa de 292,5 a 438,5 y la mejor, de 576 a 729. Pero una generación es un sorteo, y sin élite el mejor individuo puede perderse.
+- Diseñar un algoritmo genético es tomar nueve decisiones: representación, inicialización, decodificación, aptitud, mutación, cruce, selección, reemplazo y parada. La representación va primero, porque condiciona la aptitud y los operadores.
+
+## Referencias del capítulo {#referencias}
+
+<!-- Seguimiento interno: cotejado el 2026-10-15 con los PDF de Recursos. goldberg1989: pp. 1, 10–17 (tabla 1.1 en p. 11; operadores en pp. 11–14; simulación a mano y tabla 1.2 en pp. 15–17), con OCR (Tesseract) de las páginas 2–18 del extracto Claude outputs/tmp-ocr/goldberg-18-40.pdf. talbi2009: pp. 191 (algoritmo 3.1), 192, 198–199 (apartado 3.1.2), 200 (tabla 3.3 y algoritmo 3.2), 201–204 (apartados 3.2.1–3.2.4, tablas 3.4 y 3.5), 205 (apartado 3.3, siete componentes) y 221 (generacional y estacionario), con pdftotext. mitchell1998: apartado 1.6, con pdftotext (sin la paginación impresa). luke2013: el algoritmo 20 se cotejó con su reproducción en las transparencias del Tema 5d (Galán e Izquierdo, Universidad de Burgos), que lo atribuyen a «Luke, Sean (2014)»; la obra no se ha podido abrir desde el entorno del asistente, así que su año, edición y numeración siguen PENDIENTES DE COTEJO. La lista de nueve pasos de diseño procede de las transparencias del Tema 5d, que la toman de los apuntes de Granada; por D017 se cita Talbi (2009), que da siete componentes. Holland, Rechenberg, Schwefel, Fogel y Koza se mencionan a través de Talbi. -->
+
+::: {.referencias-capitulo #refs}
+:::

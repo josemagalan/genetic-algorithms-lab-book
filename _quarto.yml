@@ -21,6 +21,7 @@ book:
   language: es
   chapters:
     - index.qmd
+    - 03-ciclo.qmd
     - 04-representacion.qmd
     - 05-inicializar-evaluar.qmd
     - 06-seleccion.qmd
