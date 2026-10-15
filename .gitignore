@@ -9,3 +9,6 @@
 
 # Numeración que calcula filtros/indices.py en cada render
 /_numeracion.json
+
+# Originales que descarga figuras/01-imagenes.py si no se le indica otra carpeta
+/figuras/originales/
