@@ -29,6 +29,7 @@ book:
     - 08-mutacion.qmd
     - 09-reemplazo.qmd
     - 10-experimentos.qmd
+    - 11-viajante.qmd
     - avisos.qmd            # siempre al final: los capítulos nuevos van antes
 
 lang: es

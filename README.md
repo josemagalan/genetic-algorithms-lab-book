@@ -39,6 +39,7 @@ El manual está en construcción: su contenido y estructura pueden cambiar. / Th
 | 8. Mutar | Borrador completo, en revisión |
 | 9. Reemplazar y parar | Borrador completo, pendiente de revisión |
 | 10. Parámetros y aleatoriedad | Borrador completo, pendiente de revisión |
+| 11. El viajante de principio a fin | Borrador completo, pendiente de revisión |
 | Agradecimientos y avisos | Texto aprobado |
 
 El resto de capítulos está en preparación.
