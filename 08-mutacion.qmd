@@ -1,6 +1,6 @@
 # Mutar {#sec-mutacion}
 
-<!-- Seguimiento interno (no visible): redactado el 2026-10-08. Los ejemplos reproducibles se comprobaron en mutation-ga (commit 8a46267, 2026-10-07) el 2026-10-08, con su código y en la interfaz publicada. Guiones: memoria/verificaciones/2026-10-08-mutacion.js y 2026-10-08-mutacion-interfaz.py. Registro en memoria/sesiones/2026-10-08-07-capitulo-8-mutacion.md. En mutation-ga, una posición muta si r < pm (desigualdad estricta) y los r se redondean hacia abajo a centésimas. -->
+<!-- Seguimiento interno (no visible): redactado el 2026-10-08. Los ejemplos reproducibles se comprobaron en mutation-ga (commit 8a46267, 2026-10-07) el 2026-10-08, con su código y en la interfaz publicada. Guiones: memoria/verificaciones/2026-10-08-mutacion.js y 2026-10-08-mutacion-interfaz.py. Registro en memoria/sesiones/2026-10-08-07-capitulo-8-mutacion.md. En mutation-ga, una posición muta si r < pm (desigualdad estricta) y los r se redondean hacia abajo a centésimas. Recomprobado el 2026-10-15 con mutation-ga 6f346a0 (desde 8a46267 solo cambian enlaces y textos de «Acerca de»): mismos resultados con el código y en la interfaz, incluidas las tablas de los ejemplos 8.7 y 8.9. -->
 
 **Herramientas:** [mutation-ga](https://josemagalan.github.io/mutation-ga/#lang=es), accesible desde el [portal](https://josemagalan.github.io/genetic-algorithms-lab/).
 

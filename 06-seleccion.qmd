@@ -1,6 +1,6 @@
 # Seleccionar a los padres {#sec-seleccion}
 
-<!-- Seguimiento interno (no visible): los ejemplos reproducibles se comprobaron en selection-ga (commit f2de292) el 2026-10-07. Registro en memoria/sesiones/2026-10-07-08-capitulo-6-quarto.md. -->
+<!-- Seguimiento interno (no visible): los ejemplos reproducibles se comprobaron en selection-ga (commit f2de292) el 2026-10-07. Registro en memoria/sesiones/2026-10-07-08-capitulo-6-quarto.md. Recomprobado el 2026-10-15 con selection-ga 7b7d8a9 (desde f2de292 solo cambian enlaces y textos de «Acerca de»): mismos resultados con el código y en la interfaz, incluidas las tablas de «Comparar mecanismos» (memoria/verificaciones/2026-10-15-regresion-interfaz.py y la nota de la sesión 2026-10-15-03). -->
 
 **Herramientas:** [selection-ga](https://josemagalan.github.io/selection-ga/#lang=es) y [SelectionMechanisms](https://josemagalan.shinyapps.io/SelectionMechanisms/), accesibles desde el [portal](https://josemagalan.github.io/genetic-algorithms-lab/).
 

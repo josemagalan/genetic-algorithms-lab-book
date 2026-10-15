@@ -1,6 +1,6 @@
 # Reemplazar y parar {#sec-reemplazo}
 
-<!-- Seguimiento interno (no visible): redactado el 2026-10-08. Los ejemplos reproducibles se comprobaron en selection-ga (commit f2de292, 2026-10-07) el 2026-10-08, con su código y en la interfaz publicada. Guiones: memoria/verificaciones/2026-10-08-reemplazo.js y 2026-10-08-reemplazo-interfaz.py. La figura 9.1 es propia: figuras/09-elitismo-parada.py (Python 3, solo biblioteca estándar) genera figuras/09-elitismo-parada.svg. Registro en memoria/sesiones/2026-10-08-09-capitulo-9-reemplazo.md. En selection-ga, las edades de los padres salen de la semilla de la población (s=) y el hueco «al azar» es floor(u · μ). -->
+<!-- Seguimiento interno (no visible): redactado el 2026-10-08. Los ejemplos reproducibles se comprobaron en selection-ga (commit f2de292, 2026-10-07) el 2026-10-08, con su código y en la interfaz publicada. Guiones: memoria/verificaciones/2026-10-08-reemplazo.js y 2026-10-08-reemplazo-interfaz.py. La figura 9.1 es propia: figuras/09-elitismo-parada.py (Python 3, solo biblioteca estándar) genera figuras/09-elitismo-parada.svg. Registro en memoria/sesiones/2026-10-08-09-capitulo-9-reemplazo.md. En selection-ga, las edades de los padres salen de la semilla de la población (s=) y el hueco «al azar» es floor(u · μ). Recomprobado el 2026-10-15 con selection-ga 7b7d8a9: mismos resultados con el código y en la interfaz. -->
 
 **Herramientas:** [selection-ga](https://josemagalan.github.io/selection-ga/#lang=es), accesible desde el [portal](https://josemagalan.github.io/genetic-algorithms-lab/).
 
