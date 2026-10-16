@@ -24,11 +24,11 @@ Al terminar el recorrido básico de este capítulo podrás:
 
 El cruce combina lo que ya tienen los padres. ¿De dónde salen los valores que no tiene nadie en la población?
 
-En el [capítulo de cruce](#sec-cruce) vimos que, donde los dos padres coinciden, los hijos también coinciden (ejemplo [](#ejemplo-cruce-uno-y-dos-puntos)). La selección copia individuos y el cruce recombina sus genes, pero ninguno de los dos crea valores nuevos. Si en una posición todos los individuos tienen el mismo valor, ningún cruce lo puede cambiar. Además, la selección reduce la diversidad de la población generación tras generación, como vimos en el [capítulo de selección](#sec-seleccion).
+En el [capítulo de cruce](#sec-cruce) vimos que, en los cruces binarios que intercambian partes de los cromosomas, donde los dos padres coinciden, los hijos también coinciden (ejemplo [](#ejemplo-cruce-uno-y-dos-puntos)). Con estos cruces, cada hijo recibe en cada posición alguno de los valores que tenían allí sus padres. Si un valor desaparece de una posición en toda la población, ningún cruce de este tipo lo puede recuperar, y la selección, que solo copia individuos, tampoco. Con otras representaciones, el cruce sí puede dar valores que no tenía ningún padre: el cruce aritmético, de dos padres con un 2 y un 6 en la misma posición, puede dar un 4 (sección -@sec-cruce-reales), y los cruces de permutaciones recolocan los genes. Pero lo que alcanzan depende de lo que ya hay en la población: el aritmético, por ejemplo, nunca sale del intervalo que forman los padres. Además, la selección reduce la diversidad de la población generación tras generación, como vimos en el [capítulo de selección](#sec-seleccion).
 
 La **mutación** es un operador que actúa sobre un solo individuo y le hace un cambio pequeño y aleatorio en el cromosoma [@talbi2009, p. 208]. Introduce valores nuevos y recupera los que se habían perdido, de modo que ningún punto del espacio de búsqueda quede fuera de alcance [@herrera1998; @whitley1994].
 
-En los algoritmos genéticos de Holland, la mutación tiene un papel secundario. El cruce es la principal fuente de combinaciones nuevas, y la mutación garantiza que ningún valor desaparezca para siempre de la población; si se pierde, el cruce no tiene forma de recuperarlo [@holland1992, pp. 110–111]. @goldberg1989 [p. 14] la compara con una póliza de seguro contra la pérdida prematura de material genético útil. En otros métodos evolutivos, como la programación evolutiva y las primeras estrategias evolutivas, la mutación era la única fuente de variación [@mitchell1998, apartado 5.5]. Volveremos sobre este debate en la sección -@sec-mutacion-ampliaciones.
+En los algoritmos genéticos de Holland, con cadenas de bits, la mutación tiene un papel secundario. El cruce es la principal fuente de combinaciones nuevas, y la mutación garantiza que ningún valor desaparezca para siempre de la población; si se pierde, el cruce no tiene forma de recuperarlo [@holland1992, pp. 110–111]. @goldberg1989 [p. 14] la compara con una póliza de seguro contra la pérdida prematura de material genético útil. En otros métodos evolutivos, como la programación evolutiva y las primeras estrategias evolutivas, la mutación era la única fuente de variación [@mitchell1998, apartado 5.5]. Volveremos sobre este debate en la sección -@sec-mutacion-ampliaciones.
 
 La mutación se aplica después del cruce, a todos los individuos de la nueva población: a los hijos de las parejas que se han cruzado y también a las copias de las que no se han cruzado. A cada uno se le da una probabilidad baja de cambiar. Si una mutación empeora un individuo, lo más probable es que la selección lo descarte; si lo mejora, la selección tenderá a extender ese cambio por la población.
 
@@ -90,7 +90,7 @@ Han cambiado 2 bits. Se esperaban $0{,}15 \times 8 = 1{,}2$, pero el número de 
 <!-- Comprobado el 2026-10-08: la herramienta muestra en el paso 12 de 12 el mutante 1 0 0 1 0 1 1 0 y «Resultado: han cambiado 2 bits (posiciones 2, 6), así que el mutante está a distancia de Hamming 2 del padre. Lo esperado era pm · n = 1,2…». -->
 :::
 
-Con $\mathit{pm} > 0$, cualquier bit puede cambiar, así que cualquier cadena puede salir, aunque sea con una probabilidad muy pequeña. Esto responde al ejercicio [](#ejercicio-mutacion-para-que-mutar): sin mutación, el 0 de la posición 3 no puede cambiar nunca; con ella, sí.
+Con $0 < \mathit{pm} < 1$, cada bit puede cambiar o quedarse igual, así que cualquier cadena puede salir, aunque sea con una probabilidad muy pequeña: una cadena que difiere del padre en *d* de sus *n* bits sale con probabilidad $\mathit{pm}^d \, (1 - \mathit{pm})^{n-d}$. Hacen falta los dos límites. Con $\mathit{pm} = 0$ no cambia nada. Con $\mathit{pm} = 1$ cambian todos los bits a la vez: desde 000 solo se llega a 111 y, al mutar otra vez, se vuelve a 000. Esto responde al ejercicio [](#ejercicio-mutacion-para-que-mutar): sin mutación, el 0 de la posición 3 no puede cambiar nunca; con ella, sí.
 
 :::: {.callout-note .ejercicio #ejercicio-mutacion-inversion-bits title="Ejercicio · ¿Cuántos bits cambian?"}
 Un cromosoma tiene 8 bits y se muta con $\mathit{pm} = 1/8$. ¿Cuántos bits cambian en promedio? ¿Con qué probabilidad no cambia ninguno? ¿Y exactamente uno?
@@ -551,7 +551,7 @@ El mutante es **1 9 8 7 6 5 4 3 2**. Solo el 1 sigue en su posición, pero la ru
 
 ## Resumen {.unnumbered #resumen}
 
-- La mutación cambia al azar una pequeña parte de un individuo. Introduce valores que la selección y el cruce no pueden crear, y debe poder llegar a cualquier solución, cambiar poco y dar soluciones válidas.
+- La mutación cambia al azar una pequeña parte de un individuo. Aporta valores que la selección y el cruce no pueden crear ni recuperar por sí solos (en binaria, un bit que se ha perdido en toda la población), y debe poder llegar a cualquier solución, cambiar poco y dar soluciones válidas.
 - En binaria, cada bit se invierte con probabilidad *pm*. En entera, el reinicio aleatorio sirve para categorías y el deslizamiento, para cantidades ordenadas. En real, la mutación gaussiana suma un ruido de tamaño σ.
 - Las permutaciones necesitan mutaciones que solo recoloquen genes: intercambio, inserción e inversión.
 - Ni poca ni mucha: con *pm* pequeña la mayoría de los individuos no cambia; con *pm* demasiado alta, la búsqueda se vuelve aleatoria.

@@ -5,7 +5,8 @@ Algoritmo genético mínimo para el viajante (TSP), con el mismo diseño que Evo
 por permutación, torneo con contendientes distintos, cruce OX con probabilidad Pc, intercambio de dos
 genes con probabilidad pm por individuo, reemplazo generacional con élite) pero con su propio
 generador de números aleatorios: no reproduce número a número las ejecuciones de esa herramienta.
-Los mapas son puntos enteros distintos de una cuadrícula de 10 × 10; el origen es (0, 0).
+Los mapas son puntos enteros distintos de una cuadrícula de 10 × 10; el origen es (0, 0). Un mapa de n destinos
+tiene n puntos más el origen, donde empieza y acaba la ruta: n + 1 ciudades y n + 1 aristas.
 
 Ejecuciones: el generador de cada réplica es random.Random(semilla), con semillas 1–30 (REPLICAS).
 Cada comparación usa el mismo mapa y las mismas semillas para todas las configuraciones.
@@ -13,14 +14,15 @@ Cada comparación usa el mismo mapa y las mismas semillas para todas las configu
 Uso: python3 09-experimentos.py   → escribe 09-replicas.svg, 09-comparar-pm.svg, 09-tamano.svg y
 09-interaccion.svg, y muestra los datos y los resúmenes, también los que se citan en el texto sin figura
 (efecto de Pc, diversidad, élite, mutación por inversión, escalador, localidad de los operadores y
-tipo de cruce). Solo usa la biblioteca estándar de Python 3.
+tipo de cruce). Solo usa la biblioteca estándar de Python 3. Las cifras del libro se obtuvieron con Python 3.12;
+con Python 3.10 algunas ejecuciones dan valores algo distintos (comprobado el 2026-10-16).
 """
 import math
 import random
 import statistics as st
 
 REPLICAS = 30
-MAPA = 7                      # semilla del mapa de 20 ciudades de las figuras 9.1, 9.2 y 9.4
+MAPA = 7                      # semilla del mapa de 20 destinos (más el origen) de las figuras 9.1, 9.2 y 9.4
 N, G, K, PC, E = 30, 100, 3, 0.6, 1   # población, generaciones, torneo, Pc y tamaño de la élite
 PM_BASE = 0.05
 
@@ -243,7 +245,7 @@ def fig_replicas(datos):
     media = [st.mean(s[g] for s in datos) for g in range(G + 1)]
     ib, iw = fin.index(min(fin)), fin.index(max(fin))
     o = cabecera(W, H, 'Mejor longitud de ruta por generación en 30 ejecuciones del mismo algoritmo',
-                 f'Viajante con 20 ciudades, población de 30, pm = 0,05 y 30 ejecuciones con semillas distintas. Las curvas '
+                 f'Viajante con 20 destinos más el origen, población de 30, pm = 0,05 y 30 ejecuciones con semillas distintas. Las curvas '
                  f'terminan entre {coma(min(fin))} y {coma(max(fin))}; la media final es {coma(st.mean(fin))}.')
     ejes(o, x0, x1, y0, y1, vmin, vmax, range(40, 151, 20), [(g, str(g)) for g in range(0, G + 1, 20)], X, Y,
          'Generación', 'Longitud de la mejor ruta (menos es mejor)')
@@ -305,7 +307,7 @@ def fig_tamano(tabla, pms, tamanos, colores):
     vmax = 70
     Y = lambda v: y0 - (y0 - y1) * v / vmax
     o = cabecera(W, H, 'Cuánto empeora cada valor de pm respecto al mejor, según el tamaño del problema',
-                 'pm = 0,05 queda un ' + ', '.join(f'{100 * (tabla[n][0.05] / min(tabla[n].values()) - 1):.0f} % por encima del mejor con {n} ciudades'
+                 'pm = 0,05 queda un ' + ', '.join(f'{100 * (tabla[n][0.05] / min(tabla[n].values()) - 1):.0f} % por encima del mejor con {n} destinos'
                                                     for n in tamanos) + '. El mejor valor probado es el mismo en los tres tamaños, 0,5.')
     for v in range(0, 71, 10):
         o.append(f'<line x1="{x0}" y1="{Y(v):.1f}" x2="{x1}" y2="{Y(v):.1f}" stroke="{GRID}" stroke-width="1"/>')
@@ -323,7 +325,7 @@ def fig_tamano(tabla, pms, tamanos, colores):
         o.append(linea(pts, c, 2.5))
         for x, y in pts:
             o.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="4.5" fill="{c}" stroke="#ffffff" stroke-width="2"/>')
-        etiquetas.append(texto(pts[0][0] + 12, pts[0][1] - 10, f'{n} ciudades', 12, INK, extra=' stroke="#ffffff" stroke-width="4" paint-order="stroke"'))
+        etiquetas.append(texto(pts[0][0] + 12, pts[0][1] - 10, f'{n} destinos', 12, INK, extra=' stroke="#ffffff" stroke-width="4" paint-order="stroke"'))
     o.extend(etiquetas)
     o.append('</svg>')
     return '\n'.join(o) + '\n'
@@ -361,13 +363,13 @@ def fig_interaccion(tabla, pms, ks, colores):
 
 if __name__ == '__main__':
     semillas = range(1, REPLICAS + 1)
-    # --- 10.1 y 10.2: mapa de 20 ciudades
+    # --- 10.1 y 10.2: mapa de 20 destinos
     pts20 = mapa(20, MAPA)
     series = [ejecutar(pts20, s) for s in semillas]
     fin = [s[-1] for s in series]
     with open('09-replicas.svg', 'w', encoding='utf-8') as fh:
         fh.write(fig_replicas(series))
-    print('FIGURA 9.1: 20 ciudades, N=30, G=100, torneo 3, Pc=0,6, pm=0,05, élite 1; semillas 1-30')
+    print('FIGURA 9.1: 20 destinos, N=30, G=100, torneo 3, Pc=0,6, pm=0,05, élite 1; semillas 1-30')
     print('  finales ordenados:', [round(x, 1) for x in sorted(fin)])
     print(f'  media {st.mean(fin):.2f}  desv. típica {st.stdev(fin):.2f}  mín {min(fin):.2f} (semilla {fin.index(min(fin)) + 1})  '
           f'máx {max(fin):.2f} (semilla {fin.index(max(fin)) + 1})  mediana {st.median(fin):.2f}')
@@ -413,7 +415,7 @@ if __name__ == '__main__':
     print('FIGURA 9.3: media de 30 ejecuciones (mapa de cada tamaño con semilla 7)')
     for n in tam:
         mejor = min(tabla3[n].values())
-        print(f'  {n} ciudades:', {pm: (round(tabla3[n][pm], 1), f'+{100 * (tabla3[n][pm] / mejor - 1):.0f} %') for pm in pms3})
+        print(f'  {n} destinos:', {pm: (round(tabla3[n][pm], 1), f'+{100 * (tabla3[n][pm] / mejor - 1):.0f} %') for pm in pms3})
     # --- 10.4: interacción torneo x pm
     pms4 = [0, 0.05, 0.2, 0.5, 1.0]
     ks = [2, 10]
@@ -425,11 +427,11 @@ if __name__ == '__main__':
             tabla4[k][pm] = (st.mean(v), st.stdev(v) / math.sqrt(len(v)))
     with open('09-interaccion.svg', 'w', encoding='utf-8') as fh:
         fh.write(fig_interaccion(tabla4, pms4, ks, [AZUL, NARANJA]))
-    print('FIGURA 9.4: 20 ciudades, media (error típico) de 30 ejecuciones')
+    print('FIGURA 9.4: 20 destinos, media (error típico) de 30 ejecuciones')
     for k in ks:
         print(f'  torneo {k}:', {pm: f'{tabla4[k][pm][0]:.1f} ({tabla4[k][pm][1]:.1f})' for pm in pms4})
     # --- efecto de Pc (solo se muestra; no hay figura)
-    print('EFECTO DE Pc: 20 ciudades, media (error típico) de 30 ejecuciones')
+    print('EFECTO DE Pc: 20 destinos, media (error típico) de 30 ejecuciones')
     for pm in (0.05, 0.5):
         fila = {}
         for pc in (0.0, 0.6, 0.9):
@@ -437,7 +439,7 @@ if __name__ == '__main__':
             fila[pc] = f'{st.mean(v):.1f} ({st.stdev(v) / math.sqrt(len(v)):.1f})'
         print(f'  pm={pm}:', fila)
     # --- por qué sale tan alto el mejor pm (datos que se citan en el texto; no hay figura)
-    print('POR QUÉ UN pm ALTO: 20 ciudades, torneo 3, media de 30 ejecuciones')
+    print('POR QUÉ UN pm ALTO: 20 destinos, torneo 3, media de 30 ejecuciones')
     for pm in (0.05, 0.5):
         cuentas = []
         for s in semillas:
@@ -484,12 +486,12 @@ if __name__ == '__main__':
     for oper in ('intercambio', 'inversion'):
         print(f'  escalador con {oper}:', round(st.mean(escalador(pts20, s, oper) for s in semillas), 1))
 
-    # mejor ruta conocida del mapa de 20 ciudades: búsqueda local con inversiones desde 300 rutas al azar
+    # mejor ruta conocida del mapa de 20 destinos: búsqueda local con inversiones desde 300 rutas al azar
     mejor_conocida = min(busqueda_local(random.Random(s).sample(range(20), 20), pts20)[1] for s in range(300))
     print(f'  mejor ruta encontrada (búsqueda local con inversiones, 300 inicios): {mejor_conocida:.2f}')
 
     # --- localidad de los operadores: qué conservan de una buena ruta (sección 9.10)
-    print('LOCALIDAD: 20 ciudades; rutas buenas = 60 óptimos locales distintos de la búsqueda local con inversiones')
+    print('LOCALIDAD: 20 destinos; rutas buenas = 60 óptimos locales distintos de la búsqueda local con inversiones')
     r = random.Random(1)
     azar = [r.sample(range(20), 20) for _ in range(60)]
     buenas, vistas = [], set()
@@ -531,7 +533,7 @@ if __name__ == '__main__':
                   f'y es un {st.mean(sobre):+.0f} % más largo que el mejor padre')
 
     # --- tipo de cruce y de mutación en el algoritmo genético (sección 9.10)
-    print('CRUCE x MUTACIÓN: 20 ciudades, torneo 3, élite 1, media (error típico) de 30 ejecuciones; Pc = 0,6 salvo «sin cruce»')
+    print('CRUCE x MUTACIÓN: 20 destinos, torneo 3, élite 1, media (error típico) de 30 ejecuciones; Pc = 0,6 salvo «sin cruce»')
     for op in ('intercambio', 'inversion'):
         for pm in (0.05, 0.2, 0.5, 1.0):
             fila = {}

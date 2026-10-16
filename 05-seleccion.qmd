@@ -88,8 +88,10 @@ El torneo no depende de la escala de la aptitud: basta con saber cuál de dos in
 
 - Pulsa **Sortear de nuevo** varias veces y fíjate en cuántas copias recibe A.
 - Pulsa **Copias en 1000 repeticiones** y compara con las copias esperadas de la tabla.
-- Sube *k* de 2 a 5 y observa cómo se concentran las copias en D.
+- Sube *k* de 2 a 4, el máximo con cuatro individuos, y observa cómo se concentran las copias en D.
 - Cambia a la variante **Sin reemplazo** y comprueba que A ya no gana nunca.
+
+<!-- Revisión beta (2026-10-16, E03): en selection-ga el máximo de k es el menor de 5 y N (js/app.js, commit 424982e), así que con cuatro aptitudes es 4. -->
 :::
 
 ## Ruleta [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sec-seleccion-ruleta}
@@ -214,7 +216,7 @@ El orden es el mismo con las tres conversiones, pero la presión cambia. Con $20
 
 En la **selección por truncamiento** se ordena la población por aptitud y solo pasa el corte una proporción τ de los mejores; los demás no tienen ninguna oportunidad. En selection-ga, cada padre se elige al azar entre los que pasan el corte.
 
-Hay otra regla de la misma familia, la **selección por media**: quien supera la aptitud media se copia dos veces y quien no, se elimina. El tamaño de la población no se mantiene, porque no tiene por qué haber exactamente la mitad por encima de la media. Usar la **mediana** lo resuelve, y entonces la regla es un truncamiento con τ = 0,5.
+Hay otra regla de la misma familia, la **selección por media**: quien supera la aptitud media se copia dos veces y quien no, se elimina. El tamaño de la población no se mantiene, porque no tiene por qué haber exactamente la mitad por encima de la media. Cambiar la media por la **mediana** tampoco basta: con las aptitudes 1, 2, 3, 4 y 5 solo dos individuos superan la mediana, y sus copias son cuatro, no cinco; con 1, 1, 1 y 1 no la supera ninguno. Para conservar el tamaño, el corte se hace por posiciones: se ordena la población, pasa la mitad mejor y se fija qué hacer con los empates en el corte (por ejemplo, deshacerlos al azar) y cuando *N* es impar (por ejemplo, redondear hacia arriba). Los *N* padres se eligen entre los que han pasado. Así definida, la regla es un truncamiento con τ = 0,5. Si *N* es par y no hay empates en el corte, equivale a copiar dos veces a cada individuo de la mitad mejor.
 
 Estas reglas parecen razonables, pero se desaconsejan: reducen la diversidad muy deprisa.
 
@@ -282,7 +284,7 @@ Una ejecución no basta para hablar de frecuencias. En las 50 repeticiones de ca
 
 Esta sección amplía el recorrido básico. Requiere manejar probabilidades acumuladas y la idea de copias esperadas de las secciones -@sec-seleccion-torneo y -@sec-seleccion-ruleta.
 
-**Muestreo estocástico universal (SUS).** Es la ruleta de @baker1987 girada una sola vez. Cada individuo ocupa un tramo igual a sus copias esperadas, $e_i = N \cdot f_i / \sum f$, y sobre la ruleta se colocan $N$ punteros separados exactamente 1, a partir de un único número aleatorio. Cada individuo recibe sus copias esperadas redondeadas hacia abajo o hacia arriba. La probabilidad de cada individuo sigue siendo la de la ruleta, pero se elimina el ruido del muestreo.
+**Muestreo estocástico universal (SUS).** Es la ruleta de @baker1987 girada una sola vez. Cada individuo ocupa un tramo igual a sus copias esperadas, $e_i = N \cdot f_i / \sum f$, y sobre la ruleta se colocan $N$ punteros separados exactamente 1, a partir de un único número aleatorio. Cada individuo recibe sus copias esperadas redondeadas hacia abajo o hacia arriba. Las copias esperadas son las mismas que con la ruleta, pero la variabilidad del muestreo es mucho menor. No desaparece: el primer puntero cae al azar, así que un individuo con 0,4 copias esperadas puede recibir 0 copias o 1. Con la ruleta, en cambio, podría recibir cualquier número entre 0 y *N*.
 
 ::: {.callout-tip .ejemplo #ejemplo-seleccion-otros-mecanismos title="Ejemplo reproducible · SUS frente a la ruleta"}
 **Datos.** Aptitudes 1, 2, 3 y 4, como en el ejemplo [](#ejemplo-seleccion-ruleta). Copias esperadas: 0,4; 0,8; 1,2 y 1,6.
