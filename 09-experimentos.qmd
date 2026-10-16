@@ -34,7 +34,7 @@ EvoTraveller resuelve el problema del viajante con un algoritmo genético. Hay u
 
 **Predice.** ¿Encuentra el algoritmo la mejor ruta posible, de longitud 31,50? Si pulsas **Run** otra vez sin cambiar nada, ¿qué ruta saldrá?
 
-[Abrir EvoTraveller](https://evotraveller.streamlit.app/){.abrir target="_blank"}
+[Abrir y configurar: EvoTraveller](https://evotraveller.streamlit.app/){.abrir .configurar target="_blank"}
 
 <details>
 <summary>**Ver el resultado**</summary>
@@ -70,7 +70,7 @@ Recuerda que *pm* no significa lo mismo en todas las representaciones. Con bits,
 
 **Predice.** ¿Con qué valor acaba la ruta más corta? ¿Y la más larga?
 
-[Abrir EvoTraveller](https://evotraveller.streamlit.app/){.abrir target="_blank"}
+[Abrir y configurar: EvoTraveller](https://evotraveller.streamlit.app/){.abrir .configurar target="_blank"}
 
 <details>
 <summary>**Ver el resultado**</summary>
@@ -130,7 +130,7 @@ donde $x_i$ es el resultado de la réplica *i* y *n*, el número de réplicas. E
 
 **Predice.** ¿Gana siempre el 0,2 a los otros dos? ¿Y el 0,05 al 0?
 
-[Abrir EvoTraveller](https://evotraveller.streamlit.app/){.abrir target="_blank"}
+[Abrir y configurar: EvoTraveller](https://evotraveller.streamlit.app/){.abrir .configurar target="_blank"}
 
 <details>
 <summary>**Ver el resultado**</summary>
@@ -284,7 +284,7 @@ Para ver cómo se pierde la diversidad, SelectionMechanisms simula muchas veces 
 
 **Predice.** ¿Qué mecanismo conserva más IDs distintos después de 10 generaciones? ¿Y cuál tiene la aptitud media más alta?
 
-[Abrir SelectionMechanisms](https://josemagalan.shinyapps.io/SelectionMechanisms/){.abrir target="_blank"}
+[Abrir y configurar: SelectionMechanisms](https://josemagalan.shinyapps.io/SelectionMechanisms/){.abrir .configurar target="_blank"}
 
 <details>
 <summary>**Ver el resultado**</summary>
@@ -349,7 +349,7 @@ Como *n* está dentro de una raíz, hace falta mucho más trabajo para mejorar p
 
 **Predice.** ¿Con cuál de los dos números de simulaciones son más parecidos entre sí los cinco resultados?
 
-[Abrir SelectionMechanisms](https://josemagalan.shinyapps.io/SelectionMechanisms/){.abrir target="_blank"}
+[Abrir y configurar: SelectionMechanisms](https://josemagalan.shinyapps.io/SelectionMechanisms/){.abrir .configurar target="_blank"}
 
 <details>
 <summary>**Ver el resultado**</summary>

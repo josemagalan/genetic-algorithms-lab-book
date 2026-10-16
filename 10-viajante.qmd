@@ -32,7 +32,7 @@ EvoTraveller tiene tres gráficas. **Fitness** muestra la aptitud de la mejor ru
 
 **Predice.** ¿Sigue subiendo la curva **Fitness** hasta la generación 50? ¿Se parecen entre sí las rutas de la población al principio? ¿Y al final?
 
-[Abrir EvoTraveller](https://evotraveller.streamlit.app/){.abrir target="_blank"}
+[Abrir y configurar: EvoTraveller](https://evotraveller.streamlit.app/){.abrir .configurar target="_blank"}
 
 <details>
 <summary>**Ver el resultado**</summary>
@@ -108,7 +108,7 @@ Las longitudes de las rutas de este capítulo están calculadas con las distanci
 
 **Predice.** Con 100 individuos, ¿cuántas generaciones necesitará el algoritmo para encontrar la ruta de la figura -@fig-mapa? ¿Y con 10?
 
-[Abrir EvoTraveller](https://evotraveller.streamlit.app/){.abrir target="_blank"}
+[Abrir y configurar: EvoTraveller](https://evotraveller.streamlit.app/){.abrir .configurar target="_blank"}
 
 <details>
 <summary>**Ver el resultado**</summary>
@@ -263,7 +263,7 @@ La presión selectiva (capítulo -@sec-seleccion) decide lo deprisa que se pierd
 
 **Predice.** ¿Con qué torneo hay más copias de la mejor ruta en la generación 10?
 
-[Abrir EvoTraveller](https://evotraveller.streamlit.app/){.abrir target="_blank"}
+[Abrir y configurar: EvoTraveller](https://evotraveller.streamlit.app/){.abrir .configurar target="_blank"}
 
 <details>
 <summary>**Ver el resultado**</summary>
@@ -332,7 +332,7 @@ Pero la élite son las 6 primeras **posiciones** de la población ordenada, no 6
 
 **Predice.** ¿Con qué élite se encuentra la ruta más corta?
 
-[Abrir EvoTraveller](https://evotraveller.streamlit.app/){.abrir target="_blank"}
+[Abrir y configurar: EvoTraveller](https://evotraveller.streamlit.app/){.abrir .configurar target="_blank"}
 
 <details>
 <summary>**Ver el resultado**</summary>
@@ -405,7 +405,7 @@ Es un problema **táctico** (sección -@sec-experimentos-objetivo): se resuelve 
 
 **Predice.** ¿Qué configuración da rutas más cortas?
 
-[Abrir EvoTraveller](https://evotraveller.streamlit.app/){.abrir target="_blank"}
+[Abrir y configurar: EvoTraveller](https://evotraveller.streamlit.app/){.abrir .configurar target="_blank"}
 
 <details>
 <summary>**Ver el resultado**</summary>

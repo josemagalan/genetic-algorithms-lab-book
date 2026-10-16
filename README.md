@@ -2,7 +2,7 @@
 
 *Algoritmos genéticos en un laboratorio interactivo*
 
-> **Estado: en construcción (work in progress).** Borrador de trabajo de los autores, todavía sin revisar. El contenido, la estructura y el índice pueden cambiar.
+> **Estado: versión 0.9 beta, revisada el 16 de octubre de 2026** (primera publicación: 7 de octubre de 2026). Los autores siguen revisando el texto y los ejemplos; el contenido, la estructura y el índice pueden cambiar. La versión y la fecha están en `_quarto.yml` (`libro-version` y `libro-revision`).
 
 Libro para aprender algoritmos genéticos de forma práctica, con actividades sobre las herramientas interactivas del [Laboratorio de algoritmos genéticos](https://josemagalan.github.io/genetic-algorithms-lab/) (*genetic-algorithms-lab*). Está pensado para estudiantes de grado que empiezan.
 
@@ -25,7 +25,7 @@ Libro para aprender algoritmos genéticos de forma práctica, con actividades so
 | SelectionMechanisms | [Open / Abrir](https://josemagalan.shinyapps.io/SelectionMechanisms/) | [GitHub](https://github.com/josemagalan/SelectionMechanisms) |
 | Book / Libro: *Evolución a la vista* | [Read / Leer](https://josemagalan.github.io/genetic-algorithms-lab-book/) | [GitHub](https://github.com/josemagalan/genetic-algorithms-lab-book) |
 
-El libro está en construcción: su contenido y estructura pueden cambiar. / The book, in Spanish, is a work in progress: its content and structure may change.
+El libro está en versión beta: su contenido y estructura pueden cambiar. / The book, in Spanish, is in beta: its content and structure may change.
 <!-- ga-series-links:end -->
 
 ## Qué hay ahora
@@ -59,6 +59,7 @@ El resto de capítulos está en preparación.
 - Bibliografía en `referencias.bib`, con estilo APA en castellano (`vendor/csl/`).
 - Sin dependencias externas en la página: KaTeX va en local (`vendor/katex/`).
 - Al hacer *push* a `main`, GitHub Actions genera el libro y lo publica en GitHub Pages (`.github/workflows/publish.yml`).
+- `comprobaciones/` guarda la versión revisada de cada herramienta y un guion que avisa si una herramienta cambia o si el libro pide un valor que sus controles no permiten; lo ejecuta `.github/workflows/comprobar.yml` en cada *push* y cada lunes (`comprobaciones/LEEME.md`).
 
 Para generarlo en local hacen falta Quarto (≥ 1.10) y Python 3:
 
@@ -71,16 +72,23 @@ Las figuras propias están en `figuras/`, junto al guion de Python que las gener
 
 ## Comentarios
 
-Cada página del libro tiene enlaces «Informar sobre problema» y «Editar esta página». Los comentarios sobre el texto pueden abrirse como *issues*.
+Cada página del libro tiene el enlace «Enviar un comentario sobre esta página», que abre un formulario de GitHub (`.github/ISSUE_TEMPLATE/comentario.yml`) con la página, el capítulo y la versión ya rellenos, y distingue errata, resultado distinto, problema de uso y sugerencia. Quien no use GitHub puede escribir a los autores a través de sus páginas (página «Agradecimientos y avisos», apartado «Comentarios y contacto»).
 
 ## Autores
 
-José Manuel Galán, Silvia Díaz-de la Fuente, Virginia Ahedo, María Pereda y José Ignacio Santos.
+- [José Manuel Galán](https://sites.google.com/site/josemagalan/), Universidad de Burgos.
+- [Silvia Díaz-de la Fuente](https://produccioncientifica.usal.es/investigadores/2300823/detalle), Universidad de Salamanca.
+- [Virginia Ahedo](https://investigacion.ubu.es/investigadores/34947/detalle), Universidad de Burgos.
+- [María Pereda](https://portalcientifico.upm.es/es/ipublic/researcher/331932), Universidad Politécnica de Madrid.
+- [José Ignacio Santos](https://investigacion.ubu.es/investigadores/35543/detalle), Universidad de Burgos.
 
 ## Agradecimientos y uso de IA
 
-Los autores agradecen el apoyo del plan Claude Team para científicos de Anthropic. En la elaboración de este material se han utilizado asistentes de inteligencia artificial; los contenidos originales son obra de los autores, que han revisado, corregido y verificado todos los materiales y son los responsables de la publicación. El texto completo está en la página «Agradecimientos y avisos» del libro.
+Los autores agradecen el apoyo del plan Claude Team para científicos de Anthropic. En la elaboración de este material se han utilizado asistentes de inteligencia artificial; los contenidos originales son obra de los autores, que revisan, corrigen y verifican todos los materiales y son los responsables de la publicación; en esta versión beta, esa revisión sigue en curso. El texto completo está en la página «Agradecimientos y avisos» del libro.
 
 ## Licencia
 
-Pendiente de decidir. Los componentes de terceros conservan su licencia: KaTeX (MIT, `vendor/katex/LICENSE`) y el estilo APA de CSL (CC BY-SA 3.0, `vendor/csl/LEEME.md`).
+- Texto, figuras propias y ejercicios: [CC BY 4.0](LICENSE-CONTENT.md).
+- Código (guiones de `figuras/`, `filtros/`, `comprobaciones/` y `comentarios.js`): [MIT](LICENSE).
+- Los componentes de terceros conservan su licencia: las imágenes de terceros de `figuras/` (ficha en `figuras/01-imagenes.md`), KaTeX (MIT, `vendor/katex/LICENSE`) y el estilo APA de CSL (CC BY-SA 3.0, `vendor/csl/LEEME.md`).
+- La licencia del portal no se extiende al libro ni a las herramientas: cada recurso indica la suya.

@@ -1,11 +1,18 @@
 # Cómo leer este libro {.unnumbered}
 
+::: {.version-beta}
+**Versión {{< meta libro-version >}}**, revisada el {{< meta libro-revision >}}. Es una edición beta: los autores siguen revisando el texto y los ejemplos. Si encuentras una errata o un resultado que no coincide, [cuéntanoslo](avisos.qmd#contacto).
+:::
+
 El libro distingue a simple vista lo que se lee de lo que se hace. La teoría va como texto normal; todo lo que te pide trabajar va dentro de una caja.
 
 **Explicaciones.** Son el texto y las figuras que presentan los conceptos. Se leen como cualquier libro y no necesitan ninguna herramienta.
 
 ::: {.callout-tip .ejemplo title="Ejemplo reproducible"}
-Plantea una situación concreta, con datos y números aleatorios fijados, e invita a predecir el resultado antes de verlo. Los botones verdes **Abrir** llevan a la aplicación exactamente en ese estado, de modo que el resultado coincide con el del libro. También puede desplegarse la herramienta dentro de la página.
+Plantea una situación concreta, con datos y números aleatorios fijados, e invita a predecir el resultado antes de verlo. Hay dos tipos de botón verde:
+
+- **Abrir**, relleno, lleva a la aplicación exactamente en el estado del ejemplo, de modo que el resultado coincide con el del libro. Muchas veces también puede desplegarse la herramienta dentro de la página.
+- **⚙ Abrir y configurar**, con borde, se usa con los dos simuladores, EvoTraveller y SelectionMechanisms, que no guardan su estado en la dirección. Abre la aplicación con sus valores iniciales: antes de ejecutarla, pon a mano los valores que da el ejemplo en **Datos**.
 :::
 
 ::: {.callout-note .en-app title="En la aplicación"}

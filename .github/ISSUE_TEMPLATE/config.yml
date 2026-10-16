@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Escribir a los autores sin usar GitHub
+    url: https://josemagalan.github.io/genetic-algorithms-lab-book/avisos.html#contacto
+    about: Las páginas de los autores tienen sus datos de contacto.

@@ -257,7 +257,9 @@ def indice_general(caps):
 def indice_actividades(caps):
     o = ['# Índice de actividades {.unnumbered #sec-actividades}', '', AVISO, '',
          'Aquí están todas las cajas de trabajo del libro. Los **ejemplos reproducibles** abren '
-         'la herramienta en un estado fijado, de modo que el resultado coincide con el del libro; '
+         'la herramienta en un estado fijado, de modo que el resultado coincide con el del libro '
+         '(con EvoTraveller y SelectionMechanisms, el botón **⚙ Abrir y configurar** abre la aplicación '
+         'y el ejemplo da los valores que hay que poner); '
          'las cajas **En la aplicación** proponen explorar sin resultados fijados; los **ejercicios** '
          'se resuelven con papel y lápiz. La primera parte las ordena por herramienta, para preparar '
          'una sesión con una aplicación concreta; la segunda, por capítulo. La columna de nivel es '

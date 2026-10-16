@@ -2,9 +2,12 @@ project:
   type: book
   output-dir: _book
   pre-render: python3 filtros/indices.py    # numera ejemplos y ejercicios (_numeracion.json) y genera indice.qmd y actividades.qmd
-  post-render: python3 filtros/e-ante-i.py   # «y» → «e» ante i-/hi- (Galán e Izquierdo)
+  post-render:
+    - python3 filtros/e-ante-i.py   # «y» → «e» ante i-/hi- (Galán e Izquierdo)
+    - python3 filtros/busqueda.py   # quita la sigla de nivel duplicada de los extractos de búsqueda
   resources:
     - vendor/
+    - comentarios.js
 
 book:
   title: "Evolución a la vista"
@@ -12,14 +15,26 @@ book:
   site-url: https://josemagalan.github.io/genetic-algorithms-lab-book/
   repo-url: https://github.com/josemagalan/genetic-algorithms-lab-book
   repo-branch: main
-  repo-actions: [edit, issue, source]   # «Editar esta página», «Informar de un problema», «Ver el código»
-  author:
-    - José Manuel Galán
-    - Silvia Díaz-de la Fuente
-    - Virginia Ahedo
-    - María Pereda
-    - José Ignacio Santos
-  date: "2026-10-07"
+  repo-actions: [edit, source]   # «Editar esta página» y «Ver el código»; comentarios.js añade «Enviar un comentario» con la página y la versión
+  author:   # con su página web, como en el portal; para contactar sin GitHub (avisos.qmd#contacto)
+    - name: José Manuel Galán
+      url: https://sites.google.com/site/josemagalan/
+      affiliation: Universidad de Burgos
+    - name: Silvia Díaz-de la Fuente
+      url: https://produccioncientifica.usal.es/investigadores/2300823/detalle
+      affiliation: Universidad de Salamanca
+    - name: Virginia Ahedo
+      url: https://investigacion.ubu.es/investigadores/34947/detalle
+      affiliation: Universidad de Burgos
+    - name: María Pereda
+      url: https://portalcientifico.upm.es/es/ipublic/researcher/331932
+      affiliation: Universidad Politécnica de Madrid
+    - name: José Ignacio Santos
+      url: https://investigacion.ubu.es/investigadores/35543/detalle
+      affiliation: Universidad de Burgos
+  date: "2026-10-07"   # primera publicación; la versión y la fecha de revisión van en libro-version y libro-revision
+  page-footer:
+    center: "Texto: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es) · Código: [MIT](https://github.com/josemagalan/genetic-algorithms-lab-book/blob/main/LICENSE) · [Comentarios y contacto](https://josemagalan.github.io/genetic-algorithms-lab-book/avisos.html#contacto)"
   language: es
   chapters:
     - index.qmd
@@ -39,12 +54,21 @@ book:
     - avisos.qmd            # siempre al final: los capítulos nuevos van antes
 
 lang: es
+libro-version: "0.9 beta"                 # versión que muestran la portada y el formulario de comentarios (D055)
+libro-revision: "16 de octubre de 2026"   # fecha de la última revisión; cambiarla con cada versión
+
+language:   # etiquetas accesibles (revisión beta, M07)
+  search-submit-button-title: "Buscar en el libro"
+  search-label: "Buscar en el libro"
+  search-text-placeholder: "Buscar en el libro"
+  code-tools-source-code: "Repositorio del libro"
 bibliography: referencias.bib     # entradas pendientes de cotejo (ver la cabecera del archivo)
 csl: vendor/csl/apa.csl           # APA 7.ª ed. (CC BY-SA 3.0), en local y adaptada al castellano (vendor/csl/LEEME.md)
 link-citations: true
 
 filters:
   - filtros/numeracion.lua   # número de ejemplos y ejercicios y referencias a ellos
+  - filtros/version.lua      # <meta name="libro-version"> para comentarios.js
 
 crossref:
   fig-title: Figura
@@ -54,6 +78,8 @@ format:
   html:
     theme: default          # sin fuentes de Google: el libro no depende de CDN, como las herramientas
     css: estilos.css
+    include-after-body:
+      text: '<script src="comentarios.js"></script>'
     html-math-method:
       method: katex
       url: "vendor/katex/"   # KaTeX 0.19.0 (MIT) copiado en local

@@ -6,4 +6,20 @@ Los autores agradecen el apoyo del plan Claude Team para científicos de Anthrop
 
 ## Uso de asistentes de IA {#uso-ia}
 
-En la elaboración de este material se han utilizado asistentes de inteligencia artificial. Los contenidos originales y de partida —herramientas, vídeos, materiales docentes y publicaciones— son obra de los autores. Todos los materiales han sido revisados, corregidos y verificados por los autores, que son los responsables de esta publicación.
+En la elaboración de este material se han utilizado asistentes de inteligencia artificial. Los contenidos originales y de partida —herramientas, vídeos, materiales docentes y publicaciones— son obra de los autores. Los autores revisan, corrigen y verifican todos los materiales y son los responsables de esta publicación. Esta edición es una versión beta ({{< meta libro-version >}}): esa revisión sigue en curso.
+
+## Licencia {#licencia}
+
+El texto, las figuras propias y los ejercicios se distribuyen con la licencia [Creative Commons Atribución 4.0 Internacional (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/deed.es){target="_blank"}: puedes copiarlos, adaptarlos y redistribuirlos, también con fines comerciales, siempre que cites la autoría. El código del repositorio (los guiones de las figuras y los filtros) tiene licencia MIT. Las imágenes de terceros, la biblioteca KaTeX, el estilo de citas y las herramientas enlazadas conservan su propia licencia; el detalle está en el [repositorio del libro](https://github.com/josemagalan/genetic-algorithms-lab-book/blob/main/LICENSE-CONTENT.md){target="_blank"}.
+
+## Comentarios y contacto {#contacto}
+
+Nos ayuda mucho saber qué falla: una errata, un resultado que no coincide con el del libro, un enlace o un botón que no funciona. Al final de cada página, y en el índice lateral, está el enlace **Enviar un comentario sobre esta página**. Abre un formulario de GitHub con la página y la versión del libro ya rellenas.
+
+Si no tienes cuenta de GitHub, puedes escribir a cualquiera de los autores a través de su página:
+
+- [José Manuel Galán](https://sites.google.com/site/josemagalan/){target="_blank"}, Universidad de Burgos.
+- [Silvia Díaz-de la Fuente](https://produccioncientifica.usal.es/investigadores/2300823/detalle){target="_blank"}, Universidad de Salamanca.
+- [Virginia Ahedo](https://investigacion.ubu.es/investigadores/34947/detalle){target="_blank"}, Universidad de Burgos.
+- [María Pereda](https://portalcientifico.upm.es/es/ipublic/researcher/331932){target="_blank"}, Universidad Politécnica de Madrid.
+- [José Ignacio Santos](https://investigacion.ubu.es/investigadores/35543/detalle){target="_blank"}, Universidad de Burgos.

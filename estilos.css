@@ -40,6 +40,34 @@ a.abrir {
 }
 a.abrir:hover { background: #0b5643; }
 
+/* Simuladores que no guardan el estado en la dirección (EvoTraveller, SelectionMechanisms): se abren
+   con sus valores iniciales y hay que configurarlos a mano (revisión beta, M02) */
+a.abrir.configurar {
+  background: #fff;
+  color: #0f6e56 !important;
+  border: 1.5px solid #0f6e56;
+  padding: 0.3rem 0.8rem;
+}
+a.abrir.configurar::before { content: "⚙ "; }
+a.abrir.configurar:hover { background: #e3f2ec; }
+
+/* Versión y fecha de revisión, en la portada (D055) */
+.version-beta {
+  border-left: 3px solid #0f6e56;
+  padding: 0.3rem 0 0.3rem 0.8rem;
+  margin: 0 0 1.2rem 0;
+  color: #333;
+}
+
+/* Enlace de comentarios al final de cada página (comentarios.js, M06) */
+p.comentario-pagina {
+  margin-top: 2.5rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid #ddd;
+  font-size: 0.9rem;
+  color: #555;
+}
+
 /* Botón para explorar libremente (cajas «En la aplicación»): sin estado fijado */
 a.explorar {
   display: inline-block;

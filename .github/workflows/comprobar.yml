@@ -1,0 +1,25 @@
+# Comprueba el libro frente a las versiones actuales de las herramientas (comprobaciones/LEEME.md).
+# Va aparte de la publicación: si falla, avisa, pero no impide publicar.
+name: Comprobar el libro frente a las herramientas
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "17 6 * * 1"   # cada lunes, 06:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  comprobar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Versiones de las herramientas y valores de los controles
+        run: node comprobaciones/comprobar.cjs

@@ -1,0 +1,37 @@
+name: Comentario sobre el libro
+description: Una errata, un resultado que no coincide con el del libro, un problema de uso o una sugerencia.
+labels: ["comentario"]
+body:
+  - type: dropdown
+    id: tipo
+    attributes:
+      label: Tipo de comentario
+      options:
+        - Errata o error en el texto
+        - El resultado no coincide con el del libro
+        - Problema de uso (enlace, botón, herramienta, búsqueda)
+        - Sugerencia
+    validations:
+      required: true
+  - type: input
+    id: pagina
+    attributes:
+      label: Página
+      description: Se rellena sola si llegas desde el enlace del libro.
+      placeholder: https://josemagalan.github.io/genetic-algorithms-lab-book/…
+  - type: input
+    id: capitulo
+    attributes:
+      label: Capítulo o sección
+  - type: input
+    id: version
+    attributes:
+      label: Versión del libro
+      description: Aparece en la portada.
+  - type: textarea
+    id: descripcion
+    attributes:
+      label: Qué has visto
+      description: Si un resultado no coincide, indica qué esperabas, qué te ha salido y, si puedes, la dirección de la herramienta.
+    validations:
+      required: true

@@ -92,6 +92,7 @@ El torneo no depende de la escala de la aptitud: basta con saber cuál de dos in
 - Cambia a la variante **Sin reemplazo** y comprueba que A ya no gana nunca.
 
 <!-- Revisión beta (2026-10-16, E03): en selection-ga el máximo de k es el menor de 5 y N (js/app.js, commit 424982e), así que con cuatro aptitudes es 4. -->
+<!-- comprobar: https://josemagalan.github.io/selection-ga/#op=tournament&lang=es&k=4&f=1-2-3-4 -->
 :::
 
 ## Ruleta [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sec-seleccion-ruleta}

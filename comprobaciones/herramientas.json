@@ -1,0 +1,56 @@
+{
+  "nota": "Última versión de cada herramienta revisada para el libro. «revisado»: commit hasta el que se ha comprobado que los cambios no alteran los ejemplos; «ejemplos»: commit con el que se ejecutaron los ejemplos y fecha. Al volver a comprobar, actualizar los dos. Lo usa comprobaciones/comprobar.cjs.",
+  "ignorar": ["README.md", "LICENSE", "LICENSE-CONTENT.md", "tests/", ".github/", "img/", "docs/", "js/about.js", ".gitignore", "package.json", "package-lock.json"],
+  "herramientas": {
+    "representation-ga": {
+      "repositorio": "josemagalan/representation-ga",
+      "url": "https://josemagalan.github.io/representation-ga/",
+      "ejemplos": "4243830 (2026-10-15)",
+      "revisado": "59ff580",
+      "comentario": "983441d cambia la narración del empate entre la aptitud penalizada y la mejor factible; los ejemplos del capítulo 3 no empatan (100101: 11, 110110: 6, 101101: 14; óptimo 14), comprobado el 2026-10-16. 59ff580: nombres del portal y del libro."
+    },
+    "initialization-and-evaluation-ga": {
+      "repositorio": "josemagalan/initialization-and-evaluation-ga",
+      "url": "https://josemagalan.github.io/initialization-and-evaluation-ga/",
+      "ejemplos": "49c1e2e (2026-10-15)",
+      "revisado": "c7090ce",
+      "comentario": "Hasta c7090ce solo cambian README, «Acerca de», el nombre del portal en js/i18n.js e index.html."
+    },
+    "selection-ga": {
+      "repositorio": "josemagalan/selection-ga",
+      "url": "https://josemagalan.github.io/selection-ga/",
+      "ejemplos": "7b7d8a9 (2026-10-15)",
+      "revisado": "424982e",
+      "comentario": "Hasta 424982e solo cambian README, «Acerca de» y el nombre del portal."
+    },
+    "crossover-ga": {
+      "repositorio": "josemagalan/crossover-ga",
+      "url": "https://josemagalan.github.io/crossover-ga/",
+      "ejemplos": "9848d5d (2026-10-15)",
+      "revisado": "d58793f",
+      "comentario": "Hasta d58793f solo cambian README y el nombre del portal."
+    },
+    "mutation-ga": {
+      "repositorio": "josemagalan/mutation-ga",
+      "url": "https://josemagalan.github.io/mutation-ga/",
+      "ejemplos": "6f346a0 (2026-10-15)",
+      "revisado": "3194258",
+      "comentario": "Hasta 3194258 solo cambian README y el nombre del portal."
+    },
+    "evotraveller": {
+      "repositorio": "jismartin/evotraveller",
+      "url": "https://evotraveller.streamlit.app/",
+      "marcas": ["evotraveller.streamlit.app", "EvoTraveller"],
+      "ejemplos": "41205ad (2026-10-15)",
+      "revisado": "41205ad",
+      "comentario": "Fallo conocido (A037, revisión beta E01): la población crece si la élite y los hijos de cruce suman más que N. Si se corrige, volver a comprobar los ejemplos de los capítulos 2, 9 y 10."
+    },
+    "SelectionMechanisms": {
+      "repositorio": "josemagalan/SelectionMechanisms",
+      "url": "https://josemagalan.shinyapps.io/SelectionMechanisms/",
+      "ejemplos": "0abde85 (2026-10-08)",
+      "revisado": "8f62120",
+      "comentario": "Hasta 8f62120 solo cambia README."
+    }
+  }
+}
