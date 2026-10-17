@@ -156,3 +156,24 @@ nav[role="doc-toc"] .nivel {
   padding: 0 0.38rem;
   margin-left: 0.2rem;
 }
+
+/* Lectura en pantallas estrechas: las tablas y las ecuaciones anchas se desplazan
+   dentro de su propia caja, sin arrastrar la página entera. */
+main .katex-display {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 0.5em 0;    /* con el relleno, el mismo espacio que da KaTeX (1em) */
+  padding: 0.5em 0;   /* deja sitio a las fracciones y raíces altas */
+}
+@media (max-width: 767.98px) {
+  main table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+}
+/* Las direcciones largas de la bibliografía (DOI, URL) se parten en lugar de desbordar. */
+.csl-entry {
+  overflow-wrap: anywhere;
+}
