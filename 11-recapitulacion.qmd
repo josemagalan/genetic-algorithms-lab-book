@@ -118,7 +118,7 @@ A lo largo del libro han aparecido varios contraejemplos: decisiones que parecen
 | Reemplazo generacional sin élite | La mejor solución puede perderse | Una élite pequeña | -@sec-reemplazo-elitismo |
 | Comparar generaciones entre algoritmos distintos | Una generación estacionaria evalúa un hijo, y una generacional, *N* | Contar evaluaciones | -@sec-inicializar-evaluar-coste, -@sec-reemplazo-estacionario |
 | Sacar conclusiones de una sola ejecución | El resultado depende de la semilla | Varias réplicas, medias y desviaciones | -@sec-experimentos-replicas–-@sec-experimentos-comparar |
-| Ajustar y evaluar con los mismos casos | Los parámetros parecen mejores de lo que son | Ajustar con unos casos y comprobar con otros | -@sec-experimentos-casos-parecidos, -@sec-viajante-caso-real |
+| Ajustar y evaluar con los mismos casos | Los parámetros parecen mejores de lo que son | Elegir con unos casos (ajuste y validación) y estimar la calidad con otros (prueba) | -@sec-experimentos-casos-parecidos, -@sec-viajante-caso-real |
 
 Casi todos los errores de la tabla tienen la misma raíz: romper el equilibrio entre las dos fuerzas de la sección -@sec-evolucion-dos-fuerzas. Sembrar, truncar o quitar la mutación dan demasiada explotación y la población se bloquea; mutar demasiado da demasiada exploración y lo encontrado se pierde. Los demás son errores de medida: una aptitud que no distingue o un experimento que no permite concluir.
 

@@ -156,14 +156,14 @@ En un sistema evolutivo, la selección explota lo que ya funciona y la generaci�
 
 :::: {.callout-note .ejercicio #ejercicio-evolucion-dos-fuerzas title="Ejercicio · ¿Explorar o explotar?"}
 a) Llevas un mes viviendo en una ciudad nueva y cada viernes cenas fuera. ¿Qué es explorar y qué es explotar? ¿Qué te pasa si solo haces una de las dos cosas?
-b) En un algoritmo genético, ¿qué esperas que pase si la mutación cambia casi todos los genes de cada hijo? ¿Y si no hay ni cruce ni mutación?
+b) En un algoritmo genético, ¿qué esperas que pase si la mutación es tan fuerte que cada gen del hijo se sortea de nuevo, sin tener en cuenta el que heredó? ¿Y si no hay ni cruce ni mutación?
 
 <details>
 <summary>**Ver la solución**</summary>
 
 a) **Explotar** es volver al mejor restaurante que conoces; **explorar**, probar uno nuevo. Si solo explotas, te quedas con el mejor de los pocos que probaste al principio y nunca sabrás si había otro mejor. Si solo exploras, cada viernes cenas en un sitio desconocido, a veces bueno y a veces malo, y nunca aprovechas lo que has aprendido. Lo razonable es explorar más al principio, cuando sabes poco, y explotar más cuando ya conoces bien las opciones.
 
-b) Si la mutación cambia casi todos los genes, los hijos apenas se parecen a sus padres: lo que la selección había encontrado se pierde en cada generación, y el algoritmo se comporta casi como una búsqueda al azar. Es **demasiada exploración**. Si no hay ni cruce ni mutación, el algoritmo solo copia individuos que ya existen, y en pocas generaciones la población está formada por copias de uno solo, como en la caja «En la aplicación». Es **demasiada explotación**: la población queda bloqueada.
+b) Si cada gen se sortea de nuevo, los hijos no guardan ninguna relación con sus padres: lo que la selección había encontrado se pierde en cada generación, y el algoritmo se comporta como una búsqueda al azar. Es **demasiada exploración**. No es lo mismo que cambiar todos los genes: con cadenas de bits, invertirlos todos da la cadena contraria, que depende por completo del padre. El hijo deja de depender del padre cuando cada bit cambia con probabilidad 0,5 (sección -@sec-mutacion-cuanto-mutar). Si no hay ni cruce ni mutación, el algoritmo solo copia individuos que ya existen, y en pocas generaciones la población está formada por copias de uno solo, como en la caja «En la aplicación». Es **demasiada explotación**: la población queda bloqueada.
 </details>
 ::::
 

@@ -16,7 +16,7 @@ Al terminar el recorrido básico de este capítulo podrás:
 - aplicar a mano una generación completa a una población de rutas: evaluar, seleccionar, cruzar, mutar y reemplazar;
 - interpretar lo que muestra EvoTraveller durante una ejecución: la curva de aptitud, la mejor ruta y la pérdida de diversidad de la población;
 - explicar qué hace la élite en el reemplazo y por qué su tamaño importa menos que su existencia;
-- elegir los parámetros de EvoTraveller con mapas parecidos al caso real y comprobar la elección con mapas nuevos.
+- elegir los parámetros de EvoTraveller con mapas parecidos al caso real y estimar la calidad de la elección con mapas que no hayan servido para elegir.
 :::
 
 ## Primero, observa [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sec-viajante-observa}
@@ -391,7 +391,7 @@ Es un problema **táctico** (sección -@sec-experimentos-objetivo): se resuelve 
 
 **2. Una medida.** En cada mapa, cuánto más larga es la ruta del algoritmo que la mejor posible, en porcentaje. Aquí la mejor ruta la calcula un programa exacto; en un caso real se compararía con la mejor conocida.
 
-**3. Mapas para ajustar y mapas para comprobar.** Ajustamos con 10 mapas (semillas 1111 a 1120) y guardamos otros 20 (semillas 1121 a 1140) para comprobar la elección al final. Si eligiéramos y evaluáramos con los mismos mapas, el resultado sería demasiado optimista (sección -@sec-experimentos-ampliaciones).
+**3. Tres grupos de mapas.** Ajustamos con 10 mapas (semillas 1111 a 1120). Con otros 20, los de **validación** (semillas 1121 a 1140), comparamos las configuraciones y elegimos una. Y guardamos 20 más, los de **prueba** (semillas 1141 a 1160), que solo usaremos al final, una vez, con la configuración elegida. Si eligiéramos y evaluáramos con los mismos mapas, el resultado sería demasiado optimista (sección -@sec-experimentos-ampliaciones). Por eso la cifra que importa es la de prueba: los mapas de ajuste y los de validación sirven para elegir.
 
 **4. Configuraciones candidatas.** Con lo visto en este capítulo y en el anterior, probamos cuatro:
 
@@ -440,11 +440,11 @@ Con la tabla de los 10 mapas de ajuste, ¿qué configuración elegirías para la
 <details>
 <summary>**Ver la solución**</summary>
 
-El paso de A a B es claro: la media baja de 13,3 % a 5,2 %, y B mejora a A en 9 de los 10 mapas. Entre B, C y D, la diferencia de medias es de menos de un punto, mientras que de un mapa a otro los resultados varían mucho más (el peor mapa de cada una queda entre el 15 % y el 27 %). Que C gane en 5 mapas y pierda en 4 es lo que se esperaría si fueran igual de buenas. Con estos datos, no sabemos si C es mejor que B. Elegir C solo porque tiene la media más baja sería fiarse del azar de diez ejecuciones. Lo comprobaremos con los mapas guardados.
+El paso de A a B es claro: la media baja de 13,3 % a 5,2 %, y B mejora a A en 9 de los 10 mapas. Entre B, C y D, la diferencia de medias es de menos de un punto, mientras que de un mapa a otro los resultados varían mucho más (el peor mapa de cada una queda entre el 15 % y el 27 %). Que C gane en 5 mapas y pierda en 4 es lo que se esperaría si fueran igual de buenas. Con estos datos, no sabemos si C es mejor que B. Elegir C solo porque tiene la media más baja sería fiarse del azar de diez ejecuciones. Lo comprobaremos con los mapas de validación.
 </details>
 ::::
 
-Comprobamos las cuatro configuraciones con los 20 mapas que habíamos guardado:
+Comparamos las cuatro configuraciones con los 20 mapas de validación:
 
 | Configuración | Diferencia media | Peor mapa | Mapas con la mejor ruta |
 |---|:---:|:---:|:---:|
@@ -455,9 +455,21 @@ Comprobamos las cuatro configuraciones con los 20 mapas que habíamos guardado:
 
 La mejora de A a B se mantiene en los mapas nuevos: de 13,9 % a 6,5 %. La pequeña ventaja de C sobre B, en cambio, ha desaparecido: con los mapas nuevos, C es peor que B en 12 de 20. Era azar. Y D, que en el ajuste parecía la peor de las tres por su peor mapa, queda ahora por delante. Su ventaja sobre B, 2,1 puntos de media, tampoco es mucho mayor que la variación entre mapas; harían falta más mapas para estar seguros.
 
-Para la empresa, la decisión razonable sería B o D, y no los valores iniciales. Si el tiempo lo permite, hay otra palanca: con *pm* = 0,2 y **Generations** 100, el doble de evaluaciones, la diferencia media en los mapas guardados baja al 4,6 % y el peor mapa queda en el 10,4 %. Comprar calidad con tiempo es una decisión del problema, no del algoritmo (sección -@sec-experimentos-objetivo).
+Hay que decidir **antes** de mirar los mapas de prueba. Elegimos D, que tiene la menor diferencia media en validación y también el mejor peor mapa. Ahora, y solo ahora, la ejecutamos en los 20 mapas de prueba:
 
-<!-- Comprobado el 2026-10-15 con el código de EvoTraveller (algorithm.genetic_algorithm, igual que AppTest en las semillas comprobadas), 15 lugares, una ejecución por mapa; óptimos por programación dinámica (Held–Karp). Ajuste (1111–1120): A 13,28 / 17,62 / 0; B 5,21 / 14,84 / 1; C 4,68 / 16,89 / 2; D 5,41 / 27,33 / 3. B frente a A: mejor en 9 de 10. C frente a B: mejor en 5, peor en 4, empate en 1. Comprobación (1121–1140): A 13,95 / 32,54 / 0; B 6,49 / 16,23 / 3; C 8,17 / 30,43 / 2; D 4,39 / 14,62 / 4; C peor que B en 12 de 20 (mejor en 8); D mejor que B en 12, peor en 7, empate en 1; diferencia media 2,10 puntos, desviación típica 5,36 (error típico 1,20; intervalo del 95 % de −0,25 a 4,45, incluye el 0). B con G = 100: 4,57 % de media y 10,41 % en el peor mapa (1,73 % en los de ajuste). En 18 de los 30 mapas de 15 lugares hay dos lugares en el mismo punto. -->
+| Configuración D | Diferencia media | Peor mapa | Mapas con la mejor ruta |
+|---|:---:|:---:|:---:|
+| En los 20 mapas de validación | 4,4 % | 14,6 % | 4 de 20 |
+| En los 20 mapas de prueba | 9,1 % | 25,4 % | 1 de 20 |
+
+En los mapas de prueba, la diferencia media de D es el doble de la que prometía la validación. D no ha empeorado: la cifra de validación era optimista. Elegimos D precisamente porque le fue mejor que a las demás en esos 20 mapas, y parte de esa ventaja era suerte, como le pasó a C en el ajuste. Con una ejecución por mapa y tanta variación de un mapa a otro, 20 mapas no bastan para separar B, C y D.
+
+¿Y si ahora probamos B con los mapas de prueba? Le va mejor: 5,0 % de media. Pero si cambiamos de elección por eso, los mapas de prueba habrán servido para elegir y pasarán a ser de validación, y ese 5,0 % será tan optimista como lo era el 4,4 % de D. Lo que sí nos dice es que entre B y D no hay una ganadora clara: en validación ganó D y en prueba, B. Para separarlas harían falta más mapas o varias ejecuciones por mapa, y después, otros mapas de prueba nuevos.
+
+Para la empresa, la decisión razonable sigue siendo B o D, y no los valores iniciales, que quedan muy por detrás en el ajuste y en la validación. Hemos elegido D, y la prueba nos dice qué esperar de ella: rutas, en promedio, un 9 % más largas que la mejor posible, y en algún mapa, un 25 %. Si el tiempo lo permite, hay otra palanca: con *pm* = 0,2 y **Generations** 100, el doble de evaluaciones, la diferencia media en los mapas de validación baja al 4,6 % y el peor mapa queda en el 10,4 %. Antes de adoptarla, también habría que estimar su calidad con mapas de prueba nuevos. Comprar calidad con tiempo es una decisión del problema, no del algoritmo (sección -@sec-experimentos-objetivo).
+
+<!-- Comprobado el 2026-10-15 con el código de EvoTraveller (algorithm.genetic_algorithm, igual que AppTest en las semillas comprobadas), 15 lugares, una ejecución por mapa; óptimos por programación dinámica (Held–Karp). Ajuste (1111–1120): A 13,28 / 17,62 / 0; B 5,21 / 14,84 / 1; C 4,68 / 16,89 / 2; D 5,41 / 27,33 / 3. B frente a A: mejor en 9 de 10. C frente a B: mejor en 5, peor en 4, empate en 1. Comprobación (1121–1140): A 13,95 / 32,54 / 0; B 6,49 / 16,23 / 3; C 8,17 / 30,43 / 2; D 4,39 / 14,62 / 4; C peor que B en 12 de 20 (mejor en 8); D mejor que B en 12, peor en 7, empate en 1; diferencia media 2,10 puntos, desviación típica 5,36 (error típico 1,20; intervalo del 95 % de −0,25 a 4,45, incluye el 0). B con G = 100: 4,57 % de media y 10,41 % en el peor mapa (1,73 % en los de ajuste). En 18 de los 30 mapas de 15 lugares hay dos lugares en el mismo punto.
+Revisado el 2026-10-17 con memoria/verificaciones/2026-10-17-viajante-validacion-prueba.py (0 fallos), mismo código y mismos parámetros: los mapas 1121–1140 pasan a llamarse de validación, porque sirven para elegir, y se añaden los de prueba, 1141–1160 (nuevos). Se reproducen las tablas de ajuste y de validación y B con G = 100. La elegida por la validación (menor diferencia media) es D. D en prueba: 9,06 % de media (desviación típica 7,47), peor mapa 25,45 % (semilla 1150), mejor ruta en 1 de 20 (1142). B en prueba, solo para el párrafo «¿Y si ahora probamos B…?»: 5,0 / 12,7 / 5; mejor que D en 13 mapas, peor en 6 y empate en 1. Diagnóstico hecho aparte el mismo día y no usado en el texto: en prueba, A 10,4 / 26,0 / 1; C 9,1 / 21,1 / 1; B con G = 100 4,1 / 12,7 / 8. En 8 de los 20 mapas de prueba hay dos lugares en el mismo punto. Las cifras de prueba se calcularon con el código, no en la aplicación publicada. -->
 
 ## EvoTraveller por dentro [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-viajante-por-dentro}
 
@@ -543,7 +555,7 @@ Las dos variantes copian el segmento de un padre y colocan los demás lugares en
 - Una generación de EvoTraveller tiene tres partes: la élite, que pasa sin cambios; las copias de los individuos seleccionados por torneo; y los hijos de parejas cruzadas con OX. Las copias y los hijos pueden mutar por intercambio.
 - Durante una ejecución, la mejor aptitud no baja gracias a la élite, y la población se llena de copias de la mejor ruta. Cuanto mayor es el torneo, antes se pierde la diversidad y más a menudo se atasca el algoritmo.
 - Importa que haya élite, pero no tanto su tamaño, porque las posiciones de la élite suelen estar ocupadas por copias de la misma ruta.
-- Los parámetros se eligen con mapas parecidos al caso real y se comprueban con mapas nuevos: una ventaja pequeña en los mapas de ajuste puede desaparecer en los nuevos.
+- Los parámetros se eligen con mapas parecidos al caso real: unos para ajustar, otros de validación para elegir y otros de prueba, que solo se usan al final con la configuración elegida. Una ventaja pequeña en unos mapas puede desaparecer en otros, y la cifra de la ganadora en los mapas con que se eligió es optimista.
 
 ## Referencias del capítulo {.unnumbered #referencias}
 
