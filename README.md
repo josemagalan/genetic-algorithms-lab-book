@@ -34,7 +34,7 @@ El libro está en versión beta: su contenido y estructura pueden cambiar. / The
 |---|---|
 | Cómo leer este libro | Borrador |
 | Índice general | Generado (`filtros/indices.py`) |
-| 1. Evolución y optimización | Borrador completo, pendiente de revisión |
+| 1. Evolución y optimización | Revisado (20 de octubre de 2026) |
 | 2. El ciclo y las decisiones de diseño | Borrador completo, pendiente de revisión |
 | 3. Representar soluciones | Borrador completo, pendiente de revisión |
 | 4. Inicializar y evaluar | Borrador completo, pendiente de revisión |
