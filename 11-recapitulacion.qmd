@@ -120,7 +120,7 @@ A lo largo del libro han aparecido varios contraejemplos: decisiones que parecen
 | Sacar conclusiones de una sola ejecución | El resultado depende de la semilla | Varias réplicas, medias y desviaciones | -@sec-experimentos-replicas–-@sec-experimentos-comparar |
 | Ajustar y evaluar con los mismos casos | Los parámetros parecen mejores de lo que son | Elegir con unos casos (ajuste y validación) y estimar la calidad con otros (prueba) | -@sec-experimentos-casos-parecidos, -@sec-viajante-caso-real |
 
-Casi todos los errores de la tabla tienen la misma raíz: romper el equilibrio entre las dos fuerzas de la sección -@sec-evolucion-dos-fuerzas. Sembrar, truncar o quitar la mutación dan demasiada explotación y la población se bloquea; mutar demasiado da demasiada exploración y lo encontrado se pierde. Los demás son errores de medida: una aptitud que no distingue o un experimento que no permite concluir.
+Casi todos los errores de la tabla tienen la misma raíz: romper el equilibrio entre las dos fuerzas de la sección -@sec-evolucion-dos-fuerzas, la explotación y la exploración de la sección -@sec-evolucion-explorar-explotar. Sembrar, truncar o quitar la mutación dan demasiada explotación y la población se bloquea; mutar demasiado da demasiada exploración y lo encontrado se pierde. Los demás son errores de medida: una aptitud que no distingue o un experimento que no permite concluir.
 
 :::: {.callout-note .ejercicio #ejercicio-recapitulacion-errores title="Ejercicio · ¿Qué falla en este diseño?"}
 Un equipo diseña un algoritmo genético para un viajante de 30 ciudades:

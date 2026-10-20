@@ -2,7 +2,7 @@
 
 <!-- Archivo generado por filtros/indices.py en cada «quarto render» (pre-render). No lo edites a mano: los cambios se perderían. Para cambiar el contenido, cambia los capítulos; para cambiar el formato, cambia el script. -->
 
-El libro tiene 11 capítulos y 107 secciones: 73 de nivel [[Básico]{.largo}[B]{.corto}]{.nivel .basico}, 23 de nivel [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} y 11 de nivel [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas}. El **recorrido básico** son las secciones azules: se leen seguidas, capítulo a capítulo, sin las demás. Las avanzadas amplían el recorrido básico y suelen apoyarse en él; «Para saber más» cierra cada capítulo con lecturas y temas que el libro no desarrolla.
+El libro tiene 11 capítulos y 108 secciones: 74 de nivel [[Básico]{.largo}[B]{.corto}]{.nivel .basico}, 23 de nivel [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} y 11 de nivel [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas}. El **recorrido básico** son las secciones azules: se leen seguidas, capítulo a capítulo, sin las demás. Las avanzadas amplían el recorrido básico y suelen apoyarse en él; «Para saber más» cierra cada capítulo con lecturas y temas que el libro no desarrolla.
 
 Las actividades —67 ejemplos reproducibles, 54 cajas «En la aplicación» y 88 ejercicios— están listadas en el [índice de actividades](actividades.qmd), por capítulo y por herramienta.
 
@@ -10,7 +10,7 @@ Las actividades —67 ejemplos reproducibles, 54 cajas «En la aplicación» y 8
 
 | Capítulo | B | A | + | Ejemplos | En la aplicación | Ejercicios |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|
-| [1. Evolución y optimización](01-evolucion.qmd) | 5 | 0 | 1 | 0 | 1 | 7 |
+| [1. Evolución y optimización](01-evolucion.qmd) | 6 | 0 | 1 | 0 | 1 | 7 |
 | [2. El ciclo y las decisiones de diseño](02-ciclo.qmd) | 9 | 1 | 1 | 3 | 3 | 9 |
 | [3. Representar soluciones](03-representacion.qmd) | 7 | 5 | 1 | 10 | 8 | 12 |
 | [4. Inicializar y evaluar](04-inicializar-evaluar.qmd) | 8 | 5 | 1 | 13 | 11 | 14 |
@@ -21,7 +21,7 @@ Las actividades —67 ejemplos reproducibles, 54 cajas «En la aplicación» y 8
 | [9. Parámetros y aleatoriedad](09-experimentos.qmd) | 7 | 3 | 1 | 5 | 2 | 10 |
 | [10. El viajante de principio a fin](10-viajante.qmd) | 6 | 2 | 1 | 6 | 1 | 8 |
 | [11. Recapitulación](11-recapitulacion.qmd) | 4 | 0 | 1 | 0 | 1 | 5 |
-| **Total** | **73** | **23** | **11** | **67** | **54** | **88** |
+| **Total** | **74** | **23** | **11** | **67** | **54** | **88** |
 
 ## 1. Evolución y optimización {.unnumbered #cap-1}
 
@@ -29,8 +29,9 @@ Las actividades —67 ejemplos reproducibles, 54 cajas «En la aplicación» y 8
 - [1.2 ¿Qué hace evolutivo a un sistema?](01-evolucion.qmd#sec-evolucion-sistema-evolutivo) [[B]{.corto}]{.nivel .basico .solo-corto}
 - [1.3 Dos fuerzas que tiran en sentidos opuestos](01-evolucion.qmd#sec-evolucion-dos-fuerzas) [[B]{.corto}]{.nivel .basico .solo-corto}
 - [1.4 Optimizar es buscar](01-evolucion.qmd#sec-evolucion-optimizar) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [1.5 De la evolución natural a la artificial](01-evolucion.qmd#sec-evolucion-evolucion-artificial) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [1.6 Ampliaciones](01-evolucion.qmd#sec-evolucion-ampliaciones) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
+- [1.5 Explorar y explotar](01-evolucion.qmd#sec-evolucion-explorar-explotar) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [1.6 De la evolución natural a la artificial](01-evolucion.qmd#sec-evolucion-evolucion-artificial) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [1.7 Ampliaciones](01-evolucion.qmd#sec-evolucion-ampliaciones) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
 
 ## 2. El ciclo y las decisiones de diseño {.unnumbered #cap-2}
 

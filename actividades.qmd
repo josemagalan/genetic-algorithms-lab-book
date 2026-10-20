@@ -197,10 +197,10 @@ Aquí están todas las cajas de trabajo del libro. Los **ejemplos reproducibles*
 | [Ejercicio 1.2](01-evolucion.qmd#ejercicio-evolucion-sistema-evolutivo) | ¿Es evolutiva la economía? | [1.2](01-evolucion.qmd#sec-evolucion-sistema-evolutivo) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
 | [Ejercicio 1.3](01-evolucion.qmd#ejercicio-evolucion-sistema-evolutivo-2) | ¿Evolutivo o no? | [1.2](01-evolucion.qmd#sec-evolucion-sistema-evolutivo) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
 | [En la aplicación](01-evolucion.qmd#sec-evolucion-dos-fuerzas) | «Comparar mecanismos» | [1.3](01-evolucion.qmd#sec-evolucion-dos-fuerzas) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 1.4](01-evolucion.qmd#ejercicio-evolucion-dos-fuerzas) | ¿Explorar o explotar? | [1.3](01-evolucion.qmd#sec-evolucion-dos-fuerzas) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 1.5](01-evolucion.qmd#ejercicio-evolucion-optimizar) | ¿Cuántas rutas? | [1.4](01-evolucion.qmd#sec-evolucion-optimizar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 1.6](01-evolucion.qmd#ejercicio-evolucion-optimizar-2) | Subir por los vecinos | [1.4](01-evolucion.qmd#sec-evolucion-optimizar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 1.7](01-evolucion.qmd#ejercicio-evolucion-evolucion-artificial) | El algoritmo genético como sistema evolutivo | [1.5](01-evolucion.qmd#sec-evolucion-evolucion-artificial) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 1.4](01-evolucion.qmd#ejercicio-evolucion-optimizar) | ¿Cuántas rutas? | [1.4](01-evolucion.qmd#sec-evolucion-optimizar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 1.5](01-evolucion.qmd#ejercicio-evolucion-optimizar-2) | Subir por los vecinos | [1.4](01-evolucion.qmd#sec-evolucion-optimizar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 1.6](01-evolucion.qmd#ejercicio-evolucion-explorar-explotar) | ¿Explorar o explotar? | [1.5](01-evolucion.qmd#sec-evolucion-explorar-explotar) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 1.7](01-evolucion.qmd#ejercicio-evolucion-evolucion-artificial) | El algoritmo genético como sistema evolutivo | [1.6](01-evolucion.qmd#sec-evolucion-evolucion-artificial) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
 
 ### 2. El ciclo y las decisiones de diseño {.unnumbered #a-cap-2}
 
