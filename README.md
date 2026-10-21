@@ -2,7 +2,7 @@
 
 *Algoritmos genéticos en un laboratorio interactivo*
 
-> **Estado: versión 0.9 beta, revisada el 16 de octubre de 2026** (primera publicación: 7 de octubre de 2026). Los autores siguen revisando el texto y los ejemplos; el contenido, la estructura y el índice pueden cambiar. La versión y la fecha están en `_quarto.yml` (`libro-version` y `libro-revision`).
+> **Estado: versión 0.9 beta, revisada el 21 de octubre de 2026** (primera publicación: 7 de octubre de 2026). Los autores siguen revisando el texto y los ejemplos; el contenido, la estructura y el índice pueden cambiar. La versión y la fecha están en `_quarto.yml` (`libro-version` y `libro-revision`).
 
 Libro para aprender algoritmos genéticos de forma práctica, con actividades sobre las herramientas interactivas del [Laboratorio de algoritmos genéticos](https://josemagalan.github.io/genetic-algorithms-lab/) (*genetic-algorithms-lab*). Está pensado para estudiantes de grado que empiezan.
 
@@ -69,6 +69,8 @@ quarto preview     # vista previa que se actualiza al guardar
 ```
 
 Las figuras propias están en `figuras/`, junto al guion de Python que las genera. Los SVG se versionan, así que para generar el libro no hace falta ejecutar los guiones. Para regenerar una figura, se ejecuta su guion desde `figuras/` (por ejemplo, `python3 03-representacion.py`). Casi todos usan solo la biblioteca estándar; `03-himmelblau.py` necesita además matplotlib y NumPy.
+
+La [portada vectorial](figuras/portada.svg) aparece en la página inicial del libro. Su [guion editable](figuras/portada.py) genera también una [adaptación horizontal](figuras/portada-horizontal.svg); la [ficha de la portada](figuras/portada.md) explica cómo regenerarla y su licencia.
 
 ## Comentarios
 

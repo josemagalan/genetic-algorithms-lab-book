@@ -12,6 +12,8 @@ project:
 book:
   title: "Evolución a la vista"
   subtitle: "Algoritmos genéticos en un laboratorio interactivo"
+  cover-image: figuras/portada.svg
+  cover-image-alt: "Portada de Evolución a la vista. Algoritmos genéticos en un laboratorio interactivo: un panel digital con controles, cadenas binarias y gráficas."
   site-url: https://josemagalan.github.io/genetic-algorithms-lab-book/
   repo-url: https://github.com/josemagalan/genetic-algorithms-lab-book
   repo-branch: main
@@ -55,7 +57,7 @@ book:
 
 lang: es
 libro-version: "0.9 beta"                 # versión que muestran la portada y el formulario de comentarios (D055)
-libro-revision: "16 de octubre de 2026"   # fecha de la última revisión; cambiarla con cada versión
+libro-revision: "21 de octubre de 2026"   # fecha de la última revisión; cambiarla con cada versión
 
 language:   # etiquetas accesibles (revisión beta, M07)
   search-submit-button-title: "Buscar en el libro"

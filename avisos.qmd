@@ -1,5 +1,9 @@
 # Agradecimientos y avisos {.unnumbered #sec-avisos}
 
+## Sobre este libro {#sobre-este-libro}
+
+La portada de este libro ha sido diseñada con la ayuda de Codex.
+
 ## Agradecimientos {#agradecimientos}
 
 Los autores agradecen el apoyo del plan Claude Team para científicos de Anthropic.

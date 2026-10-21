@@ -51,6 +51,16 @@ a.abrir.configurar {
 a.abrir.configurar::before { content: "⚙ "; }
 a.abrir.configurar:hover { background: #e3f2ec; }
 
+/* Portada vectorial del libro: centrada y adaptable, sin estrechar el texto. */
+img.quarto-cover-image {
+  display: block;
+  float: none;
+  width: 100%;
+  max-width: 24rem;
+  height: auto;
+  margin: 0 auto 2rem;
+}
+
 /* Versión y fecha de revisión, en la portada (D055) */
 .version-beta {
   border-left: 3px solid #0f6e56;
