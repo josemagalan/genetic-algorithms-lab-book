@@ -21,11 +21,11 @@ Al terminar el recorrido básico de este capítulo podrás:
 
 ## Una población de soluciones [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sec-ciclo-poblacion}
 
-Muchos métodos de optimización mejoran una solución cada vez: parten de una, prueban cambios y se quedan con el mejor. ¿Qué cambia si trabajamos con muchas soluciones a la vez?
+Muchos métodos de optimización mejoran una solución cada vez: parten de una, prueban cambios y se quedan con el mejor. A este tipo de algoritmos se les conoce como algoritmos de búsqueda por trayectorias, ya que una única solución va recorriendo un camino a lo largo del espacio de soluciones [@bautistavalhondo2020]. ¿Qué cambia si trabajamos con muchas soluciones a la vez?
 
 Un algoritmo genético mantiene un conjunto de soluciones, la **población**, y la hace cambiar paso a paso. En cada paso crea soluciones nuevas a partir de las que ya tiene y decide cuáles siguen. Repite el proceso hasta que se cumple una condición de parada [@talbi2009, p. 191]. Es una idea tomada de la evolución natural: en una población, los individuos mejor adaptados tienen más descendencia, y los descendientes heredan, mezclados y con pequeños cambios, los rasgos de sus padres [@goldberg1989, pp. 1, 10–11].
 
-Para hablar de ello usaremos el vocabulario de la genética [@talbi2009, pp. 200, 205; @mitchell1998, apartado 1.6]:
+Para hablar de ello usaremos el vocabulario de la genética para tener aún más clara la metáfora [@talbi2009, pp. 200, 205; @mitchell1998, apartado 1.6]:
 
 | Término | En el algoritmo |
 |---|---|
@@ -36,7 +36,7 @@ Para hablar de ello usaremos el vocabulario de la genética [@talbi2009, pp. 200
 | **Aptitud** (*fitness*) | Un número que mide lo buena que es la solución. Cuanto mayor, mejor. |
 | **Generación** | Una vuelta completa del ciclo: de una población a la siguiente. |
 
-El cromosoma y la solución no son lo mismo: el primero es lo que manipulan los operadores y la segunda, lo que se evalúa. Lo veremos con detalle en el capítulo [](#sec-representacion-genotipo-fenotipo){.capitulo}. En este capítulo trabajaremos con cadenas de bits que representan números enteros.
+El cromosoma y la solución no son lo mismo. El cromosoma es cómo escribimos la solución para que la manipulen los operadores; la solución es lo que representa, y es lo que evalúa la función de aptitud. A veces coinciden y a veces no. Lo veremos con detalle en el capítulo [](#sec-representacion-genotipo-fenotipo){.capitulo}. En este capítulo trabajaremos con cadenas de bits que representan números enteros.
 
 :::: {.callout-note .ejercicio #ejercicio-ciclo-poblacion title="Ejercicio · El vocabulario"}
 Una población tiene cuatro individuos, escritos como cadenas de 5 bits: 01101, 11000, 01000 y 10011. ¿Cuántos cromosomas hay? ¿Cuántos genes tiene cada uno? ¿Qué alelo tiene el segundo individuo en el primer locus?
@@ -181,7 +181,7 @@ $$
 p_i = \frac{f_i}{\sum_j f_j} ,
 $$
 
-y el número esperado de copias de *i* entre los *N* padres es $N\,p_i$. Un mismo individuo puede salir varias veces. Estudiaremos la ruleta y otros mecanismos de selección en el capítulo [](#sec-seleccion-ruleta){.capitulo}; aquí basta con esta idea.
+y el número esperado de copias de *i* entre los *N* padres es $N\,p_i$. Un mismo individuo puede salir varias veces. Estudiaremos la ruleta y otros mecanismos de selección en el capítulo [](#sec-seleccion-ruleta){.capitulo}; aquí basta con esta idea. La intuición de la ruleta es un sorteo en el que cada solución tiene tantos boletos como indica su aptitud. Cuanto más apta, más probable es que salga elegida como padre, pero también influye la suerte: aunque tenga muchos boletos, puede que no le toque.
 
 | Individuo | A | B | C | D |
 |---|:---:|:---:|:---:|:---:|
@@ -353,14 +353,14 @@ A estas decisiones se suman los valores de los **parámetros**, como el tamaño 
 El orden de la tabla es el del diseño, no el de la ejecución. Primero se decide la representación, porque las demás dependen de ella: la aptitud se calcula sobre la solución decodificada, y el cruce y la mutación actúan sobre el cromosoma [@talbi2009, p. 200], así que tienen que estar pensados para él. Por ejemplo, el cruce en un punto funciona con cadenas de bits, pero no con una ruta del viajante escrita como permutación, porque los hijos pueden repetir ciudades (sección -@sec-cruce-permutaciones). En cambio, la selección y el reemplazo solo miran la aptitud, así que sirven para cualquier representación.
 
 :::: {.callout-note .ejercicio #ejercicio-ciclo-decisiones title="Ejercicio · ¿Qué decisión es?"}
-Un equipo diseña un algoritmo genético para el problema del viajante. ¿A cuál de las nueve decisiones corresponde cada frase?
+Un equipo diseña un algoritmo genético para el problema del viajante: un repartidor sale de su almacén, tiene que pasar una vez por cada cliente y volver al almacén, y se busca la ruta más corta (lo verás completo en la sección -@sec-viajante-problema). ¿A cuál de las nueve decisiones corresponde cada frase?
 
-a) «Cada ruta será una permutación de las ciudades.»
+a) «Cada ruta será una permutación de los clientes.»
 b) «La aptitud será la inversa de la longitud de la ruta.»
 c) «Para obtener la ruta, añadimos el almacén al principio y al final de la permutación.»
 d) «Los dos mejores individuos pasarán sin cambios a la generación siguiente.»
 e) «Pararemos tras 100 generaciones sin mejorar.»
-f) «Con probabilidad 0,05, intercambiaremos dos ciudades de un hijo.»
+f) «Con probabilidad 0,05, intercambiaremos dos clientes de un hijo.»
 g) «Los padres se elegirán por torneo entre 4 individuos.»
 
 <details>
@@ -378,7 +378,7 @@ Un algoritmo genético no se detiene tras una generación: repite el ciclo decen
 
 Como casi todos los pasos usan números aleatorios, dos ejecuciones con distinta semilla suelen terminar en sitios distintos [@mitchell1998, apartado 1.6]. Para saber cómo funciona un algoritmo hay que hacer varias ejecuciones; lo veremos en el capítulo [](#sec-experimentos-azar){.capitulo}.
 
-EvoTraveller permite ver una ejecución completa. Resuelve el problema del viajante: un origen en (0, 0) y varios lugares en una cuadrícula, y el algoritmo busca la ruta más corta que pasa por todos y vuelve al origen. Cada individuo es una permutación de los lugares y su aptitud es la inversa de la longitud de la ruta: a mayor aptitud, ruta más corta.
+EvoTraveller permite ver una ejecución completa. Resuelve el problema del viajante del ejercicio [](#ejercicio-ciclo-decisiones): el almacén es el origen, en (0, 0), y los clientes son varios lugares en una cuadrícula. Cada individuo es una permutación de los lugares y su aptitud es la inversa de la longitud de la ruta: a mayor aptitud, ruta más corta.
 
 ::: {.callout-note .en-app title="En la aplicación · EvoTraveller"}
 [Explorar en EvoTraveller](https://evotraveller.streamlit.app/){.explorar target="_blank"}
