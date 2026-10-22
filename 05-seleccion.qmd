@@ -221,8 +221,6 @@ Hay otra regla de la misma familia, la **selección por media**: quien supera la
 
 Estas reglas parecen razonables, pero se desaconsejan: reducen la diversidad muy deprisa.
 
-Una regla parecida, con dos umbrales en lugar de uno (la media más y menos una desviación típica), no se comporta así. Es la regla de Axelrod, y la veremos en la sección -@sec-seleccion-ampliaciones, porque su problema es otro: no está especificada por completo.
-
 ::: {.callout-tip .ejemplo #ejemplo-seleccion-truncamiento title="Ejemplo reproducible · Cuarenta generaciones solo con selección"}
 **Datos.** La pantalla «Comparar mecanismos» de selection-ga simula 40 generaciones solo con selección: cada generación es la población de padres de la anterior, sin cruce ni mutación. Las poblaciones tienen 50 individuos con aptitudes al azar entre 1 y 100, y se hacen 50 repeticiones. Comparamos tres mecanismos con sus valores por defecto: truncamiento con τ = 0,5, torneo con *k* = 2 y ruleta.
 
@@ -253,7 +251,11 @@ El truncamiento elimina de golpe a la mitad de la población. En cinco generacio
 
 Si repetimos la selección generación tras generación, ¿mejora la población indefinidamente?
 
-La selección cambia la frecuencia de los individuos que ya existen, pero no crea ninguno nuevo. Sin cruce ni mutación, la población acaba formada por copias de unos pocos, o de uno solo. La aptitud media sube mientras desaparecen los peores y se detiene cuando ya no queda nada que elegir. Además, como la selección es aleatoria, el mejor individuo inicial puede perderse por mala suerte. A esta pérdida por azar se la llama **deriva genética**.
+La selección cambia la frecuencia de los individuos que ya existen, pero no crea ninguno nuevo. Sin cruce ni mutación, la población acaba formada por copias de unos pocos, o de uno solo. La aptitud media sube mientras desaparecen los peores y se detiene cuando ya no queda nada que elegir.
+
+En esta pérdida de diversidad actúan dos causas. Una es la presión selectiva: los mejores reciben, en promedio, más copias. La otra es el azar del sorteo: en una población finita, el número de copias que recibe cada individuo varía alrededor del esperado. Ese azar basta por sí solo para cambiar la población. Aunque todos tuvieran la misma aptitud, unos recibirían más copias que otros por suerte y, al cabo de unas generaciones, la población sería copias de uno solo [@asoh1994]. A este cambio por azar, que no se debe a las diferencias de aptitud, se le llama **deriva genética**. Cuando sí hay diferencias, la deriva actúa junto con la selección, y por eso el mejor individuo inicial puede perderse por mala suerte.
+
+<!-- Definición revisada el 2026-10-22 a petición del autor: la deriva es el cambio por muestreo en una población finita, también sin diferencias de aptitud (no solo la pérdida del mejor). Asoh y Mühlenbein (1994), leído en el informe técnico GMD-AS-TR-94-12 (Recursos): sin selección, mutación ni cruce, con muestreo con reemplazo de N hijos (equivale a la ruleta con aptitudes iguales), la población converge a un solo genotipo; con dos alelos al 50 %, en unas 1,4·N generaciones de media (tabla 1). Goldberg y Segrest (1987), el trabajo clásico, se retiró de la cita el 2026-10-22 porque no se pudo conseguir; su entrada sigue en referencias.bib por si se coteja más adelante. -->
 
 En el ejemplo [](#ejemplo-seleccion-truncamiento), el mejor inicial se perdió en casi la mitad de las repeticiones con la ruleta (48 %), en una de cada cuatro con el truncamiento (24 %) y en el 8 % con el torneo. La **toma de control** (*takeover time*) es el número de generaciones hasta que todos los individuos son copias del mejor inicial [@goldberg1991].
 
@@ -323,7 +325,7 @@ D solo puede recibir 1 o 2 copias, y A, 0 o 1. En este sorteo los padres son **A
 
 **Dinámica a lo largo de muchas generaciones.** [SelectionMechanisms](https://josemagalan.shinyapps.io/SelectionMechanisms/) permite comparar mecanismos durante muchas generaciones y simulaciones, con su efecto sobre la convergencia, la aptitud y la diversidad. Es la aplicación en la que se inspira la simulación de selection-ga. Se describe en un artículo aceptado en CIO 2026, cuya referencia definitiva se añadirá cuando se publique.
 
-**Un mecanismo hay que especificarlo por completo.** La regla de @axelrod1986 viene de la simulación social: la usó en su modelo evolutivo de las normas. Se calculan la media $\bar f$ y la desviación típica σ de la población, y cada individuo tiene 2 hijos si $f \ge \bar f + \sigma$, ninguno si $f \le \bar f - \sigma$ y 1 en el resto.
+**Un mecanismo hay que especificarlo por completo.** La regla de @axelrod1986 viene de la simulación social: la usó en su modelo evolutivo de las normas. Se parece a la selección por media (sección -@sec-seleccion-truncamiento), pero con dos umbrales en lugar de uno. Se calculan la media $\bar f$ y la desviación típica σ de la población, y cada individuo tiene 2 hijos si $f \ge \bar f + \sigma$, ninguno si $f \le \bar f - \sigma$ y 1 en el resto.
 
 La regla no dice qué hacer cuando el número de hijos *M* no coincide con el tamaño *N* de la población, y lo normal es que no coincida. Con las aptitudes 1, 2, 3 y 10 ($\bar f = 4$, σ ≈ 3,54), solo D llega a $\bar f + \sigma \approx 7{,}54$ y nadie queda por debajo de $\bar f - \sigma \approx 0{,}46$, así que salen 5 hijos para 4 huecos. Con 1, 8, 9 y 10 ($\bar f = 7$, σ ≈ 3,54) ocurre lo contrario: A no pasa de $\bar f - \sigma \approx 3{,}46$, nadie llega a $\bar f + \sigma$ y salen 3 hijos. Tampoco dice qué hacer si todos tienen la misma aptitud: entonces σ = 0 y cada individuo cumple a la vez las dos condiciones.
 
