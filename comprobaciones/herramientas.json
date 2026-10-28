@@ -33,9 +33,9 @@
     "mutation-ga": {
       "repositorio": "josemagalan/mutation-ga",
       "url": "https://josemagalan.github.io/mutation-ga/",
-      "ejemplos": "6f346a0 (2026-10-15)",
-      "revisado": "3194258",
-      "comentario": "Hasta 3194258 solo cambian README y el nombre del portal."
+      "ejemplos": "cc94747 (2026-10-28)",
+      "revisado": "cc94747",
+      "comentario": "Hasta 3194258 solo cambian README y el nombre del portal. 853832a y cc94747 (2026-10-28) solo cambian textos y referencias de js/content y js/i18n.js (Cicirello, 2023, en las mutaciones de permutación; texto de la mezcla; descripción de «Orden relativo»; apartado 3.3.2.1 de Talbi), sin tocar los operadores; npm test sin fallos y todos los ejemplos del capítulo 7 recomprobados en la interfaz publicada con cc94747."
     },
     "evotraveller": {
       "repositorio": "jismartin/evotraveller",
