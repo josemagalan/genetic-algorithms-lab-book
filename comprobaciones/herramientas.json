@@ -27,8 +27,8 @@
       "repositorio": "josemagalan/crossover-ga",
       "url": "https://josemagalan.github.io/crossover-ga/",
       "ejemplos": "9848d5d (2026-10-15)",
-      "revisado": "d58793f",
-      "comentario": "Hasta d58793f solo cambian README y el nombre del portal."
+      "revisado": "8303f69",
+      "comentario": "Hasta d58793f solo cambian README y el nombre del portal. 8303f69 (2026-10-28) solo cambia textos y referencias de js/content (variante NWOX y Cicirello, 2023), sin tocar los operadores; el ejercicio 6.10 y los enlaces nuevos del capítulo 6 se comprobaron en la interfaz con esa versión."
     },
     "mutation-ga": {
       "repositorio": "josemagalan/mutation-ga",
