@@ -37,8 +37,8 @@ El libro está en versión beta: su contenido y estructura pueden cambiar. / The
 | 1. Evolución y optimización | Revisado (20 de octubre de 2026) |
 | 2. El ciclo y las decisiones de diseño | Revisado (21 de octubre de 2026) |
 | 3. Representar soluciones | Revisado (22 de octubre de 2026) |
-| 4. Inicializar y evaluar | Borrador completo, pendiente de revisión |
-| 5. Seleccionar a los padres | Borrador completo, en revisión |
+| 4. Inicializar y evaluar | Revisado (28 de octubre de 2026) |
+| 5. Seleccionar a los padres | Revisado (28 de octubre de 2026) |
 | 6. Cruzar | Borrador completo, en revisión |
 | 7. Mutar | Borrador completo, en revisión |
 | 8. Reemplazar y parar | Borrador completo, pendiente de revisión |
