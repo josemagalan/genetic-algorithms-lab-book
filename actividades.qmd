@@ -378,7 +378,7 @@ Aquí están todas las cajas de trabajo del libro. Los **ejemplos reproducibles*
 | [Ejemplo 7.8](07-mutacion.qmd#ejemplo-mutacion-otras-mutaciones) | Saltos que se estrechan | [7.8](07-mutacion.qmd#sec-mutacion-otras-mutaciones) | mutation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
 | [En la aplicación](07-mutacion.qmd#sec-mutacion-otras-mutaciones) | Exploración libre | [7.8](07-mutacion.qmd#sec-mutacion-otras-mutaciones) | mutation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
 | [Ejemplo 7.9](07-mutacion.qmd#ejemplo-mutacion-que-conserva) | Comparar las mutaciones de permutación | [7.9](07-mutacion.qmd#sec-mutacion-que-conserva) | mutation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
-| [Ejercicio 7.9](07-mutacion.qmd#ejercicio-mutacion-que-conserva) | Contar adyacencias | [7.9](07-mutacion.qmd#sec-mutacion-que-conserva) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 7.9](07-mutacion.qmd#ejercicio-mutacion-que-conserva) | Contar adyacencias y precedencias | [7.9](07-mutacion.qmd#sec-mutacion-que-conserva) | — | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
 | [En la aplicación](07-mutacion.qmd#sec-mutacion-que-conserva) | «Comparar operadores» | [7.9](07-mutacion.qmd#sec-mutacion-que-conserva) | mutation-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
 | [Ejemplo 7.10](07-mutacion.qmd#ejemplo-mutacion-ampliaciones) | Invertir casi todo | [7.10](07-mutacion.qmd#sec-mutacion-ampliaciones) | mutation-ga | [[+]{.corto}]{.nivel .saber-mas .solo-corto} |
 

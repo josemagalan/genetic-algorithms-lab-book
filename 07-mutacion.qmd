@@ -5,7 +5,7 @@ aliases:
 
 # Mutar {#sec-mutacion}
 
-<!-- Seguimiento interno (no visible): redactado el 2026-10-08. Los ejemplos reproducibles se comprobaron en mutation-ga (commit 8a46267, 2026-10-07) el 2026-10-08, con su código y en la interfaz publicada. Guiones: memoria/verificaciones/2026-10-08-mutacion.js y 2026-10-08-mutacion-interfaz.py. Registro en memoria/sesiones/2026-10-08-07-capitulo-8-mutacion.md. En mutation-ga, una posición muta si r < pm (desigualdad estricta) y los r se redondean hacia abajo a centésimas. Recomprobado el 2026-10-15 con mutation-ga 6f346a0 (desde 8a46267 solo cambian enlaces y textos de «Acerca de»): mismos resultados con el código y en la interfaz, incluidas las tablas de los ejemplos 7.7 y 7.9. -->
+<!-- Seguimiento interno (no visible): redactado el 2026-10-08. Los ejemplos reproducibles se comprobaron en mutation-ga (commit 8a46267, 2026-10-07) el 2026-10-08, con su código y en la interfaz publicada. Guiones: memoria/verificaciones/2026-10-08-mutacion.js y 2026-10-08-mutacion-interfaz.py. Registro en memoria/sesiones/2026-10-08-07-capitulo-8-mutacion.md. En mutation-ga, una posición muta si r < pm (desigualdad estricta) y los r se redondean hacia abajo a centésimas. Recomprobado el 2026-10-15 con mutation-ga 6f346a0 (desde 8a46267 solo cambian enlaces y textos de «Acerca de»): mismos resultados con el código y en la interfaz, incluidas las tablas de los ejemplos 7.7 y 7.9. Ampliado el 2026-10-28 con cicirello2023, eiben2015 (cotejada), eiben1999 y spears1993, en una versión ligera (D066): frases en 7.4, 7.6 y 7.7 (tamaño de paso, nombres en inglés, pm = 1/L y para qué se busca); mezcla y nombres en 7.8; tipos de problema, aristas con sentido, precedencias y un apartado más del ejercicio en 7.9; 2-opt, otras mutaciones, Spears y control de parámetros en Ampliaciones. Propiedades comprobadas con el código de mutation-ga 3194258 (guion memoria/verificaciones/2026-10-28-mutacion-fuentes.js); registro en memoria/sesiones/2026-10-28-03-capitulo-7-fuentes.md. -->
 
 **Herramientas:** [mutation-ga](https://josemagalan.github.io/mutation-ga/#lang=es), accesible desde el [portal](https://josemagalan.github.io/genetic-algorithms-lab/).
 
@@ -120,7 +120,7 @@ En la **representación entera**, cada gen es un entero dentro de un rango. En m
 - **Reinicio aleatorio** (*random resetting*). Si la posición muta, el gen toma un valor cualquiera del rango, todos con la misma probabilidad. Es la mutación tal como la definió @holland1992 [pp. 109–110] para cualquier alfabeto: el valor nuevo se elige al azar entre todos los posibles, con la misma probabilidad. @talbi2009 [p. 209] la describe como cambiar el valor del gen por otro del alfabeto. En la herramienta se sortea un segundo número *s* y el valor nuevo es $\lfloor 10\, s \rfloor$, la parte entera de $10\,s$. Puede coincidir con el que había.
 - **Deslizamiento** (*creep*). Si la posición muta, al gen se le suma un paso pequeño, positivo o negativo, de como mucho *s* unidades (el **paso máximo**). Con $s = 1$ se sortea un segundo número *u*: si $u < 0{,}5$, el gen baja una unidad; si no, sube una. Si el valor se sale del rango, se queda en el extremo. La idea de deslizar un gen hacia arriba o hacia abajo una cantidad pequeña, con un deslizamiento máximo fijado por el usuario, procede de los números reales [@herrera1998, apartado 4.4].
 
-Cuál conviene depende de lo que signifique cada gen [@eiben2015]. Si los valores son **categorías sin orden**, como la máquina que hace cada tarea o el proveedor que atiende cada pedido, la máquina 3 no se parece más a la 4 que a la 9, y cualquier valor es un cambio tan razonable como otro: conviene el reinicio aleatorio. Si los valores son **cantidades ordenadas**, como las unidades de un lote o los operarios de un turno, un valor próximo suele dar una solución parecida, y el deslizamiento cambia poco, como pide la sección -@sec-mutacion-para-que-mutar.
+Cuál conviene depende de lo que signifique cada gen [@eiben2015, p. 55]. Si los valores son **categorías sin orden**, como la máquina que hace cada tarea o el proveedor que atiende cada pedido, la máquina 3 no se parece más a la 4 que a la 9, y cualquier valor es un cambio tan razonable como otro: conviene el reinicio aleatorio. Si los valores son **cantidades ordenadas**, como las unidades de un lote o los operarios de un turno, un valor próximo suele dar una solución parecida, y el deslizamiento cambia poco, como pide la sección -@sec-mutacion-para-que-mutar.
 
 ::: {.callout-tip .ejemplo #ejemplo-mutacion-enteros title="Ejemplo reproducible · Saltar o deslizarse"}
 **Datos.** El padre 3 7 1 4 9 0 6 2, con genes de 0 a 9. Los números se sortean por orden y, cuando una posición muta, el siguiente número es el de la mutación. Por eso, con el mismo sorteo, los *r* de las dos mutaciones dejan de coincidir después de la primera posición que muta.
@@ -197,7 +197,7 @@ $$
 v' = v + \sigma\, z, \qquad z \sim N(0, 1).
 $$
 
-Cada posición muta con probabilidad *pm*. Los saltos pequeños son los más probables: unos 68 de cada 100 son menores que σ y unos 95, menores que 2σ. Los grandes son raros, pero posibles. Es la mutación propia de las estrategias evolutivas [@herrera1998, apartado 4.1], y σ, el tamaño del paso, hay que elegirlo bien [@talbi2009, pp. 211–212]. Si el mutante se sale del intervalo permitido, hay que repararlo. En mutation-ga los genes van de 0 a 10, y un valor que se sale se recorta al extremo.
+Cada posición muta con probabilidad *pm*. Los saltos pequeños son los más probables: unos 68 de cada 100 son menores que σ y unos 95, menores que 2σ. Los grandes son raros, pero posibles. Es la mutación propia de las estrategias evolutivas [@herrera1998, apartado 4.1]. A σ se le llama **tamaño de paso** de la mutación [@eiben2015, p. 57], y hay que elegirlo bien [@talbi2009, pp. 211–212]. Si el mutante se sale del intervalo permitido, hay que repararlo. En mutation-ga los genes van de 0 a 10, y un valor que se sale se recorta al extremo.
 
 La herramienta obtiene *z* a partir de dos números aleatorios (lo veremos en la sección -@sec-mutacion-otras-mutaciones). En el ejemplo te damos *z* directamente.
 
@@ -280,7 +280,7 @@ No es una permutación: visita dos veces las ciudades 1 y 5 y nunca la 2 ni la 3
 <!-- Comprobado el 2026-10-08: la herramienta muestra en el paso 13 de 13 el mutante 1 5 1 4 5 6 7 8 9 y «el mutante no es una permutación: tiene genes repetidos (1, 5) y otros que faltan (2, 3)». -->
 :::
 
-Con permutaciones no se pueden cambiar los valores de los genes uno a uno: casi siempre aparecen repetidos [@eiben2015]. Se podría reparar el mutante o castigarlo en la función de evaluación, pero lo natural es usar mutaciones que solo recoloquen los genes, sin cambiar ningún valor, para que se cumpla la condición de validez de la sección -@sec-mutacion-para-que-mutar. Con el cruce pasaba lo mismo (sección -@sec-cruce-permutaciones).
+Con permutaciones no se pueden cambiar los valores de los genes uno a uno: casi siempre aparecen repetidos [@eiben2015, p. 68]. Se podría reparar el mutante o castigarlo en la función de evaluación, pero lo natural es usar mutaciones que solo recoloquen los genes, sin cambiar ningún valor, para que se cumpla la condición de validez de la sección -@sec-mutacion-para-que-mutar. Con el cruce pasaba lo mismo (sección -@sec-cruce-permutaciones).
 
 ::: {.callout-note .en-app title="En la aplicación · mutation-ga, «Contraejemplo: reinicio aleatorio»"}
 [Explorar en mutation-ga](https://josemagalan.github.io/mutation-ga/#op=reset-perm&lang=es){.explorar target="_blank"}
@@ -293,15 +293,15 @@ Con permutaciones no se pueden cambiar los valores de los genes uno a uno: casi 
 
 ¿Cómo se cambia un poco una permutación sin repetir ninguna ciudad?
 
-Las mutaciones más usadas para permutaciones se basan en tres operaciones [@talbi2009, p. 209]:
+Las mutaciones más usadas para permutaciones se basan en tres operaciones [@talbi2009, p. 209; @eiben2015, pp. 69–70; @cicirello2023]:
 
 - **Intercambio** (*swap*): se eligen al azar dos posiciones, *i* y *j*, y se intercambian sus genes.
-- **Inserción**: el gen de la posición *i* se saca de su sitio y se coloca de modo que quede en la posición *j*. Los genes que había entre las dos posiciones se desplazan un lugar para hacerle hueco.
-- **Inversión**: se elige al azar un tramo del cromosoma y se invierte el orden de sus genes.
+- **Inserción** (*insertion*): el gen de la posición *i* se saca de su sitio y se coloca de modo que quede en la posición *j*. Los genes que había entre las dos posiciones se desplazan un lugar para hacerle hueco.
+- **Inversión** (*inversion* o *reversal*): se elige al azar un tramo del cromosoma y se invierte el orden de sus genes.
 
-Las tres solo recolocan genes, así que el mutante es siempre una permutación válida. Y encadenando intercambios se puede llegar a cualquier ordenación.
+Las tres solo recolocan genes, así que el mutante es siempre una permutación válida. Y encadenando intercambios se puede llegar a cualquier ordenación. Cuál conviene depende de lo que importe en el problema, como verás en la sección -@sec-mutacion-que-conserva.
 
-En una permutación los genes no se pueden mutar uno a uno, por eso *pm* se interpreta como la probabilidad de que el individuo mute, no cada gen [@eiben2015]. En la herramienta, cada operador se aplica una vez, con las posiciones elegidas al azar o arrastradas a mano.
+En una permutación los genes no se pueden mutar uno a uno, por eso *pm* se interpreta como la probabilidad de que el individuo mute, no cada gen [@eiben2015, p. 69]. En la herramienta, cada operador se aplica una vez, con las posiciones elegidas al azar o arrastradas a mano.
 
 ::: {.callout-tip .ejemplo #ejemplo-mutacion-intercambio-insercion-inversion title="Ejemplo reproducible · Tres formas de recolocar"}
 **Datos.** El padre 1 2 3 4 5 6 7 8 9.
@@ -362,7 +362,7 @@ Puedes comprobarlo en la herramienta escribiendo el padre en **Introducir el pad
 
 Si la mutación aporta diversidad, ¿por qué no mutar mucho?
 
-Normalmente *pm* es pequeña. @goldberg1989 [p. 14] habla de una mutación por cada mil bits copiados, @whitley1994 de probabilidades por bit menores del 1 % y @talbi2009 [p. 208] de valores por gen entre 0,001 y 0,01, o de $\mathit{pm} = 1/k$, donde *k* es el número de variables, para que en promedio mute una sola. Los primeros estudios sistemáticos de parámetros llegaron a valores parecidos: 0,001 por bit en los experimentos de De Jong y entre 0,005 y 0,01 en los de Grefenstette y en los de Schaffer y sus colaboradores. Pero estos valores se obtuvieron con conjuntos concretos de problemas, y nada garantiza que sean los mejores para otro [@mitchell1998, apartado 5.6]. Con muy poca mutación, la población pierde diversidad y converge enseguida. Con demasiada, el mutante apenas se parece al padre: se pierde lo que habían conseguido la selección y el cruce y, en el caso extremo, la búsqueda se convierte en una búsqueda al azar [@talbi2009, p. 209]. Por sí sola, la mutación es un paseo aleatorio por el espacio de soluciones [@goldberg1989, p. 14; @holland1992, p. 110].
+Normalmente *pm* es pequeña. @goldberg1989 [p. 14] habla de una mutación por cada mil bits copiados, @whitley1994 de probabilidades por bit menores del 1 % y @talbi2009 [p. 208] de valores por gen entre 0,001 y 0,01, o de $\mathit{pm} = 1/k$, donde *k* es el número de variables, para que en promedio mute una sola. Con cadenas de bits, esta regla, $\mathit{pm} = 1/L$ para una longitud *L*, procede de Mühlenbein [@eiben1999, p. 132]. Los primeros estudios sistemáticos de parámetros llegaron a valores parecidos: 0,001 por bit en los experimentos de De Jong y entre 0,005 y 0,01 en los de Grefenstette y en los de Schaffer y sus colaboradores. Pero estos valores se obtuvieron con conjuntos concretos de problemas, y nada garantiza que sean los mejores para otro [@mitchell1998, apartado 5.6]. También depende de lo que se busque: menos mutación si interesa que toda la población sea buena, y más si basta con encontrar un individuo muy bueno [@eiben2015, p. 52]. Con muy poca mutación, la población pierde diversidad y converge enseguida. Con demasiada, el mutante apenas se parece al padre: se pierde lo que habían conseguido la selección y el cruce y, en el caso extremo, la búsqueda se convierte en una búsqueda al azar [@talbi2009, p. 209]. Por sí sola, la mutación es un paseo aleatorio por el espacio de soluciones [@goldberg1989, p. 14; @holland1992, p. 110].
 
 En la inversión de bits, el caso extremo es $\mathit{pm} = 0{,}5$: cada bit del mutante es un 0 o un 1 con la misma probabilidad, sea cual sea el del padre. En las otras representaciones, el tamaño del cambio depende también de otros parámetros, como el paso máximo *s* del deslizamiento o σ en la mutación gaussiana.
 
@@ -418,7 +418,7 @@ Esta sección amplía el recorrido básico. Requiere las mutaciones de las secci
 
 **Deslizamiento circular.** La variante «Dar la vuelta» del deslizamiento trata el rango como un círculo: después del 9 viene el 0. Con los datos del ejemplo [](#ejemplo-mutacion-enteros), el gen 5 pasa de 9 a 0, y el mutante es 3 7 0 5 **0** 0 6 2: un salto de 9 unidades con un paso máximo de 1. Solo tiene sentido si la variable es cíclica, como la hora del día o el día de la semana.
 
-**Mutación uniforme.** Con probabilidad *pm*, el gen real se sustituye por un valor sorteado de manera uniforme en todo su intervalo, sin tener en cuenta el que tenía [@michalewicz1996; @herrera1998]. Es el equivalente real del reinicio aleatorio: puede llegar a cualquier valor, pero no cambia poco. Ojo con el nombre: @talbi2009 [p. 211] llama «uniforme» a sumar al gen un número uniforme entre −*b* y *b*, que sí es una perturbación local.
+**Mutación uniforme.** Con probabilidad *pm*, el gen real se sustituye por un valor sorteado de manera uniforme en todo su intervalo, sin tener en cuenta el que tenía [@michalewicz1996; @herrera1998]. Es el equivalente real del reinicio aleatorio [@eiben2015, p. 57]: puede llegar a cualquier valor, pero no cambia poco. Ojo con los nombres: @talbi2009 [p. 211] llama «uniforme» a sumar al gen un número uniforme entre −*b* y *b*, que sí es una perturbación local, y @eiben2015 [p. 57] llaman «no uniforme» a la mutación gaussiana, que no es la que viene a continuación.
 
 **Mutación no uniforme.** @michalewicz1996 propuso que los saltos se estrechen a medida que avanza la búsqueda. Si el gen muta, se sortea con un número τ si sube (τ < 0,5) o baja, y el gen recorre una fracción del hueco *y* que le queda hasta el límite en ese sentido:
 
@@ -454,7 +454,7 @@ Con los mismos números aleatorios, a mitad de la búsqueda los saltos son unas 
 
 **Cómo se obtiene *z*.** En la mutación gaussiana, mutation-ga calcula el número normal *z* a partir de dos números uniformes, $u_1$ y $u_2$, con la transformación de Box-Muller: $z = \sqrt{-2 \ln(1 - u_1)}\, \cos(2\pi u_2)$.
 
-**Mutación por mezcla** (*scramble*). Se elige un tramo y sus genes se reordenan al azar, de modo que todas las ordenaciones sean igual de probables. Es la más disruptiva de las cuatro mutaciones de permutación: dentro del tramo se pierden a la vez las posiciones, el orden y las vecindades. A veces, sobre todo con tramos cortos, el tramo queda como estaba. @davis1985 [p. 163] ya usó mutaciones que desordenan un segmento de una lista en un problema de empaquetado.
+**Mutación por mezcla** (*scramble*). Se elige un tramo y sus genes se reordenan al azar, de modo que todas las ordenaciones sean igual de probables. Dentro del tramo se pierden a la vez las posiciones, el orden y las vecindades, pero fuera de él no cambia nada. @cicirello2023 la considera, en general, demasiado disruptiva, salvo cuando importa qué gen va antes que otro: ese orden solo puede cambiar entre dos genes del tramo, y en promedio cambia la mitad de las veces. A veces, sobre todo con tramos cortos, el tramo queda como estaba. @davis1985 [p. 163] ya usó mutaciones que desordenan un segmento de una lista en un problema de empaquetado.
 
 ::: {.callout-note .en-app title="En la aplicación · mutation-ga"}
 - Abre [Mutación de un bit](https://josemagalan.github.io/mutation-ga/#op=one-bit&lang=es){target="_blank"} y arrastra el marcador ◆ para elegir la posición.
@@ -472,9 +472,10 @@ La condición de cambiar poco de la sección -@sec-mutacion-para-que-mutar se pu
 
 - **Posición:** el gen sigue en la misma posición. El intercambio solo mueve dos genes.
 - **Orden relativo:** los genes se recorren en el mismo orden. La inserción solo cambia la colocación del gen que se mueve respecto a los que salta.
-- **Adyacencias:** los genes vecinos del mutante ya eran vecinos en el padre. La inversión conserva todas las adyacencias salvo las dos de los extremos del tramo.
+- **Adyacencias:** los genes vecinos del mutante ya eran vecinos en el padre. La inversión conserva todas las adyacencias salvo las dos de los extremos del tramo, pero recorre al revés las de dentro. Si ir de una ciudad a otra no cuesta lo mismo que volver, la inversión cambia mucho más: da la vuelta, en promedio, a cerca de un tercio de las aristas [@cicirello2023].
+- **Precedencias:** si un gen va antes que otro en el padre, sigue antes en el mutante, contando desde el principio del cromosoma (sección -@sec-cruce-que-conserva). Si un gen salta *d* posiciones, la inserción cambia *d* precedencias y el intercambio a esa distancia, 2*d* − 1; la inversión de un tramo cambia todas las que hay entre sus genes.
 
-En los problemas de secuenciación importa sobre todo el orden relativo, y en el viajante, las adyacencias [@talbi2009, p. 92].
+@eiben2015 [p. 68] distinguen dos clases de problemas de permutación: en unos importa el orden, como en la programación de la producción, donde puede convenir fabricar un producto antes que otros; en otros, las adyacencias, como en el viajante [@talbi2009, p. 92].
 
 ::: {.callout-tip .ejemplo #ejemplo-mutacion-que-conserva title="Ejemplo reproducible · Comparar las mutaciones de permutación"}
 **Datos.** La pantalla «Comparar operadores» de permutación, con «Media con: padres al azar»: 1000 padres de longitud 9, con 10 mutaciones de cada operador por padre, en posiciones y tramos al azar. Las adyacencias y el orden relativo se miden leyendo el cromosoma como una ruta circular.
@@ -502,19 +503,29 @@ Entre las mutaciones válidas, el intercambio es el que más posiciones conserva
 <!-- Comprobado el 2026-10-08: la tabla de la interfaz, con «Media con: padres al azar», muestra estos porcentajes (en negrita). Los mismos valores se obtienen con compare.randomMean (1000 padres, 10 mutaciones, semilla 1). Entre paréntesis, la interfaz muestra los del ejemplo de la parte superior, que no se usan aquí. -->
 :::
 
-:::: {.callout-note .ejercicio #ejercicio-mutacion-que-conserva title="Ejercicio · Contar adyacencias"}
-Lee como rutas circulares el padre y los mutantes del ejemplo [](#ejemplo-mutacion-intercambio-insercion-inversion): el último gen es vecino del primero, y el padre tiene las 9 adyacencias 1–2, 2–3, …, 8–9 y 9–1. ¿Cuántas adyacencias del padre conserva cada mutante?
+La herramienta no mide las precedencias: su columna «Orden relativo» lee el cromosoma como un circuito. Con su código, en las mismas condiciones, la inserción y la mezcla conservan un 91 % de las precedencias y la inversión, un 81 %. @cicirello2023 llega a lo mismo con experimentos en problemas artificiales: la inversión sirve cuando importan las aristas sin sentido, pero no cuando lo tienen; la inserción, cuando importan las precedencias, y el intercambio, como opción general, porque cambia poco sea cual sea el rasgo que importe.
+
+<!-- Comprobado el 2026-10-28 con el código de mutation-ga 3194258 (memoria/verificaciones/2026-10-28-mutacion-fuentes.js): con padres al azar de longitud 9 y las marcas al azar de compare.randomMarks (20 000 mutaciones por operador), precedencias conservadas: inserción 90,7 %, mezcla 90,6 %, intercambio 84,2 %, inversión 81,0 %; aristas con sentido (ruta circular): inserción 67,5 %, mezcla 62,3 %, intercambio 58,3 %, inversión 47,5 %; aristas sin sentido: inversión 78,9 %. Exacto con todas las marcas: inserción d precedencias, intercambio 2d − 1, inversión k(k − 1)/2; inserción, como mucho 3 aristas nuevas; inversión, como mucho 2 aristas sin sentido nuevas. Con índices uniformes, la inversión da la vuelta en media a (n + 1)/3 aristas con sentido internas (Cicirello: n/3). La mezcla conserva el 50,2 % de las precedencias dentro del tramo. Son valores del código, no de la interfaz, que no tiene esta medida. -->
+
+:::: {.callout-note .ejercicio #ejercicio-mutacion-que-conserva title="Ejercicio · Contar adyacencias y precedencias"}
+1. Lee como rutas circulares el padre y los mutantes del ejemplo [](#ejemplo-mutacion-intercambio-insercion-inversion): el último gen es vecino del primero, y el padre tiene las 9 adyacencias 1–2, 2–3, …, 8–9 y 9–1. ¿Cuántas adyacencias del padre conserva cada mutante?
+2. Ahora lee los mismos cromosomas de izquierda a derecha. El padre tiene 36 precedencias: el 1 antes que el 2, el 1 antes que el 3… ¿Cuántas cambia cada mutante?
 
 <details>
 <summary>**Ver la solución**</summary>
 
-- Intercambio (1 2 7 4 5 6 3 8 9): conserva 5. Las nuevas son 2–7, 7–4, 6–3 y 3–8: cada gen movido rompe sus dos adyacencias.
-- Inserción (1 2 4 5 6 7 3 8 9): conserva 6. Las nuevas son 2–4, 7–3 y 3–8.
-- Inversión (1 2 7 6 5 4 3 8 9): conserva 7. Solo son nuevas 2–7 y 3–8, las de los extremos del tramo.
+1. Adyacencias:
+   - Intercambio (1 2 7 4 5 6 3 8 9): conserva 5. Las nuevas son 2–7, 7–4, 6–3 y 3–8: cada gen movido rompe sus dos adyacencias.
+   - Inserción (1 2 4 5 6 7 3 8 9): conserva 6. Las nuevas son 2–4, 7–3 y 3–8.
+   - Inversión (1 2 7 6 5 4 3 8 9): conserva 7. Solo son nuevas 2–7 y 3–8, las de los extremos del tramo.
+2. Precedencias:
+   - Intercambio: cambia 7, la del 3 con el 7 y las de cada uno de ellos con el 4, el 5 y el 6 ($2 \times 4 - 1$).
+   - Inserción: cambia 4. El 3 pasa detrás del 4, el 5, el 6 y el 7.
+   - Inversión: cambia 10, las de los cinco genes del tramo 3 4 5 6 7 entre sí.
 </details>
 ::::
 
-<!-- Ejercicio 7.9 comprobado con el código (perm-utils.stats) y con la narración de la herramienta (2026-10-08). -->
+<!-- Ejercicio 7.9 comprobado con el código (perm-utils.stats) y con la narración de la herramienta (2026-10-08). Apartado 2 añadido y comprobado con el código el 2026-10-28 (memoria/verificaciones/2026-10-28-mutacion-fuentes.js): conservan 29, 32 y 26 de las 36 precedencias. -->
 
 ::: {.callout-note .en-app title="En la aplicación · mutation-ga, «Comparar operadores»"}
 [Explorar en mutation-ga](https://josemagalan.github.io/mutation-ga/#cmp=permutation&lang=es){.explorar target="_blank"}
@@ -527,7 +538,7 @@ Lee como rutas circulares el padre y los mutantes del ejemplo [](#ejemplo-mutaci
 
 **Las tres propiedades, con su nombre.** @talbi2009 [p. 209] llama a las tres condiciones de la sección -@sec-mutacion-para-que-mutar **ergodicidad** (poder llegar a cualquier solución), **validez** y **localidad**. La localidad se mide en la solución, no en el cromosoma: una mutación es muy local si un cambio pequeño en el genotipo produce un cambio pequeño en el fenotipo. Si no es así, la búsqueda se acerca a una búsqueda aleatoria. Talbi pone un ejemplo con problemas de agrupamiento: si cada gen indica el grupo de un elemento, cambiar un solo gen de AAACCC da AAABCC, que tiene un grupo de un solo elemento. Es un cambio mínimo en el cromosoma, pero puede convertir una buena solución en una muy mala. Por eso, como en la sección -@sec-mutacion-enteros, la mutación adecuada depende de lo que signifiquen los genes.
 
-**Mutación y búsqueda local.** La mutación está emparentada con los vecindarios de las metaheurísticas que trabajan con una sola solución, como el recocido simulado: los operadores de vecindario de una representación sirven como mutaciones [@talbi2009, p. 209]. El intercambio, la inserción y la inversión son vecindarios clásicos de las permutaciones [@talbi2009, pp. 91–93]. La inversión de un tramo es el movimiento **2-opt** del viajante [@croes1958]: quita dos aristas de la ruta y vuelve a unir los dos trozos en el otro sentido. En el viajante produce un cambio pequeño, pero en un problema de secuenciación, donde importa el orden, el mismo movimiento produce un cambio grande [@talbi2009, p. 92].
+**Mutación y búsqueda local.** La mutación está emparentada con los vecindarios de las metaheurísticas que trabajan con una sola solución, como el recocido simulado: los operadores de vecindario de una representación sirven como mutaciones [@talbi2009, p. 209]. El intercambio, la inserción y la inversión son vecindarios clásicos de las permutaciones [@talbi2009, pp. 91–93]. La inversión de un tramo es el movimiento **2-opt** del viajante [@croes1958; @eiben2015, p. 70]: quita dos aristas de la ruta y vuelve a unir los dos trozos en el otro sentido. Es el cambio más pequeño que se puede hacer cuando importan las adyacencias [@eiben2015, pp. 69–70], aunque algunas inversiones, como la del ejemplo siguiente, no quitan ninguna arista [@cicirello2023]. En el viajante produce un cambio pequeño, pero en un problema de secuenciación, donde importa el orden, el mismo movimiento produce un cambio grande [@talbi2009, p. 92].
 
 ::: {.callout-tip .ejemplo #ejemplo-mutacion-ampliaciones title="Ejemplo reproducible · Invertir casi todo"}
 **Datos.** El padre 1 2 3 4 5 6 7 8 9, visto como una ruta del viajante. Se invierte el tramo de las posiciones 2–9.
@@ -545,9 +556,17 @@ El mutante es **1 9 8 7 6 5 4 3 2**. Solo el 1 sigue en su posición, pero la ru
 <!-- Comprobado el 2026-10-08: la herramienta muestra en el paso 5 de 5 el mutante 1 9 8 7 6 5 4 3 2, «conserva las 9 adyacencias, aunque solo 1 genes siguen en su posición», y en las rutas «Padre: longitud 437» y «Mutante: longitud 437, igual que el padre (0 tramos nuevos)». La longitud depende del mapa de ciudades, generado con la semilla s=0. -->
 :::
 
-**¿Un operador secundario?** La visión de Holland, con la mutación como operador de fondo, se ha matizado. Según @mitchell1998 [apartado 5.5], Spears mostró que mutación y cruce rompen esquemas por igual, aunque el cruce es más eficaz construyendo otros nuevos, y Mühlenbein defendió que el poder de la mutación se había subestimado. @whitley1994 recuerda que la mutación también actúa como un mecanismo de ascenso de colinas, y que una búsqueda genética con mutación y sin cruce suele ser bastante robusta. Lo importante es el equilibrio entre selección, cruce y mutación, que depende de la función de aptitud y de la representación, y que cambia a lo largo de una ejecución [@mitchell1998, apartado 5.5].
+@cicirello2023 repasa catorce mutaciones de permutación, como mover o intercambiar bloques de genes o el movimiento 3-opt, e indica para qué rasgo sirve cada una.
 
-**Un tamaño de paso que se adapta.** Por eso se han propuesto algoritmos que ajustan sus propias probabilidades de mutación y de cruce durante la búsqueda [@mitchell1998, apartado 5.6]. En la mutación gaussiana, σ puede mantenerse fija durante toda la búsqueda o ajustarse según lo que va ocurriendo [@talbi2009, p. 212]. En las estrategias evolutivas, cada individuo lleva junto a sus genes sus propios valores de σ, que también mutan: es la **autoadaptación** [@herrera1998, apartado 4.1]. Así, los pasos que funcionan bien se transmiten junto con las soluciones que los producen [@talbi2009, pp. 212–213].
+**¿Un operador secundario?** La visión de Holland, con la mutación como operador de fondo, se ha matizado. @spears1993 [apartados 2 y 4] mostró que, con la tasa adecuada, la mutación puede romper esquemas tanto como el cruce, o más, aunque el cruce construye mejor otros nuevos. Además, el cruce conserva los valores que comparten los padres y la mutación no, así que el cruce explora menos cuando la población pierde diversidad (sección -@sec-mutacion-para-que-mutar). Mühlenbein, según @mitchell1998 [apartado 5.5], defendió que el poder de la mutación se había subestimado. @whitley1994 recuerda que la mutación también actúa como un mecanismo de ascenso de colinas, y que una búsqueda genética con mutación y sin cruce suele ser bastante robusta. Lo importante es el equilibrio entre selección, cruce y mutación, que depende de la función de aptitud y de la representación, y que cambia a lo largo de una ejecución [@mitchell1998, apartado 5.5].
+
+**Un tamaño de paso que se adapta.** Por eso se han propuesto algoritmos que ajustan sus propias probabilidades de mutación y de cruce durante la búsqueda [@mitchell1998, apartado 5.6]. En la mutación gaussiana, σ puede mantenerse fija durante toda la búsqueda o ajustarse según lo que va ocurriendo [@talbi2009, p. 212]. @eiben1999 [pp. 125–129] distinguen tres formas de controlar un parámetro durante la ejecución, que ilustran con σ:
+
+- **Determinista:** con una regla fija, sin mirar cómo va la búsqueda; por ejemplo, σ baja de 1 a 0,1 a lo largo de las generaciones. La mutación no uniforme de la sección -@sec-mutacion-otras-mutaciones estrecha sus saltos de esta forma.
+- **Adaptativo:** con una regla que usa lo que ocurre en la búsqueda. Con la regla del 1/5 de Rechenberg, σ aumenta si más de una de cada cinco mutaciones da un mutante mejor que su padre, y disminuye si son menos.
+- **Autoadaptativo:** cada individuo lleva junto a sus genes sus propios valores de σ, que también mutan [@herrera1998, apartado 4.1]. Así, los pasos que funcionan bien se transmiten junto con las soluciones que los producen [@talbi2009, pp. 212–213]. Bäck aplicó la misma idea a la probabilidad de mutación de las cadenas de bits [@eiben1999, p. 133].
+
+Teoría y experimentos coinciden en que σ debe disminuir a lo largo de la búsqueda: al principio conviene explorar con saltos grandes y, cerca del óptimo, afinar [@eiben2015, p. 64].
 
 ## Resumen {.unnumbered #resumen}
 
@@ -558,7 +577,7 @@ El mutante es **1 9 8 7 6 5 4 3 2**. Solo el 1 sigue en su posición, pero la ru
 
 ## Referencias del capítulo {.unnumbered #referencias}
 
-<!-- Seguimiento interno: ampliada la bibliografía el 2026-10-08 a petición del autor. Cotejados con Recursos: holland1992 (pp. 109–111, texto del PDF), mitchell1998 (apartados 1.5, 1.10, 5.5 y 5.6; el PDF es una conversión sin la paginación impresa, por eso se cita por apartados), goldberg1989 (p. 14, con OCR de las pp. 1–22 del PDF escaneado), whitley1994 (apartados 2 y 4.1, con OCR del borrador de Recursos, sin la paginación de la revista) y davis1985 (p. 163). Las afirmaciones de Spears y Mühlenbein se citan a través de Mitchell. talbi2009 cotejada el 2026-10-08 con el PDF de Recursos (pp. 91–93 y 208–213: apartado 3.3.2.1; las herramientas citan por error el apartado 3.3.2.2, que es el de cruce). herrera1998: contenido cotejado con el preprint de Recursos (download.pdf, apartados 2.4.2 y 4.4); revista, volumen y páginas pendientes. eiben2015, michalewicz1996, deb1996 y croes1958: pendientes de cotejo (sin PDF en Recursos). La afirmación de eiben2015 sobre pm en permutaciones (apartado 4.5.1) procede de la memoria del asistente y de la documentación de mutation-ga; pendiente de cotejo. La lista se genera con las obras citadas en el capítulo. -->
+<!-- Seguimiento interno: ampliada la bibliografía el 2026-10-08 a petición del autor. Cotejados con Recursos: holland1992 (pp. 109–111, texto del PDF), mitchell1998 (apartados 1.5, 1.10, 5.5 y 5.6; el PDF es una conversión sin la paginación impresa, por eso se cita por apartados), goldberg1989 (p. 14, con OCR de las pp. 1–22 del PDF escaneado), whitley1994 (apartados 2 y 4.1, con OCR del borrador de Recursos, sin la paginación de la revista) y davis1985 (p. 163). Las afirmaciones de Mühlenbein se citan a través de Mitchell; desde el 2026-10-28, las de Spears, con spears1993. talbi2009 cotejada el 2026-10-08 con el PDF de Recursos (pp. 91–93 y 208–213: apartado 3.3.2.1; las herramientas citan por error el apartado 3.3.2.2, que es el de cruce). herrera1998: contenido cotejado con el preprint de Recursos (download.pdf, apartados 2.4.2 y 4.4); revista, volumen y páginas pendientes. michalewicz1996, deb1996 y croes1958: pendientes de cotejo (sin PDF en Recursos). eiben2015 cotejada el 2026-10-28 con Recursos/978-3-662-44874-8.pdf: pp. 52, 55, 57, 64 y 68–70 (la afirmación sobre pm en permutaciones está en la p. 69, apartado 4.5.1). Añadidas el 2026-10-28: cicirello2023 (leída; propiedades comprobadas con el código de mutation-ga), eiben1999 (versión publicada en Recursos; pp. 125–133) y spears1993 (versión del autor en Recursos, sin paginación: se cita por apartados; datos de ScienceDirect facilitados por el autor). Eiben y Smith (p. 69) dicen que la inserción puede romper muchas adyacencias; el código muestra que cambia como mucho 3, y no se usa. La lista se genera con las obras citadas en el capítulo. -->
 
 ::: {.referencias-capitulo #refs}
 :::
