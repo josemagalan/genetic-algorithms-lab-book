@@ -4,7 +4,7 @@
 
 El libro tiene 11 capítulos y 108 secciones: 74 de nivel [[Básico]{.largo}[B]{.corto}]{.nivel .basico}, 23 de nivel [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} y 11 de nivel [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas}. El **recorrido básico** son las secciones azules: se leen seguidas, capítulo a capítulo, sin las demás. Las avanzadas amplían el recorrido básico y suelen apoyarse en él; «Para saber más» cierra cada capítulo con lecturas y temas que el libro no desarrolla.
 
-Las actividades —67 ejemplos reproducibles, 54 cajas «En la aplicación» y 88 ejercicios— están listadas en el [índice de actividades](actividades.qmd), por capítulo y por herramienta.
+Las actividades —67 ejemplos reproducibles, 54 cajas «En la aplicación» y 89 ejercicios— están listadas en el [índice de actividades](actividades.qmd), por capítulo y por herramienta.
 
 ## El libro de un vistazo {.unnumbered #vistazo}
 
@@ -15,13 +15,13 @@ Las actividades —67 ejemplos reproducibles, 54 cajas «En la aplicación» y 8
 | [3. Representar soluciones](03-representacion.qmd) | 7 | 5 | 1 | 10 | 8 | 12 |
 | [4. Inicializar y evaluar](04-inicializar-evaluar.qmd) | 8 | 5 | 1 | 13 | 11 | 14 |
 | [5. Seleccionar a los padres](05-seleccion.qmd) | 6 | 1 | 1 | 6 | 6 | 3 |
-| [6. Cruzar](06-cruce.qmd) | 8 | 2 | 1 | 10 | 9 | 7 |
+| [6. Cruzar](06-cruce.qmd) | 8 | 2 | 1 | 10 | 9 | 8 |
 | [7. Mutar](07-mutacion.qmd) | 7 | 2 | 1 | 9 | 8 | 7 |
 | [8. Reemplazar y parar](08-reemplazo.qmd) | 6 | 2 | 1 | 5 | 4 | 6 |
 | [9. Parámetros y aleatoriedad](09-experimentos.qmd) | 7 | 3 | 1 | 5 | 2 | 10 |
 | [10. El viajante de principio a fin](10-viajante.qmd) | 6 | 2 | 1 | 6 | 1 | 8 |
 | [11. Recapitulación](11-recapitulacion.qmd) | 4 | 0 | 1 | 0 | 1 | 5 |
-| **Total** | **74** | **23** | **11** | **67** | **54** | **88** |
+| **Total** | **74** | **23** | **11** | **67** | **54** | **89** |
 
 ## 1. Evolución y optimización {.unnumbered #cap-1}
 

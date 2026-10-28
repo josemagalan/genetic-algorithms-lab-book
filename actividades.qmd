@@ -107,7 +107,7 @@ Aquí están todas las cajas de trabajo del libro. Los **ejemplos reproducibles*
 
 ### crossover-ga · Cruce {.unnumbered #h-crossover-ga}
 
-12 ejemplos reproducibles y 10 cajas «En la aplicación».
+12 ejemplos reproducibles, 10 cajas «En la aplicación» y 1 ejercicio.
 
 | Actividad | Título | Sección | Nivel |
 |---|---|:-:|:-:|
@@ -129,6 +129,7 @@ Aquí están todas las cajas de trabajo del libro. Los **ejemplos reproducibles*
 | [Ejemplo 6.9](06-cruce.qmd#ejemplo-cruce-otros-cruces) | Salir del intervalo | [6.9](06-cruce.qmd#sec-cruce-otros-cruces) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
 | [En la aplicación](06-cruce.qmd#sec-cruce-otros-cruces) | Exploración libre | [6.9](06-cruce.qmd#sec-cruce-otros-cruces) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
 | [Ejemplo 6.10](06-cruce.qmd#ejemplo-cruce-que-conserva) | Comparar los cruces de permutación | [6.10](06-cruce.qmd#sec-cruce-que-conserva) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 6.10](06-cruce.qmd#ejercicio-cruce-que-conserva) | ¿Antes o después? | [6.10](06-cruce.qmd#sec-cruce-que-conserva) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
 | [En la aplicación](06-cruce.qmd#sec-cruce-que-conserva) | «Comparar operadores» | [6.10](06-cruce.qmd#sec-cruce-que-conserva) | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
 | [Ejemplo 6.11](06-cruce.qmd#ejemplo-cruce-ampliaciones) | Cruzar un padre consigo mismo | [6.11](06-cruce.qmd#sec-cruce-ampliaciones) | [[+]{.corto}]{.nivel .saber-mas .solo-corto} |
 | [Ejemplo 10.3](10-viajante.qmd#ejemplo-viajante-a-mano) | El cruce y la mutación de la generación | [10.3](10-viajante.qmd#sec-viajante-a-mano) | [[B]{.corto}]{.nivel .basico .solo-corto} |
@@ -348,6 +349,7 @@ Aquí están todas las cajas de trabajo del libro. Los **ejemplos reproducibles*
 | [Ejemplo 6.9](06-cruce.qmd#ejemplo-cruce-otros-cruces) | Salir del intervalo | [6.9](06-cruce.qmd#sec-cruce-otros-cruces) | crossover-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
 | [En la aplicación](06-cruce.qmd#sec-cruce-otros-cruces) | Exploración libre | [6.9](06-cruce.qmd#sec-cruce-otros-cruces) | crossover-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
 | [Ejemplo 6.10](06-cruce.qmd#ejemplo-cruce-que-conserva) | Comparar los cruces de permutación | [6.10](06-cruce.qmd#sec-cruce-que-conserva) | crossover-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
+| [Ejercicio 6.10](06-cruce.qmd#ejercicio-cruce-que-conserva) | ¿Antes o después? | [6.10](06-cruce.qmd#sec-cruce-que-conserva) | crossover-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
 | [En la aplicación](06-cruce.qmd#sec-cruce-que-conserva) | «Comparar operadores» | [6.10](06-cruce.qmd#sec-cruce-que-conserva) | crossover-ga | [[A]{.corto}]{.nivel .avanzado .solo-corto} |
 | [Ejemplo 6.11](06-cruce.qmd#ejemplo-cruce-ampliaciones) | Cruzar un padre consigo mismo | [6.11](06-cruce.qmd#sec-cruce-ampliaciones) | crossover-ga | [[+]{.corto}]{.nivel .saber-mas .solo-corto} |
 

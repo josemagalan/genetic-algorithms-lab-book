@@ -5,7 +5,7 @@ aliases:
 
 # Cruzar {#sec-cruce}
 
-<!-- Seguimiento interno (no visible): revisado el 2026-10-08 a petición del autor: OX clásico en 6.6 y la variante por defecto de la herramienta en 6.9 (D038); representación entera explícita en 6.2 y 6.3 (D039). Los ejemplos reproducibles se comprobaron en crossover-ga (commit e6fb577, 2026-10-07) el 2026-10-08, con su código y en la interfaz publicada. Guiones: memoria/verificaciones/2026-10-08-cruce.js y 2026-10-08-cruce-interfaz.py. Registro en memoria/sesiones/2026-10-08-06-capitulo-7-cruce.md. Recomprobado el 2026-10-15 con crossover-ga 9848d5d (desde e6fb577 solo cambian enlaces y textos de «Acerca de»): mismos resultados con el código y en la interfaz, incluida la tabla del ejemplo 6.10. -->
+<!-- Seguimiento interno (no visible): revisado el 2026-10-08 a petición del autor: OX clásico en 6.6 y la variante por defecto de la herramienta en 6.9 (D038); representación entera explícita en 6.2 y 6.3 (D039). Los ejemplos reproducibles se comprobaron en crossover-ga (commit e6fb577, 2026-10-07) el 2026-10-08, con su código y en la interfaz publicada. Guiones: memoria/verificaciones/2026-10-08-cruce.js y 2026-10-08-cruce-interfaz.py. Registro en memoria/sesiones/2026-10-08-06-capitulo-7-cruce.md. Recomprobado el 2026-10-15 con crossover-ga 9848d5d (desde e6fb577 solo cambian enlaces y textos de «Acerca de»): mismos resultados con el código y en la interfaz, incluida la tabla del ejemplo 6.10. Ampliado el 2026-10-28 con pavai2016 y cicirello2023, en una versión ligera elegida por el autor (frases en 6.1, 6.3, 6.5 y 6.6; NWOX y ERX con aristas comunes en 6.9; precedencias y ejercicio nuevo en 6.10; dos apartados en Ampliaciones), comprobado con crossover-ga d58793f: guion memoria/verificaciones/2026-10-28-cruce-fuentes.js; registro en memoria/sesiones/2026-10-28-02-capitulo-6-fuentes.md. -->
 
 **Herramientas:** [crossover-ga](https://josemagalan.github.io/crossover-ga/#lang=es), accesible desde el [portal](https://josemagalan.github.io/genetic-algorithms-lab/).
 
@@ -30,7 +30,7 @@ Un buen cruce tiene que cumplir dos condiciones [@talbi2009, pp. 213–214]:
 - **Heredabilidad.** Los hijos deben parecerse a sus padres y conservar parte de su material genético. Si el cruce mezcla al azar sin conservar nada, se pierde lo que hacía buenos a los padres.
 - **Validez.** Los hijos deben ser soluciones del problema, que se puedan evaluar. Cómo se consigue depende de la representación: un cruce pensado para cadenas de bits puede producir soluciones no válidas si el cromosoma es una permutación.
 
-El cruce actúa sobre el genotipo, así que cada representación tiene sus propios operadores. En este capítulo los veremos para las representaciones binaria (y entera), real y de permutación.
+El cruce actúa sobre el genotipo, así que cada representación tiene sus propios operadores. Se han propuesto cientos, y ninguno es el mejor en todos los problemas: el que conviene depende de cómo se representan las soluciones y de qué rasgos de los padres importan para la aptitud [@pavai2016; @cicirello2023]. En este capítulo veremos los más conocidos para las representaciones binaria (y entera), real y de permutación.
 
 No se cruzan todas las parejas. Cada pareja se cruza con una probabilidad *Pc*, la **probabilidad de cruce**; si no se cruza, sus hijos son copias de los padres. Así, aunque el cruce rompa una buena combinación de genes en una pareja, otras pasan intactas a la generación siguiente. Los valores más usados de *Pc* están entre 0,45 y 0,95 [@talbi2009, p. 214]. Cómo elegirla con experimentos se verá más adelante, en el [capítulo dedicado a los parámetros](#sec-experimentos-pc-pm).
 
@@ -129,7 +129,7 @@ Se intercambian las posiciones 4 y 5: el Hijo 1 es (2, 4, 1, **2, 3**, 1) y el H
 
 En el **cruce uniforme**, para cada posición se saca un número aleatorio $r_i \in [0, 1)$. Si $r_i \le p$, los hijos intercambian el gen de esa posición; si no, cada hijo copia el de su propio padre. Con $p = 0{,}5$, la versión original, cada gen del Hijo 1 viene con la misma probabilidad de cada padre. Con un *p* menor, cada hijo se parece más a su propio padre.
 
-Es la misma idea de la máscara de la sección -@sec-cruce-uno-y-dos-puntos, pero ahora la máscara se sortea bit a bit y puede tener cualquier forma [@syswerda1989]. Por eso el cruce uniforme rompe más los bloques de genes contiguos que los cruces por cortes.
+Es la misma idea de la máscara de la sección -@sec-cruce-uno-y-dos-puntos, pero ahora la máscara se sortea bit a bit y puede tener cualquier forma [@syswerda1989]. Por eso el cruce uniforme rompe más los bloques de genes contiguos que los cruces por cortes. Tiene ventajas e inconvenientes. Los cruces por cortes tienden a transmitir juntos, generación tras generación, los mismos grupos de genes; el uniforme los mezcla más, pero también deshace con más facilidad las combinaciones que ya funcionaban [@pavai2016].
 
 ::: {.callout-tip .ejemplo #ejemplo-cruce-uniforme title="Ejemplo reproducible · Una máscara sorteada, con bits y con enteros"}
 **Datos.** Los mismos padres del ejemplo [](#ejemplo-cruce-uno-y-dos-puntos), con $p = 0{,}5$. Números aleatorios de las posiciones 1 a 8: 0,28; 0,07; 0,58; 0,94; 0,15; 0,01; 0,69 y 0,64.
@@ -259,7 +259,7 @@ No. Cada hijo queda entre sus dos padres, así que el valor máximo de la poblac
 
 En el problema del viajante, una solución es el orden en que se visitan las ciudades. ¿Qué pasa si cruzamos dos rutas como si fueran cadenas de bits?
 
-En la **representación de permutación**, el cromosoma es una ordenación de *n* elementos, sin repetidos. Se usa en problemas de rutas y de secuenciación. Cada número es una ciudad (o una tarea) y debe aparecer exactamente una vez.
+En la **representación de permutación**, el cromosoma es una ordenación de *n* elementos, sin repetidos. Se usa en problemas de rutas, como el del viajante, y de secuenciación y programación de tareas [@cicirello2023]. Cada número es una ciudad (o una tarea) y debe aparecer exactamente una vez.
 
 ::: {.callout-tip .ejemplo #ejemplo-cruce-permutaciones title="Ejemplo reproducible · Cortar dos rutas"}
 **Datos.** Dos padres que ordenan nueve ciudades:
@@ -320,7 +320,7 @@ El **cruce de orden**, OX (*order crossover*), procede de una propuesta de @davi
 2. Se recorre el Padre 2 empezando tras el segundo corte y dando la vuelta, y se apuntan, en ese orden, las ciudades que todavía no están en el hijo.
 3. Esas ciudades se colocan en los huecos del hijo, empezando también tras el segundo corte y dando la vuelta hasta el principio.
 
-El Hijo 2 se forma igual, con los papeles de los padres cambiados. Así, cada hijo conserva un tramo de un padre y el **orden relativo** en que el otro padre visita las demás ciudades [@talbi2009, p. 218]. En crossover-ga es la variante «Clásica (Goldberg, 1989)». La herramienta abre por defecto otra variante, que veremos en la sección -@sec-cruce-otros-cruces; los enlaces de este capítulo ya seleccionan la clásica.
+El Hijo 2 se forma igual, con los papeles de los padres cambiados. Así, cada hijo conserva un tramo de un padre y el **orden relativo** en que el otro padre visita las demás ciudades [@talbi2009, p. 218]. Según @cicirello2023, probablemente se rellena dando la vuelta porque OX se pensó para el viajante: si la ruta se lee como un circuito, las ciudades que vienen del otro padre quedan seguidas, en un solo tramo. En crossover-ga es la variante «Clásica (Goldberg, 1989)». La herramienta abre por defecto otra variante, que veremos en la sección -@sec-cruce-otros-cruces; los enlaces de este capítulo ya seleccionan la clásica.
 
 ::: {.callout-tip .ejemplo #ejemplo-cruce-ox title="Ejemplo reproducible · Segmento y orden"}
 **Datos.** Los padres del ejemplo [](#ejemplo-cruce-permutaciones). Cortes tras las posiciones 3 y 7: el segmento son las posiciones 4–7.
@@ -516,30 +516,33 @@ Cuatro de los diez genes (en cursiva) caen fuera del intervalo de sus padres. Co
 
 **Cruce SBX.** El *simulated binary crossover* de @deb1995 imita con números reales la dispersión del cruce en un punto binario. Los dos hijos quedan a la misma distancia de la media de los padres, y el parámetro η controla cuánto se alejan: con η grande, los hijos quedan cerca de los padres.
 
-**Variantes de OX.** La variante por defecto de crossover-ga, «Orden desde el inicio», lee el Padre 2 desde la primera posición, no desde el segundo corte, y rellena los huecos a partir del segundo corte, como la clásica. Con los padres del ejemplo [](#ejemplo-cruce-ox) da los hijos 3 8 1 4 5 6 7 9 2 y 5 7 9 2 6 3 8 1 4. Cada hijo sigue conservando el segmento de su padre y, leído en círculo, el orden relativo del otro, pero la variante no es pura, como veremos en el ejemplo [](#ejemplo-cruce-ampliaciones). En la variante «De izquierda a derecha», el Padre 2 se lee desde la primera posición y los huecos se rellenan en orden.
+**Variantes de OX.** La variante por defecto de crossover-ga, «Orden desde el inicio», lee el Padre 2 desde la primera posición, no desde el segundo corte, y rellena los huecos a partir del segundo corte, como la clásica. Con los padres del ejemplo [](#ejemplo-cruce-ox) da los hijos 3 8 1 4 5 6 7 9 2 y 5 7 9 2 6 3 8 1 4. Cada hijo sigue conservando el segmento de su padre y, leído en círculo, el orden relativo del otro, pero la variante no es pura, como veremos en el ejemplo [](#ejemplo-cruce-ampliaciones). En la variante «De izquierda a derecha», el Padre 2 se lee desde la primera posición y los huecos se rellenan en orden. Es el cruce NWOX (*non-wrapping order crossover*), que propuso Cicirello en 2006 para problemas en los que importa qué elemento va antes que otro [@cicirello2023]; lo usaremos en el ejercicio [](#ejercicio-cruce-que-conserva).
 
 **Variantes de CX.** En CX, la variante «Primer ciclo del Padre 1 (Goldberg, 1989)» toma el primer ciclo del Padre 1 y todas las demás posiciones del Padre 2, y «Ciclos alternos» alterna los padres de un ciclo a otro. Ninguna de las dos necesita sorteo. Con los padres del ejemplo [](#ejemplo-cruce-cx), la primera da el Hijo 1 1 4 5 2 6 3 7 8 9, y la segunda coincide con el de ese ejemplo, porque allí el sorteo alternó los padres.
 
-**Cruce ERX.** El *edge recombination crossover* de @whitley1989 intenta que el hijo herede las **aristas** de los padres: los pares de ciudades vecinas en la ruta. Construye una tabla de adyacencias con los vecinos de cada ciudad en los dos padres y, a cada paso, elige como siguiente ciudad el vecino con menos opciones pendientes.
+**Cruce ERX.** El *edge recombination crossover* de @whitley1989 intenta que el hijo herede las **aristas** de los padres: los pares de ciudades vecinas en la ruta. Construye una tabla de adyacencias con los vecinos de cada ciudad en los dos padres y, a cada paso, elige como siguiente ciudad el vecino con menos opciones pendientes. crossover-ga incluye además la variante «Prioridad a las aristas comunes» de @starkweather1991, que, cuando puede, sigue primero las aristas que comparten los dos padres [@cicirello2023].
 
 ::: {.callout-note .en-app title="En la aplicación · crossover-ga"}
 - Abre [Cruce en n puntos](https://josemagalan.github.io/crossover-ga/#op=n-point&lang=es){target="_blank"} y sube el **Número de cortes** de 1 a 5. ¿Cómo cambia la máscara?
 - Abre [Cruce SBX](https://josemagalan.github.io/crossover-ga/#op=sbx&lang=es){target="_blank"} y mueve la **Concentración (η)** entre 1 y 20 mirando la nube de otros hijos posibles.
 - En [Cruce OX](https://josemagalan.github.io/crossover-ga/#op=ox&lang=es&v=from_start&p1=1-2-3-4-5-6-7-8-9&p2=9-4-5-2-6-3-8-1-7&c=3-7){target="_blank"}, con los padres del ejemplo [](#ejemplo-cruce-ox), y en [Cruce CX](https://josemagalan.github.io/crossover-ga/#op=cx&lang=es){target="_blank"}, cambia la **Variante** con los mismos padres y compara los hijos.
-- Abre [Cruce ERX](https://josemagalan.github.io/crossover-ga/#op=erx&lang=es){target="_blank"}, sigue la tabla de adyacencias paso a paso y pulsa **Ver como rutas**.
+- Abre [Cruce ERX](https://josemagalan.github.io/crossover-ga/#op=erx&lang=es){target="_blank"}, sigue la tabla de adyacencias paso a paso y pulsa **Ver como rutas**. Cambia después la **Variante** a «Prioridad a las aristas comunes» y compara la tabla.
 :::
+
+<!-- comprobar: https://josemagalan.github.io/crossover-ga/#op=erx&lang=es&v=enhanced -->
 
 ## Qué conserva cada operador [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-cruce-que-conserva}
 
 Esta sección requiere los cruces de permutación de las secciones -@sec-cruce-ox a -@sec-cruce-otros-cruces.
 
-La heredabilidad de la sección -@sec-cruce-para-que-cruzar se puede concretar: ¿qué hereda el hijo de sus padres? Con permutaciones hay tres respuestas posibles, y cada cruce favorece una:
+La heredabilidad de la sección -@sec-cruce-para-que-cruzar se puede concretar: ¿qué hereda el hijo de sus padres? Con permutaciones hay varias respuestas posibles, y cada cruce favorece unas más que otras:
 
 - **Posición:** la ciudad ocupa la misma posición que en un padre. CX la conserva siempre, por construcción.
 - **Orden relativo:** las ciudades se visitan en el mismo orden que en un padre, aunque en otras posiciones. Es lo que conserva OX del segundo padre [@talbi2009, p. 218].
 - **Adyacencias:** las ciudades vecinas en el hijo ya eran vecinas en un padre. Es lo que busca ERX.
+- **Precedencias:** si una ciudad va antes que otra en los dos padres, también va antes en el hijo, contando desde el principio del cromosoma. Importa en la programación de tareas [@cicirello2023].
 
-Qué conviene conservar depende del problema. En el viajante, con distancias iguales a la ida y a la vuelta, la longitud de una ruta depende solo de qué ciudades son vecinas, no de la posición en que empieza la ruta. En otros problemas de secuenciación puede importar el orden o la posición. @oliver1987 compararon PMX, OX y CX en el problema del viajante.
+Qué conviene conservar depende del problema. En el viajante, con distancias iguales a la ida y a la vuelta, la longitud de una ruta depende solo de qué ciudades son vecinas, no de la posición en que empieza la ruta. En otros problemas de secuenciación puede importar el orden o la posición. @oliver1987 compararon PMX, OX y CX en el problema del viajante. Cuando importan las precedencias, OX no es buena opción: al rellenar dando la vuelta, invierte muchas [@cicirello2023]. La columna «Orden relativo» de la herramienta no lo refleja, porque lee el cromosoma como una ruta circular.
 
 ::: {.callout-tip .ejemplo #ejemplo-cruce-que-conserva title="Ejemplo reproducible · Comparar los cruces de permutación"}
 **Datos.** La pantalla «Comparar operadores» de crossover-ga aplica todos los cruces de una representación a los mismos padres. La tabla «Qué conserva cada operador» puede promediar sobre muchos padres al azar: aquí, 1000 parejas de padres de longitud 9, con 10 cruces de cada operador por pareja. OX se aplica en su variante clásica.
@@ -566,6 +569,20 @@ Hay que leer la tabla por partes. El cruce en un punto conserva todas las posici
 
 <!-- Comprobado el 2026-10-08: la tabla de la interfaz, con «Media con: padres al azar» y OX en la variante «Clásica» (from=ox&v=classic), muestra estos porcentajes (en negrita). Los mismos valores se obtienen con compare.randomMean (1000 parejas, 10 cruces, semilla 1). Con la variante por defecto de OX, su fila sería 47 / 84 / 77 / 3 / 100. Entre paréntesis, la interfaz muestra los del ejemplo de la parte superior, que no se usan aquí. -->
 :::
+
+:::: {.callout-note .ejercicio #ejercicio-cruce-que-conserva title="Ejercicio · ¿Antes o después?"}
+En los dos padres del ejemplo [](#ejemplo-cruce-ox), la ciudad 4 se visita antes que la 8. Con los mismos cortes, tras las posiciones 3 y 7, ¿cuál de las dos visita antes el Hijo 1 de OX? Calcula después el Hijo 1 de NWOX, la variante «De izquierda a derecha»: copia el segmento del Padre 1 y coloca las demás ciudades en los huecos de izquierda a derecha, en el orden en que aparecen en el Padre 2 desde la primera posición. ¿Conserva esa precedencia?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+El Hijo 1 de OX es 2 3 8 4 5 6 7 1 9: la 8 va antes que la 4, al revés que en los dos padres. Como OX empieza a rellenar tras el segundo corte y da la vuelta, el 8, que el Padre 2 visita después del segmento, acaba al principio del hijo.
+
+Con NWOX, el Padre 2 sin las ciudades del segmento (4, 5, 6 y 7) es 9 2 3 8 1, y esas ciudades ocupan las posiciones 1, 2, 3, 8 y 9. El Hijo 1 es 9 2 3 4 5 6 7 8 1, y la 4 va antes que la 8, como en los padres. NWOX no garantiza conservar todas las precedencias que comparten los padres, pero conserva muchas más que OX. Puedes comprobar el resultado en la [variante «De izquierda a derecha»](https://josemagalan.github.io/crossover-ga/#op=ox&lang=es&v=left_to_right&p1=1-2-3-4-5-6-7-8-9&p2=9-4-5-2-6-3-8-1-7&c=3-7){target="_blank"}.
+</details>
+::::
+
+<!-- Comprobado el 2026-10-28 con el código de crossover-ga d58793f (ox, variantes classic y left_to_right) y en la interfaz: hijos 2 3 8 4 5 6 7 1 9 (clásica) y 9 2 3 4 5 6 7 8 1 (De izquierda a derecha). «Muchas más»: con 1000 parejas de padres al azar de longitud 9 y cortes al azar, NWOX conserva el 89 % de las precedencias comunes a los dos padres, OX clásica el 78 % y «Orden desde el inicio» el 58 % (código, no la interfaz, que no tiene esta medida). Contraejemplo de que NWOX no las conserva todas: P1 2 5 1 4 3, P2 5 3 4 1 2, cortes tras 1 y 3, Hijo 1 3 5 1 4 2 (el 3 antes que el 5). Cicirello (2023) también dice que OX es eficaz con aristas y no con precedencias, y que NWOX lo es con precedencias. -->
 
 ::: {.callout-note .en-app title="En la aplicación · crossover-ga, «Comparar operadores»"}
 [Explorar en crossover-ga](https://josemagalan.github.io/crossover-ga/#cmp=permutation&lang=es){.explorar target="_blank"}
@@ -602,6 +619,10 @@ Con la variante clásica, los dos hijos son **1 2 3 4 5 6 7 8 9**, iguales a los
 
 **Los cromosomas como rutas.** En los cruces de permutación, el botón **Ver como rutas** de crossover-ga dibuja cada cromosoma como una ruta del viajante sobre un mapa de ciudades al azar. Muestra la longitud de cada ruta y marca los tramos nuevos del hijo, que no estaban en ningún padre. Así se ve qué significan, en el problema, las columnas de la sección -@sec-cruce-que-conserva.
 
+**Más de dos padres.** No todos los cruces combinan dos padres para dar dos hijos: los hay que dan un solo hijo y los hay con más de dos padres [@pavai2016].
+
+**El sesgo del cruce.** En la sección -@sec-cruce-reales vimos que el cruce uniforme y el aritmético no sacan a los hijos del intervalo de sus padres. Algo parecido se estudia con el nombre de **sesgo del cruce**: con números reales, muchos cruces tienden a favorecer la zona central del espacio de búsqueda. Si el óptimo está en la zona favorecida, el sesgo ayuda; si no, estorba. Cuando no se sabe dónde está, es mejor un cruce sin sesgo [@pavai2016, apartado 7.2].
+
 ## Resumen {.unnumbered #resumen}
 
 - El cruce combina dos padres en dos hijos, que deben heredar rasgos de los padres y ser soluciones válidas.
@@ -611,7 +632,7 @@ Con la variante clásica, los dos hijos son **1 2 3 4 5 6 7 8 9**, iguales a los
 
 ## Referencias del capítulo {.unnumbered #referencias}
 
-<!-- Seguimiento interno: entradas nuevas en referencias.bib, tomadas de la bibliografía de crossover-ga (commit e6fb577). Cotejadas el 2026-10-08 con los PDF de Recursos: talbi2009 (pp. 213–214 y 218), davis1985 (título, autor y páginas), eshelman1993 (título, autores y pp. 187–202) y deb1995 (revista, volumen y páginas). Las demás, pendientes de cotejo. La lista se genera con las obras citadas en el capítulo. -->
+<!-- Seguimiento interno: entradas nuevas en referencias.bib, tomadas de la bibliografía de crossover-ga (commit e6fb577). Cotejadas el 2026-10-08 con los PDF de Recursos: talbi2009 (pp. 213–214 y 218), davis1985 (título, autor y páginas), eshelman1993 (título, autores y pp. 187–202) y deb1995 (revista, volumen y páginas). Las demás, pendientes de cotejo. La lista se genera con las obras citadas en el capítulo. Añadidas el 2026-10-28: pavai2016 y cicirello2023, leídas completas en los PDF de Recursos (3009966.pdf y cicirello2023ecta.pdf, versión aceptada), con los datos cotejados en las páginas del editor (ACM vía gpbib y SciTePress); starkweather1991, cotejada el 2026-10-28 con la versión de los autores (Recursos/Starkweather.pdf): título, autores y la variante mejorada de ERX, que da prioridad a las aristas comunes a los dos padres; el autor confirmó las páginas 69–76. Lo atribuido a Cicirello (2006) y a Eshelman y colaboradores procede de cicirello2023 y pavai2016. Kora y Yadlapalli (2017) se leyó y se descartó por decisión del autor (fuente poco sólida y redundante). -->
 
 ::: {.referencias-capitulo #refs}
 :::
