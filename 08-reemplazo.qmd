@@ -76,7 +76,7 @@ En una generación concreta puede ocurrir lo contrario: si algún hijo supera al
 
 ¿Cómo evitamos perder la mejor solución sin renunciar al reemplazo generacional?
 
-El **elitismo** consiste en pasar a la generación siguiente, sin cruzarlos ni mutarlos, el mejor individuo o los *e* mejores. Se les llama la **élite**. Lo introdujo De Jong en su tesis de 1975 [@goldberg1989, p. 115; @mitchell1998, apartado 5.4], y se añade a menudo al reemplazo generacional. La élite no se aparta de la población: sigue en ella y puede ser elegida como padre en la generación siguiente, de modo que sus genes también se combinan con los de otros.
+El **elitismo** consiste en pasar a la generación siguiente, sin cruzarlos ni mutarlos, el mejor individuo o los *e* mejores. Se les llama la **élite**. Lo introdujo @dejong1975 [apartado 4.3] en su tesis doctoral [@goldberg1989, p. 115; @mitchell1998, apartado 5.4], y se añade a menudo al reemplazo generacional. La élite no se aparta de la población: sigue en ella y puede ser elegida como padre en la generación siguiente, de modo que sus genes también se combinan con los de otros.
 
 Para que la población no crezca, alguien tiene que dejarle sitio. Hay dos formas parecidas de organizarlo:
 
@@ -256,7 +256,7 @@ Con un criterio de 3 generaciones sin mejora, el algoritmo abandona justo antes 
 
 Si cada hijo sustituye a un miembro de la población, ¿importa mucho a cuál?
 
-Entre el reemplazo generacional y el estado estacionario con un solo hijo hay posiciones intermedias: en cada paso se puede sustituir a cualquier número λ de individuos, entre 1 y μ [@talbi2009, p. 221]. De Jong llamó **salto generacional** (*generation gap*) a la fracción *G* de la población que se renueva en cada generación: *G* = 1 es el reemplazo generacional y *G* < 1, una población que se solapa con la anterior [@goldberg1989, p. 111; @mitchell1998, apartado 5.4]. En el modelo de De Jong, los hijos ocupaban huecos de la población elegidos al azar [@goldberg1989, p. 111].
+Entre el reemplazo generacional y el estado estacionario con un solo hijo hay posiciones intermedias: en cada paso se puede sustituir a cualquier número λ de individuos, entre 1 y μ [@talbi2009, p. 221]. @dejong1975 llamó **salto generacional** (*generation gap*) a la fracción *G* de la población que se renueva en cada generación: *G* = 1 es el reemplazo generacional y *G* < 1, una población que se solapa con la anterior [@goldberg1989, p. 111; @mitchell1998, apartado 5.4]. En el modelo de De Jong, los hijos ocupaban huecos de la población elegidos al azar [@goldberg1989, p. 111].
 
 selection-ga ofrece tres reglas para elegir a quién sustituye cada hijo:
 
@@ -264,7 +264,11 @@ selection-ga ofrece tres reglas para elegir a quién sustituye cada hijo:
 - **Sustituir al más viejo**: sale quien lleva más tiempo en la población, sea bueno o malo. Cada individuo vive un número fijo de pasos. La herramienta muestra la edad de cada padre en la fila **Edad**; el recién llegado empieza con edad 0 y todos envejecen uno en cada paso.
 - **Sustituir a uno al azar**: el reemplazo no añade presión, y toda la presión viene de la selección de padres.
 
-La elección cambia mucho la presión selectiva. Goldberg y Deb mostraron que sustituir al peor genera una presión mucho mayor que sustituir al azar [@whitley1994, apartado 8.1]. El nombre «estado estacionario» puede despistar: estos algoritmos varían más que los generacionales, y por eso son más sensibles a los errores de muestreo y a la deriva genética. A cambio, como en GENITOR se conservan los mejores puntos encontrados, la búsqueda es más agresiva y en la práctica suele ser bastante eficaz [@whitley1994, apartado 8.1].
+Elegir a quién se sustituye es una decisión; otra es si el hijo entra siempre o solo cuando es mejor que aquel al que sustituiría. Una combinación muy usada es sustituir al peor solo si el hijo es mejor [@lozano2008, p. 4422]. En selection-ga es la variante **Sustituir al peor si es mejor**.
+
+La elección cambia mucho la presión selectiva. Goldberg y Deb mostraron que sustituir al peor genera una presión mucho mayor que sustituir al azar [@whitley1994, apartado 8.1]. Sustituir al peor mejora deprisa la aptitud media, pero puede llevar a una convergencia prematura; por eso suele combinarse con poblaciones grandes o con la regla de no admitir individuos repetidos [@eiben2015, pp. 88–89]. Sustituir a uno al azar tiene otro inconveniente: De Jong y Sarma observaron que sus resultados variaban más que los de un algoritmo generacional comparable, y Smith y Vavak lo explicaron porque pierde al mejor mucho más a menudo que sustituir al más viejo. Por eso no se recomienda [@eiben2015, p. 88].
+
+El nombre «estado estacionario» puede despistar: estos algoritmos varían más que los generacionales, y por eso son más sensibles a los errores de muestreo y a la deriva genética. A cambio, como en GENITOR se conservan los mejores puntos encontrados, la búsqueda es más agresiva y en la práctica suele ser bastante eficaz [@whitley1994, apartado 8.1]. Según De Jong y Sarma, cuando el estado estacionario funciona mejor que el generacional no es por solapar generaciones, sino por su mayor presión selectiva y por las reglas de selección y reemplazo que usa [@lozano2008, pp. 4421–4422].
 
 ::: {.callout-tip .ejemplo #ejemplo-reemplazo-variantes-estacionario title="Ejemplo reproducible · Tres formas de dejar sitio"}
 **Datos.** Los padres y los dos hijos del ejemplo [](#ejemplo-reemplazo-estacionario) (A–F: 12, 30, 5, 21, 9 y 17; a: 25; b: 14). Las edades de los padres son:
@@ -300,11 +304,12 @@ Con los mismos padres, la variante **Sustituir al peor** y dos hijos, a (25) y b
 <details>
 <summary>**Ver la solución**</summary>
 
-En selection-ga cada hijo entra sin condiciones. El hijo a sustituye a C (5), el peor. Después el peor es E (9), y b lo sustituye aunque sea peor: la generación siguiente es **A B a D b F**, con media 18. Otras variantes solo insertan al hijo si es mejor que el individuo al que sustituiría. Puedes comprobarlo con el [enlace del ejercicio](https://josemagalan.github.io/selection-ga/#op=steady-state&lang=es&v=worst&lambda=2&f=12-30-5-21-9-17&g=25-3&s=31){target="_blank"}.
+Con **Sustituir al peor**, cada hijo entra sin condiciones. El hijo a sustituye a C (5), el peor. Después el peor es E (9), y b lo sustituye aunque sea peor: la generación siguiente es **A B a D b F**, con media 18. Puedes comprobarlo con el [enlace del ejercicio](https://josemagalan.github.io/selection-ga/#op=steady-state&lang=es&v=worst&lambda=2&f=12-30-5-21-9-17&g=25-3&s=31){target="_blank"}. Con **Sustituir al peor si es mejor**, b no mejora a E y se descarta: la generación siguiente es **A B a D E F**, con media 19 ([enlace](https://josemagalan.github.io/selection-ga/#op=steady-state&lang=es&v=worst-better&lambda=2&f=12-30-5-21-9-17&g=25-3&s=31){target="_blank"}).
 </details>
 ::::
 
 <!-- Comprobado el 2026-10-08: «Siguiente generación: A B a D b F. Sobreviven 4 padres y 2 hijos; la aptitud media pasa de 15,7 a 18 y la mejor, de 30 a 30.» -->
+<!-- Comprobado el 2026-10-29 con selection-ga sin publicar (424982e más la variante «worst-better»), en una copia local de la interfaz: «Hijo 2, b (f = 3): no es mejor que el peor de la población, E (f = 9), y se descarta. La población no cambia.» y «Siguiente generación: A B a D E F. Sobreviven 5 padres y 1 hijos; la aptitud media pasa de 15,7 a 19 y la mejor, de 30 a 30.» Repetir en la web cuando se publique. -->
 
 ::: {.callout-note .en-app title="En la aplicación · selection-ga, «Estado estacionario»"}
 [Explorar en selection-ga](https://josemagalan.github.io/selection-ga/#op=steady-state&lang=es){.explorar target="_blank"}
@@ -317,12 +322,12 @@ En selection-ga cada hijo entra sin condiciones. El hijo a sustituye a C (5), el
 
 ¿Y si padres e hijos compitieran juntos por quedarse en la población?
 
-Las **estrategias evolutivas**, de Rechenberg y Schwefel, usan otros dos esquemas de reemplazo [@whitley1994, apartado 8]:
+Las **estrategias evolutivas**, que Rechenberg y Schwefel crearon en los años sesenta en la Universidad Técnica de Berlín, usan otros dos esquemas de reemplazo. Aparecieron en los setenta, cuando se pasó de un solo padre y un solo hijo a poblaciones de μ padres y λ hijos [@eiben2015, p. 101; @whitley1994, apartado 8]:
 
 - **(μ + λ).** Los μ padres crean λ hijos, y de los μ + λ individuos sobreviven los μ mejores. Un padre sigue en la población hasta que aparecen hijos mejores que él.
 - **(μ, λ).** Los hijos sustituyen a los padres y la selección se hace solo entre los hijos: sobreviven los μ mejores de los λ. Hace falta que $\lambda \geq \mu$.
 
-(μ + λ) es elitista: el mejor nunca se pierde. (μ, λ) no lo es, y se parece al reemplazo generacional del algoritmo genético canónico. GENITOR, que sustituye al peor, se comporta como una estrategia (μ + λ), y por eso la mejora de la población es monótona [@whitley1994, apartado 8.1].
+(μ + λ) es elitista: el mejor nunca se pierde. (μ, λ) no lo es, y se parece al reemplazo generacional del algoritmo genético canónico [@affenzeller2009, pp. 9–10]. GENITOR, que sustituye al peor, se comporta como una estrategia (μ + λ) [@eiben2015, p. 89], y por eso la mejora de la población es monótona [@whitley1994, apartado 8.1].
 
 El elitismo con *e* individuos está entre los dos extremos: con *e* = 0 es el reemplazo generacional puro y, cuanto mayor es *e*, más padres compiten con los hijos por quedarse.
 
@@ -354,7 +359,9 @@ Con (μ + λ), B y D siguen porque están entre los seis mejores de los quince. 
 
 ¿Por qué usar un esquema que puede perder al mejor? Porque quedarse siempre con los mejores tiene el precio que vimos en la sección -@sec-reemplazo-elitismo-ejecucion: la población pierde diversidad deprisa y puede converger prematuramente [@talbi2009, p. 221]. Con (μ + λ), un individuo muy bueno puede quedarse indefinidamente en la población. Con (μ, λ), ningún individuo dura más de una generación.
 
-<!-- Seguimiento interno: la herramienta (js/content/mu-comma-lambda.js) añade que (μ, λ) se adapta mejor si el problema cambia con el tiempo y favorece la autoadaptación de la mutación, y que en las estrategias evolutivas se usa λ ≈ 7μ, citando a Beyer y Schwefel (2002). No se ha cotejado con la obra (sin PDF en Recursos), por eso no se incluye. -->
+En las estrategias evolutivas se suele preferir (μ, λ), con muchos más hijos que padres: λ suele ser de 5 a 7 veces μ. Al descartar a todos los padres, puede salir de óptimos locales pequeños; si el problema cambia con el tiempo, no se queda con soluciones anticuadas; y no estorba la autoadaptación, en la que los parámetros de la mutación evolucionan junto con cada solución [@eiben2015, pp. 80, 89–90].
+
+<!-- Seguimiento interno: la herramienta (js/content/mu-comma-lambda.js) añade que (μ, λ) se adapta mejor si el problema cambia con el tiempo y favorece la autoadaptación de la mutación, y que en las estrategias evolutivas se usa λ ≈ 7μ, citando a Beyer y Schwefel (2002). Desde el 2026-10-29 se incluye, cotejado con eiben2015 (λ/μ entre 5 y 7, p. 80; razones para preferir (μ, λ), pp. 89–90). Beyer y Schwefel (2002) sigue sin PDF en Recursos. -->
 
 :::: {.callout-note .ejercicio #ejercicio-reemplazo-mu-lambda title="Ejercicio · Casos límite"}
 Con los padres A–F (12, 30, 5, 21, 9 y 17) y los seis hijos del ejemplo [](#ejemplo-reemplazo-generacional) (25, 3, 18, 9, 14 y 7):
@@ -380,7 +387,11 @@ Con los padres A–F (12, 30, 5, 21, 9 y 17) y los seis hijos del ejemplo [](#ej
 
 ## Ampliaciones [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas} {#sec-reemplazo-ampliaciones}
 
-**Sustituir al más parecido.** De Jong buscó un reemplazo que mantuviera la diversidad en las funciones con muchos óptimos, donde el elitismo empeoraba los resultados. Se inspiró en la naturaleza: cuando individuos parecidos llenan un nicho, compiten más entre sí. En su modelo de **apiñamiento** (*crowding*), con un salto generacional *G* = 0,1, cada hijo sustituía al individuo más parecido a él de entre unos pocos tomados al azar; su número es el factor de apiñamiento, *CF*. Con *CF* = 2 obtuvo resultados casi óptimos en una función con muchos óptimos locales [@goldberg1989, p. 116]. Otros autores desarrollaron después las ideas de apiñamiento y de nicho, importantes en la optimización de funciones con muchos óptimos [@goldberg1989, p. 116].
+**Sustituir al más parecido.** De Jong buscó un reemplazo que mantuviera la diversidad en las funciones con muchos óptimos, donde el elitismo empeoraba los resultados. Se inspiró en la naturaleza: cuando individuos parecidos llenan un nicho, compiten más entre sí. En su modelo de **apiñamiento** [*crowding*, @dejong1975, apartado 4.7], con un salto generacional *G* = 0,1, cada hijo sustituía al individuo más parecido a él de entre unos pocos tomados al azar; su número es el factor de apiñamiento, *CF*. Con *CF* = 2 obtuvo resultados casi óptimos en una función con muchos óptimos locales [@goldberg1989, p. 116]. Otros autores desarrollaron después las ideas de apiñamiento y de nicho, importantes en la optimización de funciones con muchos óptimos [@goldberg1989, p. 116]. Una de ellas es el **apiñamiento determinista** de Mahfoud: los padres se emparejan, cada pareja tiene dos hijos y cada hijo compite con el padre más parecido a él; se queda el mejor de los dos. La población se reparte entre varias cimas, con subpoblaciones de tamaño parecido aunque unas cimas sean mejores que otras [@eiben2015, p. 94; @lozano2008, p. 4423].
+
+**Diversidad útil.** Lozano, Herrera y Cano combinan la diversidad con la presión de sustituir al peor. Entre los individuos peores que el hijo, buscan el que menos diversidad aporta, medida por la distancia a su vecino más cercano. Si el hijo aporta más diversidad que él, lo sustituye; si no, el hijo sustituye al peor, siempre que sea mejor. En sus experimentos, esta mezcla funcionó mejor que cada regla por separado y que varios métodos de apiñamiento [@lozano2008, pp. 4424–4427].
+
+**Una élite que también muta.** Conservar solo al mejor se llama a veces «modelo de la jaula dorada». Si a la élite se le aplica la mutación para evitar la convergencia prematura, se habla de **elitismo débil** (*weak elitism*): la élite ya no pasa intacta [@affenzeller2009, p. 10].
 
 **Escoger a veces a los peores.** Si el reemplazo siempre se queda con los mejores, la convergencia es más rápida, pero puede ser prematura. A veces conviene conservar individuos malos para evitar los errores de muestreo [@talbi2009, p. 221]. Es la misma tensión entre presión selectiva y diversidad que vimos con el truncamiento en el capítulo [](#sec-seleccion-truncamiento){.capitulo}.
 
@@ -388,7 +399,7 @@ Con los padres A–F (12, 30, 5, 21, 9 y 17) y los seis hijos del ejemplo [](#ej
 
 **Parar cuando la población se estanca.** Los criterios de parada propios de los algoritmos basados en poblaciones miran el estado de la población, sobre todo su diversidad: se para cuando cae por debajo de un umbral [@talbi2009, p. 199]. Para usarlos hay que medir la diversidad, por ejemplo con el número de individuos distintos o con la distancia media entre ellos.
 
-**El reemplazo como parámetro.** El tipo de reemplazo también puede ajustarse. Grefenstette usó un algoritmo genético para buscar los parámetros de otro, entre ellos el salto generacional y si había elitismo; el mejor conjunto para una de sus medidas de rendimiento usaba *G* = 1 y elitismo [@mitchell1998, apartado 5.6]. Pero esas recomendaciones dependen de las funciones de prueba con que se obtuvieron.
+**El reemplazo como parámetro.** El tipo de reemplazo también puede ajustarse. @grefenstette1986 [pp. 124, 126] usó un algoritmo genético para buscar los parámetros de otro, entre ellos el salto generacional y si había elitismo; el mejor conjunto para una de sus medidas de rendimiento usaba *G* = 1 y elitismo [@mitchell1998, apartado 5.6]. Pero esas recomendaciones dependen de las funciones de prueba con que se obtuvieron.
 
 ## Resumen {.unnumbered #resumen}
 
@@ -399,7 +410,7 @@ Con los padres A–F (12, 30, 5, 21, 9 y 17) y los seis hijos del ejemplo [](#ej
 
 ## Referencias del capítulo {.unnumbered #referencias}
 
-<!-- Seguimiento interno: cotejado el 2026-10-08 con los PDF de Recursos. talbi2009: pp. 198–199 (apartado 3.1.2, criterios de parada) y p. 221 (apartado 3.3.3, estrategias de reemplazo). mitchell1998: apartados 5.4 (elitismo, estado estacionario, salto generacional, (μ + λ) con aptitud con ruido) y 5.6 (Grefenstette); se cita por apartados porque el PDF es una conversión sin la paginación impresa. goldberg1989: pp. 111, 115 y 116, con OCR de las páginas 129–134 del PDF escaneado (salto generacional, modelos R2 y R5 de De Jong). whitley1994: apartados 1.1, 8 y 8.1, con OCR del borrador de Recursos, sin la paginación de la revista. De Jong (1975), Goldberg y Deb (1991) y Grefenstette se citan a través de esas obras. La lista se genera con las obras citadas en el capítulo. -->
+<!-- Seguimiento interno: cotejado el 2026-10-08 con los PDF de Recursos. talbi2009: pp. 198–199 (apartado 3.1.2, criterios de parada) y p. 221 (apartado 3.3.3, estrategias de reemplazo). mitchell1998: apartados 5.4 (elitismo, estado estacionario, salto generacional, (μ + λ) con aptitud con ruido) y 5.6 (Grefenstette); se cita por apartados porque el PDF es una conversión sin la paginación impresa. goldberg1989: pp. 111, 115 y 116, con OCR de las páginas 129–134 del PDF escaneado (salto generacional, modelos R2 y R5 de De Jong). whitley1994: apartados 1.1, 8 y 8.1, con OCR del borrador de Recursos, sin la paginación de la revista. Goldberg y Deb (1991) se citan a través de esas obras. Añadida el 2026-10-29 (8.3, a petición del autor): dejong1975, con el apartado 4.3, «Elitist Model R2» (p. 101), tomado del índice de la vista previa de ProQuest de Recursos (out.pdf, leído con OCR); el resto de lo que se dice de la tesis (modelo con N + 1, resultados, salto generacional y apiñamiento) se sigue citando a través de Goldberg y Mitchell. Añadidas el mismo día, a petición del autor: dejong1975 en el salto generacional (sin apartado: el índice solo muestra el 3.7, sobre sus efectos) y en el apiñamiento (apartado 4.7, «Crowding Factor Model R5», p. 136); grefenstette1986 en «El reemplazo como parámetro», cotejada con el PDF de Recursos (G y la estrategia elitista, p. 124; GA1 con G = 1,0 y elitismo, la mejor para el rendimiento en línea, p. 126). Añadidas el 2026-10-29 (P025, aprobada por el autor): lozano2008 (PDF de Recursos, leído completo salvo tablas y apéndices; pp. 4421–4427), eiben2015 (pp. 80, 88–90, 93–94 y 101) y affenzeller2009 (pp. 9–10). De Jong y Sarma (1993), Smith y Vavak y Mahfoud se citan a través de esas obras. Eiben y Smith (p. 93) dicen que en el apiñamiento de De Jong se renovaba el 20 % de la población; Goldberg (p. 116), G = 0,1: se mantiene el dato de Goldberg. La lista se genera con las obras citadas en el capítulo. -->
 
 ::: {.referencias-capitulo #refs}
 :::

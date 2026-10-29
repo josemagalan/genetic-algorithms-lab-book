@@ -20,8 +20,8 @@
       "repositorio": "josemagalan/selection-ga",
       "url": "https://josemagalan.github.io/selection-ga/",
       "ejemplos": "7b7d8a9 (2026-10-15)",
-      "revisado": "424982e",
-      "comentario": "Hasta 424982e solo cambian README, «Acerca de» y el nombre del portal."
+      "revisado": "b769673",
+      "comentario": "Hasta 424982e solo cambian README, «Acerca de» y el nombre del portal. b769673 (2026-10-29) añade la variante «worst-better» («Sustituir al peor si es mejor») del estado estacionario sin cambiar las demás (las pruebas comparan las cuatro variantes con una implementación directa); el ejercicio de 8.6 la usa y se comprobó con el código y en una copia local de la interfaz. Repetir en la web cuando se publique."
     },
     "crossover-ga": {
       "repositorio": "josemagalan/crossover-ga",
