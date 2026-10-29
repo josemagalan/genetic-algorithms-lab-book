@@ -2,9 +2,9 @@
 
 <!-- Archivo generado por filtros/indices.py en cada «quarto render» (pre-render). No lo edites a mano: los cambios se perderían. Para cambiar el contenido, cambia los capítulos; para cambiar el formato, cambia el script. -->
 
-El libro tiene 11 capítulos y 108 secciones: 74 de nivel [[Básico]{.largo}[B]{.corto}]{.nivel .basico}, 23 de nivel [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} y 11 de nivel [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas}. El **recorrido básico** son las secciones azules: se leen seguidas, capítulo a capítulo, sin las demás. Las avanzadas amplían el recorrido básico y suelen apoyarse en él; «Para saber más» cierra cada capítulo con lecturas y temas que el libro no desarrolla.
+El libro tiene 11 capítulos y 109 secciones: 75 de nivel [[Básico]{.largo}[B]{.corto}]{.nivel .basico}, 23 de nivel [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} y 11 de nivel [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas}. El **recorrido básico** son las secciones azules: se leen seguidas, capítulo a capítulo, sin las demás. Las avanzadas amplían el recorrido básico y suelen apoyarse en él; «Para saber más» cierra cada capítulo con lecturas y temas que el libro no desarrolla.
 
-Las actividades —67 ejemplos reproducibles, 54 cajas «En la aplicación» y 89 ejercicios— están listadas en el [índice de actividades](actividades.qmd), por capítulo y por herramienta.
+Las actividades —67 ejemplos reproducibles, 54 cajas «En la aplicación» y 90 ejercicios— están listadas en el [índice de actividades](actividades.qmd), por capítulo y por herramienta.
 
 ## El libro de un vistazo {.unnumbered #vistazo}
 
@@ -20,8 +20,8 @@ Las actividades —67 ejemplos reproducibles, 54 cajas «En la aplicación» y 8
 | [8. Reemplazar y parar](08-reemplazo.qmd) | 6 | 2 | 1 | 5 | 4 | 6 |
 | [9. Parámetros y aleatoriedad](09-experimentos.qmd) | 7 | 3 | 1 | 5 | 2 | 10 |
 | [10. El viajante de principio a fin](10-viajante.qmd) | 6 | 2 | 1 | 6 | 1 | 8 |
-| [11. Recapitulación](11-recapitulacion.qmd) | 4 | 0 | 1 | 0 | 1 | 5 |
-| **Total** | **74** | **23** | **11** | **67** | **54** | **89** |
+| [11. Recapitulación](11-recapitulacion.qmd) | 5 | 0 | 1 | 0 | 1 | 6 |
+| **Total** | **75** | **23** | **11** | **67** | **54** | **90** |
 
 ## 1. Evolución y optimización {.unnumbered #cap-1}
 
@@ -162,4 +162,5 @@ Las actividades —67 ejemplos reproducibles, 54 cajas «En la aplicación» y 8
 - [11.2 Un mapa por representación](11-recapitulacion.qmd#sec-recapitulacion-mapa) [[B]{.corto}]{.nivel .basico .solo-corto}
 - [11.3 Errores frecuentes](11-recapitulacion.qmd#sec-recapitulacion-errores) [[B]{.corto}]{.nivel .basico .solo-corto}
 - [11.4 Diseñar para un problema nuevo](11-recapitulacion.qmd#sec-recapitulacion-problema-nuevo) [[B]{.corto}]{.nivel .basico .solo-corto}
-- [11.5 Lo que queda fuera](11-recapitulacion.qmd#sec-recapitulacion-fuera) [[+]{.corto}]{.nivel .saber-mas .solo-corto}
+- [11.5 Los algoritmos genéticos en la práctica](11-recapitulacion.qmd#sec-recapitulacion-practica) [[B]{.corto}]{.nivel .basico .solo-corto}
+- [11.6 Lo que queda fuera](11-recapitulacion.qmd#sec-recapitulacion-fuera) [[+]{.corto}]{.nivel .saber-mas .solo-corto}

@@ -454,3 +454,4 @@ Aquí están todas las cajas de trabajo del libro. Los **ejemplos reproducibles*
 | [En la aplicación](11-recapitulacion.qmd#sec-recapitulacion-problema-nuevo) | Exploración libre | [11.4](11-recapitulacion.qmd#sec-recapitulacion-problema-nuevo) | portal | [[B]{.corto}]{.nivel .basico .solo-corto} |
 | [Ejercicio 11.4](11-recapitulacion.qmd#ejercicio-recapitulacion-problema-nuevo) | ¿Un algoritmo genético? | [11.4](11-recapitulacion.qmd#sec-recapitulacion-problema-nuevo) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
 | [Ejercicio 11.5](11-recapitulacion.qmd#ejercicio-recapitulacion-problema-nuevo-2) | Un calendario de exámenes | [11.4](11-recapitulacion.qmd#sec-recapitulacion-problema-nuevo) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 11.6](11-recapitulacion.qmd#ejercicio-recapitulacion-practica) | Elegir variables | [11.5](11-recapitulacion.qmd#sec-recapitulacion-practica) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
