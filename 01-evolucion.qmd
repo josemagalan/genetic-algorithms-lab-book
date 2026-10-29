@@ -13,7 +13,7 @@ Al terminar el recorrido básico de este capítulo podrás:
 
 - explicar los tres ingredientes de la selección natural de Darwin y en qué se diferencia de la explicación de Lamarck;
 - reconocer los tres rasgos de un sistema evolutivo (diversidad, selección y replicación) en sistemas biológicos, económicos y culturales, y decir cuál falta cuando un sistema no es evolutivo;
-- explicar por qué la selección reduce la diversidad y qué le pasa a un sistema si nada la renueva;
+- explicar por qué la selección puede concentrar la población y qué le pasa a un sistema si no renueva su diversidad;
 - explicar por qué la evolución puede verse como un método de búsqueda;
 - definir un problema de optimización, su espacio de búsqueda y sus óptimos local y global, y estimar el tamaño de un espacio de búsqueda;
 - relacionar la exploración y la explotación con las dos fuerzas de un sistema evolutivo;
@@ -71,7 +71,7 @@ Lewontin resumió la teoría de Darwin en tres principios: los individuos de una
 Luis R. Izquierdo lo sintetiza en tres rasgos que comparten todos los sistemas evolutivos, aunque sus entidades sean de naturaleza muy distinta: moléculas, células, genes, animales, organizaciones, ideas o comportamientos [@izquierdo2008, pp. 22–23]:
 
 - **Diversidad.** Las entidades del sistema no son todas iguales, y sus diferencias afectan a su **aptitud** (*fitness*). La aptitud es un indicador medible que determina cómo evoluciona la población: las entidades con más aptitud tienden a extenderse relativamente más que las demás.
-- **Selección.** Es una fuerza que discrimina: favorece a unas entidades frente a otras, según su aptitud. Al quedarse solo con algunas, reduce la heterogeneidad del sistema.
+- **Selección.** Es una fuerza que discrimina: favorece a unas entidades frente a otras, según su aptitud, y cambia sus frecuencias en la población.
 - **Replicación, herencia o conservación.** Las propiedades de las entidades, o las propias entidades, se conservan, se replican o se heredan, al menos en parte, de una generación a la siguiente. Puede ocurrir por transmisión genética, en los sistemas biológicos, o por aprendizaje social, como la imitación, en muchos sistemas socioeconómicos.
 
 Son los tres ingredientes de Darwin, pero sin nada que sea exclusivo de la biología. No hacen falta ADN ni organismos que nazcan y mueran. Basta con entidades distintas entre sí, un criterio que favorezca a unas frente a otras y un mecanismo que conserve lo que se ha seleccionado. Por eso un algoritmo, que no tiene nada de vivo, puede ser un sistema evolutivo.
@@ -132,9 +132,9 @@ f) **Sí.** Hay chistes nuevos y versiones que cambian al contarlos (diversidad)
 
 Si la selección favorece una y otra vez a las mismas entidades, ¿qué le pasa a la diversidad del sistema?
 
-La selección necesita diferencias: si todas las entidades son iguales, no hay nada que elegir. Ronald Fisher lo expresó en su **teorema fundamental de la selección natural**: la velocidad a la que aumenta la aptitud en cada momento es igual a la varianza genética de la aptitud en ese momento [@fisher1930]. Cuanto más varía la aptitud heredable entre los individuos, más deprisa mejora la población.
+La selección necesita diferencias: si todas las entidades son iguales, no hay nada que elegir. Para que ese efecto se conserve en la generación siguiente, las diferencias que afectan a la aptitud deben heredarse. Ronald Fisher relacionó esa variación heredable con la mejora de la aptitud debida a la selección [@fisher1930]; en las [ampliaciones](#sec-evolucion-ampliaciones) precisaremos el alcance de su teorema.
 
-Pero la selección **reduce** la diversidad, porque favorece a unas entidades frente a otras. Si nada la renueva, el sistema acaba formado por copias de unas pocas entidades, o de una sola, y ya no puede cambiar más: queda **bloqueado** (*lock-in*). Por eso los sistemas evolutivos suelen tener procesos que **crean y mantienen** la diversidad. Actúan en sentido contrario a la selección, y son lo único que puede impedir que el sistema se bloquee [@izquierdo2008, p. 22]. No es casualidad que la explicación de cómo se genera y se renueva la variedad sea el primer requisito del darwinismo generalizado [@aldrich2008].
+En los modelos de selección que veremos, favorecer repetidamente a unos individuos **tiende a concentrar** la población en copias de unos pocos, o de uno solo. Si nada renueva la diversidad y solo quedan copias, el sistema ya no puede cambiar: queda **bloqueado** (*lock-in*). No significa que cualquier medida de diversidad baje en cada paso ni que toda selección natural termine así. La idea que nos interesa es que, para seguir cambiando, hacen falta procesos que **creen y mantengan** la diversidad [@izquierdo2008, p. 22]. No es casualidad que la explicación de cómo se genera y se renueva la variedad sea el primer requisito del darwinismo generalizado [@aldrich2008].
 
 En biología, la diversidad viene de las mutaciones y de la recombinación genética [@mitchell1998, apartado 1.2]. En los sistemas socioeconómicos, de las innovaciones, de la experimentación, de que la información no llega a todos por igual o, sencillamente, de los errores [@izquierdo2008, p. 22]; @alchian1950 [pp. 218–219] ya veía en la imitación y la innovación las formas en que las empresas se adaptan. Por eso el proceso por el que aparecen entidades nuevas se llama **mutación** en biología y **experimentación** o **innovación** en economía.
 
@@ -165,7 +165,7 @@ Un **problema de optimización** tiene dos partes: un conjunto *S* de soluciones
 
 En la búsqueda de la evolución (sección -@sec-evolucion-dos-fuerzas), *S* serían las secuencias genéticas posibles, y la aptitud haría el papel de *f*, con una diferencia: en la naturaleza nadie la fija, y cambia a medida que cambian los demás seres vivos. En un algoritmo genético, *S* y *f* las da el problema.
 
-**¿Por qué no probarlas todas?** Porque suelen ser demasiadas. Una proteína es una cadena de aminoácidos, y en cada posición puede haber uno de 20. Mitchell propone buscar una proteína con una forma determinada limitándose a las cadenas de 100 aminoácidos o menos [@mitchell1998, apartado 1.4]; solo las de 100 ya son $20^{100}$, más de $10^{130}$ posibilidades. Para hacerse una idea de la escala: se suele decir que en el universo observable hay unos $10^{80}$ átomos; una estimación reciente da unos $2 \times 10^{80}$ protones y neutrones en toda su materia visible [@vopson2021]. Hay muchísimas más proteínas posibles que átomos en el universo. Con muchos problemas, el número de soluciones crece de forma exponencial con el tamaño del problema, y revisarlas todas llevaría siglos o más [@talbi2009, pp. 10–11]. Goldberg distingue tres familias de métodos clásicos y señala el punto débil de cada una [@goldberg1989, pp. 2–5]:
+**¿Por qué no probarlas todas?** Porque suelen ser demasiadas. Una proteína es una cadena de aminoácidos, y en cada posición puede haber uno de 20. Mitchell propone buscar una proteína con una forma determinada limitándose a las cadenas de 100 aminoácidos o menos [@mitchell1998, apartado 1.4]; solo las de 100 ya son $20^{100}$, más de $10^{130}$ posibilidades. La potencia $20^{100}$ significa multiplicar 20 por sí mismo cien veces: hay 20 opciones en cada una de las 100 posiciones. Para hacerse una idea de la escala: se suele decir que en el universo observable hay unos $10^{80}$ átomos; una estimación reciente da unos $2 \times 10^{80}$ protones y neutrones en toda su materia visible [@vopson2021]. Hay muchísimas más proteínas posibles que átomos en el universo. Con muchos problemas, el número de soluciones crece de forma exponencial con el tamaño del problema, y revisarlas todas llevaría siglos o más [@talbi2009, pp. 10–11]. Goldberg distingue tres familias de métodos clásicos y señala el punto débil de cada una [@goldberg1989, pp. 2–5]:
 
 - Los **métodos basados en el cálculo** suben por la pendiente de la función. Son locales, porque buscan lo mejor cerca del punto en el que están, y necesitan derivadas, que muchos problemas no tienen.
 - Los **métodos enumerativos** revisan las soluciones una a una. Son sencillos, pero ineficientes cuando el espacio es grande.
@@ -182,7 +182,7 @@ Un algoritmo genético también usa el azar, pero para guiar la búsqueda, no pa
 **Mejorar antes que alcanzar el óptimo.** Goldberg recuerda que optimizar tiene dos partes: mejorar y acercarse a un óptimo. Para los sistemas complejos, lo más importante es mejorar: llegar pronto a una solución lo bastante buena. Alcanzar el óptimo importa mucho menos [@goldberg1989, pp. 6–7]. El propio Holland, quince años después de su libro, escribió que pondría más énfasis en la mejora y menos en la optimización [@holland1992, p. x]. Con un algoritmo genético no solemos saber si hemos llegado al óptimo, pero sí si hemos mejorado.
 
 :::: {.callout-note .ejercicio #ejercicio-evolucion-optimizar title="Ejercicio · ¿Cuántas rutas?"}
-Un repartidor sale de su almacén, tiene que pasar por 19 clientes y volver al almacén. Con 20 lugares, contando el almacén, hay $19!/2$ rutas distintas (sección -@sec-viajante-problema).
+Un repartidor sale de su almacén, tiene que pasar por 19 clientes y volver al almacén. Con 20 lugares, contando el almacén, hay $19!/2$ rutas distintas (sección -@sec-viajante-problema). El signo ! indica el **factorial**: $19! = 19 \times 18 \times \dots \times 1$.
 
 a) ¿Cuántas rutas son, aproximadamente? Si un ordenador calcula la longitud de un millón de rutas por segundo, ¿cuánto tardaría en revisarlas todas?
 b) ¿Y con 25 lugares?
@@ -301,7 +301,11 @@ Fíjate en que el cruce aparece dos veces: genera diversidad, porque produce com
 </details>
 ::::
 
+Para seguir el recorrido básico, continúa por el [capítulo «El ciclo y las decisiones de diseño»](#sec-ciclo-poblacion).
+
 ## Ampliaciones [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas} {#sec-evolucion-ampliaciones}
+
+**El alcance del teorema de Fisher.** El teorema relaciona la contribución de la selección al cambio de la aptitud media con la **varianza genética aditiva** de la aptitud, la parte asociada a los efectos aditivos de los alelos. No describe todo el cambio observado: también cambian el entorno y las interacciones entre organismos y genes. Por eso no afirma que la aptitud media de una población natural aumente siempre [@fisher1930; @price1972, pp. 129–131]. La idea básica es más sencilla: sin variación heredable, la selección no puede acumular cambios adaptativos.
 
 **Lamarck, otra vez.** A finales del siglo XX, la herencia de los caracteres adquiridos estaba rechazada por casi todos los biólogos, ante la abrumadora evidencia en contra; era difícil imaginar un mecanismo que llevara lo adquirido durante la vida al código genético [@mitchell1998, apartado 3.1]. La **epigenética** ha matizado esa conclusión. Las marcas epigenéticas, como la metilación del ADN, cambian qué genes se expresan sin cambiar la secuencia del ADN, y algunas pasan a la descendencia. @jablonka2009 reunieron más de cien casos de herencia epigenética entre generaciones en bacterias, protistas, hongos, plantas y animales, y defienden un marco que reconoce los aspectos lamarckianos de la herencia. @heard2014 concluyen que esta herencia existe, sobre todo en las plantas, pero que todavía no está claro hasta qué punto la provoca el entorno ni hasta qué punto ocurre en los seres humanos. En ratones, @takahashi2023 metilaron en el laboratorio la región reguladora de dos genes del metabolismo y comprobaron que ese cambio, y sus efectos en el metabolismo, pasaban a las generaciones siguientes por vía paterna y materna; el cambio no lo produjo el entorno, sino los investigadores. Y hay casos en los que lo adquirido sí llega a los genes: según @koonin2009, el sistema CRISPR-Cas, con el que bacterias y arqueas incorporan a su genoma fragmentos de los virus que las atacan y transmiten así la defensa a sus descendientes, funciona mediante un mecanismo lamarckiano genuino. Su conclusión es que las dos modalidades, la darwiniana y la lamarckiana, son importantes en la evolución. No se ha recuperado el mecanismo general de Lamarck, el uso y el desuso como motor de la adaptación, pero la regla de que nada de lo adquirido se hereda tiene excepciones: en algo, Lamarck tenía razón.
 
@@ -317,7 +321,7 @@ Fíjate en que el cruce aparece dos veces: genera diversidad, porque produce com
 
 - La selección natural de Darwin tiene tres ingredientes: variación entre los individuos, selección de los que sobreviven y se reproducen más, y herencia. Lamarck proponía, en cambio, que se heredan los cambios adquiridos durante la vida.
 - Cualquier sistema con **diversidad**, **selección** y **replicación** es evolutivo, sea biológico, económico o cultural. La aptitud es relativa: importa ser mejor que los demás.
-- La selección reduce la diversidad y, si nada la renueva, el sistema se bloquea. La generación de diversidad (mutación, innovación) actúa en sentido contrario. Con las dos fuerzas, la evolución busca, y encuentra, soluciones asombrosas, como la velocidad del guepardo y del impala; Holland aprovechó esa idea en los algoritmos genéticos.
+- En los modelos del libro, repetir la selección tiende a concentrar la población; si solo quedan copias y nada renueva la diversidad, el sistema se bloquea. La generación de diversidad (mutación, innovación) actúa en sentido contrario. Con las dos fuerzas, la evolución busca, y encuentra, soluciones asombrosas, como la velocidad del guepardo y del impala; Holland aprovechó esa idea en los algoritmos genéticos.
 - Optimizar es buscar en un espacio de soluciones que suele ser demasiado grande para revisarlo entero. Un método que pasa siempre al mejor vecino puede quedarse en un óptimo local; un algoritmo genético busca con una población.
 - Equilibrar la selección y la generación de diversidad es equilibrar la explotación de lo que ya funciona y la exploración de lo nuevo. Con demasiada explotación, la población converge prematuramente; con demasiada exploración, la búsqueda se vuelve al azar.
 - Holland propuso los algoritmos genéticos para estudiar la adaptación natural y llevar sus mecanismos a los sistemas artificiales. Un algoritmo genético es un sistema evolutivo cuyas entidades son soluciones de un problema.
@@ -328,3 +332,5 @@ Fíjate en que el cruce aparece dos veces: genera diversidad, porque produce com
 
 ::: {.referencias-capitulo #refs}
 :::
+
+<!-- Adenda de cotejo del 2026-10-29: price1972, texto recuperado del PDF de UBC, pp. 129–131 y comienzo de 132; ficha de Wiley para autor, título, revista, volumen, número, páginas y DOI. Se precisa el alcance del teorema de Fisher en Ampliaciones; no se declara leído todo Price ni cotejada la obra de Fisher. -->

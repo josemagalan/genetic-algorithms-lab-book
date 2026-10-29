@@ -221,7 +221,7 @@ La media de las longitudes baja de 30,06 a 26,54, y la mejor ruta, de 27,81 a 24
 
 ![La generación a mano de la sección -@sec-viajante-a-mano. Arriba, la población inicial; abajo, la siguiente. En naranja, la ruta más corta de cada población. Figura propia, generada con `figuras/10-viajante.py`, en el repositorio del libro.](figuras/10-generacion.svg){#fig-generacion fig-alt="Dos filas de cuatro mapas pequeños. Arriba, las rutas A, de longitud 30,62; B, 27,81, en naranja; C, 32,53; y D, 29,26. Las cuatro se cruzan consigo mismas. Abajo, B, que pasa como élite; D, copiada; H1, 24,80; y H2, en naranja, 24,29, que es la mejor ruta posible y no se cruza consigo misma."}
 
-Con cinco lugares hay solo 60 rutas y es fácil dar con la mejor. En un mapa de 15 lugares, con más de 40 000 millones de rutas, una generación no da tanto de sí: la mejora es lenta y depende de muchas generaciones.
+Con cinco destinos y el origen hay solo 60 rutas y es fácil dar con la mejor. En un mapa de 15 lugares, con más de 40 000 millones de rutas, una generación no da tanto de sí: la mejora es lenta y depende de muchas generaciones.
 
 :::: {.callout-note .ejercicio #ejercicio-viajante-a-mano title="Ejercicio · Con el OX clásico"}
 Repite el paso 4 con el OX clásico de la sección -@sec-cruce-ox, que lee el otro padre a partir del segundo corte. Con los mismos padres, el mismo segmento y la misma mutación del Hijo 2 en las posiciones 4 y 5, ¿qué hijos salen y cuál es la mejor ruta de la generación siguiente?
@@ -343,7 +343,7 @@ Pero la élite son las 6 primeras **posiciones** de la población ordenada, no 6
 | 0,05 | 6 | 0,0293 | 34,11 |
 | 0,1 | 10 | 0,0317 | 31,50 |
 
-La élite pequeña y la grande encuentran la mejor ruta posible; la intermedia, no. No tiene sentido: lo que vemos es el azar de una sola ejecución. Cambiar **Elitism** cambia también los sorteos de toda la ejecución, y cada una sigue su camino.
+La élite pequeña y la grande encuentran la mejor ruta posible; la intermedia, no. No hay por qué esperar un orden monótono: estamos comparando una sola ejecución con cada valor. Cambiar **Elitism** cambia también los sorteos de toda la ejecución, y cada una sigue su camino.
 </details>
 :::
 
@@ -453,7 +453,7 @@ Comparamos las cuatro configuraciones con los 20 mapas de validación:
 | C, *pm* = 0,2 y torneo de 7 | 8,2 % | 30,4 % | 2 de 20 |
 | D, *pm* = 0,2, población 50 y 100 generaciones | 4,4 % | 14,6 % | 4 de 20 |
 
-La mejora de A a B se mantiene en los mapas nuevos: de 13,9 % a 6,5 %. La pequeña ventaja de C sobre B, en cambio, ha desaparecido: con los mapas nuevos, C es peor que B en 12 de 20. Era azar. Y D, que en el ajuste parecía la peor de las tres por su peor mapa, queda ahora por delante. Su ventaja sobre B, 2,1 puntos de media, tampoco es mucho mayor que la variación entre mapas; harían falta más mapas para estar seguros.
+La mejora de A a B se mantiene en los mapas nuevos: de 13,9 % a 6,5 %. La pequeña ventaja de C sobre B, en cambio, no se mantuvo: con los mapas nuevos, C es peor que B en 12 de 20. Y D, que en el ajuste parecía la peor de las tres por su peor mapa, queda ahora por delante. Su ventaja sobre B, 2,1 puntos de media, tampoco es mucho mayor que la variación entre mapas; harían falta más mapas para estar seguros.
 
 Hay que decidir **antes** de mirar los mapas de prueba. Elegimos D, que tiene la menor diferencia media en validación y también el mejor peor mapa. Ahora, y solo ahora, la ejecutamos en los 20 mapas de prueba:
 
@@ -470,6 +470,8 @@ Para la empresa, la decisión razonable sigue siendo B o D, y no los valores ini
 
 <!-- Comprobado el 2026-10-15 con el código de EvoTraveller (algorithm.genetic_algorithm, igual que AppTest en las semillas comprobadas), 15 lugares, una ejecución por mapa; óptimos por programación dinámica (Held–Karp). Ajuste (1111–1120): A 13,28 / 17,62 / 0; B 5,21 / 14,84 / 1; C 4,68 / 16,89 / 2; D 5,41 / 27,33 / 3. B frente a A: mejor en 9 de 10. C frente a B: mejor en 5, peor en 4, empate en 1. Comprobación (1121–1140): A 13,95 / 32,54 / 0; B 6,49 / 16,23 / 3; C 8,17 / 30,43 / 2; D 4,39 / 14,62 / 4; C peor que B en 12 de 20 (mejor en 8); D mejor que B en 12, peor en 7, empate en 1; diferencia media 2,10 puntos, desviación típica 5,36 (error típico 1,20; intervalo del 95 % de −0,25 a 4,45, incluye el 0). B con G = 100: 4,57 % de media y 10,41 % en el peor mapa (1,73 % en los de ajuste). En 18 de los 30 mapas de 15 lugares hay dos lugares en el mismo punto.
 Revisado el 2026-10-17 con memoria/verificaciones/2026-10-17-viajante-validacion-prueba.py (0 fallos), mismo código y mismos parámetros: los mapas 1121–1140 pasan a llamarse de validación, porque sirven para elegir, y se añaden los de prueba, 1141–1160 (nuevos). Se reproducen las tablas de ajuste y de validación y B con G = 100. La elegida por la validación (menor diferencia media) es D. D en prueba: 9,06 % de media (desviación típica 7,47), peor mapa 25,45 % (semilla 1150), mejor ruta en 1 de 20 (1142). B en prueba, solo para el párrafo «¿Y si ahora probamos B…?»: 5,0 / 12,7 / 5; mejor que D en 13 mapas, peor en 6 y empate en 1. Diagnóstico hecho aparte el mismo día y no usado en el texto: en prueba, A 10,4 / 26,0 / 1; C 9,1 / 21,1 / 1; B con G = 100 4,1 / 12,7 / 8. En 8 de los 20 mapas de prueba hay dos lugares en el mismo punto. Las cifras de prueba se calcularon con el código, no en la aplicación publicada. -->
+
+Para seguir el recorrido básico, continúa por el [capítulo «Recapitulación»](#sec-recapitulacion-decisiones).
 
 ## EvoTraveller por dentro [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-viajante-por-dentro}
 

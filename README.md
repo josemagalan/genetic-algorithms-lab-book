@@ -2,7 +2,7 @@
 
 *Algoritmos genéticos en un laboratorio interactivo*
 
-> **Estado: versión 0.9 beta, revisada el 21 de octubre de 2026** (primera publicación: 7 de octubre de 2026). Los autores siguen revisando el texto y los ejemplos; el contenido, la estructura y el índice pueden cambiar. La versión y la fecha están en `_quarto.yml` (`libro-version` y `libro-revision`).
+> **Estado: versión 0.9 beta, revisada el 29 de octubre de 2026** (primera publicación: 7 de octubre de 2026). Los autores siguen revisando el texto y los ejemplos; el contenido, la estructura y el índice pueden cambiar. La versión y la fecha están en `_quarto.yml` (`libro-version` y `libro-revision`).
 
 Libro para aprender algoritmos genéticos de forma práctica, con actividades sobre las herramientas interactivas del [Laboratorio de algoritmos genéticos](https://josemagalan.github.io/genetic-algorithms-lab/) (*genetic-algorithms-lab*). Está pensado para estudiantes de grado que empiezan.
 
@@ -48,7 +48,7 @@ El libro está en versión beta: su contenido y estructura pueden cambiar. / The
 | Índice de actividades | Generado (`filtros/indices.py`) |
 | Agradecimientos y avisos | Texto aprobado |
 
-El resto de capítulos está en preparación.
+Los once capítulos tienen un borrador completo y una primera revisión del autor. El 29 de octubre se incorpora una revisión docente de precisión y coherencia; la edición sigue en beta.
 
 ## Cómo está hecho
 

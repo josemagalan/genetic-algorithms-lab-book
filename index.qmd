@@ -4,12 +4,16 @@
 **Versión {{< meta libro-version >}}**, revisada el {{< meta libro-revision >}}. Es una edición beta: los autores siguen revisando el texto y los ejemplos. Si encuentras una errata o un resultado que no coincide, [cuéntanoslo](avisos.qmd#contacto).
 :::
 
+Este libro está dirigido a estudiantes de grado que empiezan con los algoritmos genéticos. Las actividades del recorrido básico se hacen con papel, calculadora y las herramientas del laboratorio.
+
+Conviene manejar operaciones elementales, fracciones y porcentajes. Las [potencias y los factoriales](#sec-evolucion-optimizar) se recuerdan al contar soluciones; las [probabilidades](#sec-seleccion-torneo) se trabajan con sorteos concretos, y la [media y la desviación típica](#sec-experimentos-replicas), con resultados de varias ejecuciones. Las secciones avanzadas añaden conceptos como la distribución normal y el error típico; pueden dejarse para una segunda lectura.
+
 El libro distingue a simple vista lo que se lee de lo que se hace. La teoría va como texto normal; todo lo que te pide trabajar va dentro de una caja.
 
 **Explicaciones.** Son el texto y las figuras que presentan los conceptos. Se leen como cualquier libro y no necesitan ninguna herramienta.
 
 ::: {.callout-tip .ejemplo title="Ejemplo reproducible"}
-Plantea una situación concreta, con datos y números aleatorios fijados, e invita a predecir el resultado antes de verlo. Hay dos tipos de botón verde:
+Plantea una situación concreta, con datos y números aleatorios fijados. Intenta predecir el resultado antes de abrirlo; después ejecuta la herramienta y explica qué coincide con tu predicción y qué te ha hecho cambiar de idea. Hay dos tipos de botón verde:
 
 - **Abrir**, relleno, lleva a la aplicación exactamente en el estado del ejemplo, de modo que el resultado coincide con el del libro. Muchas veces también puede desplegarse la herramienta dentro de la página.
 - **⚙ Abrir y configurar**, con borde, se usa con los dos simuladores, EvoTraveller y SelectionMechanisms, que no guardan su estado en la dirección. Abre la aplicación con sus valores iniciales: antes de ejecutarla, pon a mano los valores que da el ejemplo en **Datos**.

@@ -217,7 +217,7 @@ El orden es el mismo con las tres conversiones, pero la presión cambia. Con $20
 
 En la **selección por truncamiento** se ordena la población por aptitud y solo pasa el corte una proporción τ de los mejores; los demás no tienen ninguna oportunidad. En selection-ga, cada padre se elige al azar entre los que pasan el corte.
 
-Hay otra regla de la misma familia, la **selección por media**: quien supera la aptitud media se copia dos veces y quien no, se elimina. El tamaño de la población no se mantiene, porque no tiene por qué haber exactamente la mitad por encima de la media. Cambiar la media por la **mediana** tampoco basta: con las aptitudes 1, 2, 3, 4 y 5 solo dos individuos superan la mediana, y sus copias son cuatro, no cinco; con 1, 1, 1 y 1 no la supera ninguno. Para conservar el tamaño, el corte se hace por posiciones: se ordena la población, pasa la mitad mejor y se fija qué hacer con los empates en el corte (por ejemplo, deshacerlos al azar) y cuando *N* es impar (por ejemplo, redondear hacia arriba). Los *N* padres se eligen entre los que han pasado. Así definida, la regla es un truncamiento con τ = 0,5. Si *N* es par y no hay empates en el corte, equivale a copiar dos veces a cada individuo de la mitad mejor.
+Hay otra regla de la misma familia, la **selección por media**: quien supera la aptitud media se copia dos veces y quien no, se elimina. El tamaño de la población no se mantiene, porque no tiene por qué haber exactamente la mitad por encima de la media. Cambiar la media por la **mediana** tampoco basta: con las aptitudes 1, 2, 3, 4 y 5 solo dos individuos superan la mediana, y sus copias son cuatro, no cinco; con 1, 1, 1 y 1 no la supera ninguno. Para conservar el tamaño, el corte se hace por posiciones: se ordena la población, pasa la mitad mejor y se fija qué hacer con los empates en el corte (por ejemplo, deshacerlos al azar) y cuando *N* es impar (por ejemplo, redondear hacia arriba). Los *N* padres se eligen entre los que han pasado. Así definida, la regla es un truncamiento con τ = 0,5. Si *N* es par y no hay empates en el corte, cada individuo de la mitad mejor recibe dos copias **en promedio**. Copiar exactamente dos veces a cada uno, sin sorteo, es otra forma de completar la regla; no da los mismos resultados ejecución por ejecución.
 
 Estas reglas parecen razonables, pero se desaconsejan: reducen la diversidad muy deprisa.
 
@@ -282,6 +282,8 @@ Un compañero ejecuta una sola vez la simulación con la ruleta y el mejor no se
 Una ejecución no basta para hablar de frecuencias. En las 50 repeticiones de cada simulación, el mejor se pierde con la ruleta en aproximadamente la mitad de los casos, y la proporción varía entre simulaciones (del 48 al 66 % en las cinco primeras). Que no se pierda en una ejecución concreta es perfectamente compatible con esa frecuencia. Para comprobarlo, basta con mirar la columna «El mejor se pierde» y pulsar «Simular de nuevo» varias veces.
 </details>
 ::::
+
+Para seguir el recorrido básico, continúa por el [capítulo «Cruzar»](#sec-cruce-para-que-cruzar).
 
 ## Otros mecanismos de selección [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-seleccion-otros-mecanismos}
 

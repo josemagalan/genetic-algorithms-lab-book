@@ -36,7 +36,9 @@ $$
 f(x_1, x_2) = (x_1^2 + x_2 - 11)^2 + (x_1 + x_2^2 - 7)^2,
 $$
 
-dentro del cuadrado $[-5, 5]^2$. Cada variable se escribe con *k* = 4 bits. Esos cuatro bits se leen como un número entero *z* entre 0 y 15, y *z* se reparte a intervalos iguales entre −5 y 5. En la sección -@sec-representacion-binaria veremos la fórmula con detalle.
+dentro del cuadrado $[-5, 5]^2$. Aquí *f* es la **función objetivo que se minimiza**: cuanto menor, mejor. La herramienta y la figura -@fig-genotipo-fenotipo llaman «Aptitud» a ese valor; en otros ejemplos se maximiza. Hay que fijarse siempre en el sentido de la comparación. Solo si el mecanismo lo exige, como la ruleta, se transforma el coste en una aptitud creciente (sección -@sec-inicializar-evaluar-objetivo-aptitud).
+
+Cada variable se escribe con *k* = 4 bits. Esos cuatro bits se leen como un número entero *z* entre 0 y 15, y *z* se reparte a intervalos iguales entre −5 y 5. En la sección -@sec-representacion-binaria veremos la fórmula con detalle.
 
 La figura -@fig-himmelblau muestra la función. Tiene cuatro mínimos, todos con *f* = 0, cada uno en su valle. Entre ellos, cerca de $(-0{,}27;\ -0{,}92)$, hay un máximo local con $f \approx 181{,}6$, y la función crece hacia las esquinas, hasta 890 en $(5;\ 5)$.
 
@@ -58,7 +60,7 @@ $$
 x_1 = -5 + 10 \times 0{,}6667 \approx 1{,}6667, \qquad x_2 = -5 + 3 \times 0{,}6667 = -3.
 $$
 
-El cromosoma representa el punto $(1{,}6667;\ -3)$, donde $f \approx 139{,}38$. El mínimo de la función vale 0, así que este individuo es malo; la selección lo tratará como tal.
+El cromosoma representa el punto $(1{,}6667;\ -3)$, donde $f \approx 139{,}38$. El mínimo de la función vale 0; este individuo queda lejos de él. Al comparar dos individuos, será mejor el que tenga menor *f*.
 </details>
 
 <details class="incrustada">
@@ -258,7 +260,7 @@ Un viajante tiene que pasar una sola vez por cada una de *n* ciudades. ¿Sirve a
 
 Un vector de enteros permite repetir valores, y un circuito no puede repetir ciudades. La **representación permutacional** escribe un orden: cada gen es una ciudad y cada ciudad aparece exactamente una vez. El gen *k* es la ciudad que se visita en el lugar *k*, y el viajante vuelve de la última ciudad a la primera [@talbi2009, p. 36]. Esta representación sirve para los problemas de secuenciación, planificación y rutas.
 
-Aquí, la restricción de que cada ciudad se visite una vez no está en el dominio de cada gen, sino en la **estructura** de todo el cromosoma. Un cromosoma **válido** es el que cumple esa estructura, es decir, el que es una permutación. Por eso necesitan operadores propios, que mantengan la estructura, el cruce y la mutación de permutaciones que vimos en los capítulos [](#sec-cruce-permutaciones){.capitulo} y [](#sec-mutacion-permutaciones){.capitulo}.
+Aquí, la restricción de que cada ciudad se visite una vez no está en el dominio de cada gen, sino en la **estructura** de todo el cromosoma. Un cromosoma **válido** es el que cumple esa estructura, es decir, el que es una permutación. Por eso necesitan operadores propios, que mantengan la estructura, el cruce y la mutación de permutaciones que veremos en los capítulos [](#sec-cruce-permutaciones){.capitulo} y [](#sec-mutacion-permutaciones){.capitulo}.
 
 Hay una segunda característica. Con *n* ciudades hay *n*! permutaciones, pero un mismo circuito se puede describir de muchas maneras: se puede empezar por cualquiera de sus *n* ciudades y recorrerlo en cualquiera de los dos sentidos. Hay entonces $2n$ cromosomas para cada circuito, y solo $(n-1)!/2$ circuitos distintos. Se llama **redundancia** a que varios cromosomas representen la misma solución.
 
@@ -420,6 +422,8 @@ Un cromosoma de 7 bits no es válido: el problema tiene 6 objetos y haría falta
 - Pulsa **Instancia aleatoria** varias veces y compara la proporción de factibles. ¿De qué crees que depende?
 :::
 
+Para seguir el recorrido básico, continúa por el [capítulo «Inicializar y evaluar»](#sec-inicializar-evaluar-uniforme).
+
 ## Binaria: saltos de Hamming y código Gray [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-representacion-gray}
 
 Al mutar un bit, el punto debería cambiar poco. ¿Es así en la representación binaria de los reales?
@@ -478,7 +482,7 @@ Pero en Gray no todo es mejor: de los ocho cromosomas a un bit de distancia, sol
 <!-- Comprobado el 2026-10-15: en el paso 15 de 15 (estándar) la herramienta muestra «para pasar de z = 7 a su vecino de la rejilla, z = 8, hay que cambiar 4 bits de x₁», y en el 17 de 17 (Gray), «para pasar de z = 7 a z = 8 basta cambiar un bit de x₁ (recuadro verde). Pero lo contrario no se cumple: los puntos rosas, a un bit de distancia, pueden caer lejos». Con el código: 0111 → 1000 (4 bits) y Gray 0100 → 1100 (1 bit); 0100 con el segundo bit cambiado es 0000, z = 0. En la página «Comparar codificaciones» (punto (−0,33; −0,33), k = 4): «Vecinos de la rejilla» 25 % en estándar y 50 % en Gray; media de 1 000 puntos: 25 % y 48 %; «Genes hasta el vecino de la rejilla» media 2,9 y 1. -->
 :::
 
-El código Gray garantiza que el vecino de la rejilla está siempre a un bit, pero no que un bit lleve siempre a un vecino. Midiendo con 1 000 puntos al azar, la herramienta cuenta, con *k* = 4, 2,9 genes de media hasta el vecino de la rejilla en estándar y 1 en Gray; en cambio, la proporción de cromosomas a un bit que son vecinos de la rejilla sube de un 25 % a un 48 %, no a un 100 %. Gray reduce los saltos de Hamming, pero no los elimina. Talbi señala que su principal inconveniente es que maneja mal los rangos dinámicos [@talbi2009, p. 43]. Mitchell lo menciona como una de las extensiones de la codificación binaria [@mitchell1998, apartado 5.2].
+El código Gray garantiza que el vecino de la rejilla está siempre a un bit, pero no que un bit lleve siempre a un vecino. Midiendo con 1 000 puntos al azar, la herramienta cuenta, con *k* = 4, 2,9 genes de media hasta el vecino de la rejilla en estándar y 1 en Gray; en cambio, la proporción de cromosomas a un bit que son vecinos de la rejilla sube de un 25 % a un 48 %, no a un 100 %. Gray elimina los saltos de Hamming entre valores consecutivos, pero no garantiza que cualquier cambio de un bit dé un valor cercano. Talbi señala que su principal inconveniente es que maneja mal los rangos dinámicos [@talbi2009, p. 43]. Mitchell lo menciona como una de las extensiones de la codificación binaria [@mitchell1998, apartado 5.2].
 
 :::: {.callout-note .ejercicio #ejercicio-representacion-gray title="Ejercicio · Pasar a Gray y volver"}
 (a) Escribe el entero *z* = 5 en 4 bits en código Gray. (b) ¿Qué entero representa el código Gray 1 1 0 0? (c) Escribe 15 y 16 en 5 bits, en binario estándar y en Gray, y cuenta cuántos bits cambian en cada código.
@@ -661,7 +665,7 @@ En la representación real, nada impide que un gen salga del intervalo $[a, b]$.
 <details>
 <summary>**Ver el resultado**</summary>
 
-| Tratamiento | Punto evaluado | Aptitud |
+| Tratamiento | Punto evaluado | Aptitud (se minimiza) |
 |:---|:---:|:---:|
 | Acotar | (5; −1,2) | 164,15 |
 | Reflejar | (3,7; −1,2) | 5,68 |
@@ -709,7 +713,7 @@ Hemos visto varias representaciones. ¿Con qué criterios se comparan?
 Talbi pide a una representación tres características [@talbi2009, p. 35]:
 
 - **Completitud.** Todas las soluciones del problema están representadas. La binaria de la función de Himmelblau no la cumple: solo representa los puntos de una rejilla (sección -@sec-representacion-precision).
-- **Conexidad.** Existe un camino de búsqueda entre dos soluciones cualesquiera, en particular hasta el óptimo. Es la primera condición de una buena mutación, que vimos en la sección -@sec-mutacion-para-que-mutar.
+- **Conexidad.** Existe un camino de búsqueda entre dos soluciones cualesquiera, en particular hasta el óptimo. Es la primera condición de una buena mutación, que veremos en la sección -@sec-mutacion-para-que-mutar.
 - **Eficiencia.** Los operadores deben poder manipular el cromosoma con poco coste en tiempo y espacio. Un cromosoma de 15 bits, como la matriz de la sección -@sec-representacion-matriz, es más largo que uno de 5 enteros para el mismo problema.
 
 Y distingue tres tipos de correspondencia entre soluciones y cromosomas [@talbi2009, p. 40]:
@@ -770,8 +774,7 @@ Di si la correspondencia entre soluciones y cromosomas es uno a uno o uno a much
 - La representación fija cómo se escribe una solución. El genotipo (el cromosoma) es lo que manipulan el cruce y la mutación; el fenotipo (la solución) es lo que se evalúa; la decodificación pasa del uno al otro.
 - Cada tipo de decisión pide su representación: bits para sí o no y para números en un intervalo, enteros para elegir entre opciones, permutaciones para ordenar y reales para variables continuas.
 - En la binaria de un número real, la precisión es $\Delta = (b - a)/(2^k - 1)$: cada bit más afina la rejilla, pero también agranda el espacio de búsqueda.
-- Un cromosoma válido tiene la estructura de la representación, y una solución factible cumple las restricciones del problema; no son lo mismo. Algunas representaciones absorben las restricciones y otras dejan cromosomas infactibles, que se pueden rechazar, penalizar o reparar; con un decodificador, en cambio, no los hay.
-- Una buena representación debería ser completa, conexa y eficiente, y tener localidad: que un cambio pequeño en el cromosoma cambie poco la solución.
+- Un cromosoma válido tiene la estructura de la representación, y una solución factible cumple las restricciones del problema; no son lo mismo. Algunas representaciones absorben las restricciones y otras exigen un tratamiento adicional para las soluciones que las incumplen.
 
 ## Referencias del capítulo {.unnumbered #referencias}
 

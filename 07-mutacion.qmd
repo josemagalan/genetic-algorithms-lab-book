@@ -410,6 +410,8 @@ Un individuo queda igual si no muta ninguno de sus 10 bits. Con $\mathit{pm} = 0
 - Despliega «Qué mide cada columna» para ver la definición exacta de cada medida.
 :::
 
+Para seguir el recorrido básico, continúa por el [capítulo «Reemplazar y parar»](#sec-reemplazo-quien-sobrevive).
+
 ## Otras mutaciones [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-mutacion-otras-mutaciones}
 
 Esta sección amplía el recorrido básico. Requiere las mutaciones de las secciones -@sec-mutacion-inversion-bits a -@sec-mutacion-intercambio-insercion-inversion.

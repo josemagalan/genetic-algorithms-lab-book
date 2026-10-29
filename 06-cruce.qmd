@@ -371,14 +371,14 @@ El Hijo 2 copia el segmento del Padre 2 (2 6 3 8) y coloca 9, 1, 4, 5 y 7, en el
 El **cruce PMX** (*partially mapped crossover*) lo propusieron @goldberg1985 para el problema del viajante. También usa dos cortes y un segmento, pero rellena el resto de otra forma. En la herramienta, para formar el Hijo 1:
 
 1. El Hijo 1 recibe el segmento del Padre 2.
-2. Los pares de genes que ocupan la misma posición del segmento forman una **tabla de correspondencias**: Padre 1 ↔ Padre 2.
+2. Los pares de genes que ocupan la misma posición del segmento forman una **tabla de correspondencias dirigida**: del valor del Padre 2 al valor del Padre 1.
 3. Fuera del segmento, cada posición copia el gen del Padre 1 si no está ya en el hijo.
-4. Si ya está, se busca en la tabla su correspondiente, y se repite hasta encontrar un gen que no esté en el hijo.
+4. Si ya está, se busca ese valor en el segmento copiado del Padre 2 y se toma el de la misma posición del Padre 1. Se sigue siempre ese sentido de las correspondencias y se repite hasta encontrar un gen que no esté en el hijo.
 
-El Hijo 2 se forma igual, con el segmento del Padre 1 y el resto del Padre 2. Algunos textos dan al Hijo 1 el segmento del Padre 1; se obtienen los mismos dos hijos con los nombres cambiados.
+El Hijo 2 se forma igual, con el segmento del Padre 1 y el resto del Padre 2, e invirtiendo las flechas de la tabla. Algunos textos dan al Hijo 1 el segmento del Padre 1; se obtienen los mismos dos hijos con los nombres cambiados.
 
 ::: {.callout-tip .ejemplo #ejemplo-cruce-pmx title="Ejemplo reproducible · Seguir las correspondencias"}
-**Datos.** Los mismos padres y cortes del ejemplo [](#ejemplo-cruce-ox): segmento en las posiciones 4–7. La tabla de correspondencias es 4 ↔ 2, 5 ↔ 6, 6 ↔ 3 y 7 ↔ 8.
+**Datos.** Los mismos padres y cortes del ejemplo [](#ejemplo-cruce-ox): segmento en las posiciones 4–7. Para el Hijo 1, las correspondencias son 2 → 4, 6 → 5, 3 → 6 y 8 → 7; para el Hijo 2 se invierten.
 
 **Predice.** El Hijo 1 recibe 2 6 3 8 en las posiciones 4–7. ¿Qué gen va en la posición 3, donde el Padre 1 tiene un 3?
 
@@ -483,6 +483,8 @@ Hay tres ciclos y cada uno puede venir de cualquiera de los dos padres: $2^3 = 8
 - Pulsa **Sortear de nuevo** varias veces con los mismos padres. ¿Cuántas veces sale una copia de un padre?
 - Pulsa **Ver como rutas** y compara la longitud de las rutas de los hijos con las de los padres.
 :::
+
+Para seguir el recorrido básico, continúa por el [capítulo «Mutar»](#sec-mutacion-para-que-mutar).
 
 ## Otros cruces [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-cruce-otros-cruces}
 

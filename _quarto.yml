@@ -57,7 +57,7 @@ book:
 
 lang: es
 libro-version: "0.9 beta"                 # versión que muestran la portada y el formulario de comentarios (D055)
-libro-revision: "21 de octubre de 2026"   # fecha de la última revisión; cambiarla con cada versión
+libro-revision: "29 de octubre de 2026"   # fecha de la última revisión; cambiarla con cada versión
 
 language:   # etiquetas accesibles (revisión beta, M07)
   search-submit-button-title: "Buscar en el libro"

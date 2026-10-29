@@ -14,7 +14,7 @@ Al terminar el recorrido básico de este capítulo podrás:
 
 - generar a mano los individuos de una población inicial uniforme a partir de números aleatorios dados, también cuando son permutaciones;
 - medir la diversidad de una población con distancias y contar cuántos de sus individuos son factibles;
-- explicar por qué sembrar la población inicial con una solución heurística suele ser una mala idea;
+- reconocer cuándo sembrar la población inicial con una solución heurística puede poner en riesgo la diversidad;
 - calcular la aptitud de un individuo: decodificarlo, calcular el objetivo y la violación de las restricciones, y penalizarla;
 - transformar un coste en una aptitud que sirva para la ruleta y calcular las probabilidades que resultan;
 - contar las evaluaciones que hace una ejecución y explicar cuándo ahorra trabajo una caché.
@@ -80,7 +80,7 @@ El individuo es **(1, 1, 2, 1, 3)**. La máquina 1 hace las tareas 1, 2 y 4, con
 Los otros cinco individuos de esa población se generan igual, con números nuevos: sus makespans son 9, 8, 14, 14 y 14. Ninguno llega al óptimo, 5, y no tienen por qué: mejorar la población es trabajo de los operadores que vienen después.
 
 :::: {.callout-note .ejercicio #ejercicio-inicializar-evaluar-uniforme title="Ejercicio · Las mismas cifras, otras reglas"}
-Usa los números del ejemplo [](#ejemplo-inicializar-evaluar-uniforme). (a) Con los cinco primeros, redondeados a dos decimales (0,08; 0,27; 0,45; 0,22; 0,98), genera una cadena de 5 bits. (b) Con los dos primeros, 0,087 y 0,277, genera un punto real de la caja $[-5, 5]^2$. (c) Si hubiera 4 máquinas en lugar de 3, ¿a qué máquina iría la tarea 5?
+Usa los números del ejemplo [](#ejemplo-inicializar-evaluar-uniforme). (a) Con los cinco primeros, truncados a dos decimales (0,08; 0,27; 0,45; 0,22; 0,98), genera una cadena de 5 bits. (b) Con los dos primeros, 0,087 y 0,277, genera un punto real de la caja $[-5, 5]^2$. (c) Si hubiera 4 máquinas en lugar de 3, ¿a qué máquina iría la tarea 5?
 
 <details>
 <summary>**Ver la solución**</summary>
@@ -255,20 +255,22 @@ La media de los tres pares es $(0{,}5 + 0{,}83 + 0{,}67)/3 = 2/3 \approx 0{,}67$
 
 Si ya tenemos una solución razonable, obtenida con otro método, ¿no conviene meterla en la población inicial?
 
-Parece buena idea, y en métodos que parten de una sola solución, como la búsqueda local, es lo habitual. En un algoritmo genético hay que tener más cuidado. Lo habitual es generar la población inicial al azar; se pueden usar heurísticas, pero que compense o no depende del problema [@eiben2015, apartados 3.2.7 y 10.3.1]. @surry1996 llamaron **inoculación** a sembrar la población inicial con buenas soluciones conocidas: en sus problemas industriales mejoraba la calidad media de los resultados y acortaba la búsqueda, pero el mejor resultado de varias ejecuciones podía empeorar, porque la población era menos aleatoria. Por eso los manuales advierten de que la convergencia prematura puede aparecer precisamente si la población inicial se genera con una heurística voraz o con una búsqueda local [@talbi2009, p. 193]. El motivo es la diversidad. Una buena solución mezclada con individuos aleatorios, mucho peores, gana todas las comparaciones: la selección la copia una y otra vez, y en pocas generaciones sus copias ocupan toda la población. Si esa solución no es el óptimo, el algoritmo se queda atrapado cerca de ella.
+Parece buena idea, y en métodos que parten de una sola solución, como la búsqueda local, es lo habitual. En un algoritmo genético hay que tener más cuidado. Lo habitual es generar la población inicial al azar; se pueden usar heurísticas, pero que compense o no depende del problema [@eiben2015, apartados 3.2.7 y 10.3.1]. @surry1996 llamaron **inoculación** a sembrar la población inicial con buenas soluciones conocidas: en sus problemas industriales mejoraba la calidad media de los resultados y acortaba la búsqueda, pero el mejor resultado de varias ejecuciones podía empeorar, porque la población era menos aleatoria. Por eso los manuales advierten de que la convergencia prematura puede aparecer precisamente si la población inicial se genera con una heurística voraz o con una búsqueda local [@talbi2009, p. 193]. El motivo es la diversidad. Una buena solución mezclada con individuos aleatorios puede recibir muchas copias por selección y desplazar variedad útil. Si esa solución no es el óptimo y la variación no compensa la concentración, la búsqueda puede quedar atrapada cerca de ella.
 
 Una **heurística voraz** construye una solución tomando en cada paso la decisión que parece mejor. En la mochila, se ordenan los objetos por su relación valor/peso, de mayor a menor, una idea que se remonta a @dantzig1957, y se mete cada uno si cabe. En nuestra mochila, el orden es 6 (4/2 = 2), 3 (9/5 = 1,8), 5 (7/4 = 1,75), 2, 1 y 4. Entran el 6, el 3 y el 5, que pesan 11; los demás ya no caben. La solución voraz es **0 0 1 0 1 1**, que vale 20: buena, pero no la óptima, que vale 21.
 
-¿Cuánto tarda en invadir la población? Supongamos que hay *k* copias de la mejor solución entre *N* individuos y que solo actúa la selección por **torneo binario** con reemplazo, que elige dos individuos al azar y se queda con el mejor (lo verás en la sección -@sec-seleccion-torneo). Un torneo deja escapar la solución solo si sus dos contendientes son otros, lo que ocurre con probabilidad $(1 - k/N)^2$. El número esperado de copias en la generación siguiente es
+¿Cuánto tarda en invadir la población? Supongamos que hay *k* copias de la mejor solución entre *N* individuos y que solo actúa la selección por **torneo binario** con reemplazo, sin cruce, mutación ni élite, que elige dos individuos al azar y se queda con el mejor (lo verás en la sección -@sec-seleccion-torneo). Un torneo deja escapar la solución solo si sus dos contendientes son otros, lo que ocurre con probabilidad $(1 - k/N)^2$. Dado ese número actual de copias, el número esperado en la generación siguiente es
 $$
 k' = N\left[1 - \left(1 - \frac{k}{N}\right)^2\right].
 $$
-El número de generaciones hasta que toda la población es la misma solución es el **tiempo de toma de control** (*takeover time*) [@goldberg1991].
+Si el mejor individuo inicial llega a ocupar toda la población, el número de generaciones hasta que ocurre es el **tiempo de toma de control** (*takeover time*) [@goldberg1991].
 
-::: {.callout-tip .ejemplo #ejemplo-inicializar-evaluar-sembrar title="Ejemplo reproducible · Basta una copia"}
+Para dibujar su expansión, la herramienta aplica sucesivamente la fórmula al número medio de copias del paso anterior. Es una **aproximación determinista**: deja de lado las fluctuaciones del sorteo. La fórmula da la esperanza de una generación cuando se conoce *k*, pero iterarla así no da la media exacta de muchas poblaciones pequeñas. En ellas, la semilla también puede perderse por azar (sección -@sec-seleccion-seleccion-y-diversidad).
+
+::: {.callout-tip .ejemplo #ejemplo-inicializar-evaluar-sembrar title="Ejemplo reproducible · Una copia sembrada"}
 **Datos.** La mochila de la sección -@sec-inicializar-evaluar-diversidad, una población de *N* = 10 individuos: 9 aleatorios uniformes, el mejor de los cuales vale 18, y una copia de la solución voraz, 001011.
 
-**Predice.** Con selección por torneo binario, sin cruce ni mutación, ¿cuántas copias de la solución voraz habrá de media tras cada generación? ¿En cuántas generaciones ocupará casi toda la población?
+**Predice.** Con selección por torneo binario, sin cruce, mutación ni élite, ¿cuántas copias estima la aproximación determinista tras cada generación? ¿En qué generación se acerca al tamaño de la población?
 
 [Abrir: una copia sembrada](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=seeded&lang=es&enc=knapsack-bits&n=6&N=10&s=21&ps=2&K=1&step=12){.abrir target="_blank"}
 
@@ -277,9 +279,11 @@ El número de generaciones hasta que toda la población es la misma solución es
 
 | Generación | 0 | 1 | 2 | 3 | 4 | 5 | 6 |
 |:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| Copias esperadas | 1 | 1,9 | 3,4 | 5,7 | 8,1 | 9,7 | 10,0 |
+| Copias en la aproximación | 1 | 1,9 | 3,4 | 5,7 | 8,1 | 9,7 | 10,0 |
 
-En **unas 5 generaciones**, casi toda la población es la solución voraz, que vale 20 y no es el óptimo. Con una sola copia, la diversidad inicial apenas cambia (la distancia media es 0,49 en las dos poblaciones). El problema no está en la población inicial, sino en lo que hace con ella la selección.
+La aproximación llega a **9,7 copias en la generación 5**: casi toda la población sería la solución voraz, que vale 20 y no es el óptimo. No es la media exacta de muchas ejecuciones. Por ejemplo, la única copia inicial puede no aparecer en ninguno de los diez torneos, con probabilidad $0{,}81^{10} \approx 0{,}122$: se pierde ya en la primera generación en alrededor del 12 % de los casos.
+
+Con una sola copia, la diversidad inicial apenas cambia (la distancia media es 0,49 en las dos poblaciones). La curva advierte de cómo la selección puede concentrarla después alrededor de una solución; no garantiza que esa solución sobreviva ni mide lo que harían el cruce y la mutación.
 </details>
 
 <details class="incrustada">
@@ -290,19 +294,19 @@ En **unas 5 generaciones**, casi toda la población es la solución voraz, que v
 <!-- Comprobado el 2026-10-15: en el paso 1 de 13 la herramienta muestra «Heurística voraz: se ordenan los objetos por relación valor/peso de mayor a menor (6, 3, 5, 2, 1, 4) y cada uno entra si cabe. Resultado: 001011, que vale 20; el óptimo es 21»; en el 3, «ningún individuo aleatorio llega a su nivel» (dice «1 copias»: errata de la herramienta); en el 4, «Diversidad: con una sola copia apenas cambia (distancia media 0,49 en la población uniforme y 0,49 en la sembrada)»; en los pasos 5–10, «unas 1,9 / 3,4 / 5,7 / 8,1 / 9,7 / 10,0 copias de 10»; en el 13, «En unas 5 generaciones, casi toda la población serían copias de la solución heurística». Que el mejor aleatorio vale 18 se comprobó con el código. -->
 :::
 
-A cualquier mejor individuo le pasaría lo mismo con la selección sola. La diferencia es qué invade la población. En una población aleatoria, los mejores individuos son solo algo mejores que los demás y se parecen poco entre sí, y el cruce y la mutación tienen tiempo de combinarlos antes de que uno domine. La semilla heurística, en cambio, es una solución elegida de antemano y muy superior al resto, que gana todos los torneos desde la primera generación.
+La misma expansión por torneo se aplica a cualquier mejor individuo, sembrado o no. Con el mismo número de copias y el mismo tamaño de torneo, importa su puesto, no cuánto supera a los demás: una solución de valor 20 frente a otra de 18 gana los mismos torneos que frente a una de 19,99. Lo que se arriesga al sembrar es orientar la búsqueda hacia una solución elegida de antemano y perder variedad útil. Este ejemplo de selección sola no demuestra que sembrar empeore siempre un algoritmo genético completo.
 
 Sembrar no está prohibido, pero tiene que ser una decisión consciente. Si se hace, conviene «aleatorizar» la heurística para obtener soluciones distintas, porque el principal inconveniente es que la población pierde diversidad y se estanca [@talbi2009, p. 198]. En un primer diseño, lo recomendable es una población aleatoria uniforme.
 
 :::: {.callout-note .ejercicio #ejercicio-inicializar-evaluar-sembrar title="Ejercicio · La invasión, a mano"}
-(a) Con *N* = 10 y una copia, comprueba con la fórmula los valores de las generaciones 1, 2 y 3 del ejemplo [](#ejemplo-inicializar-evaluar-sembrar). (b) ¿Cuántas copias esperadas hay tras una generación si se siembran 5 copias? (c) En la población del ejemplo, ¿qué objeto habría que cambiar en la solución voraz para llegar al óptimo?
+(a) Con *N* = 10 y una copia, aplica la aproximación determinista para comprobar los valores de las generaciones 1, 2 y 3 del ejemplo [](#ejemplo-inicializar-evaluar-sembrar). (b) ¿Cuántas copias esperadas hay tras una generación si se siembran 5 copias? (c) En la población del ejemplo, ¿qué objeto habría que cambiar en la solución voraz para llegar al óptimo?
 
 <details>
 <summary>**Ver la solución**</summary>
 
-(a) Generación 1: $10\,[1 - (0{,}9)^2] = 10 \times 0{,}19 = 1{,}9$. Generación 2: $1 - 1{,}9/10 = 0{,}81$ y $10\,[1 - 0{,}81^2] = 10 \times 0{,}3439 \approx 3{,}44$. Generación 3: $1 - 0{,}3439 = 0{,}6561$ y $10\,[1 - 0{,}6561^2] \approx 10 \times 0{,}5695 \approx 5{,}7$.
+(a) Son los valores de la aproximación, no las medias exactas de poblaciones finitas. Generación 1: $10\,[1 - (0{,}9)^2] = 10 \times 0{,}19 = 1{,}9$. Generación 2: $1 - 1{,}9/10 = 0{,}81$ y $10\,[1 - 0{,}81^2] = 10 \times 0{,}3439 \approx 3{,}44$. Generación 3: $1 - 0{,}3439 = 0{,}6561$ y $10\,[1 - 0{,}6561^2] \approx 10 \times 0{,}5695 \approx 5{,}7$.
 
-(b) $10\,[1 - (0{,}5)^2] = 7{,}5$ copias: tres cuartos de la población en una sola generación.
+(b) $10\,[1 - (0{,}5)^2] = 7{,}5$ copias en promedio: tres cuartos de la población tras una generación; esta esperanza de un solo paso sí es exacta.
 
 (c) La solución voraz mete los objetos 3, 5 y 6 (001011) y el óptimo, los objetos 1, 3 y 5 (101010). Hay que cambiar dos genes a la vez: sacar el objeto 6 y meter el 1. Cambiando uno solo, o no cabe (meter el 1 sin sacar el 6 da peso 15) o se pierde valor (sacar el 6 deja 16).
 </details>
@@ -430,7 +434,7 @@ Las tres transformaciones ordenan igual, pero reparten la ruleta de forma distin
 <!-- Comprobado el 2026-10-15: con tr=cmax, en el paso 2 de 9 la herramienta muestra «C = 21»; en el 5, «con ΣF = 46»; en el 6, «El mejor, I3 (f = 8), tiene p = 28,3 %: en N = 6 tiradas saldría 1,70 veces de media»; en el 7, «El peor, I1 (f = 21), tiene F = 0 y p = 0»; en el 8, «el mejor se lleva el 28,3 % de la ruleta con C − f, el 24,3 % con 1/(1 + f) y el 28,6 % con el rango». Con tr=rank, paso 6: «tiene p = 28,6 %: en N = 6 tiradas saldría 1,71 veces»; paso 7: «El peor, I1 (f = 21), tiene p = 4,8 %». Con tr=inv, paso 7: «El peor, I1 (f = 21), tiene p = 10,0 %. El mejor sale 2,4 veces más que él». Con tr=neg, paso 5: «la ruleta no se puede construir». Las demás probabilidades de la tabla se calcularon con el código (función table de objective.js). -->
 :::
 
-Las cuatro transformaciones conservan el orden. Una selección que solo compara individuos, como el torneo, elegiría exactamente igual con cualquiera de ellas; con la ruleta, en cambio, elegir la aptitud es elegir la **presión selectiva**: cuánto favorece la selección a los mejores. Demasiada lleva a la convergencia prematura; demasiado poca, a una búsqueda casi al azar. Volveremos a ello en los capítulos [](#sec-seleccion-ruleta-deja-de-distinguir){.capitulo} y [](#sec-experimentos-diversidad){.capitulo}.
+Las cuatro transformaciones conservan el orden. Un torneo al que se indique que el coste menor es mejor puede compararlos directamente, sin transformarlos. Una selección que solo compara individuos, como el torneo, elegiría exactamente igual con cualquiera de estas transformaciones; con la ruleta, en cambio, elegir la aptitud es elegir la **presión selectiva**: cuánto favorece la selección a los mejores. Demasiada lleva a la convergencia prematura; demasiado poca, a una búsqueda casi al azar. Volveremos a ello en los capítulos [](#sec-seleccion-ruleta-deja-de-distinguir){.capitulo} y [](#sec-experimentos-diversidad){.capitulo}.
 
 :::: {.callout-note .ejercicio #ejercicio-inicializar-evaluar-objetivo-aptitud title="Ejercicio · Sumar una constante"}
 Supón que todos los makespans del ejemplo [](#ejemplo-inicializar-evaluar-objetivo-aptitud) llevaran sumados 100 unidades de tiempo de preparación, iguales en todas las soluciones: 121, 109, 108, 114, 114 y 114. El problema es el mismo. (a) Con $F = 1/(1 + f)$, ¿cuántas veces más probable es el mejor que el peor? Compáralo con el 2,4 del problema original. (b) ¿Cambian las probabilidades con $C - f$? ¿Y con el rango?
@@ -466,7 +470,7 @@ Hay dos decisiones. La primera es cómo medir la violación. Contar cuántas res
 - **Lineal**, $P = \lambda\, e$: cada unidad de exceso cuesta λ unidades de valor.
 - **Cuadrática**, $P = (\lambda\, e)^2$: un exceso pequeño casi no se castiga y uno grande, mucho.
 
-El **peso λ** es la decisión difícil. Si es demasiado pequeño, la búsqueda puede terminar en soluciones infactibles; si es demasiado grande, puede converger a soluciones factibles que no son óptimas [@michalewicz1996b, apartado 3.2.6; @talbi2009, p. 50], porque los infactibles quedan todos al fondo y se pierden los que están cerca del límite. Y es ahí, en la frontera de la región factible, donde suele estar el óptimo cuando alguna restricción está activa; @schoenauer1996 propusieron incluso buscar solo en esa frontera. Para una población concreta se puede calcular el **peso crítico** λ\*: el menor peso con el que ningún infactible iguala ni supera al mejor factible. Si *B* es el valor del mejor factible, cada infactible con valor $z_i > B$ y exceso $e_i$ queda por detrás si $z_i - \lambda e_i < B$, así que, con la penalización lineal,
+El **peso λ** es la decisión difícil. Si es demasiado pequeño, la búsqueda puede terminar en soluciones infactibles; si es demasiado grande, puede converger a soluciones factibles que no son óptimas [@michalewicz1996b, apartado 3.2.6; @talbi2009, p. 50], porque los infactibles quedan todos al fondo y se pierden los que están cerca del límite. Y es ahí, en la frontera de la región factible, donde suele estar el óptimo cuando alguna restricción está activa; @schoenauer1996 propusieron incluso buscar solo en esa frontera. Para una población concreta que tenga individuos factibles se puede calcular el **peso crítico** λ\*: el umbral a partir del cual los infactibles no superan al mejor factible. En el umbral puede haber empate; para que todos queden estrictamente por detrás hay que elegir $\lambda > \lambda^*$. Si *B* es el valor del mejor factible, cada infactible con valor $z_i > B$ y exceso $e_i$ queda por detrás si $z_i - \lambda e_i < B$, así que, con la penalización lineal,
 $$
 \lambda^* = \max_i \frac{z_i - B}{e_i}.
 $$
@@ -499,7 +503,7 @@ El mejor factible es I5 = 001011, con *B* = 20.
 | I7 | $(29 - 20)/11 \approx 0{,}82$ |
 | I8 | $(20 - 20)/6 = 0$ |
 
-El peso crítico es **λ\* = 4**, y lo fija I1, el que menos se pasa. Con λ = 1 gana I1, con $F = 24 - 1 = 23$. Con λ = 5, su aptitud baja a $24 - 5 = 19$ y gana **I5**, que cabe, con $F = 20$. Para dejar atrás a un infactible que casi cabe y vale mucho hace falta un peso grande; a los que se pasan mucho, cualquier peso los aparta.
+El peso crítico es **λ\* = 4**, y lo fija I1, el que menos se pasa. Con λ = 4, I1 e I5 empatan en 20; para dejar atrás a todos los infactibles de esta población hace falta λ > 4. Con λ = 1 gana I1, con $F = 24 - 1 = 23$. Con λ = 5, su aptitud baja a $24 - 5 = 19$ y gana **I5**, que cabe, con $F = 20$. Para dejar atrás a un infactible que casi cabe y vale mucho hace falta un peso grande; a los que se pasan mucho, cualquier peso los aparta.
 </details>
 
 <details class="incrustada">
@@ -537,7 +541,7 @@ Con la misma población y la penalización cuadrática, $F = \text{valor} - (\la
 <details>
 <summary>**Ver la solución**</summary>
 
-(a) I1 queda por detrás de I5 si $24 - (\lambda \times 1)^2 < 20$, es decir, si $\lambda^2 > 4$: $\lambda^* = \sqrt{4}/1 = 2$. Para los demás infactibles, $\sqrt{z_i - B}/e_i$ vale $\sqrt{6}/9 \approx 0{,}27$, $\sqrt{9}/11 \approx 0{,}27$ y 0. El peso crítico es **2**.
+(a) I1 queda por detrás de I5 si $24 - (\lambda \times 1)^2 < 20$, es decir, si $\lambda^2 > 4$: $\lambda^* = \sqrt{4}/1 = 2$. Para los demás infactibles, $\sqrt{z_i - B}/e_i$ vale $\sqrt{6}/9 \approx 0{,}27$, $\sqrt{9}/11 \approx 0{,}27$ y 0. El peso crítico es **2**: en ese valor I1 empata con I5, y hace falta λ > 2 para que quede estrictamente por detrás.
 
 (b) $F = 24 - 3^2 = 15$. Los otros infactibles quedan muy abajo (por ejemplo, I2: $26 - 27^2 = -703$). El mejor es I5, con 20.
 
@@ -609,6 +613,10 @@ La caché tiene condiciones. Solo vale si la aptitud es **determinista**, es dec
 - Avanza generación a generación y anota cuántos individuos ya estaban en la caché. ¿Aumentan o disminuyen?
 - Cambia las **Generaciones (G)** y el **Problema y codificación**. ¿En qué problema ahorra menos la caché?
 :::
+
+Para seguir el recorrido básico, continúa por el [capítulo «Seleccionar a los padres»](#sec-seleccion-quien-se-reproduce).
+
+<!-- Revisión matemática del 2026-10-29: en sec-inicializar-evaluar-sembrar se mantiene la curva de la herramienta como aproximación determinista y se distingue de la esperanza exacta en población finita. Cálculo independiente por distribución de los 11 estados para N = 10, K inicial = 1, sin variación ni élite: media exacta en la generación 6 = 7,753758173159563; recurrencia determinista = 9,98820981542226; pérdida en la primera = 0,81^10 = 0,12157665459056936. Es cálculo, no nueva prueba de la interfaz. -->
 
 ## Cubrir mejor la caja: cuasialeatoria e hipercubo latino [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-inicializar-evaluar-cuasialeatoria}
 
@@ -955,7 +963,7 @@ La historia de los algoritmos genéticos con varios objetivos, de los primeros a
 
 - La población inicial se genera al azar y de forma uniforme: los bits, los enteros y los reales, gen a gen; las permutaciones, barajando con Fisher–Yates. No tiene que ser buena, sino diversa.
 - La diversidad se mide con distancias normalizadas entre individuos. Una población uniforme sobre los cromosomas no es uniforme sobre las soluciones factibles: puede tener muchos infactibles.
-- Sembrar la población con una solución heurística es un contraejemplo: la selección la copia y, en pocas generaciones, la población pierde la diversidad.
+- Sembrar con una heurística puede ayudar, pero también concentrar la búsqueda alrededor de unas pocas soluciones. Hay que cuidar la diversidad y comprobar el efecto con el algoritmo completo.
 - Evaluar es decodificar, calcular el objetivo, medir la violación y combinarlo todo en la aptitud. Con una penalización, el peso λ no debe ser ni demasiado pequeño, porque ganan los infactibles, ni demasiado grande.
 - Para la ruleta, un coste se transforma en aptitud ($C - f$, $1/(1 + f)$ o el rango): todas conservan el orden, pero reparten la ruleta de forma distinta. El esfuerzo se mide en evaluaciones, $N\,(G + 1)$, y una caché evita repetirlas si la aptitud es determinista.
 

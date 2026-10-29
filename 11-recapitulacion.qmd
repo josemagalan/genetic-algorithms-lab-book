@@ -31,7 +31,7 @@ En la sección -@sec-ciclo-decisiones reunimos el diseño en nueve decisiones. L
 |---|---|---|:---:|
 | 1. Representación | ¿Cómo se escribe una solución? | La más natural para el problema: bits para decisiones de sí o no, enteros para elegir entre opciones, una permutación para ordenar y reales para variables continuas | -@sec-representacion |
 | 2. Inicialización | ¿Con qué población se empieza? | Al azar y de forma uniforme; las permutaciones, barajando con Fisher–Yates. Tiene que ser diversa, no buena | -@sec-inicializar-evaluar-uniforme–-@sec-inicializar-evaluar-diversidad |
-| 3. Genotipo y fenotipo | ¿Cómo se pasa del cromosoma a la solución? | Directa en la entera, la real y la permutación; en la binaria, leer los bits como un número y llevarlo al intervalo | -@sec-representacion-genotipo-fenotipo–-@sec-representacion-real |
+| 3. Genotipo y fenotipo | ¿Cómo se pasa del cromosoma a la solución? | Directa en la entera, la real y la permutación; en binaria de sí o no, cada bit indica si se incluye el elemento; para variables numéricas, leer cada grupo de bits como un entero y, si procede, llevarlo al intervalo | -@sec-representacion-genotipo-fenotipo–-@sec-representacion-real |
 | 4. Aptitud | ¿Cómo se mide lo buena que es una solución? | A partir de la función objetivo. Si se minimiza un coste, hay que transformarlo para la ruleta; las restricciones que la representación no absorbe, con una penalización | -@sec-inicializar-evaluar-evaluar–-@sec-inicializar-evaluar-penalizacion |
 | 5. Mutación | ¿Cómo se introducen cambios pequeños? | Inversión de bits; reinicio aleatorio o deslizamiento en la entera; gaussiana en la real; intercambio, inserción o inversión en la permutación. Con *pm* pequeña | -@sec-mutacion |
 | 6. Cruce | ¿Cómo se combinan dos padres? | En un punto, en dos puntos o uniforme en la binaria y la entera; uniforme o aritmético en la real; OX, PMX o CX en la permutación | -@sec-cruce |
@@ -77,7 +77,7 @@ Casi todo lo que depende de la representación son la inicialización, la decodi
 | | Binaria | Entera | Real | Permutación |
 |---|---|---|---|---|
 | **Para qué** | Decisiones de sí o no (la mochila, qué proyectos se financian) y números en un intervalo | Elegir una opción para cada elemento (asignar tareas a máquinas, franjas a exámenes o un emplazamiento a cada almacén) | Variables continuas (la función de Himmelblau, el ajuste de los parámetros de un modelo) | Ordenar (el viajante, la secuenciación de trabajos, el orden de las paradas de un reparto) |
-| **Decodificar** | Bits → entero → intervalo, con precisión $\Delta = (b-a)/(2^k-1)$ (-@sec-representacion-binaria–-@sec-representacion-precision) | Directa: el gen es la opción (-@sec-representacion-entera) | Ninguna: el cromosoma es el punto (-@sec-representacion-real) | El orden de la permutación; en el viajante, más el origen al principio y al final (-@sec-representacion-permutaciones) |
+| **Decodificar** | Sí o no: cada bit indica si se incluye el elemento. Para variables numéricas: bits → entero → intervalo, con precisión $\Delta = (b-a)/(2^k-1)$ (-@sec-representacion-binaria–-@sec-representacion-precision) | Directa: el gen es la opción (-@sec-representacion-entera) | Ninguna: el cromosoma es el punto (-@sec-representacion-real) | El orden de la permutación; en el viajante, más el origen al principio y al final (-@sec-representacion-permutaciones) |
 | **Inicializar** | Cada bit, 0 o 1 con la misma probabilidad (-@sec-inicializar-evaluar-uniforme) | Cada gen, uniforme en su rango | Cada gen, uniforme en su intervalo | Barajar con Fisher–Yates (-@sec-inicializar-evaluar-fisher-yates) |
 | **Validez y factibilidad** | Toda cadena es válida, pero puede no ser factible (la mochila que se pasa de peso) (-@sec-representacion-validez) | Válido si cada gen está en su rango | Todo vector es válido; fuera del intervalo, la solución no es factible (-@sec-representacion-fuera-caja) | Cada elemento una sola vez: los operadores tienen que respetarlo |
 | **Cruce** | Un punto, dos puntos, uniforme (-@sec-cruce-uno-y-dos-puntos–-@sec-cruce-uniforme) | Los mismos que en la binaria | Uniforme y aritmético (-@sec-cruce-reales) | OX, PMX y CX (-@sec-cruce-ox–-@sec-cruce-cx) |
@@ -114,7 +114,7 @@ A lo largo del libro han aparecido varios contraejemplos: decisiones que parecen
 
 | Error | Qué pasa | Qué hacer | Dónde |
 |---|---|---|:---:|
-| Sembrar la población con la solución de una heurística | La selección la copia y, en pocas generaciones, la población pierde la diversidad | Población inicial al azar; si se siembra, una heurística aleatorizada que dé soluciones distintas | -@sec-inicializar-evaluar-sembrar |
+| Sembrar sin cuidar la diversidad | La selección puede concentrar la población alrededor de unas pocas soluciones | Población inicial al azar; si se siembra, una heurística aleatorizada que dé soluciones distintas | -@sec-inicializar-evaluar-sembrar |
 | Usar un coste como aptitud en la ruleta | La ruleta favorece a los peores, o no se puede construir si hay valores negativos | Transformar el coste ($C - f$, $1/(1+f)$, el rango) o usar el torneo | -@sec-inicializar-evaluar-objetivo-aptitud |
 | Elegir mal el peso de la penalización | Si λ es pequeño ganan los infactibles; si es muy grande, los infactibles prometedores se pierden | Probar varios pesos con casos parecidos | -@sec-inicializar-evaluar-penalizacion |
 | Usar la ruleta con aptitudes muy parecidas | Todos tienen casi la misma probabilidad: la selección deja de distinguir | Torneo, ranking o escalado | -@sec-seleccion-ruleta-deja-de-distinguir |
@@ -127,7 +127,7 @@ A lo largo del libro han aparecido varios contraejemplos: decisiones que parecen
 | Ajustar sin pensar en el tiempo disponible | La configuración elegida no termina a tiempo en un problema operativo, o se queda corta en uno estratégico | Fijar antes el presupuesto según el horizonte de la decisión | -@sec-experimentos-objetivo |
 | Ajustar y evaluar con los mismos casos | Los parámetros parecen mejores de lo que son | Elegir con unos casos (ajuste y validación) y estimar la calidad con otros (prueba) | -@sec-experimentos-casos-parecidos, -@sec-viajante-caso-real |
 
-Casi todos los errores de la tabla tienen la misma raíz: romper el equilibrio entre las dos fuerzas de la sección -@sec-evolucion-dos-fuerzas, la explotación y la exploración de la sección -@sec-evolucion-explorar-explotar. Sembrar, truncar o quitar la mutación dan demasiada explotación y la población se bloquea; mutar demasiado da demasiada exploración y lo encontrado se pierde. Los demás son errores de medida o de planificación: una aptitud que no distingue, un experimento que no permite concluir o un presupuesto que no se corresponde con el problema.
+Casi todos los errores de la tabla tienen la misma raíz: romper el equilibrio entre las dos fuerzas de la sección -@sec-evolucion-dos-fuerzas, la explotación y la exploración de la sección -@sec-evolucion-explorar-explotar. Sembrar sin conservar variedad, truncar o quitar la mutación pueden dar demasiada explotación y la población se bloquea; mutar demasiado da demasiada exploración y lo encontrado se pierde. Los demás son errores de medida o de planificación: una aptitud que no distingue, un experimento que no permite concluir o un presupuesto que no se corresponde con el problema.
 
 :::: {.callout-note .ejercicio #ejercicio-recapitulacion-errores title="Ejercicio · ¿Qué falla en este diseño?"}
 Un equipo diseña un algoritmo genético para un viajante de 30 ciudades:
@@ -254,6 +254,7 @@ a) ¿Qué representación usarías? ¿A qué problema del libro se parece?
 b) Además de predecir bien, se prefiere un modelo con pocas variables. ¿Cómo podría tenerlo en cuenta la aptitud?
 c) Recorre las cuatro preguntas de la figura -@fig-que-metodo. ¿Es razonable un algoritmo genético?
 d) ¿Cuántas evaluaciones caben en una noche de cálculo, de 8 horas?
+e) ¿Basta con que los datos usados para comparar subconjuntos no hayan servido para ajustar los coeficientes del modelo? ¿Cómo medirías el error final de la elección?
 
 <details>
 <summary>**Ver la solución**</summary>
@@ -265,10 +266,14 @@ b) Por ejemplo, minimizar el error más λ por cada variable usada, una penaliza
 c) El espacio no es pequeño: hay $2^{200} \approx 1{,}6 \times 10^{60}$ subconjuntos. No es suave, porque quitar o añadir una variable puede cambiar mucho el error, y el error medido depende de qué datos se reserven para medirlo, así que tiene algo de ruido. No hay una heurística específica que resuelva el problema. Y combinar tiene sentido: si dos subconjuntos predicen bien, cada uno puede tener variables útiles que el cruce reúna en un hijo. **Sí es razonable**, aunque también podría probarse una búsqueda local que añada o quite variables de una en una.
 
 d) $8 \times 3600 / 3 = 9600$ evaluaciones, por ejemplo unas 95 generaciones de 100 individuos. El presupuesto es corto: hay que contar evaluaciones (sección -@sec-inicializar-evaluar-coste) y quizá usar una población pequeña. Elegir las variables se hace una vez, al construir el modelo, así que es un problema de diseño: si hay más noches, se pueden hacer varias ejecuciones.
+
+e) No. Los datos usados para comparar subconjuntos son datos de **validación**: también ayudan a elegir el modelo, aunque no ajusten sus coeficientes. Una vez fijadas las variables, su error final debe medirse con otros datos de **prueba** que no hayan intervenido en esa elección. Es la misma separación que hicimos con los mapas en la sección [-@sec-viajante-caso-real] [@hastie2009, apartado 7.2].
 </details>
 ::::
 
 **Lo que no hemos visto.** Este libro cubre el algoritmo genético básico, con un solo objetivo y una sola población. Deja fuera, entre otras cosas, la optimización con varios objetivos, las poblaciones repartidas en islas, los métodos híbridos y otras metaheurísticas. La sección -@sec-recapitulacion-fuera los presenta en breve, con lecturas para seguir; quizá se traten con más detalle en ediciones futuras.
+
+Aquí termina el recorrido básico. El [índice de actividades](actividades.qmd) reúne los ejemplos y los ejercicios para volver a practicarlos.
 
 ## Lo que queda fuera [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas} {#sec-recapitulacion-fuera}
 
@@ -344,3 +349,5 @@ En castellano, @bautistavalhondo2020 dedica capítulos a la búsqueda local, a G
 
 ::: {.referencias-capitulo #refs}
 :::
+
+<!-- Adenda de cotejo del 2026-10-29: separación de entrenamiento, validación y prueba en el apartado e del ejercicio de selección de variables, con remisión a sec-viajante-caso-real. hastie2009, apartado 7.2: extracto de la obra devuelto por búsqueda en la reproducción de Yumpu (página web /241), sobre selección y evaluación de modelos y los tres grupos de datos. El PDF oficial no se pudo recuperar; no es lectura íntegra del apartado ni cotejo de toda la obra. -->

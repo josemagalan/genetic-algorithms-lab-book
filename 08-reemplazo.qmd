@@ -252,6 +252,8 @@ Con un criterio de 3 generaciones sin mejora, el algoritmo abandona justo antes 
 </details>
 ::::
 
+Para seguir el recorrido básico, continúa por el [capítulo «Parámetros y aleatoriedad»](#sec-experimentos-azar).
+
 ## Variantes del estado estacionario [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-reemplazo-variantes-estacionario}
 
 Si cada hijo sustituye a un miembro de la población, ¿importa mucho a cuál?
@@ -327,7 +329,9 @@ Las **estrategias evolutivas**, que Rechenberg y Schwefel crearon en los años s
 - **(μ + λ).** Los μ padres crean λ hijos, y de los μ + λ individuos sobreviven los μ mejores. Un padre sigue en la población hasta que aparecen hijos mejores que él.
 - **(μ, λ).** Los hijos sustituyen a los padres y la selección se hace solo entre los hijos: sobreviven los μ mejores de los λ. Hace falta que $\lambda \geq \mu$.
 
-(μ + λ) es elitista: el mejor nunca se pierde. (μ, λ) no lo es, y se parece al reemplazo generacional del algoritmo genético canónico [@affenzeller2009, pp. 9–10]. GENITOR, que sustituye al peor, se comporta como una estrategia (μ + λ) [@eiben2015, p. 89], y por eso la mejora de la población es monótona [@whitley1994, apartado 8.1].
+(μ + λ) es elitista: el mejor nunca se pierde. (μ, λ) no lo es, y se parece al reemplazo generacional del algoritmo genético canónico [@affenzeller2009, pp. 9–10]. GENITOR también conserva la mejor solución al sustituir al peor [@eiben2015, p. 89; @whitley1994, apartado 8.1]. Pero admitir cualquier hijo, aunque sea peor que aquel al que sustituye, no coincide exactamente con (μ + λ): la media puede bajar, como vimos en el ejercicio [](#ejercicio-reemplazo-variantes-estacionario).
+
+Con un solo hijo, **Sustituir al peor si es mejor** sí equivale, en aptitud, a quedarse con los μ mejores entre la población y ese hijo: es (μ + 1). Si se crean varios hijos, hay que especificar si se insertan uno a uno con esa condición o se seleccionan juntos entre todos los candidatos.
 
 El elitismo con *e* individuos está entre los dos extremos: con *e* = 0 es el reemplazo generacional puro y, cuanto mayor es *e*, más padres compiten con los hijos por quedarse.
 

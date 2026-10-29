@@ -33,7 +33,7 @@ Para hablar de ello usaremos el vocabulario de la genética para tener aún más
 | **Cromosoma** | La forma en que se escribe esa solución; por ejemplo, una cadena de bits. |
 | **Gen** y **alelo** | Cada posición del cromosoma, y el valor que toma. En una cadena de bits, cada gen tiene dos alelos posibles, 0 y 1. |
 | **Locus** | El lugar que ocupa un gen en el cromosoma. |
-| **Aptitud** (*fitness*) | Un número que mide lo buena que es la solución. Cuanto mayor, mejor. |
+| **Aptitud** (*fitness*) | Un número que mide la calidad de la solución. En los ejemplos de este capítulo se maximiza: cuanto mayor, mejor. |
 | **Generación** | Una vuelta completa del ciclo: de una población a la siguiente. |
 
 El cromosoma y la solución no son lo mismo. El cromosoma es cómo escribimos la solución para que la manipulen los operadores; la solución es lo que representa, y es lo que evalúa la función de aptitud. A veces coinciden y a veces no. Lo veremos con detalle en el capítulo [](#sec-representacion-genotipo-fenotipo){.capitulo}. En este capítulo trabajaremos con cadenas de bits que representan números enteros.
@@ -412,13 +412,15 @@ a)
 | 8. Reemplazo | Generacional con élite | **Elitism** |
 | 9. Parada | Un número fijo de generaciones | **Generations** |
 
-**Number of places** y **Seed** no son decisiones del algoritmo: definen el problema, es decir, cuántos lugares hay y dónde están.
+**Number of places** fija el tamaño del problema. **Seed** fija tanto las posiciones de los lugares como los sorteos del algoritmo: permite reproducir el mapa y la ejecución. Cambiarla cambia las dos cosas, como veremos en la sección -@sec-experimentos-azar.
 
 b) Porque hay **élite**: los mejores individuos pasan a la generación siguiente sin cruzarse ni mutar, así que la mejor ruta de una generación sigue en la siguiente. La mejor aptitud solo puede subir o quedarse igual, como en el ejercicio [](#ejercicio-ciclo-reemplazar) con élite.
 </details>
 ::::
 
 <!-- Comprobado el 2026-10-15 con el código de EvoTraveller (algorithm.py y main.py, commit 41205ad): initial_population usa random.sample; random_tournament; ox_crossover; mutate intercambia dos posiciones con probabilidad mutation_rate por individuo; la élite, max(1, int(elitism · N)) redondeada a par, se copia sin mutar; el bucle hace `generations` vueltas; add_extremes añade (0, 0) al principio y al final; fitness = 1/distancia. Con los valores iniciales (10 lugares, semilla 1111), la mejor aptitud pasa de 0,02301 a 0,02932 y no baja nunca (mejora en las generaciones 1, 2 y 3), como en el capítulo 9. La gráfica Fitness tiene 51 puntos (generaciones 0 a 50); el control Generation va de 0 a Generations − 1. -->
+
+Para seguir el recorrido básico, continúa por el [capítulo «Representar soluciones»](#sec-representacion-genotipo-fenotipo).
 
 ## Variantes del ciclo [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-ciclo-variantes}
 
