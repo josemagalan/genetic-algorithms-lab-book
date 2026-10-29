@@ -6,9 +6,10 @@ que pasa al mejor vecino, el de la explotación (intensificación); en general, 
 población tienden a explorar y las de una sola solución (de trayectoria), a explotar. La figura de Talbi
 no se reproduce (D016): se rehace con los métodos que nombra el capítulo. La posición indica la tendencia
 de cada familia, no ordena los métodos de dentro de cada caja.
-Métodos de población: los de la sección «Otras familias» del capítulo 11 (Talbi, 2009, pp. 222–247).
-Métodos de trayectoria: Talbi (2009, capítulo 2: recocido simulado p. 126, búsqueda tabú p. 140, búsqueda
-local iterada p. 146, búsqueda de vecindario variable p. 150, GRASP p. 164).
+Métodos: los de la sección «Otras metaheurísticas» del capítulo 11, que cita sus fuentes originales
+(de población: Hansen y Ostermeier, 2001; Koza, 1992; Storn y Price, 1997; Mühlenbein y Paaß, 1996;
+Dorigo et al., 1996; Kennedy y Eberhart, 1995; de trayectoria: Kirkpatrick et al., 1983; Glover, 1986;
+Lourenço et al., 2003; Mladenović y Hansen, 1997; Feo y Resende, 1995; la clasificación, Blum y Roli, 2003).
 
 Uso: python3 11-metaheuristicas.py   → escribe 11-metaheuristicas.svg. Solo usa la biblioteca estándar.
 """
