@@ -41,7 +41,7 @@ El libro está en versión beta: su contenido y estructura pueden cambiar. / The
 | 5. Seleccionar a los padres | Revisado (28 de octubre de 2026) |
 | 6. Cruzar | Revisado (28 de octubre de 2026) |
 | 7. Mutar | Revisado (28 de octubre de 2026) |
-| 8. Reemplazar y parar | Borrador completo, pendiente de revisión |
+| 8. Reemplazar y parar | Revisado (29 de octubre de 2026) |
 | 9. Parámetros y aleatoriedad | Borrador completo, pendiente de revisión |
 | 10. El viajante de principio a fin | Borrador completo, pendiente de revisión |
 | 11. Recapitulación | Borrador completo, pendiente de revisión |
