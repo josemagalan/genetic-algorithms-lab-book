@@ -78,11 +78,13 @@ Cada página del libro tiene el enlace «Enviar un comentario sobre esta página
 
 ## Autores
 
-- [José Manuel Galán](https://sites.google.com/site/josemagalan/), Universidad de Burgos.
-- [Silvia Díaz-de la Fuente](https://produccioncientifica.usal.es/investigadores/2300823/detalle), Universidad de Salamanca.
-- [Virginia Ahedo](https://investigacion.ubu.es/investigadores/34947/detalle), Universidad de Burgos.
-- [María Pereda](https://portalcientifico.upm.es/es/ipublic/researcher/331932), Universidad Politécnica de Madrid.
-- [José Ignacio Santos](https://investigacion.ubu.es/investigadores/35543/detalle), Universidad de Burgos.
+- [José Manuel Galán](https://sites.google.com/site/josemagalan/)\*. ORCID: [0000-0003-3360-7602](https://orcid.org/0000-0003-3360-7602). Departamento de Ingeniería de Organización, Escuela Politécnica Superior, Universidad de Burgos. Edificio A1, Avda. Cantabria s/n, 09006 Burgos, España.
+- [Silvia Díaz-de la Fuente](https://produccioncientifica.usal.es/investigadores/2300823/detalle). ORCID: [0000-0002-5961-3368](https://orcid.org/0000-0002-5961-3368). Departamento de Cartografía e Ingeniería del Terreno, Escuela Politécnica Superior de Ávila, Universidad de Salamanca. Hornos Caleros 50, 05003 Ávila, España.
+- [Virginia Ahedo](https://investigacion.ubu.es/investigadores/34947/detalle). ORCID: [0000-0002-9812-388X](https://orcid.org/0000-0002-9812-388X). Departamento de Ingeniería de Organización, Escuela Politécnica Superior, Universidad de Burgos. Edificio A1, Avda. Cantabria s/n, 09006 Burgos, España.
+- [María Pereda](https://portalcientifico.upm.es/es/ipublic/researcher/331932). ORCID: [0000-0002-6151-1176](https://orcid.org/0000-0002-6151-1176). Grupo de investigación Ingeniería de Organización y Logística (IOL), Escuela Técnica Superior de Ingenieros Industriales, Universidad Politécnica de Madrid. C/ José Gutiérrez Abascal 2, 28006 Madrid, España; y Grupo Interdisciplinar de Sistemas Complejos, Madrid, España.
+- [José Ignacio Santos](https://investigacion.ubu.es/investigadores/35543/detalle). ORCID: [0000-0002-6653-043X](https://orcid.org/0000-0002-6653-043X). Departamento de Ingeniería de Organización, Escuela Politécnica Superior, Universidad de Burgos. Edificio A1, Avda. Cantabria s/n, 09006 Burgos, España.
+
+\* Autor de correspondencia.
 
 ## Agradecimientos y uso de IA
 

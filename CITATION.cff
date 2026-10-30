@@ -1,0 +1,67 @@
+# Metadatos de cita. GitHub los muestra en «Cite this repository» y Zenodo los lee al archivar una release.
+# Sin correos electrónicos (D056). Añadir doi y date-released al publicar la 1.0 en Zenodo.
+cff-version: 1.2.0
+message: "Si usas este libro, cítalo así. / If you use this book, please cite it as below."
+type: software
+title: "Evolución a la vista. Algoritmos genéticos en un laboratorio interactivo"
+version: "0.9 beta"
+authors:
+  - given-names: José Manuel
+    family-names: Galán
+    orcid: "https://orcid.org/0000-0003-3360-7602"
+    affiliation: "Departamento de Ingeniería de Organización, Escuela Politécnica Superior, Universidad de Burgos"
+  - given-names: Silvia
+    family-names: Díaz-de la Fuente
+    orcid: "https://orcid.org/0000-0002-5961-3368"
+    affiliation: "Departamento de Cartografía e Ingeniería del Terreno, Escuela Politécnica Superior de Ávila, Universidad de Salamanca"
+  - given-names: Virginia
+    family-names: Ahedo
+    orcid: "https://orcid.org/0000-0002-9812-388X"
+    affiliation: "Departamento de Ingeniería de Organización, Escuela Politécnica Superior, Universidad de Burgos"
+  - given-names: María
+    family-names: Pereda
+    orcid: "https://orcid.org/0000-0002-6151-1176"
+    affiliation: "Grupo de investigación Ingeniería de Organización y Logística (IOL), Escuela Técnica Superior de Ingenieros Industriales, Universidad Politécnica de Madrid; Grupo Interdisciplinar de Sistemas Complejos, Madrid"
+  - given-names: José Ignacio
+    family-names: Santos
+    orcid: "https://orcid.org/0000-0002-6653-043X"
+    affiliation: "Departamento de Ingeniería de Organización, Escuela Politécnica Superior, Universidad de Burgos"
+license:
+  - CC-BY-4.0
+  - MIT
+url: "https://josemagalan.github.io/genetic-algorithms-lab-book/"
+repository-code: "https://github.com/josemagalan/genetic-algorithms-lab-book"
+keywords:
+  - algoritmos genéticos
+  - genetic algorithms
+  - computación evolutiva
+  - metaheurísticas
+  - educación
+preferred-citation:
+  type: book
+  title: "Evolución a la vista. Algoritmos genéticos en un laboratorio interactivo"
+  languages:
+    - es
+  url: "https://josemagalan.github.io/genetic-algorithms-lab-book/"
+  license: CC-BY-4.0
+  authors:
+    - given-names: José Manuel
+      family-names: Galán
+      orcid: "https://orcid.org/0000-0003-3360-7602"
+      affiliation: "Departamento de Ingeniería de Organización, Escuela Politécnica Superior, Universidad de Burgos"
+    - given-names: Silvia
+      family-names: Díaz-de la Fuente
+      orcid: "https://orcid.org/0000-0002-5961-3368"
+      affiliation: "Departamento de Cartografía e Ingeniería del Terreno, Escuela Politécnica Superior de Ávila, Universidad de Salamanca"
+    - given-names: Virginia
+      family-names: Ahedo
+      orcid: "https://orcid.org/0000-0002-9812-388X"
+      affiliation: "Departamento de Ingeniería de Organización, Escuela Politécnica Superior, Universidad de Burgos"
+    - given-names: María
+      family-names: Pereda
+      orcid: "https://orcid.org/0000-0002-6151-1176"
+      affiliation: "Grupo de investigación Ingeniería de Organización y Logística (IOL), Escuela Técnica Superior de Ingenieros Industriales, Universidad Politécnica de Madrid; Grupo Interdisciplinar de Sistemas Complejos, Madrid"
+    - given-names: José Ignacio
+      family-names: Santos
+      orcid: "https://orcid.org/0000-0002-6653-043X"
+      affiliation: "Departamento de Ingeniería de Organización, Escuela Politécnica Superior, Universidad de Burgos"

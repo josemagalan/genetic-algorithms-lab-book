@@ -18,22 +18,61 @@ book:
   repo-url: https://github.com/josemagalan/genetic-algorithms-lab-book
   repo-branch: main
   repo-actions: [edit, source]   # «Editar esta página» y «Ver el código»; comentarios.js añade «Enviar un comentario» con la página y la versión
-  author:   # con su página web, como en el portal; para contactar sin GitHub (avisos.qmd#contacto)
+  author:   # con su página web, como en el portal; para contactar sin GitHub (avisos.qmd#contacto). Sin correos (D056)
     - name: José Manuel Galán
+      orcid: 0000-0003-3360-7602
+      corresponding: true
       url: https://sites.google.com/site/josemagalan/
-      affiliation: Universidad de Burgos
+      affiliations:
+        - name: Universidad de Burgos
+          department: Departamento de Ingeniería de Organización, Escuela Politécnica Superior
+          address: Edificio A1, Avda. Cantabria s/n
+          postal-code: "09006"
+          city: Burgos
+          country: España
     - name: Silvia Díaz-de la Fuente
+      orcid: 0000-0002-5961-3368
       url: https://produccioncientifica.usal.es/investigadores/2300823/detalle
-      affiliation: Universidad de Salamanca
+      affiliations:
+        - name: Universidad de Salamanca
+          department: Departamento de Cartografía e Ingeniería del Terreno, Escuela Politécnica Superior de Ávila
+          address: Hornos Caleros 50
+          postal-code: "05003"
+          city: Ávila
+          country: España
     - name: Virginia Ahedo
+      orcid: 0000-0002-9812-388X
       url: https://investigacion.ubu.es/investigadores/34947/detalle
-      affiliation: Universidad de Burgos
+      affiliations:
+        - name: Universidad de Burgos
+          department: Departamento de Ingeniería de Organización, Escuela Politécnica Superior
+          address: Edificio A1, Avda. Cantabria s/n
+          postal-code: "09006"
+          city: Burgos
+          country: España
     - name: María Pereda
+      orcid: 0000-0002-6151-1176
       url: https://portalcientifico.upm.es/es/ipublic/researcher/331932
-      affiliation: Universidad Politécnica de Madrid
+      affiliations:
+        - name: Universidad Politécnica de Madrid
+          department: Grupo de investigación Ingeniería de Organización y Logística (IOL), Escuela Técnica Superior de Ingenieros Industriales
+          address: C/ José Gutiérrez Abascal 2
+          postal-code: "28006"
+          city: Madrid
+          country: España
+        - name: Grupo Interdisciplinar de Sistemas Complejos
+          city: Madrid
+          country: España
     - name: José Ignacio Santos
+      orcid: 0000-0002-6653-043X
       url: https://investigacion.ubu.es/investigadores/35543/detalle
-      affiliation: Universidad de Burgos
+      affiliations:
+        - name: Universidad de Burgos
+          department: Departamento de Ingeniería de Organización, Escuela Politécnica Superior
+          address: Edificio A1, Avda. Cantabria s/n
+          postal-code: "09006"
+          city: Burgos
+          country: España
   date: "2026-10-07"   # primera publicación; la versión y la fecha de revisión van en libro-version y libro-revision
   page-footer:
     center: "Texto: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es) · Código: [MIT](https://github.com/josemagalan/genetic-algorithms-lab-book/blob/main/LICENSE) · [Comentarios y contacto](https://josemagalan.github.io/genetic-algorithms-lab-book/avisos.html#contacto)"
