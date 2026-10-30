@@ -14,7 +14,7 @@ Al terminar el recorrido básico de este capítulo podrás:
 
 - explicar por qué dos ejecuciones del mismo algoritmo genético dan resultados distintos y qué papel tiene la semilla;
 - calcular la media y la desviación típica de varias ejecuciones e interpretarlas;
-- decidir si la diferencia entre dos configuraciones es creíble o puede deberse al azar;
+- explicar por qué una diferencia entre ejecuciones sueltas puede deberse al azar y por qué hay que comparar las medias de varias réplicas;
 - explicar por qué no hay valores de *Pc* y *pm* buenos para todos los problemas y cómo se ajustan con casos parecidos al real;
 - relacionar la presión selectiva con la pérdida de diversidad y con la mutación.
 :::
@@ -66,7 +66,7 @@ Los capítulos -@sec-cruce y -@sec-mutacion presentaron dos parámetros que cont
 Recuerda que *pm* no significa lo mismo en todas las representaciones. Con bits, *pm* es la probabilidad de que mute **cada gen**. Los valores habituales son pequeños, de 0,001 a 0,01, o $\mathit{pm} = 1/k$, donde *k* es el número de genes, para que en promedio mute uno solo en cada individuo [@talbi2009, p. 208]. Lo vimos en la sección -@sec-mutacion-cuanto-mutar. En EvoTraveller, en cambio, *pm* es la probabilidad de que **el individuo** reciba un intercambio, que cambia dos posiciones. En promedio, cada hijo cambia $2 \times \mathit{pm}$ posiciones: con *pm* = 0,05, una décima de posición; con *pm* = 0,5, una posición, como pide la regla $1/k$. Para comparar valores de *pm* entre representaciones hay que traducirlos a cuántos genes cambian, en promedio, en cada hijo.
 
 ::: {.callout-tip .ejemplo #ejemplo-experimentos-pc-pm title="Ejemplo reproducible · Sin mutación, con poca y con más"}
-**Datos.** El mismo problema del ejemplo [](#ejemplo-experimentos-azar), con todos los valores iniciales salvo **Mutation rate**, que tomará tres valores: 0, 0,05 y 0,2. Pulsa **Run** con cada uno.
+**Datos.** El mismo problema del ejemplo [](#ejemplo-experimentos-azar), con todos los valores iniciales salvo **Mutation rate**, que tomará tres valores: 0; 0,05 y 0,2. Pulsa **Run** con cada uno.
 
 **Predice.** ¿Con qué valor acaba la ruta más corta? ¿Y la más larga?
 
@@ -103,7 +103,7 @@ La selección solo copia rutas que ya existen. Cuando la población se llena de 
 
 Si el resultado depende del azar, ¿cómo sabemos qué da un algoritmo genético en general?
 
-Repitiendo la ejecución. Cada repetición con una semilla distinta es una **réplica**, y lo que nos interesa es cómo se reparten los resultados de muchas réplicas. EvoTraveller no permite repetir ejecuciones sobre el mismo mapa, porque la semilla cambia también el mapa. Por eso hemos programado un algoritmo del mismo diseño: permutaciones, torneo de 3, cruce OX con *Pc* = 0,6, intercambio con *pm* = 0,05 por individuo y reemplazo generacional con un individuo de élite. En este guion usamos el OX **clásico** de la sección -@sec-cruce-ox; EvoTraveller usa «Orden desde el inicio». Comparten los componentes generales, pero no reproducen la misma implementación ni los mismos sorteos. Lo hemos aplicado a un mapa con 20 destinos y el origen, donde empieza y acaba la ruta: 21 ciudades en total. En EvoTraveller, **Number of places** cuenta también el origen, así que este mapa serían 21 lugares, más de los 15 que admite. Hemos usado una población de 30 y 100 generaciones. Un solo mapa, 30 semillas distintas (1 a 30).
+Repitiendo la ejecución. Cada repetición con una semilla distinta es una **réplica**, y lo que nos interesa es cómo se reparten los resultados de muchas réplicas. EvoTraveller no permite repetir ejecuciones sobre el mismo mapa, porque la semilla cambia también el mapa. Por eso hemos programado un algoritmo del mismo diseño: permutaciones, torneo de 3, cruce OX con *Pc* = 0,6, intercambio con *pm* = 0,05 por individuo y reemplazo generacional con un individuo de élite. En nuestro programa usamos el OX **clásico** de la sección -@sec-cruce-ox; EvoTraveller usa «Orden desde el inicio». Comparten los componentes generales, pero no reproducen la misma implementación ni los mismos sorteos. Lo hemos aplicado a un mapa con 20 destinos y el origen, donde empieza y acaba la ruta: 21 ciudades en total. En EvoTraveller, **Number of places** cuenta también el origen, así que este mapa serían 21 lugares, más de los 15 que admite. Hemos usado una población de 30 y 100 generaciones. Un solo mapa, 30 semillas distintas (1 a 30).
 
 ![Longitud de la mejor ruta en cada generación, en 30 ejecuciones del mismo algoritmo sobre el mismo mapa de 20 destinos, con *pm* = 0,05. Las líneas grises son las ejecuciones; en color, la mejor y la peor de las finales, y en trazo discontinuo, la media. Menos es mejor. Figura propia, generada con `figuras/09-experimentos.py`, en el repositorio del libro.](figuras/09-replicas.svg){#fig-replicas fig-alt="Gráfica de líneas de la longitud de la mejor ruta frente a la generación, de 0 a 100, para 30 ejecuciones. Todas parten de longitudes de 87 a 113, bajan deprisa al principio y más despacio después. Terminan entre 50,3 y 78,0, con una media de 62,6."}
 
@@ -126,7 +126,7 @@ $$\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i, \qquad s = \sqrt{\frac{1}{n-1}\sum_{i
 donde $x_i$ es el resultado de la réplica *i* y *n*, el número de réplicas. En nuestras 30 réplicas, la media de la longitud final es 62,6 y la desviación típica, 5,2. Una desviación típica pequeña indica que el algoritmo es **robusto**: da resultados parecidos aunque cambie el azar [@talbi2009, p. 63]. Si la dispersión es grande, una ejecución concreta puede salir mucho peor que la media, y quien la usa no lo sabe.
 
 ::: {.callout-tip .ejemplo #ejemplo-experimentos-replicas title="Ejemplo reproducible · Cinco mapas, tres valores de pm"}
-**Datos.** En EvoTraveller, con **Number of places** 15 y los demás valores iniciales, haz una ejecución con cada semilla, de 1111 a 1115, y con cada **Mutation rate**: 0, 0,05 y 0,2. Son 15 ejecuciones. La tabla del resultado da la longitud final; la aptitud es su inversa.
+**Datos.** En EvoTraveller, con **Number of places** 15 y los demás valores iniciales, haz una ejecución con cada semilla, de 1111 a 1115, y con cada **Mutation rate**: 0; 0,05 y 0,2. Son 15 ejecuciones. La tabla del resultado da la longitud final; la aptitud es su inversa.
 
 **Predice.** ¿Gana siempre el 0,2 a los otros dos? ¿Y el 0,05 al 0?
 
@@ -144,7 +144,7 @@ donde $x_i$ es el resultado de la réplica *i* y *n*, el número de réplicas. E
 | 1115 | 38,38 | 40,86 | 44,90 | 39,53 |
 | **Media** | | **44,12** | **42,16** | **39,23** |
 
-Con 0,2 sale la ruta más corta de las tres en las cinco semillas. Pero en la 1115, 0,05 es peor que no mutar (44,90 frente a 40,86), y en la 1112 las diferencias son pequeñas. Si solo hubiéramos probado la semilla 1115, habríamos concluido que mutar a 0,05 empeora el resultado. La media sobre las cinco semillas da una visión más fiable.
+Con 0,2 sale la ruta más corta de las tres en las cinco semillas. Pero en la semilla 1115, mutar con 0,05 es peor que no mutar (44,90 frente a 40,86), y en la 1112 las diferencias son pequeñas. Si solo hubiéramos probado la semilla 1115, habríamos concluido que mutar a 0,05 empeora el resultado. La media sobre las cinco semillas da una visión más fiable.
 </details>
 :::
 
@@ -158,7 +158,7 @@ Las cinco primeras réplicas de la figura -@fig-replicas, con las semillas 1 a 5
 
 La media es $(66{,}0 + 56{,}8 + 61{,}2 + 58{,}7 + 57{,}9)/5 = 60{,}12$. Las desviaciones respecto a la media son 5,88; −3,32; 1,08; −1,42 y −2,22, y sus cuadrados suman 53,7. Dividido entre $n - 1 = 4$, da 13,4, y la raíz cuadrada es la desviación típica: 3,7.
 
-Con cinco réplicas la media sale algo por debajo de la de 30 (60,1 frente a 62,6) y la desviación típica, algo más pequeña (3,7 frente a 5,2): con pocas réplicas, las estimaciones son poco fiables. Con la semilla 1 habríamos obtenido 66,0, que queda por encima de la media de las 30 réplicas: habríamos creído que el algoritmo da rutas más largas de lo habitual.
+Con cinco réplicas la media sale algo por debajo de la de 30 (60,1 frente a 62,6) y la desviación típica, algo más pequeña (3,7 frente a 5,2): con pocas réplicas, las estimaciones son poco fiables. Con la semilla 1 habríamos obtenido 66,0, que queda por encima de la media de las 30 réplicas: habríamos sobrestimado la longitud típica de sus rutas (66,0 frente a 62,6).
 </details>
 ::::
 
@@ -166,9 +166,9 @@ Con cinco réplicas la media sale algo por debajo de la de 30 (60,1 frente a 62,
 
 Si una configuración da una media menor que otra, ¿es mejor?
 
-Con el mismo mapa y las mismas 30 semillas hemos repetido el experimento con tres valores de *pm*: 0, 0,05 y 0,2. Todas usan el mismo mapa y las mismas 30 semillas, y por tanto las mismas 30 poblaciones iniciales.
+Con el mismo mapa y las mismas 30 semillas hemos repetido el experimento con tres valores de *pm*: 0; 0,05 y 0,2. Todas usan el mismo mapa y las mismas 30 semillas, y por tanto las mismas 30 poblaciones iniciales.
 
-![Longitud final de la mejor ruta en 30 ejecuciones (un punto cada una) para *pm* = 0, 0,05 y 0,2, sobre el mismo mapa de 20 destinos. La línea horizontal es la media y la barra vertical, la media ± una desviación típica. Menos es mejor. Figura propia, generada con `figuras/09-experimentos.py`, en el repositorio del libro.](figuras/09-comparar-pm.svg){#fig-comparar-pm fig-alt="Gráfica de tres nubes de puntos, una por valor de pm. Con pm igual a 0, los puntos van de 56 a 99 y la media es 80,1. Con 0,05, de 50 a 78 y la media es 62,6. Con 0,2, de 43 a 65 y la media es 55,4. Las nubes de 0,05 y 0,2 se solapan."}
+![Longitud final de la mejor ruta en 30 ejecuciones (un punto cada una) para *pm* = 0; 0,05 y 0,2, sobre el mismo mapa de 20 destinos. La línea horizontal es la media y la barra vertical, la media ± una desviación típica. Menos es mejor. Figura propia, generada con `figuras/09-experimentos.py`, en el repositorio del libro.](figuras/09-comparar-pm.svg){#fig-comparar-pm fig-alt="Gráfica de tres nubes de puntos, una por valor de pm. Con pm igual a 0, los puntos van de 56 a 99 y la media es 80,1. Con 0,05, de 50 a 78 y la media es 62,6. Con 0,2, de 43 a 65 y la media es 55,4. Las nubes de 0,05 y 0,2 se solapan."}
 
 <details>
 <summary>Ver los datos de la figura</summary>
@@ -184,17 +184,17 @@ La diferencia entre 0 y 0,05 es grande en comparación con la dispersión de las
 
 También podemos preguntarnos qué le pasaría a quien hiciera una sola ejecución de cada configuración, con semillas distintas para cada una. Para simularlo, combinamos cada ejecución con 0,05 con cada ejecución con 0,2: 30 × 30 = 900 parejas. En 146 de ellas, el 16 %, la ejecución con 0,05 acaba con una ruta más corta. Y la ejecución sin mutación supera a la de 0,05 en el 5 % de las 900 parejas (47).
 
-Si hubiéramos hecho una sola ejecución con cada valor, nos habría salido que 0,05 es mejor que 0,2, cuando no lo es, en una de cada diez comparaciones con la misma semilla y en una de cada seis con semillas distintas. Con 30 réplicas, la media de cada una tiene un error mucho menor, y la conclusión es fiable. Comparar medias de varias réplicas, y no ejecuciones sueltas, es lo que hace creíble una comparación.
+Si hubiéramos hecho una sola ejecución con cada valor, nos habría salido que 0,05 es mejor que 0,2, cuando no lo es, en 3 de las 30 semillas y en una de cada seis parejas con semillas distintas. Con solo 30 semillas, esas dos cifras no se distinguen de verdad: aquí compartir la semilla solo fija la población inicial y apenas influye en el resultado final, como veremos en la sección -@sec-experimentos-numero-replicas. Con 30 réplicas, la media de cada una tiene un error mucho menor, y la conclusión es fiable. Comparar medias de varias réplicas, y no ejecuciones sueltas, es lo que hace creíble una comparación.
 
 Hay una condición más: la comparación solo vale para lo que se ha probado. Aquí, para este mapa, este tamaño de población y estas 100 generaciones. Sobre otros casos no sabemos nada aún; volveremos a ello en la sección -@sec-experimentos-casos-parecidos.
 
 :::: {.callout-note .ejercicio #ejercicio-experimentos-comparar title="Ejercicio · ¿Cuántas veces me equivoco?"}
-Un compañero compara *pm* = 0,05 y *pm* = 0,2 con una sola ejecución de cada una, con semillas distintas elegidas al azar. Según las 900 parejas de la sección -@sec-experimentos-comparar, ¿con qué frecuencia le saldrá que 0,05 es mejor? ¿Y si usa la misma semilla para las dos? ¿Y si compara las medias de 30 réplicas?
+Un compañero compara *pm* = 0,05 y *pm* = 0,2 con una sola ejecución de cada una, con semillas distintas elegidas al azar. Según las 900 parejas de la sección -@sec-experimentos-comparar, ¿con qué frecuencia le saldrá que 0,05 es mejor? ¿Y si usa la misma semilla para las dos? ¿Y qué le saldría si compara las medias de 30 réplicas?
 
 <details>
 <summary>**Ver la solución**</summary>
 
-Con una ejecución de cada una, 0,05 queda mejor en 146 de 900 parejas, el 16 %: se equivocaría una vez de cada seis, aproximadamente. Con la misma semilla, 0,05 queda mejor en 3 de las 30 semillas: una vez de cada diez. Con las medias de 30 réplicas, las medias son 62,6 y 55,4: la diferencia es de 7,2 y la ventaja de 0,2 se mantiene. En la sección -@sec-experimentos-numero-replicas veremos cómo medir si esa diferencia es creíble.
+Con una ejecución de cada una, 0,05 queda mejor en 146 de 900 parejas, el 16 %: se equivocaría una vez de cada seis, aproximadamente. Con la misma semilla, 0,05 queda mejor en 3 de las 30 semillas. Con tan pocas parejas, esa cifra es compatible con el 16 %: en este algoritmo, compartir la semilla no protege de equivocarse. Con las medias de 30 réplicas, las medias son 62,6 y 55,4: la diferencia es de 7,2 y la ventaja de 0,2 se mantiene. En la sección -@sec-experimentos-numero-replicas veremos cómo medir si esa diferencia es creíble: es unas cinco veces su error típico, así que con 30 réplicas casi nunca saldría al revés.
 </details>
 ::::
 
@@ -226,17 +226,17 @@ Media de la longitud final de 30 ejecuciones y, entre paréntesis, el porcentaje
 
 <!-- Seguimiento interno: datos generados el 2026-10-08 con figuras/09-experimentos.py: mapa de cada tamaño con la semilla 7, población 30, 100 generaciones, torneo de 3, OX con Pc = 0,6, élite 1, semillas 1–30. Un mapa por tamaño, así que la figura no dice nada sobre otros mapas del mismo tamaño. -->
 
-En estos tres mapas, el mismo valor de *pm* sale peor parado en los de mayor tamaño. Como solo hay un mapa por tamaño, no podemos separar el efecto del tamaño del de la estructura de cada mapa. Con *pm* = 0,05, la media queda un 7 % por encima de la mejor con 10 destinos, un 21 % con 20 y un 24 % con 30. De los cinco valores probados, el mejor es el mismo en los tres tamaños: 0,5. No es un valor extraño: como vimos en la sección -@sec-experimentos-pc-pm, equivale a cambiar en promedio una posición por hijo, lo que pide la regla $1/k$, y 0,05 equivale a mutar diez veces menos. EvoTraveller solo llega a 0,2. En la sección -@sec-experimentos-interaccion veremos por qué este algoritmo admite tanta mutación. Si hubiéramos ajustado *pm* con el problema de 10 destinos, habríamos creído que 0,05 está cerca del mejor, y en el problema de 30 destinos no lo está.
+En estos tres mapas, un valor bajo de *pm*, como 0,05, sale peor parado en los de mayor tamaño. Como solo hay un mapa por tamaño, no podemos separar el efecto del tamaño del de la estructura de cada mapa. Con *pm* = 0,05, la media queda un 7 % por encima de la mejor con 10 destinos, un 21 % con 20 y un 24 % con 30. De los cinco valores probados, el mejor es el mismo en los tres tamaños: 0,5. No es un valor extraño: como vimos en la sección -@sec-experimentos-pc-pm, equivale a cambiar en promedio una posición por hijo, lo que pide la regla $1/k$, y 0,05 equivale a mutar diez veces menos. EvoTraveller solo llega a 0,2. En la sección -@sec-experimentos-interaccion veremos por qué este algoritmo admite tanta mutación. Si hubiéramos ajustado *pm* con el problema de 10 destinos, habríamos creído que 0,05 está cerca del mejor, y en el problema de 30 destinos no lo está.
 
 De ahí sale una regla práctica: **ajustar los parámetros con casos parecidos al real**, en tamaño y en estructura, y no con un caso pequeño y cómodo. Y mejor con varios casos que con uno solo. Esto tiene un límite que veremos en las [ampliaciones](#sec-experimentos-ampliaciones): si ajustamos los parámetros con unos casos y evaluamos el algoritmo con los mismos, el resultado es demasiado optimista.
 
 :::: {.callout-note .ejercicio #ejercicio-experimentos-casos-parecidos title="Ejercicio · Ajustar con un caso pequeño"}
-Tienes un problema real de 30 destinos, pero para ajustar *pm* solo usas el de 10, porque es más rápido. Con los datos de la figura -@fig-tamano, ¿qué diferencia ves entre *pm* = 0,05 y *pm* = 0,2 en cada tamaño? ¿Qué decisión tomarías con el caso pequeño y qué pasaría con el real?
+Tienes un problema real de 30 destinos, pero para ajustar *pm* solo usas el de 10, porque es más rápido. Con los datos de la figura -@fig-tamano, ¿qué diferencia ves entre *pm* = 0,05 y *pm* = 0,2 en cada tamaño? ¿Qué conclusión sacarías con el caso pequeño sobre cuánto importa elegir bien *pm*, y qué pasaría con el real?
 
 <details>
 <summary>**Ver la solución**</summary>
 
-Con 10 destinos, 0,05 y 0,2 quedan un 7 % y un 4 % por encima de la mejor media: solo 3 puntos de diferencia. Con 30 destinos quedan un 24 % y un 6 %: 18 puntos. Con el caso pequeño, la diferencia parece menor y podríamos quedarnos con 0,05, el valor habitual. Aplicado al problema de 30 destinos, perderíamos mucho más: la ruta saldría de media un 24 % más larga que con el mejor valor probado. En estos ejemplos, usar solo el mapa pequeño habría subestimado cuánto importa *pm* en el mapa grande.
+Con 10 destinos, 0,05 y 0,2 quedan un 7 % y un 4 % por encima de la mejor media: solo 3 puntos de diferencia. Con 30 destinos quedan un 24 % y un 6 %: 18 puntos. Con el caso pequeño, la diferencia parece despreciable y podríamos pensar que da igual dejar el valor habitual, 0,05. Aplicado al problema de 30 destinos, perderíamos mucho más: la ruta saldría de media un 24 % más larga que con el mejor valor probado. En estos ejemplos, usar solo el mapa pequeño habría subestimado cuánto importa *pm* en el mapa grande.
 </details>
 ::::
 
@@ -281,7 +281,7 @@ La **presión selectiva** mide cuánto favorece la selección a los mejores (cap
 
 Perder diversidad no es malo en sí: que desaparezcan los genes de las soluciones malas es justo lo que se busca. Lo malo es perder los genes que forman parte de las mejores soluciones, porque entonces solo la mutación puede recuperarlos. Por eso algunos autores definen la convergencia prematura por su efecto: el cruce y la mutación ya no consiguen hijos mejores que sus padres [@affenzeller2009, pp. 66–67].
 
-Para ver cómo se pierde la diversidad, SelectionMechanisms simula muchas veces una población que solo se somete a la selección, sin cruce ni mutación. Cada individuo tiene un identificador (ID) y sus copias lo heredan. El número de **IDs distintos** que quedan en la población mide la diversidad: empieza en N, y llega a 1 cuando todos son copias del mismo individuo.
+Para ver cómo se pierde la diversidad, SelectionMechanisms simula muchas veces una población que solo se somete a la selección, sin cruce ni mutación. Cada individuo tiene un identificador (ID) y sus copias lo heredan. El número de **IDs distintos** que quedan en la población mide la diversidad: empieza en N y llega a 1 cuando todos son copias del mismo individuo.
 
 ::: {.callout-tip .ejemplo #ejemplo-experimentos-diversidad title="Ejemplo reproducible · Diez generaciones de selección"}
 **Datos.** En SelectionMechanisms, escribe **Population size (N)** 100, **Generations (G)** 10, **Simulations** 30, **Fitness distribution per ID** «Permutation 1..N (no repetition)», **Seed (optional)** 1 y **Elitism (n elites)** 1. Pulsa **Run** con tres valores de **Method**: **Tournament** (con **Tournament size (k)** 2), **Roulette wheel** y **SUS**. Mira la pestaña **Summary**.
@@ -338,11 +338,11 @@ La media de las réplicas también depende del azar: con otras 30 réplicas sald
 
 $$\mathrm{EE} = \frac{s}{\sqrt{n}}$$
 
-Cuando *n* es grande, la media de los resultados se parece a una distribución normal de media la del algoritmo y desviación típica EE, y se puede dar un **intervalo de confianza del 95 %** para la media [@talbi2009, p. 64]:
+Cuando *n* es grande, si repitiéramos el experimento muchas veces, las medias obtenidas se repartirían aproximadamente según una distribución normal centrada en la media del algoritmo y con desviación típica EE, y se puede dar un **intervalo de confianza del 95 %** para la media [@talbi2009, p. 64]:
 
 $$\bar{x} \pm 1{,}96 \, \frac{s}{\sqrt{n}}$$
 
-En la figura -@fig-replicas, con *pm* = 0,05, $\bar{x} = 62{,}6$, $s = 5{,}2$ y $n = 30$. El error típico es $5{,}2/\sqrt{30} \approx 0{,}95$, y el intervalo, de 60,7 a 64,4. Si repitiéramos el experimento muchas veces, el 95 % de los intervalos calculados así contendría la media del algoritmo en este mapa, la que saldría con infinitas réplicas. Con menos réplicas, el intervalo es más ancho.
+En la figura -@fig-replicas, con *pm* = 0,05, $\bar{x} = 62{,}6$, $s = 5{,}2$ y $n = 30$. El error típico es $5{,}2/\sqrt{30} \approx 0{,}95$, y el intervalo, de 60,7 a 64,4 (con la media sin redondear, 62,55). El 1,96 sale de la distribución normal: el 95 % de sus valores queda a menos de 1,96 desviaciones típicas de la media. Si repitiéramos el experimento muchas veces, el 95 % de los intervalos calculados así contendría la media del algoritmo en este mapa, la que saldría con infinitas réplicas. Con menos réplicas, el intervalo es más ancho.
 
 Para comparar dos configuraciones se hace lo mismo con su diferencia, y cómo se calcula depende del diseño del experimento. En la sección -@sec-experimentos-comparar, *pm* = 0,05 y *pm* = 0,2 usan las mismas 30 semillas, así que el diseño es **emparejado**: en cada semilla se calcula la diferencia $d_i$ entre la longitud final con 0,05 y con 0,2, y se aplican las fórmulas anteriores a esas 30 diferencias. Su media es 7,2, la diferencia de las medias (62,6 − 55,4); su desviación típica, 7,6, y el error típico, $7{,}6/\sqrt{30} \approx 1{,}39$. El intervalo del 95 % va de 4,5 a 9,9. No incluye el 0, así que es difícil explicar la diferencia solo por el azar de las 30 réplicas: *pm* = 0,2 es mejor en este mapa.
 
@@ -415,7 +415,7 @@ Longitud media final de 30 ejecuciones y, entre paréntesis, el error típico:
 
 <!-- Seguimiento interno: datos generados el 2026-10-08 con figuras/09-experimentos.py (mapa de 20 destinos con la semilla 7, población 30, 100 generaciones, OX con Pc = 0,6, élite 1, semillas 1–30). El mismo guion da, sin figura, los datos de esta sección y de las secciones 9.7 y 9.10: rutas distintas en la población (pm = 0,05: 30; 10,9; 4,5; 2,8 en las generaciones 0, 10, 20 y 99; pm = 0,5: 30; 25,7; 25,7; 20,6); con pm = 1, torneo de 2 → 29,9; 30; 30 y torneo de 10 → 29,8; 29,8; 29,5 en las generaciones 5, 20 y 99; sin élite 64,0; 55,2; 57,4; 81,5 para pm 0,05, 0,2, 0,5 y 1; inversión 65,3; 53,9; 44,7; 42,5; 48,8 para pm 0,01, 0,05, 0,2, 0,5 y 1; escalador 54,9 (intercambio) y 42,2 (inversión); mejor ruta conocida 40,68. Lo de «los padres son casi siempre el mejor individuo o rutas muy buenas» es una inferencia de la presión del torneo de 10; no se ha medido de qué padres salen los mutantes. Añadido a petición del autor tras la primera versión, que explicaba el valor alto de pm solo con el tamaño del intercambio y confundía. -->
 
-Con un torneo de 2, el mejor valor de *pm* de los cinco es 0,2 y subirlo más empeora el resultado: con *pm* = 1 la media sube de 55,2 a 63,1. Con un torneo de 10, subir *pm* mejora el resultado hasta el último valor, *pm* = 1. No hay un valor de *pm* bueno por sí mismo: depende de *k*.
+Con un torneo de 2, el mejor valor de *pm* de los cinco es 0,2; subirlo a 0,5 no mejora, y con *pm* = 1 la media sube de 55,2 a 63,1. Con un torneo de 10, subir *pm* mejora el resultado hasta el último valor, *pm* = 1. No hay un valor de *pm* bueno por sí mismo: depende de *k*.
 
 Con poca mutación, el torneo de 10 es el peor: con *pm* = 0 da 90,2, porque una selección tan fuerte llena enseguida la población de copias (sección -@sec-experimentos-diversidad). Con *pm* = 1, en cambio, los dos torneos mantienen la población llena de rutas distintas, unas 30 de 30 hasta el final. La diferencia está en qué rutas se mutan. Con un torneo de 10, los padres son casi siempre el mejor individuo o rutas muy buenas, y mutarlos a todos equivale a probar en cada generación unas 29 variaciones pequeñas de las mejores rutas: una búsqueda alrededor de lo mejor encontrado. Con un torneo de 2, muchos padres son rutas mediocres, y mutarlos a todos dispersa la búsqueda.
 
@@ -428,7 +428,7 @@ Hay una tercera pieza: el reemplazo. Mutar mucho estropea muchos hijos, pero con
 
 El mejor valor de *pm* depende, por tanto, de la selección y del reemplazo.
 
-También hay interacción entre *Pc* y *pm*. Con *pm* = 0,05, subir *Pc* de 0 a 0,6 y 0,9 baja la media de 69,0 a 62,6 y a 59,9: cruzar ayuda. Con *pm* = 0,5, las medias son 51,2, 51,6 y 53,3, es decir, que el cruce apenas importa. Con mucha mutación y OX, este algoritmo casi no necesita el cruce: es, sobre todo, una búsqueda que muta y selecciona muchas rutas a la vez. En la sección -@sec-experimentos-operadores veremos que no ocurre lo mismo con un cruce que conserve lo que importa en el viajante.
+También hay interacción entre *Pc* y *pm*. Con *pm* = 0,05, subir *Pc* de 0 a 0,6 y 0,9 baja la media de 69,0 a 62,6 y a 59,9: cruzar ayuda. Con *pm* = 0,5, las medias son 51,2; 51,6 y 53,3, es decir, que el cruce apenas importa. Con mucha mutación y OX, este algoritmo casi no necesita el cruce: es, sobre todo, una búsqueda que muta y selecciona muchas rutas a la vez. En la sección -@sec-experimentos-operadores veremos que no ocurre lo mismo con un cruce que conserve lo que importa en el viajante.
 
 <details>
 <summary>Ver los datos del efecto de *Pc*</summary>
@@ -506,17 +506,17 @@ Longitud media final de 30 ejecuciones y, entre paréntesis, el error típico:
 
 Con el intercambio, ERX mejora la media con todos los valores de *pm* probados, y la mejor media baja de 51,6 con OX a 43,3 con ERX, un 16 % menos. Ningún valor de *pm* consigue eso con OX. La mejor ruta que hemos encontrado para este mapa, repitiendo la búsqueda local con inversiones desde 300 rutas al azar, mide 40,68. Con ERX, además, el cruce sí ayuda aunque haya mucha mutación: con *pm* = 0,5 la media baja de 51,2 sin cruce a 43,3. Lo que vimos en la sección -@sec-experimentos-interaccion, que con mucha mutación el cruce apenas importa, era cierto para OX, que no conserva bien las aristas, no para cualquier cruce.
 
-Con la inversión, en cambio, la mutación ya conserva las aristas y los cruces se parecen: con *pm* = 0,5, todos quedan entre 42,4 y 43,9, y sin cruce, en 43,0. El cruce ayuda sobre todo cuando la mutación es escasa (con *pm* = 0,05, de 60,0 sin cruce a 53,1 con ERX). Con los dos tipos de mutación, el mejor de los valores de *pm* probados sigue siendo 0,5. Como referencia, un **escalador** (*hill climbing*) que parte de la mejor de 30 rutas al azar y en cada generación prueba 29 mutaciones de la mejor ruta, y se queda con la mejor si no empeora, hace las mismas evaluaciones y llega a 54,9 con intercambios y a 42,2 con inversiones.
+Con la inversión, en cambio, la mutación ya conserva las aristas y los cruces se parecen: con *pm* = 0,5, todos quedan entre 42,4 y 43,9, y sin cruce, en 43,0. El cruce ayuda sobre todo cuando la mutación es escasa (con *pm* = 0,05, de 60,0 sin cruce a 53,1 con ERX). Con los dos tipos de mutación, el mejor de los valores de *pm* probados sigue siendo 0,5 (con CX e intercambio, 0,5 y 1 empatan). Como referencia, un **escalador** (*hill climbing*) que parte de la mejor de 30 rutas al azar y en cada generación prueba 29 mutaciones de la mejor ruta, y se queda con la mejor si no empeora, hace las mismas evaluaciones y llega a 54,9 con intercambios y a 42,2 con inversiones.
 
 La conclusión es que los parámetros se ajustan **después** de elegir una representación y unos operadores que conserven lo que importa del problema. Afinar *pm* no compensa unos operadores con poca localidad. En EvoTraveller los operadores son fijos (OX e intercambio); para ver qué conserva cada uno, están las pantallas «Comparar operadores» de crossover-ga y mutation-ga (secciones -@sec-cruce-que-conserva y -@sec-mutacion-que-conserva).
 
 :::: {.callout-note .ejercicio #ejercicio-experimentos-operadores title="Ejercicio · ¿Parámetro u operador?"}
-Con OX e intercambio, nuestro punto de partida, la media es 62,6 con *pm* = 0,05. Con los datos de esta sección, ¿qué mejora más la media: subir *pm* a 0,5, o cambiar OX por ERX sin tocar *pm*? ¿Y hacer las dos cosas? ¿Por qué con la inversión casi da igual qué cruce se use?
+Con OX e intercambio, nuestro punto de partida, la media es 62,6 con *pm* = 0,05. Con los datos de esta sección, ¿qué mejora más la media: subir *pm* a 0,5, o cambiar OX por ERX sin tocar *pm*? ¿Y hacer las dos cosas? ¿Por qué con la inversión y *pm* = 0,5 casi da igual qué cruce se use?
 
 <details>
 <summary>**Ver la solución**</summary>
 
-Subir *pm* a 0,5 baja la media a 51,6, un 18 % menos. Cambiar OX por ERX con *pm* = 0,05 la baja a 53,9, un 14 % menos. Las dos cosas a la vez, a 43,3, un 31 % menos, a un 6 % de la mejor ruta conocida (40,68). Con la inversión, la propia mutación hace una búsqueda local que respeta las aristas: el algoritmo llega a unos 42–44 con cualquier cruce, y la elección del cruce deja de ser decisiva.
+Subir *pm* a 0,5 baja la media a 51,6, un 18 % menos. Cambiar OX por ERX con *pm* = 0,05 la baja a 53,9, un 14 % menos. Las dos cosas a la vez, a 43,3, un 31 % menos, a un 6 % de la mejor ruta conocida (40,68). Con la inversión, la propia mutación hace una búsqueda local que respeta las aristas: el algoritmo llega a unos 42–44 con cualquier cruce cuando *pm* = 0,5, y la elección del cruce deja de ser decisiva.
 </details>
 ::::
 

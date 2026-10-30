@@ -13,7 +13,7 @@ aliases:
 Al terminar el recorrido básico de este capítulo podrás:
 
 - explicar por qué la selección debe favorecer a los mejores sin excluir a los demás;
-- calcular a mano qué padres eligen un torneo binario y una ruleta, dados los números aleatorios;
+- calcular a mano qué padres eligen un torneo binario, dados los contendientes, y una ruleta, dados los números aleatorios;
 - predecir cómo cambia la presión de la ruleta al sumar una constante a la aptitud, y por qué el torneo no cambia;
 - reconocer el truncamiento como un mecanismo que reduce la diversidad muy deprisa;
 - explicar por qué la selección por sí sola no basta para mejorar una población.
@@ -151,7 +151,7 @@ Las copias esperadas solo se cumplen en promedio. Cada giro es independiente, as
 Con las aptitudes 1, 2, 3 y 4, el mejor individuo, D, tiene una probabilidad de $4/10 = 0{,}40$ en cada giro. ¿Qué ocurre si sumamos la misma cantidad a todas las aptitudes? El orden no cambia: D sigue siendo el mejor y A el peor. Pero la ruleta no mira el orden, sino los cocientes $f_i / \sum f$.
 
 ::: {.callout-tip .ejemplo #ejemplo-seleccion-ruleta-deja-de-distinguir title="Ejemplo reproducible · Sumar una constante a la aptitud"}
-**Datos.** Los mismos cuatro individuos y los mismos números aleatorios del ejemplo [](#ejemplo-seleccion-ruleta) (0,11; 0,71; 0,80 y 0,45), pero sumando $C = 100$ a todas las aptitudes: 101, 102, 103 y 104.
+**Datos.** Los mismos cuatro individuos y los mismos números aleatorios del ejemplo [](#ejemplo-seleccion-ruleta) (0,11; 0,71; 0,80 y 0,45), pero sumando la constante $C = 100$ (no confundir con el individuo C) a todas las aptitudes: 101, 102, 103 y 104.
 
 **Predice.** ¿Qué probabilidad tiene ahora D? ¿Qué padres salen con los mismos números?
 
@@ -222,7 +222,7 @@ Hay otra regla de la misma familia, la **selección por media**: quien supera la
 Estas reglas parecen razonables, pero se desaconsejan: reducen la diversidad muy deprisa.
 
 ::: {.callout-tip .ejemplo #ejemplo-seleccion-truncamiento title="Ejemplo reproducible · Cuarenta generaciones solo con selección"}
-**Datos.** La pantalla «Comparar mecanismos» de selection-ga simula 40 generaciones solo con selección: cada generación es la población de padres de la anterior, sin cruce ni mutación. Las poblaciones tienen 50 individuos con aptitudes al azar entre 1 y 100, y se hacen 50 repeticiones. Comparamos tres mecanismos con sus valores por defecto: truncamiento con τ = 0,5, torneo con *k* = 2 y ruleta.
+**Datos.** La pantalla «Comparar mecanismos» de selection-ga simula 40 generaciones solo con selección: cada generación es la población de padres de la anterior, sin cruce ni mutación. Las poblaciones tienen 50 individuos con aptitudes al azar entre 1 y 100, y se hacen 50 repeticiones. Comparamos tres mecanismos con sus valores por defecto: truncamiento con τ = 0,5, torneo con *k* = 2 y ruleta. La **toma de control** es la generación en que todos los individuos son copias del mejor inicial; la tabla da la generación típica (la mediana) y el porcentaje de repeticiones en que llega a ocurrir.
 
 **Predice.** ¿Qué mecanismo deja menos individuos distintos al cabo de cinco generaciones? ¿Con cuál se pierde más a menudo el mejor individuo inicial?
 
@@ -239,7 +239,7 @@ La simulación tarda unos segundos. Su resultado aparece al final de la página,
 | Torneo (*k* = 2) | 4,5 | 1,1 | generación 8 (en el 92 %) | 8 % |
 | Ruleta | 10,7 | 3,2 | no en la mayoría (solo en el 16 %) | 48 % |
 
-Las gráficas muestran además que, ya en la primera generación, el truncamiento deja unos 21 individuos distintos de 50, frente a unos 28 del torneo y de la ruleta.
+Si añades el truncamiento a las gráficas (por defecto muestran la ruleta, el ranking lineal y el torneo), verás además que, ya en la primera generación, deja unos 21 individuos distintos de 50, frente a unos 28 del torneo y de la ruleta.
 </details>
 
 <!-- Comprobado el 2026-10-07: la tabla de la herramienta muestra estos valores con la simulación inicial. Los valores de la primera generación se obtuvieron con su código (`compare.simulate`, semilla 1). -->
@@ -266,7 +266,7 @@ En el ejemplo [](#ejemplo-seleccion-truncamiento), el mejor inicial se perdió e
 
 - En la gráfica de **aptitud media**, fíjate en cuándo deja de subir cada mecanismo.
 - Pulsa **Simular de nuevo** para repetir con otras poblaciones. En las cuatro simulaciones siguientes el mejor se pierde con la ruleta en el 52, 66, 58 y 56 % de las repeticiones, y con el torneo en el 14, 12, 14 y 14 %.
-- Elige qué mecanismos aparecen en las gráficas (hasta cuatro) y añade el **ranking lineal** o el **SUS**.
+- Elige qué mecanismos aparecen en las gráficas (hasta cuatro). Por defecto salen la ruleta, el ranking lineal y el torneo: añade el **truncamiento** o el **SUS**.
 :::
 
 La aptitud media deja de mejorar en cuanto la población se llena de copias: en pocas generaciones con truncamiento y torneo, y más despacio con la ruleta. **La selección sola no basta.** Hacen falta operadores que creen soluciones nuevas (cruce y mutación, capítulos -@sec-cruce y -@sec-mutacion) y un reemplazo que no pierda la mejor solución (elitismo, capítulo [](#sec-reemplazo-elitismo){.capitulo}). Y como el resultado depende del azar, para comparar mecanismos o parámetros hay que repetir las ejecuciones (capítulo [](#sec-experimentos-replicas){.capitulo}).
@@ -289,7 +289,7 @@ Para seguir el recorrido básico, continúa por el [capítulo «Cruzar»](#sec-c
 
 Esta sección amplía el recorrido básico. Requiere manejar probabilidades acumuladas y la idea de copias esperadas de las secciones -@sec-seleccion-torneo y -@sec-seleccion-ruleta.
 
-**Muestreo estocástico universal (SUS).** Es la ruleta de @baker1987 girada una sola vez. Cada individuo ocupa un tramo igual a sus copias esperadas, $e_i = N \cdot f_i / \sum f$, y sobre la ruleta se colocan $N$ punteros separados exactamente 1, a partir de un único número aleatorio. Cada individuo recibe sus copias esperadas redondeadas hacia abajo o hacia arriba. Las copias esperadas son las mismas que con la ruleta, pero la variabilidad del muestreo es mucho menor. No desaparece: el primer puntero cae al azar, así que un individuo con 0,4 copias esperadas puede recibir 0 copias o 1. Con la ruleta, en cambio, podría recibir cualquier número entre 0 y *N*.
+**Muestreo estocástico universal (SUS).** Es la ruleta de @baker1987 girada una sola vez. Cada individuo ocupa un tramo igual a sus copias esperadas, $e_i = N \cdot f_i / \sum f$, y sobre una ruleta de longitud $N$ se colocan $N$ punteros separados exactamente 1, a partir de un único número aleatorio. Cada individuo recibe sus copias esperadas redondeadas hacia abajo o hacia arriba. Las copias esperadas son las mismas que con la ruleta, pero la variabilidad del muestreo es mucho menor. No desaparece: el primer puntero cae al azar, así que un individuo con 0,4 copias esperadas puede recibir 0 copias o 1. Con la ruleta, en cambio, podría recibir cualquier número entre 0 y *N*.
 
 ::: {.callout-tip .ejemplo #ejemplo-seleccion-otros-mecanismos title="Ejemplo reproducible · SUS frente a la ruleta"}
 **Datos.** Aptitudes 1, 2, 3 y 4, como en el ejemplo [](#ejemplo-seleccion-ruleta). Copias esperadas: 0,4; 0,8; 1,2 y 1,6.
@@ -307,9 +307,9 @@ D solo puede recibir 1 o 2 copias, y A, 0 o 1. En este sorteo los padres son **A
 <!-- Comprobado el 2026-10-07: la herramienta muestra «Resultado: los padres son A B C D». -->
 :::
 
-**Selección basada en el rango.** Solo importa el orden. En el **ranking lineal**, el mejor espera *s* copias y el peor, 2 − *s*, con *s* entre 1 y 2 [@baker1985; @eiben2015]. En el **ranking exponencial**, cada individuo tiene 1/*c* veces la probabilidad del anterior, con 0 < *c* < 1, lo que permite presiones más altas [@blickle1996]. Ninguno depende de la escala de la aptitud.
+**Selección basada en el rango.** Solo importa el orden. En el **ranking lineal**, el mejor espera *s* copias y el peor, 2 − *s*, con *s* entre 1 y 2 [@baker1985; @eiben2015]. En el **ranking exponencial**, ordenados del peor al mejor, cada individuo tiene 1/*c* veces la probabilidad del anterior, con 0 < *c* < 1, lo que permite presiones más altas [@blickle1996]. Ninguno depende de la escala de la aptitud.
 
-**Escalado de la aptitud.** Transforma la aptitud antes de girar la ruleta [@goldberg1989]. El **escalado lineal** conserva la media y hace que el mejor espere *cm* copias. El **truncamiento sigma** resta la base $\bar f - c\,\sigma$. Ojo: esta *c* minúscula no es la constante *C* de la sección -@sec-seleccion-ruleta-deja-de-distinguir.
+**Escalado de la aptitud.** Transforma la aptitud antes de girar la ruleta [@goldberg1989]. El **escalado lineal** conserva la media y hace que el mejor espere $c_m$ copias, un parámetro que se elige. El **truncamiento sigma** resta la base $\bar f - c\,\sigma$. Ojo: esta *c* no es la del ranking exponencial ni la constante *C* de la sección -@sec-seleccion-ruleta-deja-de-distinguir.
 
 **Selección de Boltzmann.** Asigna a cada individuo un peso $\exp(f_i / T)$ [@delamaza1993]. La temperatura *T* regula la presión. Solo cuentan las diferencias de aptitud, así que sumar una constante no cambia nada.
 

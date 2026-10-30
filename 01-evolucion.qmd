@@ -155,7 +155,7 @@ En un algoritmo genético también actúan las dos fuerzas. La selección no cre
 - Pulsa **Simular de nuevo** varias veces. ¿Cambia la conclusión?
 :::
 
-La población queda bloqueada en pocas generaciones: es la versión artificial del *lock-in*. Lo estudiaremos con detalle en la sección -@sec-seleccion-seleccion-y-diversidad. Para evitarlo, un algoritmo genético tiene operadores que generan diversidad: el **cruce**, que combina los genes de dos padres en individuos nuevos (capítulo -@sec-cruce), y la **mutación**, que introduce valores que no tiene nadie en la población (capítulo [](#sec-mutacion-para-que-mutar){.capitulo}). Cuánta diversidad conviene generar es una de las preguntas centrales del diseño; volveremos a ella en la sección -@sec-evolucion-explorar-explotar, después de precisar qué significa buscar.
+La población queda bloqueada en pocas generaciones: es la versión artificial del *lock-in*. Lo estudiaremos con detalle en la sección -@sec-seleccion-seleccion-y-diversidad. Para evitarlo, un algoritmo genético tiene operadores que generan diversidad: el **cruce**, que combina los genes de dos padres en individuos nuevos (capítulo -@sec-cruce), y la **mutación**, que puede introducir valores que no tiene nadie en la población (capítulo [](#sec-mutacion-para-que-mutar){.capitulo}). Cuánta diversidad conviene generar es una de las preguntas centrales del diseño; volveremos a ella en la sección -@sec-evolucion-explorar-explotar, después de precisar qué significa buscar.
 
 ## Optimizar es buscar [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sec-evolucion-optimizar}
 
@@ -165,7 +165,7 @@ Un **problema de optimización** tiene dos partes: un conjunto *S* de soluciones
 
 En la búsqueda de la evolución (sección -@sec-evolucion-dos-fuerzas), *S* serían las secuencias genéticas posibles, y la aptitud haría el papel de *f*, con una diferencia: en la naturaleza nadie la fija, y cambia a medida que cambian los demás seres vivos. En un algoritmo genético, *S* y *f* las da el problema.
 
-**¿Por qué no probarlas todas?** Porque suelen ser demasiadas. Una proteína es una cadena de aminoácidos, y en cada posición puede haber uno de 20. Mitchell propone buscar una proteína con una forma determinada limitándose a las cadenas de 100 aminoácidos o menos [@mitchell1998, apartado 1.4]; solo las de 100 ya son $20^{100}$, más de $10^{130}$ posibilidades. La potencia $20^{100}$ significa multiplicar 20 por sí mismo cien veces: hay 20 opciones en cada una de las 100 posiciones. Para hacerse una idea de la escala: se suele decir que en el universo observable hay unos $10^{80}$ átomos; una estimación reciente da unos $2 \times 10^{80}$ protones y neutrones en toda su materia visible [@vopson2021]. Hay muchísimas más proteínas posibles que átomos en el universo. Con muchos problemas, el número de soluciones crece de forma exponencial con el tamaño del problema, y revisarlas todas llevaría siglos o más [@talbi2009, pp. 10–11]. Goldberg distingue tres familias de métodos clásicos y señala el punto débil de cada una [@goldberg1989, pp. 2–5]:
+**¿Por qué no probarlas todas?** Porque suelen ser demasiadas. Una proteína es una cadena de aminoácidos, y en cada posición puede haber uno de 20. Mitchell propone buscar una proteína con una forma determinada limitándose a las cadenas de 100 aminoácidos o menos [@mitchell1998, apartado 1.4]; solo las de 100 ya son $20^{100}$, más de $10^{130}$ posibilidades. La potencia $20^{100}$ significa multiplicar 20 por sí mismo cien veces: hay 20 opciones en cada una de las 100 posiciones. Para hacerse una idea de la escala: se suele decir que en el universo observable hay unos $10^{80}$ átomos; una estimación reciente da unos $2 \times 10^{80}$ protones y neutrones en toda su materia visible [@vopson2021]. Hay muchísimas más proteínas posibles que átomos en el universo. Con muchos problemas, el número de soluciones crece de forma exponencial con el tamaño del problema, o aún más deprisa, y revisarlas todas llevaría siglos o más [@talbi2009, pp. 10–11]. Goldberg distingue tres familias de métodos clásicos y señala el punto débil de cada una [@goldberg1989, pp. 2–5]:
 
 - Los **métodos basados en el cálculo** suben por la pendiente de la función. Son locales, porque buscan lo mejor cerca del punto en el que están, y necesitan derivadas, que muchos problemas no tienen.
 - Los **métodos enumerativos** revisan las soluciones una a una. Son sencillos, pero ineficientes cuando el espacio es grande.
@@ -179,7 +179,7 @@ Un algoritmo genético también usa el azar, pero para guiar la búsqueda, no pa
 
 **Una solución o una población.** Los métodos como la búsqueda local o el recocido simulado transforman una sola solución; los algoritmos evolutivos hacen evolucionar una población entera [@talbi2009, p. 25]. Una población que empieza repartida por el espacio de búsqueda no depende de un único punto de partida.
 
-**Mejorar antes que alcanzar el óptimo.** Goldberg recuerda que optimizar tiene dos partes: mejorar y acercarse a un óptimo. Para los sistemas complejos, lo más importante es mejorar: llegar pronto a una solución lo bastante buena. Alcanzar el óptimo importa mucho menos [@goldberg1989, pp. 6–7]. El propio Holland, quince años después de su libro, escribió que pondría más énfasis en la mejora y menos en la optimización [@holland1992, p. x]. Con un algoritmo genético no solemos saber si hemos llegado al óptimo, pero sí si hemos mejorado.
+**Mejorar antes que alcanzar el óptimo.** Goldberg recuerda que optimizar tiene dos partes: mejorar y acercarse a un óptimo. Para los sistemas complejos, lo más importante es mejorar: llegar pronto a una solución lo bastante buena. Alcanzar el óptimo importa mucho menos [@goldberg1989, pp. 6–7]. El propio Holland, diecisiete años después de su libro, escribió que pondría más énfasis en la mejora y menos en la optimización [@holland1992, p. x]. Con un algoritmo genético no solemos saber si hemos llegado al óptimo, pero sí si hemos mejorado.
 
 :::: {.callout-note .ejercicio #ejercicio-evolucion-optimizar title="Ejercicio · ¿Cuántas rutas?"}
 Un repartidor sale de su almacén, tiene que pasar por 19 clientes y volver al almacén. Con 20 lugares, contando el almacén, hay $19!/2$ rutas distintas (sección -@sec-viajante-problema). El signo ! indica el **factorial**: $19! = 19 \times 18 \times \dots \times 1$.
@@ -191,7 +191,7 @@ c) En el universo observable hay unos $10^{80}$ átomos. ¿A partir de cuántos 
 <details>
 <summary>**Ver la solución**</summary>
 
-a) $19!/2 = 60\,822\,550\,204\,416\,000$, unas $6{,}1 \times 10^{16}$ rutas. A un millón por segundo son $6{,}1 \times 10^{10}$ segundos. Un año tiene unos $3{,}16 \times 10^{7}$ segundos, así que harían falta **unos 1 900 años**.
+a) $19!/2 = 60\,822\,550\,204\,416\,000$, unas $6{,}1 \times 10^{16}$ rutas. A un millón por segundo son $6{,}1 \times 10^{10}$ segundos. Un año tiene unos $3{,}16 \times 10^{7}$ segundos, así que harían falta **unos 1900 años**.
 
 b) Con 25 lugares, $24!/2 \approx 3{,}1 \times 10^{23}$ rutas: **casi 10 000 millones de años**. Cinco lugares más multiplican el tiempo por unos cinco millones. Por eso, salvo en problemas pequeños, no se puede revisar todo el espacio de búsqueda.
 
@@ -320,7 +320,7 @@ Para seguir el recorrido básico, continúa por el [capítulo «El ciclo y las d
 ## Resumen {.unnumbered #resumen}
 
 - La selección natural de Darwin tiene tres ingredientes: variación entre los individuos, selección de los que sobreviven y se reproducen más, y herencia. Lamarck proponía, en cambio, que se heredan los cambios adquiridos durante la vida.
-- Cualquier sistema con **diversidad**, **selección** y **replicación** es evolutivo, sea biológico, económico o cultural. La aptitud es relativa: importa ser mejor que los demás.
+- Cualquier sistema con **diversidad**, **selección** y **replicación** es evolutivo, sea biológico, económico o cultural. Lo que decide la selección es la aptitud relativa: importa ser mejor que los demás.
 - En los modelos del libro, repetir la selección tiende a concentrar la población; si solo quedan copias y nada renueva la diversidad, el sistema se bloquea. La generación de diversidad (mutación, innovación) actúa en sentido contrario. Con las dos fuerzas, la evolución busca, y encuentra, soluciones asombrosas, como la velocidad del guepardo y del impala; Holland aprovechó esa idea en los algoritmos genéticos.
 - Optimizar es buscar en un espacio de soluciones que suele ser demasiado grande para revisarlo entero. Un método que pasa siempre al mejor vecino puede quedarse en un óptimo local; un algoritmo genético busca con una población.
 - Equilibrar la selección y la generación de diversidad es equilibrar la explotación de lo que ya funciona y la exploración de lo nuevo. Con demasiada explotación, la población converge prematuramente; con demasiada exploración, la búsqueda se vuelve al azar.

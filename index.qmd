@@ -6,7 +6,7 @@
 
 Este libro está dirigido a estudiantes de grado que empiezan con los algoritmos genéticos. Las actividades del recorrido básico se hacen con papel, calculadora y las herramientas del laboratorio.
 
-Conviene manejar operaciones elementales, fracciones y porcentajes. Las [potencias y los factoriales](#sec-evolucion-optimizar) se recuerdan al contar soluciones; las [probabilidades](#sec-seleccion-torneo) se trabajan con sorteos concretos, y la [media y la desviación típica](#sec-experimentos-replicas), con resultados de varias ejecuciones. Las secciones avanzadas añaden conceptos como la distribución normal y el error típico; pueden dejarse para una segunda lectura.
+Conviene manejar operaciones elementales, fracciones y porcentajes. Las [potencias y los factoriales](#sec-evolucion-optimizar) se recuerdan al contar soluciones; las [probabilidades](#sec-ciclo-seleccionar) se trabajan con sorteos concretos, y la [media y la desviación típica](#sec-experimentos-replicas), con resultados de varias ejecuciones. La distribución normal se presenta de forma intuitiva con la [mutación gaussiana](#sec-mutacion-gaussiana); las secciones avanzadas añaden conceptos como el error típico, y pueden dejarse para una segunda lectura.
 
 El libro distingue a simple vista lo que se lee de lo que se hace. La teoría va como texto normal; todo lo que te pide trabajar va dentro de una caja.
 

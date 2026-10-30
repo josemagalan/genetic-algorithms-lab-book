@@ -74,14 +74,14 @@ El cromosoma representa el punto $(1{,}6667;\ -3)$, donde $f \approx 139{,}38$. 
 Mutar un solo bit de ese cromosoma, por ejemplo el primero, da 0 0 1 0 0 0 1 1: $z_1$ pasa de 10 a 2 y $x_1$, de 1,6667 a −3,6667. Un bit ha movido el punto $8\,\Delta \approx 5{,}33$, más de la mitad del lado de la caja. Esto no es un fallo, sino una consecuencia de la representación; volveremos a ello en la sección -@sec-representacion-gray.
 
 :::: {.callout-note .ejercicio #ejercicio-representacion-genotipo-fenotipo title="Ejercicio · Decodificar"}
-Con la misma representación (Himmelblau, $[-5, 5]^2$, *k* = 4), decodifica el cromosoma 0 0 0 0 1 1 1 1 y calcula *f* en ese punto. ¿Hay algún cromosoma que represente exactamente el punto (0, 0)?
+Con la misma representación (Himmelblau, $[-5, 5]^2$, *k* = 4), decodifica el cromosoma 0 0 0 0 1 1 1 1 y calcula *f* en ese punto. ¿Hay algún cromosoma que represente exactamente el punto (0; 0)?
 
 <details>
 <summary>**Ver la solución**</summary>
 
-Los cuatro primeros bits dan $z_1 = 0$, así que $x_1 = -5$; los cuatro últimos dan $z_2 = 15$, así que $x_2 = -5 + 15 \times 10/15 = 5$. El punto es $(-5, 5)$, una esquina de la caja, y $f = (25 + 5 - 11)^2 + (-5 + 25 - 7)^2 = 19^2 + 13^2 = 530$.
+Los cuatro primeros bits dan $z_1 = 0$, así que $x_1 = -5$; los cuatro últimos dan $z_2 = 15$, así que $x_2 = -5 + 15 \times 10/15 = 5$. El punto es $(-5;\ 5)$, una esquina de la caja, y $f = (25 + 5 - 11)^2 + (-5 + 25 - 7)^2 = 19^2 + 13^2 = 530$.
 
-Para representar $x = 0$ haría falta $z = 5/\Delta = 7{,}5$, que no es un entero. Ningún cromosoma de este tipo representa el punto (0, 0); los más cercanos usan $z = 7$ o $z = 8$, que dan $x = \mp 0{,}3333$.
+Para representar $x = 0$ haría falta $z = 5/\Delta = 7{,}5$, que no es un entero. Ningún cromosoma de este tipo representa el punto (0; 0); los más cercanos usan $z = 7$ o $z = 8$, que dan $x = \mp 0{,}3333$.
 </details>
 ::::
 
@@ -119,7 +119,7 @@ Un parámetro puede valer entre 2,5 y 20,5 y se escribe con 8 bits. ¿Qué valor
 <details>
 <summary>**Ver la solución**</summary>
 
-Los 8 bits, leídos como un solo entero, dan $z = 128 + 32 + 2 + 1 = 163$. Con $k = 8$ hay $2^8 = 256$ valores y $\Delta = (20{,}5 - 2{,}5)/255 \approx 0{,}0706$. El valor es $x = 2{,}5 + 163 \times 0{,}0706 \approx 14{,}006$.
+Los 8 bits, leídos como un solo entero, dan $z = 128 + 32 + 2 + 1 = 163$. Con $k = 8$ hay $2^8 = 256$ valores y $\Delta = (20{,}5 - 2{,}5)/255 \approx 0{,}0706$. El valor es $x = 2{,}5 + 163 \times 18/255 \approx 14{,}006$.
 
 Compáralo con el ejemplo [](#ejemplo-representacion-genotipo-fenotipo): son los mismos bits, pero leídos como una variable de 8 bits en lugar de dos de 4. Los cromosomas no significan nada por sí solos; lo que significan depende de la representación.
 </details>
@@ -180,7 +180,7 @@ Hace falta $10/(2^k - 1) \le 0{,}01$, es decir, $2^k - 1 \ge 1\,000$. Con $k = 9
 
 - Cambia los **Bits por variable (k)**, de 2 a 12, y fíjate en el panel que muestra Δ y el «Mejor de la rejilla». ¿A partir de qué *k* baja ese valor de 0,1?
 - En el paso de **Validez**, comprueba que todas las cadenas caen dentro de la caja: la codificación binaria no puede salirse de ella.
-- Cambia a **Rastrigin**, cuyo óptimo está en el origen, y busca algún *k* para el que la rejilla contenga el punto (0, 0). Para ayudarte, mira el ejercicio [](#ejercicio-representacion-genotipo-fenotipo).
+- Cambia a **Rastrigin**, cuyo óptimo está en el origen, ¿hay algún *k* para el que la rejilla contenga el punto (0; 0)? Razónalo y compruébalo con varios *k*. Para ayudarte, mira el ejercicio [](#ejercicio-representacion-genotipo-fenotipo).
 :::
 
 ## Entera: un número por decisión [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sec-representacion-entera}
@@ -258,9 +258,9 @@ Parte del cromosoma 2 1 3 2 1 del ejemplo [](#ejemplo-representacion-entera). (a
 
 Un viajante tiene que pasar una sola vez por cada una de *n* ciudades. ¿Sirve aquí un vector de enteros como el de las asignaciones?
 
-Un vector de enteros permite repetir valores, y un circuito no puede repetir ciudades. La **representación permutacional** escribe un orden: cada gen es una ciudad y cada ciudad aparece exactamente una vez. El gen *k* es la ciudad que se visita en el lugar *k*, y el viajante vuelve de la última ciudad a la primera [@talbi2009, p. 36]. Esta representación sirve para los problemas de secuenciación, planificación y rutas.
+Un vector de enteros permite repetir valores, y un circuito no puede repetir ciudades. La **representación permutacional** escribe un orden: cada gen es una ciudad y cada ciudad aparece exactamente una vez. El gen *j* es la ciudad que se visita en el lugar *j*, y el viajante vuelve de la última ciudad a la primera [@talbi2009, p. 36]. Esta representación sirve para los problemas de secuenciación, planificación y rutas.
 
-Aquí, la restricción de que cada ciudad se visite una vez no está en el dominio de cada gen, sino en la **estructura** de todo el cromosoma. Un cromosoma **válido** es el que cumple esa estructura, es decir, el que es una permutación. Por eso necesitan operadores propios, que mantengan la estructura, el cruce y la mutación de permutaciones que veremos en los capítulos [](#sec-cruce-permutaciones){.capitulo} y [](#sec-mutacion-permutaciones){.capitulo}.
+Aquí, la restricción de que cada ciudad se visite una vez no está en el dominio de cada gen, sino en la **estructura** de todo el cromosoma. Un cromosoma **válido** es el que cumple esa estructura, es decir, el que es una permutación. Por eso las permutaciones necesitan operadores propios que mantengan la estructura: el cruce y la mutación de permutaciones de los capítulos [](#sec-cruce-permutaciones){.capitulo} y [](#sec-mutacion-permutaciones){.capitulo}.
 
 Hay una segunda característica. Con *n* ciudades hay *n*! permutaciones, pero un mismo circuito se puede describir de muchas maneras: se puede empezar por cualquiera de sus *n* ciudades y recorrerlo en cualquiera de los dos sentidos. Hay entonces $2n$ cromosomas para cada circuito, y solo $(n-1)!/2$ circuitos distintos. Se llama **redundancia** a que varios cromosomas representen la misma solución.
 
@@ -348,7 +348,7 @@ El vector de reales tiene un problema que la binaria no tenía: un gen puede val
 <details>
 <summary>**Ver la solución**</summary>
 
-(a) Vector de bits, de 20 genes: el gen *i* vale 1 si el producto *i* entra en el pedido (decisión de sí o no). (b) Vector de enteros, de 12 genes que valen de 1 a 4: el gen *i* es el repartidor de la entrega *i* (una categoría sin orden). (c) Permutación de 8 genes: el gen *k* es el trabajo que se procesa en el lugar *k*. (d) Vector de reales, de 3 genes: cada gen es un coeficiente. Es la representación natural, aunque también podría escribirse en binario, con la precisión que dé el número de bits.
+(a) Vector de bits, de 20 genes: el gen *i* vale 1 si el producto *i* entra en el pedido (decisión de sí o no). (b) Vector de enteros, de 12 genes que valen de 1 a 4: el gen *i* es el repartidor de la entrega *i* (una categoría sin orden). (c) Permutación de 8 genes: el gen *j* es el trabajo que se procesa en el lugar *j*. (d) Vector de reales, de 3 genes: cada gen es un coeficiente. Es la representación natural, aunque también podría escribirse en binario, con la precisión que dé el número de bits.
 </details>
 ::::
 
@@ -356,7 +356,7 @@ El vector de reales tiene un problema que la binaria no tenía: un gen puede val
 
 ¿Toda cadena de bits describe algo que se puede llevar a cabo?
 
-Hay que distinguir dos cosas. Un cromosoma es **válido** cuando tiene la estructura que exige la representación: en las permutaciones, cada ciudad una sola vez; en el vector de enteros, un valor del rango en cada gen. Y la solución que describe es **factible** cuando cumple las restricciones del problema [@talbi2009, p. 48]. En las representaciones de las secciones anteriores las dos cosas coinciden. No ocurre así en el problema de la **mochila**.
+Hay que distinguir dos cosas. Un cromosoma es **válido** cuando tiene la estructura que exige la representación: en las permutaciones, cada ciudad una sola vez; en el vector de enteros, un valor del rango en cada gen. Y la solución que describe es **factible** cuando cumple las restricciones del problema [@talbi2009, p. 48]. En la binaria, la entera y la de permutaciones de las secciones anteriores, las dos cosas coinciden; el vector de reales, en cambio, puede salirse de la caja (sección -@sec-representacion-fuera-caja). En el problema de la **mochila** la diferencia aparece incluso con bits.
 
 En el problema de la mochila 0/1 hay *n* objetos, cada uno con un peso $w_i$ y un valor $v_i$, y una mochila con capacidad *W*. Hay que decidir qué objetos se meten para maximizar el valor total sin pasarse de peso. Es uno de los problemas clásicos de la optimización combinatoria. @karp1972 [p. 95] incluyó entre los 21 problemas NP-completos de su artículo una versión de decisión, que no pregunta cuál es la mejor selección, sino si hay alguna cuyos pesos sumen exactamente una cantidad dada. Dicho de manera informal, para estos problemas no se conoce ningún método que encuentre siempre la solución exacta con un esfuerzo que crezca de forma polinómica con el tamaño de los datos. La representación natural es binaria, con un bit por objeto: el gen *i* vale 1 si el objeto *i* entra [@talbi2009, p. 36]. Toda cadena de *n* bits es un cromosoma válido, porque describe una selección de objetos. Pero la selección es factible solo si $\sum_i w_i x_i \le W$.
 
@@ -396,7 +396,7 @@ Entre las factibles, la mejor es 1 0 1 1 0 1, con valor 14. Es el óptimo del pr
 <!-- Comprobado el 2026-10-15: en el paso 15 de 15 (1 0 0 1 0 1 y 1 0 1 1 0 1) la herramienta muestra «Validez: la solución es factible […] su aptitud es su valor» (pesa 8 y vale 11; pesa 10 y vale 14), y en el 15 de 17 (1 1 0 1 1 0), «Validez: la solución es infactible. Pesa 18 y la capacidad es W = 10: se pasa en e = 8». «2⁶ = 64. Solo 32 caben en la mochila (el 50 %). La mejor vale 14» está en el paso 5. Que 28 de los 32 cromosomas infactibles valen más que el óptimo se comprobó solo con el código. -->
 :::
 
-El cromosoma 1 1 0 1 1 0 vale 22, más que el óptimo, 14, pero no cabe en la mochila. Si el algoritmo lo evaluara por su valor sin más, creería que es el mejor. No es un caso aislado: de los 32 cromosomas infactibles, 28 suman más valor que el óptimo, porque en general meter más objetos da más valor. Por eso los cromosomas infactibles son un problema real, y habrá que decidir qué hacer con ellos: lo veremos en la sección -@sec-representacion-infactibles.
+El cromosoma 1 1 0 1 1 0 vale 22, más que el óptimo, 14, pero no cabe en la mochila. Si el algoritmo lo evaluara por su valor sin más, creería que es el mejor. No es un caso aislado: de los 32 cromosomas infactibles, 28 suman más valor que el óptimo, porque en general meter más objetos da más valor. Por eso los cromosomas infactibles son un problema real, y habrá que decidir qué hacer con ellos: rechazarlos, repararlos, usar un decodificador que solo dé soluciones factibles o penalizarlos, es decir, dejarlos en la población con una aptitud peor. Las estrategias se comparan en la sección avanzada -@sec-representacion-infactibles, y la penalización, la más usada, se estudia en la sección -@sec-inicializar-evaluar-penalizacion.
 
 Cuando la representación absorbe las restricciones, como el vector de enteros de las asignaciones, esto no ocurre. Elegir la representación es, en parte, decidir cuántas restricciones se resuelven al escribir el cromosoma y cuántas quedan para después.
 
@@ -428,7 +428,7 @@ Para seguir el recorrido básico, continúa por el [capítulo «Inicializar y ev
 
 Al mutar un bit, el punto debería cambiar poco. ¿Es así en la representación binaria de los reales?
 
-Una buena representación debería tener la **propiedad de proximidad**: dos soluciones parecidas deberían tener cromosomas parecidos, y al revés, donde «parecidos» se mide con los operadores que se aplican [@talbi2009, p. 43]. Con operadores que cambian bits, la binaria estándar no la cumple. Tomemos los enteros 15 y 16. Son vecinos, pero en 5 bits se escriben 0 1 1 1 1 y 1 0 0 0 0: hay que cambiar los cinco bits para pasar de uno a otro [@talbi2009, p. 43]. A este salto entre vecinos con cromosomas lejanos se le llama **salto de Hamming** (*Hamming cliff*). Y al revés, como vimos en el ejemplo [](#ejemplo-representacion-genotipo-fenotipo), cambiar el bit más significativo de una variable mueve el punto algo más de media caja.
+Una buena representación debería tener la **propiedad de proximidad** (o **localidad**): dos soluciones parecidas deberían tener cromosomas parecidos, y al revés, donde «parecidos» se mide con los operadores que se aplican [@talbi2009, p. 43]. Con operadores que cambian bits, la binaria estándar no la cumple. Tomemos los enteros 15 y 16. Son vecinos, pero en 5 bits se escriben 0 1 1 1 1 y 1 0 0 0 0: hay que cambiar los cinco bits para pasar de uno a otro [@talbi2009, p. 43]. A este salto entre vecinos con cromosomas lejanos se le llama **salto de Hamming** (*Hamming cliff*). Y al revés, como vimos en el ejemplo [](#ejemplo-representacion-genotipo-fenotipo), cambiar el bit más significativo de una variable mueve el punto algo más de media caja.
 
 El **código Gray** reflejado se construye para que dos enteros consecutivos difieran siempre en un solo bit [@mitchell1998, apartado 5.2]. Para pasar un número de binario estándar $b_1 b_2 \dots b_k$ a Gray, el primer bit se copia y cada uno de los siguientes es el «o exclusivo» ($\oplus$) de dos bits consecutivos del binario:
 
@@ -471,7 +471,7 @@ En los 15 pasos cambian 26 bits en estándar (1,73 de media) y 15 en Gray.
 
 En binario estándar, 0 1 1 1 pasa a 1 0 0 0: hay que cambiar **4 bits**. En código Gray, 0 1 0 0 pasa a 1 1 0 0: basta **1 bit**, el primero. Los dos cromosomas representan el mismo punto, con $f \approx 178{,}1$.
 
-Pero en Gray no todo es mejor: de los ocho cromosomas a un bit de distancia, solo cuatro (el 50 %) son vecinos de la rejilla; en binario estándar son dos (el 25 %). Por ejemplo, si en 0 1 0 0 se cambia el segundo bit, sale 0 0 0 0, que es $z = 0$, en el otro extremo de la caja.
+Pero Gray no lo arregla todo: de los ocho cromosomas a un bit de distancia, solo cuatro (el 50 %) son vecinos de la rejilla (en binario estándar, dos, el 25 %); los demás saltan lejos. Por ejemplo, si en 0 1 0 0 se cambia el segundo bit, sale 0 0 0 0, que es $z = 0$, en el borde de la caja.
 </details>
 
 <details class="incrustada">
@@ -482,7 +482,7 @@ Pero en Gray no todo es mejor: de los ocho cromosomas a un bit de distancia, sol
 <!-- Comprobado el 2026-10-15: en el paso 15 de 15 (estándar) la herramienta muestra «para pasar de z = 7 a su vecino de la rejilla, z = 8, hay que cambiar 4 bits de x₁», y en el 17 de 17 (Gray), «para pasar de z = 7 a z = 8 basta cambiar un bit de x₁ (recuadro verde). Pero lo contrario no se cumple: los puntos rosas, a un bit de distancia, pueden caer lejos». Con el código: 0111 → 1000 (4 bits) y Gray 0100 → 1100 (1 bit); 0100 con el segundo bit cambiado es 0000, z = 0. En la página «Comparar codificaciones» (punto (−0,33; −0,33), k = 4): «Vecinos de la rejilla» 25 % en estándar y 50 % en Gray; media de 1 000 puntos: 25 % y 48 %; «Genes hasta el vecino de la rejilla» media 2,9 y 1. -->
 :::
 
-El código Gray garantiza que el vecino de la rejilla está siempre a un bit, pero no que un bit lleve siempre a un vecino. Midiendo con 1 000 puntos al azar, la herramienta cuenta, con *k* = 4, 2,9 genes de media hasta el vecino de la rejilla en estándar y 1 en Gray; en cambio, la proporción de cromosomas a un bit que son vecinos de la rejilla sube de un 25 % a un 48 %, no a un 100 %. Gray elimina los saltos de Hamming entre valores consecutivos, pero no garantiza que cualquier cambio de un bit dé un valor cercano. Talbi señala que su principal inconveniente es que maneja mal los rangos dinámicos [@talbi2009, p. 43]. Mitchell lo menciona como una de las extensiones de la codificación binaria [@mitchell1998, apartado 5.2].
+El código Gray garantiza que el vecino de la rejilla está siempre a un bit, pero no que un bit lleve siempre a un vecino. Midiendo con 1 000 puntos al azar, la herramienta cuenta, con *k* = 4, que en el peor caso hay que cambiar de media 2,9 genes para llegar a un vecino de la rejilla en estándar, y siempre 1 en Gray (no confundir con los 1,73 bits de media que cambian de *z* a *z* + 1); en cambio, la proporción de cromosomas a un bit que son vecinos de la rejilla sube de un 25 % a un 48 %, no a un 100 %. Gray elimina los saltos de Hamming entre valores consecutivos, pero no garantiza que cualquier cambio de un bit dé un valor cercano. Talbi señala que su principal inconveniente es que maneja mal los rangos dinámicos [@talbi2009, p. 43]. Mitchell lo menciona como una de las extensiones de la codificación binaria [@mitchell1998, apartado 5.2].
 
 :::: {.callout-note .ejercicio #ejercicio-representacion-gray title="Ejercicio · Pasar a Gray y volver"}
 (a) Escribe el entero *z* = 5 en 4 bits en código Gray. (b) ¿Qué entero representa el código Gray 1 1 0 0? (c) Escribe 15 y 16 en 5 bits, en binario estándar y en Gray, y cuenta cuántos bits cambian en cada código.
@@ -515,7 +515,7 @@ En la **matriz binaria**, el cromosoma tiene un bit $y_{ij}$ por cada tarea *i* 
 Es el caso de la sección -@sec-representacion-validez, pero más extremo. De los $2^{15} = 32\,768$ cromosomas, solo $3^5 = 243$ son asignaciones factibles: el 0,74 %. El resto no describe un plan de trabajo.
 
 ::: {.callout-tip .ejemplo #ejemplo-representacion-matriz title="Ejemplo reproducible · Una matriz que no es un plan"}
-**Datos.** Los tiempos del ejemplo [](#ejemplo-representacion-entera) y la matriz binaria con un grupo de tres bits por tarea: 0 0 0 | 1 1 0 | 0 0 1 | 0 1 0 | 1 0 0. Cada grupo da, para esa tarea, los bits de las máquinas 1, 2 y 3. Para repararla se procede tarea a tarea: si no tiene ningún 1, va a la máquina más rápida para ella; si tiene varios, se queda con el de la máquina más rápida de entre ellos.
+**Datos.** Los tiempos del ejemplo [](#ejemplo-representacion-entera) y la matriz binaria con un grupo de tres bits por tarea: 0 0 0 | 1 1 0 | 0 0 1 | 0 1 0 | 1 0 0. Cada grupo da, para esa tarea, los bits de las máquinas 1, 2 y 3. Para repararla se procede tarea a tarea: si no tiene ningún 1, va a la máquina más rápida para ella; si tiene varios, se queda con el de la máquina más rápida de entre ellos. A igualdad de tiempo, se elige la máquina de menor número.
 
 **Predice.** ¿Es factible? ¿Qué tareas incumplen la restricción? ¿Qué asignación sale al repararla y cuánto vale su makespan?
 
@@ -524,7 +524,7 @@ Es el caso de la sección -@sec-representacion-validez, pero más extremo. De lo
 <details>
 <summary>**Ver el resultado**</summary>
 
-No es factible. La tarea 1 no tiene máquina (000) y la tarea 2 está en dos (110); las otras tres cumplen la restricción. La violación total es $v = |0 - 1| + |2 - 1| = 2$.
+No es factible. La tarea 1 no tiene máquina (000) y la tarea 2 está en dos (110); las otras tres cumplen la restricción. La violación total *v* suma, para cada tarea, cuánto se aleja su número de unos de 1: $v = |0 - 1| + |2 - 1| = 2$.
 
 Al repararla, la tarea 1 va a la máquina 3, la más rápida para ella (tarda 3), y la tarea 2 se queda en la máquina 2 (tarda 2, frente a 5 en la máquina 1). Sale la asignación 3 2 3 2 1, con cargas 2, 6 y 8 y makespan 8. El óptimo es 5.
 
@@ -588,7 +588,7 @@ Las revisiones clásicas sobre el tratamiento de las restricciones en los algori
 ¿Cuál funciona mejor? Depende del problema. En la mochila, @michalewicz1994 [pp. 140–141] compararon penalizaciones, reparaciones y decodificadores. Cuando la capacidad era pequeña y cabían pocas selecciones, las penalizaciones no llegaban a soluciones factibles y ganaba la reparación voraz; con una capacidad mayor, ganaba la penalización más suave, la logarítmica.
 
 ::: {.callout-tip .ejemplo #ejemplo-representacion-infactibles title="Ejemplo reproducible · Cinco tratamientos para un mismo cromosoma"}
-**Datos.** La mochila de la sección -@sec-representacion-validez (*W* = 10) y el cromosoma infactible 1 1 0 1 1 0, que pesa 18 y vale 22. Los dos tratamientos con penalización usan λ = 2. En la reparación aleatoria, los números sorteados son 0,62; 0,00 y 0,52, y cada uno elige cuál de los *k* objetos que quedan dentro se saca: el número $\lfloor r\,k \rfloor$, contando desde 0 en el orden de los genes.
+**Datos.** La mochila de la sección -@sec-representacion-validez (*W* = 10) y el cromosoma infactible 1 1 0 1 1 0, que pesa 18 y vale 22. Los dos tratamientos con penalización usan λ = 2. En la reparación aleatoria, los números sorteados son 0,62; 0,00 y 0,52, y cada uno elige cuál de los *q* objetos que quedan dentro se saca: el número $\lfloor r\,q \rfloor$, contando desde 0 en el orden de los genes.
 
 **Predice.** ¿Qué aptitud da cada penalización? ¿Qué objetos saca la reparación voraz? ¿Qué solución da el decodificador?
 
@@ -647,7 +647,7 @@ Vale más la del decodificador, 13 frente a 12. El óptimo del problema es 14, e
 
 Un cruce o una mutación pueden empujar un gen real más allá del límite permitido. ¿Qué se hace con ese punto?
 
-En la representación real, nada impide que un gen salga del intervalo $[a, b]$. La mutación gaussiana del capítulo [](#sec-mutacion-gaussiana){.capitulo} o un cruce que extrapola pueden hacerlo. El cromosoma es válido (dos números reales), pero la solución no es factible, porque está fuera de la caja. Sirven las estrategias de la sección anterior: acotar y reflejar son reparaciones, porque cambian el punto por otro de dentro de la caja, y penalizar es una penalización [@padhye2015]. Hay más formas de reparar, como volver a sortear el gen dentro de su intervalo o hacerlo entrar por el límite contrario [@padhye2015]. Veremos las tres más sencillas:
+En la representación real, nada impide que un gen salga del intervalo $[a, b]$. La mutación gaussiana del capítulo [](#sec-mutacion-gaussiana){.capitulo} o un cruce que extrapola pueden hacerlo. El cromosoma es válido (dos números reales), pero la solución no es factible, porque está fuera de la caja. Sirven las estrategias de la sección anterior: acotar y reflejar son reparaciones, porque cambian el punto por otro de dentro de la caja, y penalizar corresponde a la estrategia del mismo nombre [@padhye2015]. Hay más formas de reparar, como volver a sortear el gen dentro de su intervalo o hacerlo entrar por el límite contrario [@padhye2015]. Veremos las tres más sencillas:
 
 - **Acotar.** Cada gen que se sale se lleva al límite más cercano (en inglés, *set on boundary* o *clamping*). Es la forma más sencilla, y la que usa la mutación gaussiana de mutation-ga.
 - **Reflejar.** Cada gen que se sale rebota en el límite que ha cruzado, y vuelve a entrar tanta distancia como se había salido.
@@ -703,7 +703,7 @@ La distancia a la caja es $d = 2{,}2$. Penalizando, $f(-7{,}2;\ 2) = 42{,}84^2 +
 
 - Arrastra el punto del mapa hasta sacarlo de la caja y cambia el tratamiento en **Fuera de la caja**: **Acotar**, **Reflejar** o **Penalizar**. Observa a qué punto se lleva en cada caso.
 - Fíjate en la tabla **Los tres tratamientos sobre este punto**: ¿cuándo coinciden los tres?
-- Sube el **λ** en **Penalizar** y observa cuándo la aptitud del punto penalizado supera a la de los otros dos.
+- Sube el **λ** en **Penalizar** y observa cuándo la aptitud del punto penalizado es mayor, es decir, peor, que la de los otros dos.
 :::
 
 ## Qué hace buena a una representación [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-representacion-propiedades}
@@ -755,11 +755,11 @@ Di si la correspondencia entre soluciones y cromosomas es uno a uno o uno a much
 
 ## Ampliaciones [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas} {#sec-representacion-ampliaciones}
 
-**Elegir la representación reduce el espacio.** En el problema de las 8 reinas hay que colocar ocho reinas en un tablero de 8 × 8 sin que ninguna ataque a otra. Si el cromosoma es la posición de cada reina, hay más de 4 000 millones de casos; si se obliga a que cada reina esté en una fila distinta, queda $8^8 = 16\,777\,216$, y si se les prohíbe también compartir columna, el cromosoma es una permutación y quedan solo $8! = 40\,320$ [@talbi2009, p. 37]. La representación elegida decide de qué tamaño es el espacio que tiene que explorar el algoritmo.
+**Elegir la representación reduce el espacio.** En el problema de las 8 reinas hay que colocar ocho reinas en un tablero de 8 × 8 sin que ninguna ataque a otra. Si el cromosoma es la posición de cada reina, hay más de 4 000 millones de casos; si se obliga a que cada reina esté en una fila distinta, quedan $8^8 = 16\,777\,216$, y si se les prohíbe también compartir columna, el cromosoma es una permutación y quedan solo $8! = 40\,320$ [@talbi2009, p. 37]. La representación elegida decide de qué tamaño es el espacio que tiene que explorar el algoritmo.
 
 **Claves aleatorias.** Para usar los operadores de reales con problemas de permutaciones, cada elemento recibe un número aleatorio en [0, 1) y la permutación se obtiene ordenando los elementos según su clave. Con las claves $(0{,}72;\ 0{,}15;\ 0{,}48;\ 0{,}91;\ 0{,}33)$, de menor a mayor son 0,15 (elemento 2), 0,33 (5), 0,48 (3), 0,72 (1) y 0,91 (4), y se decodifica como la permutación 2 5 3 1 4. Cualquier vector de reales da una permutación válida, y así los operadores clásicos no producen cromosomas inválidos [@talbi2009, p. 38].
 
-**Cuántos símbolos usar.** Goldberg propone dos principios para elegir una codificación [@goldberg1989, pp. 80–82]. El de los **bloques constructivos con significado** pide que los esquemas cortos y de bajo orden sean relevantes para el problema y poco dependientes de los de otras posiciones. El del **alfabeto mínimo** pide el alfabeto más pequeño que permita expresar el problema de forma natural, porque el binario ofrece el mayor número de esquemas por bit de información. Es el argumento teórico a favor de la binaria que Holland ya había dado: una cadena binaria de 100 bits contiene muchos más esquemas, $2^{100}$, que una cadena decimal de 30 cifras, $2^{30}$. Pero Mitchell recuerda que este argumento vale solo en la medida en que valga el análisis de esquemas, y eso se ha discutido. Varias comparaciones empíricas han dado mejores resultados con codificaciones de reales que con binarias, pero depende del problema y no hay reglas rigurosas para predecir cuál funcionará mejor [@mitchell1998, apartado 5.2]. Davis, con mucha experiencia en aplicaciones reales, recomienda usar la codificación más natural para el problema y diseñar el algoritmo para ella [@mitchell1998, apartado 5.2].
+**Cuántos símbolos usar.** Goldberg propone dos principios para elegir una codificación [@goldberg1989, pp. 80–82]. El de los **bloques constructivos con significado** pide que los esquemas cortos y de bajo orden sean relevantes para el problema y poco dependientes de los de otras posiciones. El del **alfabeto mínimo** pide el alfabeto más pequeño que permita expresar el problema de forma natural, porque el binario ofrece el mayor número de esquemas por bit de información. Es el argumento teórico a favor de la binaria que Holland ya había dado: un **esquema** es una plantilla con posiciones fijas y comodines, como 1 \* \* 0, y una cadena binaria de 100 bits, que guarda casi la misma información que una decimal de 30 cifras ($2^{100} \approx 10^{30}$), es ejemplo de muchos más esquemas, $2^{100}$, que la decimal, $2^{30}$. Pero Mitchell recuerda que este argumento vale solo en la medida en que valga el análisis de esquemas, y eso se ha discutido. Varias comparaciones empíricas han dado mejores resultados con codificaciones de reales que con binarias, pero depende del problema y no hay reglas rigurosas para predecir cuál funcionará mejor [@mitchell1998, apartado 5.2]. Davis, con mucha experiencia en aplicaciones reales, recomienda usar la codificación más natural para el problema y diseñar el algoritmo para ella [@mitchell1998, apartado 5.2].
 
 **Otras representaciones.** No todos los cromosomas son cadenas. Los **árboles**, usados en programación genética, representan expresiones o programas [@talbi2009, pp. 39–40], y entre las lineales hay variantes como las codificaciones *messy*, en las que el valor de un gen no depende de su posición, las que añaden regiones sin efecto, o las diploides [@talbi2009, pp. 38–39].
 

@@ -21,7 +21,7 @@ Al terminar el recorrido básico de este capítulo podrás:
 
 ## ¿Quién pasa a la generación siguiente? [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sec-reemplazo-quien-sobrevive}
 
-Ya tenemos padres elegidos por la selección e hijos creados por cruce y mutación. ¿Con quiénes seguimos?
+Ya tenemos la población actual e hijos creados por cruce y mutación a partir de los padres que eligió la selección. ¿Con quiénes seguimos?
 
 En cada generación, un algoritmo genético selecciona padres (capítulo -@sec-seleccion), los cruza (capítulo -@sec-cruce) y muta a los descendientes (capítulo -@sec-mutacion). Falta decidir qué individuos forman la población de la generación siguiente: los hijos, los padres o una mezcla de los dos. Esa decisión es el **reemplazo** (o reemplazamiento), también llamado **selección de supervivientes**: la selección de padres decide quién se reproduce y el reemplazo, quién sigue en la población [@talbi2009, p. 221]. Como el tamaño de la población suele ser constante, si entran hijos tienen que salir otros tantos individuos.
 
@@ -32,7 +32,7 @@ Hay dos estrategias básicas [@talbi2009, p. 221; @mitchell1998, apartado 5.4]:
 
 Después de reemplazar se vuelve a empezar el ciclo (sección -@sec-ciclo-ciclo), hasta que se cumple un **criterio de parada**. Lo veremos en la sección -@sec-reemplazo-cuando-parar.
 
-**Notación.** Seguimos la de la herramienta. Los padres son A, B, C… y su número es μ (*mu*); los hijos son a, b, c… y su número es λ (*lambda*). En el capítulo [](#sec-seleccion-torneo){.capitulo} hablamos de sortear «con reemplazo» en el sentido de devolver al individuo para que pueda volver a salir; en este capítulo, *reemplazo* significa sustituir a unos individuos de la población por otros.
+**Notación.** Seguimos la de la herramienta. En este capítulo llamamos padres a todos los individuos de la población actual, los haya elegido o no la selección. Son A, B, C… y su número es μ (*mu*), el tamaño de la población, que en otros capítulos es *N*; los hijos son a, b, c… y su número es λ (*lambda*). En el capítulo [](#sec-seleccion-torneo){.capitulo} hablamos de sortear «con reemplazo» en el sentido de devolver al individuo para que pueda volver a salir; en este capítulo, *reemplazo* significa sustituir a unos individuos de la población por otros.
 
 :::: {.callout-note .ejercicio #ejercicio-reemplazo-quien-sobrevive title="Ejercicio · Predice"}
 En el reemplazo generacional, todos los hijos sustituyen a todos los padres. ¿Puede la mejor aptitud de la población ser peor en la generación siguiente que en la actual? ¿Y la aptitud media? Anota tu predicción: la comprobarás en el ejemplo [](#ejemplo-reemplazo-generacional).
@@ -141,7 +141,7 @@ La mayoría de los algoritmos genéticos descritos en la bibliografía son gener
 ::: {.callout-tip .ejemplo #ejemplo-reemplazo-estacionario title="Ejemplo reproducible · Dos hijos entran en la población"}
 **Datos.** Los padres de los ejemplos anteriores (A–F: 12, 30, 5, 21, 9 y 17) y dos hijos nuevos, a (25) y b (14). Variante **Sustituir al peor**.
 
-**Predice.** ¿A quién sustituye a? ¿Y b? ¿Se pierde el mejor?
+**Predice.** ¿A quién sustituye el hijo a? ¿Y el hijo b? ¿Se pierde el mejor?
 
 [Abrir: estado estacionario, sustituir al peor](https://josemagalan.github.io/selection-ga/#op=steady-state&lang=es&v=worst&lambda=2&f=12-30-5-21-9-17&g=25-14&s=31){.abrir target="_blank"}
 
@@ -236,7 +236,7 @@ Un algoritmo genético con élite busca el máximo de un problema cuyo óptimo e
 |---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | Mejor aptitud | 31 | 35 | 35 | 42 | 42 | 42 | 47 | 47 | 47 | 47 | 50 |
 
-¿En qué generación para con cada criterio: (a) 3 generaciones sin mejora; (b) 5 generaciones sin mejora; (c) alcanzar el óptimo; (d) un máximo de 8 generaciones? ¿Qué aptitud devuelve en cada caso?
+¿En qué generación para con cada criterio: (a) 3 generaciones sin mejora; (b) 5 generaciones sin mejora; (c) alcanzar el óptimo; (d) un máximo de 8 generaciones? ¿Qué aptitud devuelve en cada caso? Si algún criterio no se cumple antes de la generación 10, supón que el algoritmo sigue y que ya no mejora.
 
 <details>
 <summary>**Ver la solución**</summary>
@@ -324,16 +324,16 @@ Con **Sustituir al peor**, cada hijo entra sin condiciones. El hijo a sustituye 
 
 ¿Y si padres e hijos compitieran juntos por quedarse en la población?
 
-Las **estrategias evolutivas**, que Rechenberg y Schwefel crearon en los años sesenta en la Universidad Técnica de Berlín, usan otros dos esquemas de reemplazo. Aparecieron en los setenta, cuando se pasó de un solo padre y un solo hijo a poblaciones de μ padres y λ hijos [@eiben2015, p. 101; @whitley1994, apartado 8]:
+Las **estrategias evolutivas**, que Rechenberg y Schwefel crearon en los años sesenta en la Universidad Técnica de Berlín, usan otros dos esquemas de reemplazo. Estos esquemas aparecieron en los setenta, cuando se pasó de un solo padre y un solo hijo a poblaciones de μ padres y λ hijos [@eiben2015, p. 101; @whitley1994, apartado 8]:
 
 - **(μ + λ).** Los μ padres crean λ hijos, y de los μ + λ individuos sobreviven los μ mejores. Un padre sigue en la población hasta que aparecen hijos mejores que él.
 - **(μ, λ).** Los hijos sustituyen a los padres y la selección se hace solo entre los hijos: sobreviven los μ mejores de los λ. Hace falta que $\lambda \geq \mu$.
 
-(μ + λ) es elitista: el mejor nunca se pierde. (μ, λ) no lo es, y se parece al reemplazo generacional del algoritmo genético canónico [@affenzeller2009, pp. 9–10]. GENITOR también conserva la mejor solución al sustituir al peor [@eiben2015, p. 89; @whitley1994, apartado 8.1]. Pero admitir cualquier hijo, aunque sea peor que aquel al que sustituye, no coincide exactamente con (μ + λ): la media puede bajar, como vimos en el ejercicio [](#ejercicio-reemplazo-variantes-estacionario).
+(μ + λ) es elitista: el mejor nunca se pierde. (μ, λ) no lo es, y se parece al reemplazo generacional del algoritmo genético canónico [@affenzeller2009, pp. 9–10]. GENITOR también conserva la mejor solución al sustituir al peor [@eiben2015, p. 89; @whitley1994, apartado 8.1]. Pero admitir cualquier hijo, aunque sea peor que aquel al que sustituye, no coincide exactamente con (μ + λ): la media puede bajar: en el ejercicio [](#ejercicio-reemplazo-variantes-estacionario), tras entrar a la media es 19, y al entrar b, peor que E, baja a 18.
 
 Con un solo hijo, **Sustituir al peor si es mejor** sí equivale, en aptitud, a quedarse con los μ mejores entre la población y ese hijo: es (μ + 1). Si se crean varios hijos, hay que especificar si se insertan uno a uno con esa condición o se seleccionan juntos entre todos los candidatos.
 
-El elitismo con *e* individuos está entre los dos extremos: con *e* = 0 es el reemplazo generacional puro y, cuanto mayor es *e*, más padres compiten con los hijos por quedarse.
+El elitismo con *e* individuos queda entre los dos esquemas, aunque no coincide con ninguno. Con *e* = 0 es el reemplazo generacional puro. Cuanto mayor es *e*, más padres se quedan, pero sin competir con los hijos como en (μ + λ): los *e* mejores padres se quedan aunque algún hijo descartado sea mejor que ellos.
 
 ::: {.callout-tip .ejemplo #ejemplo-reemplazo-mu-lambda title="Ejemplo reproducible · Competir juntos o solo entre hijos"}
 **Datos.** Los padres de siempre (A–F: 12, 30, 5, 21, 9 y 17) y nueve hijos (λ = 9):

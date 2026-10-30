@@ -58,7 +58,7 @@ La mutación clásica de la representación binaria es la **inversión de bits**
 2. Si $r < \mathit{pm}$, el bit de esa posición se invierte: el 0 pasa a 1 y el 1, a 0.
 3. Si no, el bit se queda como está.
 
-El número de bits que cambian no es fijo. En promedio cambian $\mathit{pm} \times n$, donde *n* es la longitud del cromosoma, pero unas veces cambian más, otras menos y otras ninguno.
+El número de bits que cambian no es fijo. En promedio cambian $\mathit{pm} \times L$, donde *L* es la longitud del cromosoma, pero unas veces cambian más, otras menos y otras ninguno.
 
 ::: {.callout-tip .ejemplo #ejemplo-mutacion-inversion-bits title="Ejemplo reproducible · Un sorteo por posición"}
 **Datos.** El padre 1 1 0 1 0 0 1 0 y $\mathit{pm} = 0{,}15$. Números aleatorios de las posiciones 1 a 8:
@@ -92,7 +92,7 @@ Han cambiado 2 bits. Se esperaban $0{,}15 \times 8 = 1{,}2$, pero el número de 
 <!-- Comprobado el 2026-10-08: la herramienta muestra en el paso 12 de 12 el mutante 1 0 0 1 0 1 1 0 y «Resultado: han cambiado 2 bits (posiciones 2, 6), así que el mutante está a distancia de Hamming 2 del padre. Lo esperado era pm · n = 1,2…». -->
 :::
 
-Con $0 < \mathit{pm} < 1$, cada bit puede cambiar o quedarse igual, así que cualquier cadena puede salir, aunque sea con una probabilidad muy pequeña: una cadena que difiere del padre en *d* de sus *n* bits sale con probabilidad $\mathit{pm}^d \, (1 - \mathit{pm})^{n-d}$. Hacen falta los dos límites. Con $\mathit{pm} = 0$ no cambia nada. Con $\mathit{pm} = 1$ cambian todos los bits a la vez: desde 000 solo se llega a 111 y, al mutar otra vez, se vuelve a 000. Esto responde al ejercicio [](#ejercicio-mutacion-para-que-mutar): sin mutación, el 0 de la posición 3 no puede cambiar nunca; con ella, sí.
+Con $0 < \mathit{pm} < 1$, cada bit puede cambiar o quedarse igual, así que cualquier cadena puede salir, aunque sea con una probabilidad muy pequeña: una cadena que difiere del padre en *d* de sus *L* bits sale con probabilidad $\mathit{pm}^d \, (1 - \mathit{pm})^{L-d}$. Hacen falta los dos límites. Con $\mathit{pm} = 0$ no cambia nada. Con $\mathit{pm} = 1$ cambian todos los bits a la vez: desde 000 solo se llega a 111 y, al mutar otra vez, se vuelve a 000. Esto responde al ejercicio [](#ejercicio-mutacion-para-que-mutar): sin mutación, el 0 de la posición 3 no puede cambiar nunca; con ella, sí.
 
 :::: {.callout-note .ejercicio #ejercicio-mutacion-inversion-bits title="Ejercicio · ¿Cuántos bits cambian?"}
 Un cromosoma tiene 8 bits y se muta con $\mathit{pm} = 1/8$. ¿Cuántos bits cambian en promedio? ¿Con qué probabilidad no cambia ninguno? ¿Y exactamente uno?
@@ -120,7 +120,7 @@ Si cada gen es un número entero, ¿da igual cambiarlo por cualquier otro valor?
 En la **representación entera**, cada gen es un entero dentro de un rango. En mutation-ga, el rango es de 0 a 9. Hay dos mutaciones básicas, y en las dos cada posición muta con probabilidad *pm*, como en la inversión de bits:
 
 - **Reinicio aleatorio** (*random resetting*). Si la posición muta, el gen toma un valor cualquiera del rango, todos con la misma probabilidad. Es la mutación tal como la definió @holland1992 [pp. 109–110] para cualquier alfabeto: el valor nuevo se elige al azar entre todos los posibles, con la misma probabilidad. @talbi2009 [p. 209] la describe como cambiar el valor del gen por otro del alfabeto. En la herramienta se sortea un segundo número *s* y el valor nuevo es $\lfloor 10\, s \rfloor$, la parte entera de $10\,s$. Puede coincidir con el que había.
-- **Deslizamiento** (*creep*). Si la posición muta, al gen se le suma un paso pequeño, positivo o negativo, de como mucho *s* unidades (el **paso máximo**). Con $s = 1$ se sortea un segundo número *u*: si $u < 0{,}5$, el gen baja una unidad; si no, sube una. Si el valor se sale del rango, se queda en el extremo. La idea de deslizar un gen hacia arriba o hacia abajo una cantidad pequeña, con un deslizamiento máximo fijado por el usuario, procede de los números reales [@herrera1998, apartado 4.4].
+- **Deslizamiento** (*creep*). Si la posición muta, al gen se le suma un paso pequeño, positivo o negativo, de como mucho *s* unidades (el **paso máximo**; no lo confundas con el número *s* del reinicio aleatorio). Con $s = 1$ se sortea un segundo número *u*: si $u < 0{,}5$, el gen baja una unidad; si no, sube una. Si el valor se sale del rango, se queda en el extremo. La idea de deslizar un gen hacia arriba o hacia abajo una cantidad pequeña, con un deslizamiento máximo fijado por el usuario, procede de los números reales [@herrera1998, apartado 4.4].
 
 Cuál conviene depende de lo que signifique cada gen [@eiben2015, p. 55]. Si los valores son **categorías sin orden**, como la máquina que hace cada tarea o el proveedor que atiende cada pedido, la máquina 3 no se parece más a la 4 que a la 9, y cualquier valor es un cambio tan razonable como otro: conviene el reinicio aleatorio. Si los valores son **cantidades ordenadas**, como las unidades de un lote o los operarios de un turno, un valor próximo suele dar una solución parecida, y el deslizamiento cambia poco, como pide la sección -@sec-mutacion-para-que-mutar.
 
@@ -199,7 +199,7 @@ $$
 v' = v + \sigma\, z, \qquad z \sim N(0, 1).
 $$
 
-Cada posición muta con probabilidad *pm*. Los saltos pequeños son los más probables: unos 68 de cada 100 son menores que σ y unos 95, menores que 2σ. Los grandes son raros, pero posibles. Es la mutación propia de las estrategias evolutivas [@herrera1998, apartado 4.1]. A σ se le llama **tamaño de paso** de la mutación [@eiben2015, p. 57], y hay que elegirlo bien [@talbi2009, pp. 211–212]. Si el mutante se sale del intervalo permitido, hay que repararlo. En mutation-ga los genes van de 0 a 10, y un valor que se sale se recorta al extremo.
+Una distribución normal tiene forma de campana: la mayoría de los valores quedan cerca de la media, aquí 0, y cuanto más lejos, menos probables son. La desviación típica σ mide lo ancha que es la campana; *z* sale de la campana más sencilla, de media 0 y desviación típica 1, y al multiplicarlo por σ la campana se ensancha o se estrecha. Cada posición muta con probabilidad *pm*. Los saltos pequeños son los más probables: unos 68 de cada 100 son menores que σ, en valor absoluto, y unos 95, menores que 2σ. Los grandes son raros, pero posibles. Es la mutación propia de las estrategias evolutivas [@herrera1998, apartado 4.1]. A σ se le llama **tamaño de paso** de la mutación [@eiben2015, p. 57], y hay que elegirlo bien [@talbi2009, pp. 211–212]. Si el mutante se sale del intervalo permitido, hay que repararlo. En mutation-ga los genes van de 0 a 10, y un valor que se sale se recorta al extremo.
 
 La herramienta obtiene *z* a partir de dos números aleatorios (lo veremos en la sección -@sec-mutacion-otras-mutaciones). En el ejemplo te damos *z* directamente.
 
@@ -303,7 +303,7 @@ Las mutaciones más usadas para permutaciones se basan en tres operaciones [@tal
 
 Las tres solo recolocan genes, así que el mutante es siempre una permutación válida. Y encadenando intercambios se puede llegar a cualquier ordenación. Cuál conviene depende de lo que importe en el problema, como verás en la sección -@sec-mutacion-que-conserva.
 
-En una permutación los genes no se pueden mutar uno a uno, por eso *pm* se interpreta como la probabilidad de que el individuo mute, no cada gen [@eiben2015, p. 69]. En la herramienta, cada operador se aplica una vez, con las posiciones elegidas al azar o arrastradas a mano.
+En una permutación los genes no se pueden mutar uno a uno, por eso *pm* se interpreta como la probabilidad de que mute el individuo, no la de cada gen [@eiben2015, p. 69]. En la herramienta, cada operador se aplica una vez, con las posiciones elegidas al azar o arrastradas a mano.
 
 ::: {.callout-tip .ejemplo #ejemplo-mutacion-intercambio-insercion-inversion title="Ejemplo reproducible · Tres formas de recolocar"}
 **Datos.** El padre 1 2 3 4 5 6 7 8 9.
@@ -345,7 +345,7 @@ Aplica las tres mutaciones al padre 9 4 5 2 6 3 8 1 7: el intercambio de las pos
 <summary>**Ver la solución**</summary>
 
 - Intercambio: el 4 y el 3 cambian de sitio: **9 3 5 2 6 4 8 1 7**.
-- Inserción: se saca el 4, el 5, el 2, el 6 y el 3 se desplazan a la izquierda y el 4 queda en la posición 6: **9 5 2 6 3 4 8 1 7**.
+- Inserción: se saca el 4; el 5, el 2, el 6 y el 3 se desplazan a la izquierda, y el 4 queda en la posición 6: **9 5 2 6 3 4 8 1 7**.
 - Inversión: el tramo 4 5 2 6 3 queda como 3 6 2 5 4: **9 3 6 2 5 4 8 1 7**.
 
 Puedes comprobarlo en la herramienta escribiendo el padre en **Introducir el padre a mano** y arrastrando los marcadores.
@@ -366,7 +366,7 @@ Si la mutación aporta diversidad, ¿por qué no mutar mucho?
 
 Normalmente *pm* es pequeña. @goldberg1989 [p. 14] habla de una mutación por cada mil bits copiados, @whitley1994 de probabilidades por bit menores del 1 % y @talbi2009 [p. 208] de valores por gen entre 0,001 y 0,01, o de $\mathit{pm} = 1/k$, donde *k* es el número de variables, para que en promedio mute una sola. Con cadenas de bits, esta regla, $\mathit{pm} = 1/L$ para una longitud *L*, procede de Mühlenbein [@eiben1999, p. 132]. Los primeros estudios sistemáticos de parámetros llegaron a valores parecidos: 0,001 por bit en los experimentos de @dejong1975 [según @schaffer1989, p. 52], 0,01 en los de @grefenstette1986 [p. 126] y entre 0,005 y 0,01 en los de @schaffer1989 [pp. 51, 54], que además encontraron el rendimiento más sensible a la tasa de mutación que a la de cruce. Pero estos valores se obtuvieron con conjuntos concretos de problemas, y nada garantiza que sean los mejores para otro [@mitchell1998, apartado 5.6]. También depende de lo que se busque: menos mutación si interesa que toda la población sea buena, y más si basta con encontrar un individuo muy bueno [@eiben2015, p. 52]. Con muy poca mutación, la población pierde diversidad y converge enseguida. Con demasiada, el mutante apenas se parece al padre: se pierde lo que habían conseguido la selección y el cruce y, en el caso extremo, la búsqueda se convierte en una búsqueda al azar [@talbi2009, p. 209]. Por sí sola, la mutación es un paseo aleatorio por el espacio de soluciones [@goldberg1989, p. 14; @holland1992, p. 110].
 
-En la inversión de bits, el caso extremo es $\mathit{pm} = 0{,}5$: cada bit del mutante es un 0 o un 1 con la misma probabilidad, sea cual sea el del padre. En las otras representaciones, el tamaño del cambio depende también de otros parámetros, como el paso máximo *s* del deslizamiento o σ en la mutación gaussiana.
+En la inversión de bits, el caso extremo es $\mathit{pm} = 0{,}5$: cada bit del mutante es un 0 o un 1 con la misma probabilidad, sea cual sea el del padre. Por encima de 0,5, el mutante vuelve a parecerse, pero al complementario del padre: con $\mathit{pm} = 1$ es exactamente el complementario. En las otras representaciones, el tamaño del cambio depende también de otros parámetros, como el paso máximo *s* del deslizamiento o σ en la mutación gaussiana.
 
 ::: {.callout-tip .ejemplo #ejemplo-mutacion-cuanto-mutar title="Ejemplo reproducible · Poca o mucha mutación"}
 **Datos.** La pantalla «Comparar operadores» de mutation-ga aplica todas las mutaciones de una representación y resume cuánto cambia cada una. Con «Media con: padres al azar» promedia sobre 1000 padres de la misma longitud, con 10 mutaciones de cada uno. Usamos cadenas de 10 bits y la inversión de bits con $\mathit{pm} = 0{,}1$ y con $\mathit{pm} = 0{,}5$.
@@ -381,12 +381,13 @@ La media con padres al azar tarda unos segundos en calcularse.
 <details>
 <summary>**Ver el resultado**</summary>
 
-| Inversión de bits | Distancia de Hamming | Copia del padre |
+| Mutación | Distancia de Hamming | Copia del padre |
 |---|:---:|:---:|
-| $\mathit{pm} = 0{,}1$ | 1,01 | 34 % |
-| $\mathit{pm} = 0{,}5$ | 5,00 | 0 % |
+| Inversión de bits, $\mathit{pm} = 0{,}1$ | 1,01 | 34 % |
+| Inversión de bits, $\mathit{pm} = 0{,}5$ | 5,00 | 0 % |
+| Mutación de un bit | 1,00 | 0 % |
 
-La **distancia de Hamming** es el número de bits en que difieren el mutante y el padre. Con $\mathit{pm} = 0{,}1 = 1/n$ cambia en promedio $10 \times 0{,}1 = 1$ bit, y un tercio de los mutantes son copias: la probabilidad teórica es $0{,}9^{10} \approx 0{,}35$. Con $\mathit{pm} = 0{,}5$ cambia la mitad de los bits y el mutante no guarda ninguna relación con el padre: es una cadena al azar. La fila «Mutación de un bit» de la tabla se explica en la sección -@sec-mutacion-otras-mutaciones.
+La **distancia de Hamming** es el número de bits en que difieren el mutante y el padre. Con $\mathit{pm} = 0{,}1 = 1/L$ cambia en promedio $10 \times 0{,}1 = 1$ bit, y un tercio de los mutantes son copias: la probabilidad teórica es $0{,}9^{10} \approx 0{,}35$. Con $\mathit{pm} = 0{,}5$ cambia la mitad de los bits y el mutante no guarda ninguna relación con el padre: es una cadena al azar. La fila «Mutación de un bit» de la tabla se explica en la sección -@sec-mutacion-otras-mutaciones.
 </details>
 
 <!-- Comprobado el 2026-10-08: la tabla de la interfaz, con «Media con: padres al azar», muestra «Inversión de bits 1,01 … 34 %» (pm = 0,1) y «5,00 … 0 %» (pm = 0,5), y para «Mutación de un bit» 1,00 y 0 %. Los mismos valores se obtienen con compare.randomMean (1000 padres, 10 mutaciones, semilla 1): copias 33,8 % y 0,18 %. Entre paréntesis, la interfaz muestra los del ejemplo de la parte superior, que no se usan aquí. -->
@@ -454,7 +455,7 @@ Con los mismos números aleatorios, a mitad de la búsqueda los saltos son unas 
 <!-- Comprobado el 2026-10-08: la herramienta muestra en el paso 9 de 9 los mutantes 2,0 8,0 5,82 1,5 6,0 («salto medio de 1,16») y 2,0 8,48 4,07 1,5 6,0 («salto medio de 0,04»). Δ exactos (código): 0,49895 y 1,824; 0,01605 y 0,06757. -->
 :::
 
-**Mutación polinómica.** La mutación polinómica de @deb1996 suele acompañar al cruce SBX de la sección -@sec-cruce-otros-cruces. El gen se perturba con $v' = v + \delta\,(U - L)$, donde *L* y *U* son los límites del intervalo y δ, entre −1 y 1, sale de una distribución polinómica centrada en 0. El **índice de distribución** η controla su forma: cuanto mayor es η, más se concentra δ cerca de 0 y más se parece el mutante al padre. Se suele usar η ≈ 20 [@talbi2009, p. 212].
+**Mutación polinómica.** La mutación polinómica de @deb1996 suele acompañar al cruce SBX de la sección -@sec-cruce-otros-cruces. El gen se perturba con $v' = v + \delta\,(b - a)$, donde *a* y *b* son los límites del intervalo y δ, entre −1 y 1, sale de una distribución polinómica centrada en 0. El **índice de distribución** η controla su forma: cuanto mayor es η, más se concentra δ cerca de 0 y más se parece el mutante al padre. Se suele usar η ≈ 20 [@talbi2009, p. 212].
 
 **Cómo se obtiene *z*.** En la mutación gaussiana, mutation-ga calcula el número normal *z* a partir de dos números uniformes, $u_1$ y $u_2$, con la transformación de Box-Muller: $z = \sqrt{-2 \ln(1 - u_1)}\, \cos(2\pi u_2)$.
 

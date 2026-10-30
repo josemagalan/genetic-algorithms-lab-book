@@ -236,7 +236,7 @@ En el uniforme se intercambian las posiciones 1, 2 y 5, y los hijos solo tienen 
 <!-- Comprobado el 2026-10-08: la herramienta muestra los hijos 6 2.5 4 1.5 3 y 2 8.5 5 9.5 6 (uniforme, paso 8 de 8) y 5 4 4.75 7.5 3.75 y 3 7 4.25 3.5 5.25 (aritmético, paso 5 de 5). -->
 :::
 
-Ni el cruce uniforme ni el aritmético sacan a los hijos del intervalo que forman los padres en cada posición. Si se cruza solo de esta forma, generación tras generación, los valores de cada gen se van concentrando y la población pierde diversidad. En la sección -@sec-cruce-otros-cruces veremos cruces reales que pueden salir de ese intervalo.
+Ni el cruce uniforme ni el aritmético sacan a los hijos del intervalo que forman los padres en cada posición. Sin mutación, el intervalo de cada gen nunca crece. Con el aritmético, además, cada hijo se acerca al centro de sus padres, y generación tras generación los valores se van concentrando y la población pierde diversidad. En la sección -@sec-cruce-otros-cruces veremos cruces reales que pueden salir de ese intervalo.
 
 :::: {.callout-note .ejercicio #ejercicio-cruce-reales title="Ejercicio · ¿Hasta dónde llega la población?"}
 En una población, el primer gen de los individuos toma valores entre 2 y 6. Si solo se aplica el cruce aritmético, sin mutación, ¿podrá algún descendiente tener un primer gen mayor que 6 dentro de diez generaciones? ¿Y si se usa siempre λ = 0,5?
@@ -411,7 +411,7 @@ Compara el Hijo 1 de OX (ejemplo [](#ejemplo-cruce-ox)) con el de PMX. Fuera del
 <details>
 <summary>**Ver la solución**</summary>
 
-Fuera del segmento están las posiciones 1, 2, 3, 8 y 9. El Hijo 1 de PMX (1 4 5 · · · · 7 9) conserva dos ciudades en la posición que tenían en el Padre 1: el 1 y el 9. El de OX (2 3 8 · · · · 1 9) solo conserva una en la posición que tenía en el Padre 2, el 1 de la posición 8, pero conserva el orden relativo de las cinco. PMX tiende a conservar posiciones y OX, el orden. Lo mediremos en la sección -@sec-cruce-que-conserva.
+Fuera del segmento están las posiciones 1, 2, 3, 8 y 9. El Hijo 1 de PMX (1 4 5 · · · · 7 9) conserva dos ciudades en la posición que tenían en el Padre 1: el 1 y el 9. El de OX (2 3 8 · · · · 1 9) solo conserva una en la posición que tenía en el Padre 2, el 1 de la posición 8, pero conserva el orden relativo de las cinco, leídas en círculo a partir de la posición 8. PMX tiende a conservar posiciones y OX, el orden. Lo mediremos en la sección -@sec-cruce-que-conserva.
 </details>
 ::::
 
@@ -472,7 +472,7 @@ Con los padres del ejemplo [](#ejemplo-cruce-cx), ¿cuántos Hijos 1 distintos p
 <details>
 <summary>**Ver la solución**</summary>
 
-Hay tres ciclos y cada uno puede venir de cualquiera de los dos padres: $2^3 = 8$ Hijos 1 distintos, todos igual de probables. Dos de ellos son copias: todos los ciclos del Padre 1, o todos del Padre 2. La probabilidad es 2/8 = 0,25. Con menos ciclos, las copias son más frecuentes: con dos ciclos, la mitad de las veces.
+Hay tres ciclos y cada uno puede venir de cualquiera de los dos padres: $2^3 = 8$ Hijos 1 distintos, todos igual de probables. Dos de ellos son copias: todos los ciclos del Padre 1, o todos del Padre 2. La probabilidad es 2/8 = 0,25. Con menos ciclos, las copias son más frecuentes: con dos ciclos, la mitad de las veces. Un ciclo de una sola posición, donde los padres tienen la misma ciudad, da lo mismo de un padre que del otro, así que no mezcla nada.
 </details>
 ::::
 
@@ -490,7 +490,7 @@ Para seguir el recorrido básico, continúa por el [capítulo «Mutar»](#sec-mu
 
 Esta sección amplía el recorrido básico. Requiere la máscara de cruce de la sección -@sec-cruce-uno-y-dos-puntos y los cruces de las secciones -@sec-cruce-reales a -@sec-cruce-cx.
 
-**Cruce en *n* puntos.** Generaliza los cruces por cortes: con *k* cortes, los tramos alternan entre copiar del propio padre y tomar del otro. Su máscara cambia de valor en cada corte. Con un corte es el cruce en un punto, y con dos, el de dos puntos.
+**Cruce en *k* puntos.** Generaliza los cruces por cortes: con *k* cortes, los tramos alternan entre copiar del propio padre y tomar del otro. Su máscara cambia de valor en cada corte. Con un corte es el cruce en un punto, y con dos, el de dos puntos.
 
 **Cruce BLX-α.** @eshelman1993 propusieron sortear cada gen de los hijos en el intervalo de los padres ampliado por los dos lados. Si en una posición los padres valen $c_{\min}$ y $c_{\max}$, con $I = c_{\max} - c_{\min}$, cada hijo se sortea de manera uniforme en $[c_{\min} - \alpha I,\ c_{\max} + \alpha I]$. Con α = 0 los hijos quedan dentro del intervalo de los padres; con α > 0 pueden salir de él, lo que contrarresta la concentración de la sección -@sec-cruce-reales.
 
@@ -520,7 +520,7 @@ Cuatro de los diez genes (en cursiva) caen fuera del intervalo de sus padres. Co
 
 **Variantes de OX.** La variante por defecto de crossover-ga, «Orden desde el inicio», lee el Padre 2 desde la primera posición, no desde el segundo corte, y rellena los huecos a partir del segundo corte, como la clásica. Con los padres del ejemplo [](#ejemplo-cruce-ox) da los hijos 3 8 1 4 5 6 7 9 2 y 5 7 9 2 6 3 8 1 4. Cada hijo sigue conservando el segmento de su padre y, leído en círculo, el orden relativo del otro, pero la variante no es pura, como veremos en el ejemplo [](#ejemplo-cruce-ampliaciones). En la variante «De izquierda a derecha», el Padre 2 se lee desde la primera posición y los huecos se rellenan en orden. Es el cruce NWOX (*non-wrapping order crossover*), que propuso Cicirello en 2006 para problemas en los que importa qué elemento va antes que otro [@cicirello2023]; lo usaremos en el ejercicio [](#ejercicio-cruce-que-conserva).
 
-**Variantes de CX.** En CX, la variante «Primer ciclo del Padre 1 (Goldberg, 1989)» toma el primer ciclo del Padre 1 y todas las demás posiciones del Padre 2, y «Ciclos alternos» alterna los padres de un ciclo a otro. Ninguna de las dos necesita sorteo. Con los padres del ejemplo [](#ejemplo-cruce-cx), la primera da el Hijo 1 1 4 5 2 6 3 7 8 9, y la segunda coincide con el de ese ejemplo, porque allí el sorteo alternó los padres.
+**Variantes de CX.** En CX, la variante «Primer ciclo del Padre 1 (Goldberg, 1989)» toma el primer ciclo del Padre 1 y todas las demás posiciones del Padre 2, y «Ciclos alternos» alterna los padres de un ciclo a otro. Ninguna de las dos necesita sorteo. Con los padres del ejemplo [](#ejemplo-cruce-cx), la primera da el Hijo 1 (1 4 5 2 6 3 7 8 9), y la segunda coincide con el de ese ejemplo, porque allí el sorteo alternó los padres.
 
 **Cruce ERX.** El *edge recombination crossover* de @whitley1989 intenta que el hijo herede las **aristas** de los padres: los pares de ciudades vecinas en la ruta. Construye una tabla de adyacencias con los vecinos de cada ciudad en los dos padres y, a cada paso, elige como siguiente ciudad el vecino con menos opciones pendientes. crossover-ga incluye además la variante «Prioridad a las aristas comunes» de @starkweather1991, que, cuando puede, sigue primero las aristas que comparten los dos padres [@cicirello2023].
 
@@ -566,7 +566,7 @@ La media con padres al azar tarda unos segundos en calcularse.
 | CX | 100 % | 91 % | 89 % | 63 % | 100 % |
 | ERX | 36 % | 50 % | 93 % | 2 % | 100 % |
 
-Hay que leer la tabla por partes. El cruce en un punto conserva todas las posiciones, pero solo el 4 % de sus hijos es válido. CX conserva todas las posiciones, pero el 63 % de sus hijos es copia de un padre: con nueve ciudades suele haber pocos ciclos (ejercicio [](#ejercicio-cruce-cx)), y una copia puntúa al 100 % en todo. Entre los demás, PMX es el que más posiciones conserva, OX el que más orden relativo y ERX el que más adyacencias.
+Hay que leer la tabla por partes. El cruce en un punto conserva todas las posiciones, pero solo el 4 % de sus hijos es válido. CX conserva todas las posiciones, pero el 63 % de sus hijos es copia de un padre: con nueve ciudades suele haber pocos ciclos (ejercicio [](#ejercicio-cruce-cx)), y los de una sola posición, donde los padres coinciden, no mezclan nada, y una copia puntúa al 100 % en todo. Entre los demás, PMX es el que más posiciones conserva, OX el que más orden relativo y ERX el que más adyacencias.
 </details>
 
 <!-- Comprobado el 2026-10-08: la tabla de la interfaz, con «Media con: padres al azar» y OX en la variante «Clásica» (from=ox&v=classic), muestra estos porcentajes (en negrita). Los mismos valores se obtienen con compare.randomMean (1000 parejas, 10 cruces, semilla 1). Con la variante por defecto de OX, su fila sería 47 / 84 / 77 / 3 / 100. Entre paréntesis, la interfaz muestra los del ejemplo de la parte superior, que no se usan aquí. -->
@@ -578,7 +578,7 @@ En los dos padres del ejemplo [](#ejemplo-cruce-ox), la ciudad 4 se visita antes
 <details>
 <summary>**Ver la solución**</summary>
 
-El Hijo 1 de OX es 2 3 8 4 5 6 7 1 9: la 8 va antes que la 4, al revés que en los dos padres. Como OX empieza a rellenar tras el segundo corte y da la vuelta, el 8, que el Padre 2 visita después del segmento, acaba al principio del hijo.
+El Hijo 1 de OX es 2 3 8 4 5 6 7 1 9: la 8 va antes que la 4, al revés que en los dos padres. Como OX lee el Padre 2 desde la posición 8 y da la vuelta, el 8, que ocupa la posición 7, es la última ciudad que se lee; los huecos también se rellenan dando la vuelta, así que va al último, la posición 3, delante del segmento donde está el 4.
 
 Con NWOX, el Padre 2 sin las ciudades del segmento (4, 5, 6 y 7) es 9 2 3 8 1, y esas ciudades ocupan las posiciones 1, 2, 3, 8 y 9. El Hijo 1 es 9 2 3 4 5 6 7 8 1, y la 4 va antes que la 8, como en los padres. NWOX no garantiza conservar todas las precedencias que comparten los padres, pero conserva muchas más que OX. Puedes comprobar el resultado en la [variante «De izquierda a derecha»](https://josemagalan.github.io/crossover-ga/#op=ox&lang=es&v=left_to_right&p1=1-2-3-4-5-6-7-8-9&p2=9-4-5-2-6-3-8-1-7&c=3-7){target="_blank"}.
 </details>
@@ -598,7 +598,7 @@ Con NWOX, el Padre 2 sin las ciudades del segmento (4, 5, 6 y 7) es 9 2 3 8 1, y
 
 **Más propiedades de un cruce.** @talbi2009 [pp. 213–214] precisa la heredabilidad. Un cruce es **puro** si dos padres idénticos dan hijos idénticos a ellos: solo recombina, y deja a la mutación la tarea de introducir valores nuevos. Es **respetuoso** si conserva lo que tienen en común los dos padres, como los cruces binarios en las posiciones 2 y 6 del ejemplo [](#ejemplo-cruce-uno-y-dos-puntos).
 
-El detalle de cada variante importa. @talbi2009 [p. 218] señala que OX, tal como se explica en la sección -@sec-cruce-ox, es puro, y que deja de serlo si se empieza a leer o a rellenar en el primer corte. Tampoco lo es la variante «Orden desde el inicio» de la sección -@sec-cruce-otros-cruces, que empieza a leer el otro padre por la primera posición.
+El detalle de cada variante importa. @talbi2009 [p. 218] señala que OX, tal como se explica en la sección -@sec-cruce-ox, es puro. Deja de serlo si se empieza a leer el otro padre en un sitio y a rellenar los huecos en otro. Es lo que hace la variante «Orden desde el inicio» de la sección -@sec-cruce-otros-cruces, que lee el otro padre desde la primera posición y rellena tras el segundo corte.
 
 ::: {.callout-tip .ejemplo #ejemplo-cruce-ampliaciones title="Ejemplo reproducible · Cruzar un padre consigo mismo"}
 **Datos.** Los dos padres son la ruta 1 2 3 4 5 6 7 8 9. Cruce OX con el segmento en las posiciones 4–7, con la variante «Orden desde el inicio» y con la «Clásica (Goldberg, 1989)».
@@ -630,7 +630,7 @@ Con la variante clásica, los dos hijos son **1 2 3 4 5 6 7 8 9**, iguales a los
 - El cruce combina dos padres en dos hijos, que deben heredar rasgos de los padres y ser soluciones válidas.
 - En binaria y entera, los cruces en un punto, en dos puntos y uniforme se describen con una máscara. Donde los padres coinciden, los hijos también.
 - En la representación real, el cruce uniforme copia valores y el aritmético los promedia; ninguno sale del intervalo de los padres.
-- Las permutaciones necesitan cruces propios: OX conserva el orden relativo, PMX completa con correspondencias y CX conserva las posiciones.
+- Las permutaciones necesitan cruces propios: OX conserva el orden relativo, PMX completa con correspondencias y tiende a conservar posiciones, y CX las conserva todas.
 
 ## Referencias del capítulo {.unnumbered #referencias}
 
