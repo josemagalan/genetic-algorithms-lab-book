@@ -411,7 +411,14 @@ Un individuo queda igual si no muta ninguno de sus 10 bits. Con $\mathit{pm} = 0
 - Lee «Qué mide cada columna», debajo de la tabla, para ver la definición exacta de cada medida.
 :::
 
-Para seguir el recorrido básico, continúa por el [capítulo «Reemplazar y parar»](#sec-reemplazo-quien-sobrevive).
+## Resumen {.unnumbered #resumen}
+
+- La mutación cambia al azar una pequeña parte de un individuo. Aporta valores que la selección y el cruce no pueden crear ni recuperar por sí solos (en binaria, un bit que se ha perdido en toda la población), y debe poder llegar a cualquier solución, cambiar poco y dar soluciones válidas.
+- En binaria, cada bit se invierte con probabilidad *pm*. En entera, el reinicio aleatorio sirve para categorías y el deslizamiento, para cantidades ordenadas. En real, la mutación gaussiana suma un ruido de tamaño σ.
+- Las permutaciones necesitan mutaciones que solo recoloquen genes: intercambio, inserción e inversión.
+- Una tasa mal elegida puede impedir que se conserve lo aprendido. En bits, con *pm* = 0,5 el mutante es independiente del padre; con *pm* = 1 se obtiene su complemento.
+
+Para seguir el recorrido básico, continúa por el [capítulo «Reemplazar y parar»](08-reemplazo.qmd).
 
 ## Otras mutaciones [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-mutacion-otras-mutaciones}
 
@@ -574,13 +581,6 @@ El mutante es **1 9 8 7 6 5 4 3 2**. Solo el 1 sigue en su posición, pero la ru
 - **Autoadaptativo:** cada individuo lleva junto a sus genes sus propios valores de σ, que también mutan [@herrera1998, apartado 4.1]. Así, los pasos que funcionan bien se transmiten junto con las soluciones que los producen [@talbi2009, pp. 212–213]. Bäck aplicó la misma idea a la probabilidad de mutación de las cadenas de bits [@eiben1999, p. 133].
 
 Teoría y experimentos coinciden en que σ debe disminuir a lo largo de la búsqueda: al principio conviene explorar con saltos grandes y, cerca del óptimo, afinar [@eiben2015, p. 64].
-
-## Resumen {.unnumbered #resumen}
-
-- La mutación cambia al azar una pequeña parte de un individuo. Aporta valores que la selección y el cruce no pueden crear ni recuperar por sí solos (en binaria, un bit que se ha perdido en toda la población), y debe poder llegar a cualquier solución, cambiar poco y dar soluciones válidas.
-- En binaria, cada bit se invierte con probabilidad *pm*. En entera, el reinicio aleatorio sirve para categorías y el deslizamiento, para cantidades ordenadas. En real, la mutación gaussiana suma un ruido de tamaño σ.
-- Las permutaciones necesitan mutaciones que solo recoloquen genes: intercambio, inserción e inversión.
-- Ni poca ni mucha: con *pm* pequeña la mayoría de los individuos no cambia; con *pm* demasiado alta, la búsqueda se vuelve aleatoria.
 
 ## Referencias del capítulo {.unnumbered #referencias}
 

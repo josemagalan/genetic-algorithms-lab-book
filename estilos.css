@@ -187,3 +187,6 @@ main .katex-display {
 .csl-entry {
   overflow-wrap: anywhere;
 }
+
+/* Acceso al SVG original para leer rótulos con el zoom del navegador. */
+a.ampliar-figura { display: inline-block; margin: 0 0 1rem; font-size: 0.9rem; }

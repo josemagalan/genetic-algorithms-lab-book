@@ -60,6 +60,7 @@ Los once capítulos tienen un borrador completo y una primera revisión del auto
 - Sin dependencias externas en la página: KaTeX va en local (`vendor/katex/`).
 - Al hacer *push* a `main`, GitHub Actions genera el libro y lo publica en GitHub Pages (`.github/workflows/publish.yml`).
 - `comprobaciones/` guarda la versión revisada de cada herramienta y un guion que avisa si una herramienta cambia o si el libro pide un valor que sus controles no permiten; lo ejecuta `.github/workflows/comprobar.yml` en cada *push* y cada lunes (`comprobaciones/LEEME.md`).
+- `.github/workflows/verificar-html.yml` comprueba además el HTML y una muestra de actividades en Chromium. Verifica la navegación del recorrido básico, el ciclo bilingüe, los enlaces al libro y resultados de selección, OX y siembra. Las instrucciones locales y los límites están en `comprobaciones/LEEME.md`.
 
 Para generarlo en local hacen falta Quarto (≥ 1.10) y Python 3:
 

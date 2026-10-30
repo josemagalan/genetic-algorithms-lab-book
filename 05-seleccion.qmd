@@ -301,7 +301,14 @@ Una ejecución no basta para hablar de frecuencias. En las 50 repeticiones de ca
 </details>
 ::::
 
-Para seguir el recorrido básico, continúa por el [capítulo «Cruzar»](#sec-cruce-para-que-cruzar).
+## Resumen {.unnumbered #resumen}
+
+- La selección favorece a los mejores, pero debe dejar oportunidades a los demás.
+- El torneo solo depende del orden. La ruleta depende de la escala de la aptitud y pierde presión cuando las aptitudes se parecen.
+- El truncamiento reduce la diversidad muy deprisa.
+- La selección no crea soluciones nuevas, y el mejor puede perderse por azar.
+
+Para seguir el recorrido básico, continúa por el [capítulo «Cruzar»](06-cruce.qmd).
 
 ## Otros mecanismos de selección [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-seleccion-otros-mecanismos}
 
@@ -384,13 +391,6 @@ La regla de Axelrod no pierde diversidad tan deprisa como el truncamiento. En la
 - Introduce cuatro aptitudes iguales y observa cómo resuelve la herramienta el caso σ = 0.
 - En [Comparar mecanismos](https://josemagalan.github.io/selection-ga/#cmp=all&lang=es){target="_blank"}, compara su «Variabilidad del muestreo» con la de la ruleta y el torneo.
 :::
-
-## Resumen {.unnumbered #resumen}
-
-- La selección favorece a los mejores, pero debe dejar oportunidades a los demás.
-- El torneo solo depende del orden. La ruleta depende de la escala de la aptitud y pierde presión cuando las aptitudes se parecen.
-- El truncamiento reduce la diversidad muy deprisa.
-- La selección no crea soluciones nuevas, y el mejor puede perderse por azar.
 
 ## Referencias del capítulo {.unnumbered #referencias}
 

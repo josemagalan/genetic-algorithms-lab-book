@@ -52,21 +52,23 @@ Hay **cuatro cromosomas**, uno por individuo, y cada uno tiene **cinco genes**. 
 
 ¿En qué orden se hacen las cosas, y cuáles se repiten?
 
-Antes de empezar hay que **representar** el problema, es decir, decidir cómo se escribe una solución como cromosoma, y **crear la población inicial**, normalmente al azar. Estas dos cosas se hacen una sola vez. Después, la población entra en un ciclo que se repite en cada generación [@talbi2009, p. 200; @goldberg1989, pp. 10–14]:
+Antes de empezar hay que **representar** el problema, es decir, decidir cómo se escribe una solución como cromosoma, **crear la población inicial**, normalmente al azar, y **evaluarla**. Estas tres cosas se hacen una sola vez. Después, la población entra en un ciclo que se repite en cada generación [@talbi2009, p. 200; @goldberg1989, pp. 10–14]:
 
-1. **Evaluar:** calcular la aptitud de cada individuo.
-2. **Seleccionar:** elegir a los padres, de modo que los individuos con más aptitud tengan más probabilidad de reproducirse.
-3. **Cruzar:** combinar los genes de dos padres para formar hijos.
-4. **Mutar:** cambiar al azar, con una probabilidad pequeña, algún gen de los hijos.
+1. **Seleccionar:** elegir a los padres, de modo que los individuos con más aptitud tengan más probabilidad de reproducirse.
+2. **Cruzar:** combinar los genes de dos padres para formar hijos.
+3. **Mutar:** cambiar al azar, con una probabilidad pequeña, algún gen de los hijos.
+4. **Evaluar a los hijos:** calcular su aptitud.
 5. **Reemplazar:** decidir quiénes forman la población de la generación siguiente.
 
 Y vuelta a empezar, hasta que se cumple el **criterio de parada**. Al terminar, el algoritmo devuelve la mejor solución que ha encontrado. La figura -@fig-ciclo resume el ciclo.
 
 ![El ciclo de un algoritmo genético. Representar el problema, crear la población inicial y evaluarla se hace una sola vez; seleccionar, cruzar, mutar, evaluar a los hijos y reemplazar se repite en cada generación hasta que se cumple el criterio de parada. Figura propia, generada con `figuras/02-ciclo.py`, en el repositorio del libro.](figuras/02-ciclo.svg){#fig-ciclo fig-alt="Esquema de flujo. A la izquierda, bajo el rótulo Antes del ciclo, una vez, tres cajas grises en columna: Representar, que define los cromosomas; Crear P(0), la población inicial; y Evaluar P(0), que mide su aptitud. Una flecha lleva a un rombo con la pregunta ¿Parar? Si la respuesta es no, una flecha sube a la caja Seleccionar, que elige los padres; de ahí, con los padres, a Cruzar, que combina los genes; con los hijos, a Mutar, que introduce cambios; con los hijos mutados, a Evaluar, que mide la aptitud de los hijos; y a Reemplazar, que forma P(t + 1) y vuelve al rombo. Estas cinco cajas azules están dentro de un recuadro discontinuo rotulado En cada generación. Si la respuesta es sí, una flecha baja a la caja Devolver la mejor solución encontrada."}
 
+[Ampliar figura](figuras/02-ciclo.svg){.ampliar-figura target="_blank" rel="noopener"}
+
 Hay dos decisiones que se parecen y conviene no confundir. La **selección** decide quién se reproduce; el **reemplazo** decide quién sigue en la población. Por eso la selección va al principio de la generación, con la población actual, y el reemplazo al final, cuando ya hay hijos.
 
-En la figura, la evaluación de cada generación aparece después de mutar: se evalúa a los hijos en cuanto se crean. Si el reemplazo compara la aptitud de padres e hijos, hay que conocerla antes de reemplazar. Si los hijos sustituyen a todos los padres, da igual evaluarlos al final de una generación o al principio de la siguiente: es la misma evaluación. Así lo cuenta el portal, que pone «Evaluar» al principio del ciclo. En los dos casos, la población inicial se evalúa una sola vez, antes de entrar en el ciclo, y en cada generación se evalúa a los hijos.
+La figura, el pseudocódigo y el portal siguen el mismo orden: se evalúa la población inicial antes del ciclo y a los hijos después de mutar, antes del reemplazo. Así se puede comparar la aptitud de padres e hijos al decidir quién sigue. Con reemplazo generacional puro también se podría evaluar a los hijos al comienzo de la vuelta siguiente, pero usaremos el mismo esquema en todo el laboratorio.
 
 ::: {.callout-note .en-app title="En la aplicación · portal, «Así encajan en el algoritmo»"}
 [Explorar en el portal](https://josemagalan.github.io/genetic-algorithms-lab/?lang=es#algorithm){.explorar target="_blank"}
@@ -383,7 +385,8 @@ EvoTraveller permite ver una ejecución completa. Resuelve el problema del viaja
 ::: {.callout-note .en-app title="En la aplicación · EvoTraveller"}
 [Explorar en EvoTraveller](https://evotraveller.streamlit.app/){.explorar target="_blank"}
 
-- Deja los valores iniciales de la barra lateral y pulsa **Run**. La gráfica **Fitness** muestra la mejor aptitud de cada generación, de la 0 a la 50; **Best solution**, la mejor ruta al final.
+- Si aparece **Zzzz**, pulsa **Yes, get this app back up!** y espera a que aparezcan los controles.
+- Pon los [valores de referencia](09-experimentos.qmd#configuracion-evotraveller) de la barra lateral y pulsa **Run**. La gráfica **Fitness** muestra la mejor aptitud de cada generación, de la 0 a la 50; **Best solution**, la mejor ruta al final.
 - Bajo **Solutions**, mueve el control **Generation** desde 0 y observa cómo cambian las rutas de la población. ¿Se parecen más entre sí al principio o al final?
 - Busca en la barra lateral, bajo **GA parameters**, qué controles corresponden a la selección, el cruce, la mutación, el reemplazo y la parada. ¿Qué decisiones de diseño no puedes cambiar?
 - Pon **Generations** en 10 y vuelve a pulsar **Run**. ¿Qué decisión has cambiado? ¿Llega la curva al mismo valor que con 50? ¿En qué generación deja de mejorar? Lo retomaremos en la sección -@sec-experimentos-azar.
@@ -393,7 +396,7 @@ EvoTraveller permite ver una ejecución completa. Resuelve el problema del viaja
 Según su descripción y su código, EvoTraveller crea la población inicial con permutaciones al azar, elige los padres por torneo, cruza con OX, muta intercambiando dos lugares y pasa los mejores a la generación siguiente sin cambiarlos. Para obtener la ruta, añade el origen al principio y al final de la permutación.
 
 a) Completa la tabla de la sección -@sec-ciclo-decisiones para EvoTraveller y di qué control de la barra lateral corresponde a cada decisión, si lo hay.
-b) Con los valores iniciales, la curva **Fitness** sube o se queda igual, pero nunca baja. ¿Por qué?
+b) Con los [valores de referencia](09-experimentos.qmd#configuracion-evotraveller), la curva **Fitness** sube o se queda igual, pero nunca baja. ¿Por qué?
 
 <details>
 <summary>**Ver la solución**</summary>
@@ -420,7 +423,14 @@ b) Porque hay **élite**: los mejores individuos pasan a la generación siguient
 
 <!-- Comprobado el 2026-10-15 con el código de EvoTraveller (algorithm.py y main.py, commit 41205ad): initial_population usa random.sample; random_tournament; ox_crossover; mutate intercambia dos posiciones con probabilidad mutation_rate por individuo; la élite, max(1, int(elitism · N)) redondeada a par, se copia sin mutar; el bucle hace `generations` vueltas; add_extremes añade (0, 0) al principio y al final; fitness = 1/distancia. Con los valores iniciales (10 lugares, semilla 1111), la mejor aptitud pasa de 0,02301 a 0,02932 y no baja nunca (mejora en las generaciones 1, 2 y 3), como en el capítulo 9. La gráfica Fitness tiene 51 puntos (generaciones 0 a 50); el control Generation va de 0 a Generations − 1. -->
 
-Para seguir el recorrido básico, continúa por el [capítulo «Representar soluciones»](#sec-representacion-genotipo-fenotipo).
+## Resumen {.unnumbered #resumen}
+
+- Un algoritmo genético hace evolucionar una población de soluciones. Representar el problema, crear la población inicial y evaluarla se hace una vez; seleccionar, cruzar, mutar, evaluar a los hijos y reemplazar se repite en cada generación hasta que se cumple el criterio de parada.
+- La selección decide quién se reproduce y el reemplazo, quién sigue en la población. Cada individuo se evalúa una vez, y el algoritmo devuelve la mejor solución encontrada.
+- En la generación de Goldberg, la ruleta da más copias a los mejores y el cruce combina partes buenas de dos padres: la aptitud media pasa de 292,5 a 438,5 y la mejor, de 576 a 729. Pero una generación es un sorteo, y sin élite el mejor individuo puede perderse.
+- Diseñar un algoritmo genético es tomar nueve decisiones: representación, inicialización, genotipo y fenotipo (decodificación), aptitud, mutación, cruce, selección, reemplazo y parada. La representación va primero, porque condiciona la aptitud y los operadores.
+
+Para seguir el recorrido básico, continúa por el [capítulo «Representar soluciones»](03-representacion.qmd).
 
 ## Variantes del ciclo [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-ciclo-variantes}
 
@@ -451,13 +461,6 @@ El generacional evalúa los 50 individuos iniciales y 50 hijos en cada generaci�
 **¿Por qué funciona?** En el ejemplo [](#ejemplo-ciclo-variar), el mejor hijo juntó dos trozos de cadenas buenas: 11 al principio y 11 al final. @goldberg1989 [p. 17] parte de esta observación para analizar los algoritmos genéticos con la idea de **esquema** o plantilla de semejanza: un patrón como 11\*\*\*, que comparten todas las cadenas que empiezan por 11. Con esa idea empieza el análisis teórico clásico de los algoritmos genéticos [@goldberg1989, p. 1], que no necesitamos para usarlos.
 
 **Más lecturas.** La simulación a mano completa, con más detalle sobre cada operador, está en @goldberg1989 [pp. 10–17]. @mitchell1998 [apartado 1.6] describe el mismo algoritmo como una lista de pasos, con otro ejemplo. @talbi2009 [apartados 3.1–3.3] presenta el esquema común de los algoritmos evolutivos y sus componentes, y @luke2013 [algoritmo 20] da un pseudocódigo del algoritmo genético muy cercano al de la sección -@sec-ciclo-pseudocodigo.
-
-## Resumen {.unnumbered #resumen}
-
-- Un algoritmo genético hace evolucionar una población de soluciones. Representar el problema, crear la población inicial y evaluarla se hace una vez; seleccionar, cruzar, mutar, evaluar a los hijos y reemplazar se repite en cada generación hasta que se cumple el criterio de parada.
-- La selección decide quién se reproduce y el reemplazo, quién sigue en la población. Cada individuo se evalúa una vez, y el algoritmo devuelve la mejor solución encontrada.
-- En la generación de Goldberg, la ruleta da más copias a los mejores y el cruce combina partes buenas de dos padres: la aptitud media pasa de 292,5 a 438,5 y la mejor, de 576 a 729. Pero una generación es un sorteo, y sin élite el mejor individuo puede perderse.
-- Diseñar un algoritmo genético es tomar nueve decisiones: representación, inicialización, genotipo y fenotipo (decodificación), aptitud, mutación, cruce, selección, reemplazo y parada. La representación va primero, porque condiciona la aptitud y los operadores.
 
 ## Referencias del capítulo {.unnumbered #referencias}
 

@@ -1,0 +1,48 @@
+name: Verificar HTML e interfaces
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "37 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: 1.10.19
+      - name: Generar el libro y comprobar el HTML
+        run: |
+          quarto render
+          node comprobaciones/html.cjs
+      - name: Obtener los módulos y el portal actuales
+        run: |
+          mkdir -p _herramientas
+          for repo in representation-ga initialization-and-evaluation-ga selection-ga crossover-ga mutation-ga; do
+            git clone --depth 1 "https://github.com/josemagalan/$repo.git" "_herramientas/$repo"
+          done
+          git clone --depth 1 https://github.com/josemagalan/genetic-algorithms-lab.git _herramientas/portal
+      - name: Preparar Chromium
+        working-directory: comprobaciones
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          npx playwright install --with-deps chromium
+      - name: Comprobar las actividades en la interfaz
+        run: node comprobaciones/interfaz.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: comprobaciones-interfaz
+          path: comprobaciones/resultados/
+          if-no-files-found: ignore

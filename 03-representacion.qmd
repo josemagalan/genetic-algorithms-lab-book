@@ -28,6 +28,8 @@ Un **cromosoma** es una cadena de **genes**, y cada gen toma un valor, su **alel
 
 ![Del cromosoma a la aptitud, con la representación binaria de dos variables reales. El cruce y la mutación actúan sobre los bits; la función de aptitud solo ve la solución decodificada. Figura propia, generada con `figuras/03-representacion.py`, en el repositorio del libro.](figuras/03-genotipo-fenotipo.svg){#fig-genotipo-fenotipo fig-alt="Esquema de izquierda a derecha. A la izquierda, el genotipo: ocho casillas con los bits 1 0 1 0 0 0 1 1, agrupadas de cuatro en cuatro. Los cuatro primeros son el gen x1, con z igual a 10, y los cuatro siguientes, el gen x2, con z igual a 3. Una flecha, rotulada decodificar, lleva al fenotipo: la solución x1 igual a 1,67 y x2 igual a menos 3,00. Otra flecha, rotulada evaluar, lleva a la aptitud, f igual a 139,38. Una llave bajo el genotipo indica que ahí actúan el cruce y la mutación; otra bajo el fenotipo y la aptitud indica que ahí actúa la función de aptitud."}
 
+[Ampliar figura](figuras/03-genotipo-fenotipo.svg){.ampliar-figura target="_blank" rel="noopener"}
+
 El esquema de la figura recoge una idea que usaremos todo el capítulo: el cruce y la mutación no saben qué significan los bits, y la función de aptitud no ve los bits. Todo lo que hay entre los dos, la representación, decide qué soluciones se pueden alcanzar, qué le ocurre a la solución cuando cambia un gen y si los operadores pueden producir cromosomas que no describen ninguna solución. Por eso, al elegir una representación hay que pensar a la vez cómo se evaluará la solución y cómo actuarán los operadores [@talbi2009, p. 35].
 
 Veamos una decodificación completa. Buscamos el punto más bajo de la función de Himmelblau,
@@ -43,6 +45,8 @@ Cada variable se escribe con *k* = 4 bits. Esos cuatro bits se leen como un núm
 La figura -@fig-himmelblau muestra la función. Tiene cuatro mínimos, todos con *f* = 0, cada uno en su valle. Entre ellos, cerca de $(-0{,}27;\ -0{,}92)$, hay un máximo local con $f \approx 181{,}6$, y la función crece hacia las esquinas, hasta 890 en $(5;\ 5)$.
 
 ![La función de Himmelblau en $[-5, 5]^2$: superficie (izquierda) y curvas de nivel (derecha). Los rombos son los cuatro mínimos globales, donde *f* = 0. Los colores siguen una escala aproximadamente logarítmica, la misma en los dos paneles, para que se distingan los valles. Figura propia, generada con `figuras/03-himmelblau.py`, en el repositorio del libro.](figuras/03-himmelblau.svg){#fig-himmelblau fig-alt="Dos paneles. A la izquierda, una superficie en tres dimensiones sobre el cuadrado de −5 a 5, con la altura f de 0 a 900: tiene cuatro hoyos, coloreados en azul intenso y marcados con rombos naranjas, separados por zonas más altas y claras; la superficie sube mucho hacia las esquinas. A la derecha, el mismo cuadrado visto desde arriba, con curvas de nivel blancas sobre un fondo que va del azul oscuro, donde f es baja, al gris claro, donde es alta. Los cuatro rombos están cerca de (3; 2), (−2,8; 3,1), (−3,8; −3,3) y (3,6; −1,8), cada uno en el centro de un valle. Una barra de color con las marcas 0, 1, 10, 100 y 900 da la escala."}
+
+[Ampliar figura](figuras/03-himmelblau.svg){.ampliar-figura target="_blank" rel="noopener"}
 
 ::: {.callout-tip .ejemplo #ejemplo-representacion-genotipo-fenotipo title="Ejemplo reproducible · De bits a un punto"}
 **Datos.** El cromosoma 1 0 1 0 0 0 1 1, con *k* = 4. Los cuatro primeros bits codifican $x_1$ y los cuatro siguientes, $x_2$. Entre dos valores representables consecutivos hay una distancia $\Delta = 10/15 \approx 0{,}6667$, y la fórmula es $x = -5 + z\,\Delta$.
@@ -134,6 +138,8 @@ Con *k* bits solo se pueden escribir $2^k$ valores por variable. ¿Qué se pierd
 Se pierden todos los valores que quedan entre dos representables. La solución buscada, por ejemplo el mínimo de la función, puede no ser uno de los puntos que se pueden escribir. Para ver cuánto cambia esto con el número de bits, la figura -@fig-rejilla dibuja los puntos representables de la función de Himmelblau con *k* = 3, 4 y 5.
 
 ![Puntos representables en $[-5, 5]^2$ con 3, 4 y 5 bits por variable. Los rombos son los cuatro mínimos globales, donde *f* = 0; el círculo señala el mejor punto representable de cada rejilla. Figura propia, generada con `figuras/03-representacion.py`, en el repositorio del libro.](figuras/03-rejilla.svg){#fig-rejilla fig-alt="Tres gráficos de puntos, uno por valor de k, con las variables x1 horizontal y x2 vertical, ambas de menos 5 a 5. Con k igual a 3 hay una rejilla de 64 puntos, separados 1,43; con k igual a 4, una de 256 puntos, separados 0,67; con k igual a 5, una de 1024 puntos, separados 0,32. En cada gráfico, cuatro rombos señalan los mínimos globales de la función de Himmelblau, que no coinciden con puntos de la rejilla. Un círculo marca el mejor punto de cada rejilla: con k igual a 3 y a 4, cerca del mínimo de la zona inferior derecha, y con k igual a 5, cerca del mínimo de la zona superior izquierda."}
+
+[Ampliar figura](figuras/03-rejilla.svg){.ampliar-figura target="_blank" rel="noopener"}
 
 <details>
 <summary>Ver los datos de la figura</summary>
@@ -424,7 +430,14 @@ Un cromosoma de 7 bits no es válido: el problema tiene 6 objetos y haría falta
 - Pulsa **Instancia aleatoria** varias veces y compara la proporción de factibles. ¿De qué crees que depende?
 :::
 
-Para seguir el recorrido básico, continúa por el [capítulo «Inicializar y evaluar»](#sec-inicializar-evaluar-uniforme).
+## Resumen {.unnumbered #resumen}
+
+- La representación fija cómo se escribe una solución. El genotipo (el cromosoma) es lo que manipulan el cruce y la mutación; el fenotipo (la solución) es lo que se evalúa; la decodificación pasa del uno al otro.
+- Cada tipo de decisión pide su representación: bits para sí o no y para números en un intervalo, enteros para elegir entre opciones, permutaciones para ordenar y reales para variables continuas.
+- En la binaria de un número real, la precisión es $\Delta = (b - a)/(2^k - 1)$: cada bit más afina la rejilla, pero también agranda el espacio de búsqueda.
+- Un cromosoma válido tiene la estructura de la representación, y una solución factible cumple las restricciones del problema; no son lo mismo. Algunas representaciones absorben las restricciones y otras exigen un tratamiento adicional para las soluciones que las incumplen.
+
+Para seguir el recorrido básico, continúa por el [capítulo «Inicializar y evaluar»](04-inicializar-evaluar.qmd).
 
 ## Binaria: saltos de Hamming y código Gray [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-representacion-gray}
 
@@ -446,6 +459,8 @@ El $\oplus$ vale 1 si los dos bits son distintos y 0 si son iguales. Para decodi
 | Gray | 0111 | 0101 | 0100 | 1100 |
 
 ![Bits que cambian al pasar de un entero al siguiente con 4 bits, en binario estándar y en código Gray. Figura propia, generada con `figuras/03-representacion.py`, en el repositorio del libro.](figuras/03-saltos-hamming.svg){#fig-saltos-hamming fig-alt="Gráfico de barras agrupadas con quince pasos, de 0 a 1 hasta 14 a 15, y el número de bits que cambian en cada paso. En código Gray, todas las barras valen 1. En binario estándar, las barras valen 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2 y 1; la mayor, 4 bits, es el paso de 7 a 8."}
+
+[Ampliar figura](figuras/03-saltos-hamming.svg){.ampliar-figura target="_blank" rel="noopener"}
 
 <details>
 <summary>Ver los datos de la figura</summary>
@@ -772,13 +787,6 @@ Di si la correspondencia entre soluciones y cromosomas es uno a uno o uno a much
 **Adaptar la codificación.** Para un problema difícil no se sabe, de antemano, cuál es la mejor codificación: encontrarla es casi tan difícil como resolver el problema. Por eso se ha propuesto que el algoritmo adapte la codificación a la vez que busca, por ejemplo con el operador de inversión de Holland, que cambia el orden de los genes para que los relacionados se queden juntos [@mitchell1998, apartado 5.3].
 
 **Más lecturas.** Un libro dedicado por entero al tema es @rothlauf2006.
-
-## Resumen {.unnumbered #resumen}
-
-- La representación fija cómo se escribe una solución. El genotipo (el cromosoma) es lo que manipulan el cruce y la mutación; el fenotipo (la solución) es lo que se evalúa; la decodificación pasa del uno al otro.
-- Cada tipo de decisión pide su representación: bits para sí o no y para números en un intervalo, enteros para elegir entre opciones, permutaciones para ordenar y reales para variables continuas.
-- En la binaria de un número real, la precisión es $\Delta = (b - a)/(2^k - 1)$: cada bit más afina la rejilla, pero también agranda el espacio de búsqueda.
-- Un cromosoma válido tiene la estructura de la representación, y una solución factible cumple las restricciones del problema; no son lo mismo. Algunas representaciones absorben las restricciones y otras exigen un tratamiento adicional para las soluciones que las incumplen.
 
 ## Referencias del capítulo {.unnumbered #referencias}
 

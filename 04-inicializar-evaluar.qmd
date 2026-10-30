@@ -524,6 +524,8 @@ La figura -@fig-penalizacion dibuja la aptitud de los ocho individuos según λ.
 
 ![Aptitud de los ocho individuos del ejemplo [](#ejemplo-inicializar-evaluar-penalizacion) en función del peso λ, con la penalización lineal. Para λ entre 0,5 y λ\* = 4, el mejor es I1, que no cabe en la mochila (con λ menor aún gana I7, que tampoco cabe); por encima de λ\*, el mejor es I5, que sí cabe. Figura propia, generada con `figuras/04-inicializar-evaluar.py`, en el repositorio del libro.](figuras/04-penalizacion.svg){#fig-penalizacion fig-alt="Gráfico de líneas. En el eje horizontal, el peso lambda de 0 a 5; en el vertical, la aptitud. Cuatro líneas horizontales son los individuos que caben: I5 a la altura 20, I4 a 11, I6 a 9 e I3 a 5. Cuatro líneas descendentes son los que no caben: I1 empieza en 24 y baja con pendiente 1, I2 empieza en 26 con pendiente 9, I7 empieza en 29 con pendiente 11 e I8 empieza en 20 con pendiente 6. I2, I7 e I8 caen por debajo de I5 antes de lambda igual a 1. La línea de I1 corta a la de I5 en lambda igual a 4, marcada con una línea vertical discontinua."}
 
+[Ampliar figura](figuras/04-penalizacion.svg){.ampliar-figura target="_blank" rel="noopener"}
+
 <details>
 <summary>Ver los datos de la figura</summary>
 
@@ -620,9 +622,19 @@ La caché tiene condiciones. Solo vale si la aptitud es **determinista**, es dec
 - Cambia las **Generaciones (G)** y el **Problema y codificación**. ¿En qué problema ahorra menos la caché?
 :::
 
-Para seguir el recorrido básico, continúa por el [capítulo «Seleccionar a los padres»](#sec-seleccion-quien-se-reproduce).
+
 
 <!-- Revisión matemática del 2026-10-29: en sec-inicializar-evaluar-sembrar se mantiene la curva de la herramienta como aproximación determinista y se distingue de la esperanza exacta en población finita. Cálculo independiente por distribución de los 11 estados para N = 10, K inicial = 1, sin variación ni élite: media exacta en la generación 6 = 7,753758173159563; recurrencia determinista = 9,98820981542226; pérdida en la primera = 0,81^10 = 0,12157665459056936. Es cálculo, no nueva prueba de la interfaz. -->
+
+## Resumen {.unnumbered #resumen}
+
+- La población inicial se genera al azar y de forma uniforme: los bits, los enteros y los reales, gen a gen; las permutaciones, barajando con Fisher–Yates. No tiene que ser buena, sino diversa.
+- La diversidad se mide con distancias normalizadas entre individuos. Una población uniforme sobre los cromosomas no es uniforme sobre las soluciones factibles: puede tener muchos infactibles.
+- Sembrar con una heurística puede ayudar, pero también concentrar la búsqueda alrededor de unas pocas soluciones. Hay que cuidar la diversidad y comprobar el efecto con el algoritmo completo.
+- Evaluar es decodificar, calcular el objetivo, medir la violación y combinarlo todo en la aptitud. Con una penalización, el peso λ no debe ser ni demasiado pequeño, porque ganan los infactibles, ni demasiado grande.
+- Para la ruleta, un coste se transforma en aptitud ($C - f$, $1/(1 + f)$ o el rango): todas conservan el orden, pero reparten la ruleta de forma distinta. El esfuerzo se mide en evaluaciones, $N\,(G + 1)$, y una caché evita repetirlas si la aptitud es determinista.
+
+Para seguir el recorrido básico, continúa por el [capítulo «Seleccionar a los padres»](05-seleccion.qmd).
 
 ## Cubrir mejor la caja: cuasialeatoria e hipercubo latino [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-inicializar-evaluar-cuasialeatoria}
 
@@ -667,6 +679,8 @@ Los 8 puntos de Halton ocupan **las 8 franjas** de cada eje; la población unifo
 La figura -@fig-cobertura compara las tres poblaciones de ocho individuos.
 
 ![Tres poblaciones de 8 individuos en la caja $[-5, 5]^2$, con cada eje dividido en 8 franjas: uniforme (a), secuencia de Halton (b) e hipercubo latino (c). La uniforme deja vacías 4 franjas verticales y 2 horizontales; Halton y el hipercubo latino ocupan todas. Figura propia, generada con `figuras/04-inicializar-evaluar.py`, en el repositorio del libro, con los puntos que da initialization-and-evaluation-ga con la semilla de población 1.](figuras/04-cobertura.svg){#fig-cobertura fig-alt="Tres cuadrados iguales, cada uno con una rejilla de 8 por 8 franjas y 8 puntos. En el primero, población uniforme, los puntos se amontonan junto a los bordes izquierdo y derecho: quedan sin ningún punto cuatro columnas, casi todas en el centro, y dos filas. En el segundo, secuencia de Halton, los puntos se reparten con regularidad y hay uno en cada columna y en cada fila. En el tercero, hipercubo latino, también hay un punto en cada columna y en cada fila, pero con una disposición menos regular, y varios puntos siguen la diagonal de abajo a la izquierda."}
+
+[Ampliar figura](figuras/04-cobertura.svg){.ampliar-figura target="_blank" rel="noopener"}
 
 <details>
 <summary>Ver los datos de la figura</summary>
@@ -964,14 +978,6 @@ La historia de los algoritmos genéticos con varios objetivos, de los primeros a
 **Aptitudes relativas.** En algunos problemas no hay un valor absoluto que medir, como en un juego en el que la estrategia A gana a la B, la B a la C y la C a la A. Entonces la aptitud se obtiene comparando a los individuos entre sí, por puesto o mediante competiciones, y a los algoritmos de población les basta, porque la selección solo necesita saber quién es mejor [@talbi2009, p. 47].
 
 **Más lecturas.** @kazimipour2014 revisan las técnicas de inicialización de la población en algoritmos evolutivos, y @coello2002, las formas de tratar las restricciones.
-
-## Resumen {.unnumbered #resumen}
-
-- La población inicial se genera al azar y de forma uniforme: los bits, los enteros y los reales, gen a gen; las permutaciones, barajando con Fisher–Yates. No tiene que ser buena, sino diversa.
-- La diversidad se mide con distancias normalizadas entre individuos. Una población uniforme sobre los cromosomas no es uniforme sobre las soluciones factibles: puede tener muchos infactibles.
-- Sembrar con una heurística puede ayudar, pero también concentrar la búsqueda alrededor de unas pocas soluciones. Hay que cuidar la diversidad y comprobar el efecto con el algoritmo completo.
-- Evaluar es decodificar, calcular el objetivo, medir la violación y combinarlo todo en la aptitud. Con una penalización, el peso λ no debe ser ni demasiado pequeño, porque ganan los infactibles, ni demasiado grande.
-- Para la ruleta, un coste se transforma en aptitud ($C - f$, $1/(1 + f)$ o el rango): todas conservan el orden, pero reparten la ruleta de forma distinta. El esfuerzo se mide en evaluaciones, $N\,(G + 1)$, y una caché evita repetirlas si la aptitud es determinista.
 
 ## Referencias del capítulo {.unnumbered #referencias}
 

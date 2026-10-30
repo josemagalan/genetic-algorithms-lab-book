@@ -484,7 +484,14 @@ Hay tres ciclos y cada uno puede venir de cualquiera de los dos padres: $2^3 = 8
 - Pulsa **Ver como rutas** y compara la longitud de las rutas de los hijos con las de los padres.
 :::
 
-Para seguir el recorrido básico, continúa por el [capítulo «Mutar»](#sec-mutacion-para-que-mutar).
+## Resumen {.unnumbered #resumen}
+
+- El cruce combina dos padres en dos hijos, que deben heredar rasgos de los padres y ser soluciones válidas.
+- En binaria y entera, los cruces en un punto, en dos puntos y uniforme se describen con una máscara. Donde los padres coinciden, los hijos también.
+- En la representación real, el cruce uniforme copia valores y el aritmético los promedia; ninguno sale del intervalo de los padres.
+- Las permutaciones necesitan cruces propios: OX conserva el orden relativo, PMX completa con correspondencias y tiende a conservar posiciones, y CX las conserva todas.
+
+Para seguir el recorrido básico, continúa por el [capítulo «Mutar»](07-mutacion.qmd).
 
 ## Otros cruces [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-cruce-otros-cruces}
 
@@ -624,13 +631,6 @@ Con la variante clásica, los dos hijos son **1 2 3 4 5 6 7 8 9**, iguales a los
 **Más de dos padres.** No todos los cruces combinan dos padres para dar dos hijos: los hay que dan un solo hijo y los hay con más de dos padres [@pavai2016].
 
 **El sesgo del cruce.** En la sección -@sec-cruce-reales vimos que el cruce uniforme y el aritmético no sacan a los hijos del intervalo de sus padres. Algo parecido se estudia con el nombre de **sesgo del cruce**: con números reales, muchos cruces tienden a favorecer la zona central del espacio de búsqueda. Si el óptimo está en la zona favorecida, el sesgo ayuda; si no, estorba. Cuando no se sabe dónde está, es mejor un cruce sin sesgo [@pavai2016, apartado 7.2].
-
-## Resumen {.unnumbered #resumen}
-
-- El cruce combina dos padres en dos hijos, que deben heredar rasgos de los padres y ser soluciones válidas.
-- En binaria y entera, los cruces en un punto, en dos puntos y uniforme se describen con una máscara. Donde los padres coinciden, los hijos también.
-- En la representación real, el cruce uniforme copia valores y el aritmético los promedia; ninguno sale del intervalo de los padres.
-- Las permutaciones necesitan cruces propios: OX conserva el orden relativo, PMX completa con correspondencias y tiende a conservar posiciones, y CX las conserva todas.
 
 ## Referencias del capítulo {.unnumbered #referencias}
 

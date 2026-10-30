@@ -176,6 +176,8 @@ Para verlo, hemos programado un algoritmo genético con los operadores de los ca
 
 ![Mejor aptitud de la población en cada generación, con y sin élite. OneMax de 40 bits, población de 20, semilla 3. Las líneas verticales y los puntos marcan dónde pararían algunos criterios en la ejecución con élite (sección -@sec-reemplazo-cuando-parar). Figura propia, generada con `figuras/08-elitismo-parada.py`, en el repositorio del libro.](figuras/08-elitismo-parada.svg){#fig-elitismo-parada fig-alt="Gráfica de líneas de la mejor aptitud frente a la generación, de 0 a 100. Con élite, la línea sube por escalones, nunca baja, y alcanza el óptimo, 40, en la generación 42. Sin élite, la línea sube y baja entre 34 y 38 a partir de la generación 15 y termina en 36 sin llegar al óptimo."}
 
+[Ampliar figura](figuras/08-elitismo-parada.svg){.ampliar-figura target="_blank" rel="noopener"}
+
 <details>
 <summary>Ver los datos de la figura</summary>
 
@@ -254,7 +256,14 @@ Con un criterio de 3 generaciones sin mejora, el algoritmo abandona justo antes 
 </details>
 ::::
 
-Para seguir el recorrido básico, continúa por el [capítulo «Parámetros y aleatoriedad»](#sec-experimentos-azar).
+## Resumen {.unnumbered #resumen}
+
+- El reemplazo decide quién forma la generación siguiente. En el reemplazo generacional, los hijos sustituyen a todos los padres; en el estado estacionario, solo entran unos pocos hijos en cada paso.
+- Con el reemplazo generacional puro, la mejor solución puede perderse. El elitismo pasa los *e* mejores, sin cambios, a la generación siguiente; así, la mejor aptitud nunca baja.
+- El elitismo acelera la búsqueda, pero puede reducir la diversidad y llevar a una convergencia prematura. Por eso la élite suele ser pequeña.
+- El algoritmo para cuando alcanza el óptimo, si se conoce, cuando agota los recursos o cuando lleva varias generaciones sin mejorar. Devuelve la mejor solución encontrada.
+
+Para seguir el recorrido básico, continúa por el [capítulo «Parámetros y aleatoriedad»](09-experimentos.qmd).
 
 ## Variantes del estado estacionario [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-reemplazo-variantes-estacionario}
 
@@ -410,13 +419,6 @@ Con los padres A–F (12, 30, 5, 21, 9 y 17) y los seis hijos del ejemplo [](#ej
 **Sin individuos repetidos.** Otra forma sencilla de conservar la diversidad es no admitir copias: por ejemplo, descartar el hijo que ya está en la población. Los primeros estudios empíricos ya mostraron que eliminar los duplicados puede mejorar mucho los resultados [@garciamartinez2025, p. 643].
 
 **El reemplazo como parámetro.** El tipo de reemplazo también puede ajustarse. @grefenstette1986 [pp. 124, 126] usó un algoritmo genético para buscar los parámetros de otro, entre ellos el salto generacional y si había elitismo; el mejor conjunto para una de sus medidas de rendimiento usaba *G* = 1 y elitismo [@mitchell1998, apartado 5.6]. Pero esas recomendaciones dependen de las funciones de prueba con que se obtuvieron.
-
-## Resumen {.unnumbered #resumen}
-
-- El reemplazo decide quién forma la generación siguiente. En el reemplazo generacional, los hijos sustituyen a todos los padres; en el estado estacionario, solo entran unos pocos hijos en cada paso.
-- Con el reemplazo generacional puro, la mejor solución puede perderse. El elitismo pasa los *e* mejores, sin cambios, a la generación siguiente; así, la mejor aptitud nunca baja.
-- El elitismo acelera la búsqueda, pero puede reducir la diversidad y llevar a una convergencia prematura. Por eso la élite suele ser pequeña.
-- El algoritmo para cuando alcanza el óptimo, si se conoce, cuando agota los recursos o cuando lleva varias generaciones sin mejorar. Devuelve la mejor solución encontrada.
 
 ## Referencias del capítulo {.unnumbered #referencias}
 
