@@ -34,7 +34,14 @@ for (const name of pages) {
     if(tag==='a') links++; else resources++;
   }
   const main=(html.match(/<main\b[\s\S]*?<\/main>/)||[''])[0];
-  for(const img of main.matchAll(/<img\b[^>]*>/g)) assert.ok(/\balt="[^"]+"/.test(img[0]),`${name}: imagen sin texto alternativo`);
+  for(const img of main.matchAll(/<img\b[^>]*>/g)) {
+    if(/\balt="[^"]+"/.test(img[0])) continue;
+    // Quarto usa alt="" en el icono ORCID: el nombre accesible está en su enlace.
+    const anchor=(main.slice(0,img.index).match(/<a\b[^>]*>\s*$/)||[''])[0];
+    const namedLinkIcon=/\balt=""/.test(img[0]) && /\baria-label="[^"]+"/.test(anchor)
+      && /^\s*<\/a>/.test(main.slice(img.index+img[0].length));
+    assert.ok(namedLinkIcon,`${name}: imagen sin texto alternativo`);
+  }
   for(const frame of main.matchAll(/<iframe\b[^>]*>/g)) assert.ok(/\btitle="[^"]+"/.test(frame[0]),`${name}: iframe sin título`);
   for(const link of main.matchAll(/<a\b[^>]*class="[^"]*ampliar-figura[^>]*>/g)) {
     assert.ok(/href="figuras\/[^"#]+\.svg"/.test(link[0]),`${name}: ampliación sin SVG`);
