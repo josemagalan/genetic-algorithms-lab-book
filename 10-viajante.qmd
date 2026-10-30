@@ -54,7 +54,7 @@ EvoTraveller tiene tres gráficas. **Fitness** muestra la aptitud de la mejor ru
 - **La curva sube al principio y después se queda plana.** La aptitud pasa de 0,0230 en la generación 0 a 0,0293 en la 3, y no cambia en las 47 generaciones siguientes. La mejor ruta mide 34,11, la inversa de 0,02932.
 - **En la generación 0, los 100 cromosomas son distintos** (99 rutas: dos son la misma recorrida al revés) y casi todas están muy enredadas.
 - **En la generación 10 hay muchas rutas repetidas.** Solo quedan 30 rutas distintas, y 43 de los 100 dibujos son la misma ruta: la mejor, de longitud 34,11.
-- **En la generación 49 sigue igual.** Hay 23 rutas distintas, y 46 dibujos son la mejor ruta. Las demás son variaciones de ella, algunas bastante peores.
+- **En la generación 49, la mejor ruta sigue igual.** Hay 23 rutas distintas, y 46 dibujos son la mejor ruta. Las demás son variaciones de ella, algunas bastante peores.
 
 A partir de la generación 1, la población se dibuja ordenada y el dibujo que queda solo en la fila de arriba es la mejor ruta de esa generación.
 </details>
@@ -325,9 +325,9 @@ c) Cruzar dos copias de la mejor ruta solo la repite si el segmento empieza en l
 
 a) Hay 57 individuos que no son la mejor ruta. La probabilidad de que los 4 contendientes salgan de ellos es
 
-$$\frac{57}{100} \cdot \frac{56}{99} \cdot \frac{55}{98} \cdot \frac{54}{97} \approx 0{,}10.$$
+    $$\frac{57}{100} \cdot \frac{56}{99} \cdot \frac{55}{98} \cdot \frac{54}{97} \approx 0{,}10.$$
 
-Si en el torneo hay al menos una copia de la mejor ruta, gana ella, así que la probabilidad es $1 - 0{,}10 = 0{,}90$.
+    Si en el torneo hay al menos una copia de la mejor ruta, gana ella, así que la probabilidad es $1 - 0{,}10 = 0{,}90$.
 
 b) Cada copia es la mejor ruta con probabilidad 0,90 y no muta con probabilidad 0,95: en promedio, $34 \times 0{,}90 \times 0{,}95 \approx 29$.
 
@@ -388,14 +388,14 @@ Sin élite, la mejor ruta de una generación puede perderse: si muta o se cruza,
 <!-- Comprobado el 2026-10-15 con el código de EvoTraveller y con una copia de genetic_algorithm en la que la línea «e = max(1, int(elitism*population_size))» se sustituye por «e = 0» (memoria/verificaciones/2026-10-15-viajante-evotraveller.py). 15 lugares, semillas 1111–1140, valores iniciales con Mutation rate 0,2: con élite 6,06 % de media, sin élite 10,20 %; curva que empeora en alguna generación: 0 y 28 de 30; final peor que el mejor visto: 0 y 13. Con Mutation rate 0,05: 13,73 % y 13,50 %. Con 10 lugares y 0,05: con élite 2,06 % (17 óptimos), sin élite 1,06 % (24 óptimos), y la curva empeora en 18 de 30. Élite de 10 lugares: Elitism 0,01/0,05/0,1 → 26/17/20 óptimos con pm 0,05 y 23/28/27 con pm 0,2. Desde la generación 5 del ejemplo 10.1, los 6 primeros individuos de la población ordenada son la misma ruta. -->
 
 :::: {.callout-note .ejercicio #ejercicio-viajante-elite title="Ejercicio · Sin élite, a mano"}
-Repite el reemplazo de la sección -@sec-viajante-a-mano sin élite. En lugar de B pasa una segunda copia, la del ganador de un cuarto torneo entre B y D, y no muta. a) ¿Cuál es la generación siguiente y su mejor ruta? b) Imagina ahora que, además, el Hijo 2 no hubiera mutado y el Hijo 1 hubiera salido peor que B. ¿Qué podría pasar con la mejor ruta?
+Repite el reemplazo de la sección -@sec-viajante-a-mano sin élite. En lugar de B pasa una segunda copia, la del ganador de un cuarto torneo entre B y D, y no muta. a) ¿Cuál es la generación siguiente y su mejor ruta? b) Imagina ahora que el cuarto torneo lo juegan C y D, el Hijo 2 no muta y el Hijo 1 sale peor que B. ¿Qué pasa con la mejor ruta?
 
 <details>
 <summary>**Ver la solución**</summary>
 
 a) B gana el torneo contra D, así que la generación siguiente sería la misma: B (como copia), D, H1 y H2. Su mejor ruta es H2, de 24,29. Aquí la élite no cambia nada, porque el torneo ya ha elegido a B.
 
-b) Con estos sorteos, B gana el cuarto torneo y pasa como copia, así que la mejor ruta seguiría siendo B. Pero eso depende del sorteo: si ese torneo lo hubieran jugado C y D, pasarían D dos veces, el Hijo 1 y el Hijo 2 sin mutar (5 2 1 3 4, de 30,62). Ninguna llegaría a 27,81: la mejor ruta de la generación siguiente sería peor que B, y la curva de la mejor aptitud bajaría. La élite garantiza que eso no pase.
+b) D gana el cuarto torneo contra C. Pasan D dos veces, el Hijo 1 y el Hijo 2 sin mutar (5 2 1 3 4, de 30,62). Ninguna ruta llega a 27,81: la mejor ruta de la generación siguiente es peor que B, y la curva de la mejor aptitud baja. La élite garantiza que eso no pase.
 </details>
 ::::
 
@@ -419,7 +419,7 @@ Es un problema **táctico** (sección -@sec-experimentos-objetivo): se resuelve 
 - **D**, como B pero con **Population size** 50 y **Generations** 100: 50 rutas en cada una de 101 generaciones, unas 5000 evaluaciones, como las demás.
 
 ::: {.callout-tip .ejemplo #ejemplo-viajante-caso-real title="Ejemplo reproducible · Tres mapas, dos configuraciones"}
-**Datos.** En EvoTraveller, pon **Number of places** 15 y prueba las configuraciones B y D con tres semillas: 1111, 1112 y 1117. B: [valores de referencia](09-experimentos.qmd#configuracion-evotraveller) con **Mutation rate** 0,2. D: lo mismo, con **Population size** 50 y **Generations** 100. Son seis ejecuciones. Lee en la curva **Fitness** la aptitud final, aproximada, y calcula la longitud como su inversa.
+**Datos.** En EvoTraveller, pon **Number of places** 15 y prueba las configuraciones B y D con tres semillas: 1111, 1112 y 1117. B: [valores de referencia](09-experimentos.qmd#configuracion-evotraveller) con **Mutation rate** 0,2. D: lo mismo, con **Population size** 50 y **Generations** 100. Son seis ejecuciones. Lee en la curva **Fitness** la aptitud final, aproximada, y calcula una longitud aproximada como su inversa.
 
 **Predice.** ¿Qué configuración da rutas más cortas?
 
@@ -434,6 +434,8 @@ Es un problema **táctico** (sección -@sec-experimentos-objetivo): se resuelve 
 | 1112 | 39,81 | 45,72 (+14,8 %) | **39,91** (+0,2 %) |
 | 1117 | 37,00 | **40,16** (+8,6 %) | 41,02 (+10,9 %) |
 | **Media** | | +9,1 % | +6,4 % |
+
+Las longitudes de la tabla se calculan con las aptitudes sin redondear. Por eso pueden diferir de las que obtengas al invertir una aptitud aproximada: con 0,0251 sale 39,84, mientras que la aptitud exacta de D en la semilla 1112 da 39,91.
 
 B gana en dos de los tres mapas, pero D tiene la media más baja, porque en la semilla 1112 B se queda muy lejos. Con tres mapas, la respuesta depende de qué mapas se miren. Hacen falta más.
 
@@ -571,7 +573,7 @@ Las dos variantes copian el segmento de un padre y colocan los demás lugares en
 
 ## Ampliaciones [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas} {#sec-viajante-ampliaciones}
 
-**Un poco de historia.** El problema circulaba entre los matemáticos al menos desde los años treinta: Merrill Flood y Albert Tucker lo oyeron en una charla de Hassler Whitney en Princeton en 1934 [@dantzig1954, p. 393]. Veinte años después, @dantzig1954 encontraron la ruta más corta entre 49 ciudades, una en cada uno de los 48 estados que tenía entonces Estados Unidos y otra en Washington, y demostraron que no había otra mejor. Los métodos exactos han llegado mucho más lejos desde entonces: se ha demostrado cuál es la ruta más corta entre 85 900 puntos, con un cálculo de más de 136 años de procesador [@applegate2009, p. 11]. Para el viajante tal cual hay, por tanto, métodos especializados mucho más potentes que un algoritmo genético; aquí lo usamos porque se ve y se entiende. Los algoritmos genéticos se aplican al viajante desde 1985, entre otros con el cruce PMX de la sección -@sec-cruce-pmx, que @goldberg1985 propusieron con ese fin [@larranaga1999, p. 133].
+**Un poco de historia.** El problema circulaba entre los matemáticos al menos desde los años treinta: Merrill Flood y Albert Tucker recordaban haberlo oído en una charla de Hassler Whitney en Princeton en 1934, aunque el propio Whitney, consultado después, no lo recordaba [@dantzig1954, p. 393]. Veinte años después, @dantzig1954 encontraron la ruta más corta entre 49 ciudades, una en cada uno de los 48 estados que tenía entonces Estados Unidos y otra en Washington, y demostraron que no había otra mejor. Los métodos exactos han llegado mucho más lejos desde entonces: se ha demostrado cuál es la ruta más corta entre 85 900 puntos, con un cálculo de más de 136 años de procesador [@applegate2009, p. 11]. Para el viajante tal cual hay, por tanto, métodos especializados mucho más potentes que un algoritmo genético; aquí lo usamos porque se ve y se entiende. Los algoritmos genéticos se aplican al viajante desde 1985, entre otros con el cruce PMX de la sección -@sec-cruce-pmx, que @goldberg1985 propusieron con ese fin [@larranaga1999, p. 133].
 
 **Otras representaciones.** La permutación no es la única forma de escribir una ruta. @larranaga1999 [pp. 134–155, 166–167] repasan otras y concluyen que la permutación, que llaman representación de camino, es la más natural y la que mejores resultados da. En la **binaria**, cada lugar es una cadena de bits, y el cruce y la mutación clásicos dan cromosomas que repiten lugares o se los saltan, y hay que repararlos, como en la sección -@sec-representacion-infactibles. En la **ordinal**, cada gen dice qué posición ocupa el lugar siguiente en la lista de los que quedan por visitar. Con la lista 1 2 3 4 5, la ruta 3 4 1 2 5 se escribe 3 3 1 1 1: el 3 es el tercero de la lista; quitado el 3, el 4 es el tercero de 1 2 4 5; quitado el 4, el 1 es el primero de 1 2 5, y así hasta el final. Cualquier cromosoma en el que cada gen esté entre 1 y el número de lugares que quedan por visitar es una ruta válida, así que el cruce en un punto no necesita reparación. Pero los resultados son pobres: lo que hay a la derecha del corte cambia de significado cuando cambia lo de la izquierda, y esa parte de la ruta se desordena casi al azar. Que los hijos sean válidos no basta: tienen que heredar lo que importa del problema, que es la localidad de la sección -@sec-experimentos-operadores.
 
@@ -591,3 +593,5 @@ Las dos variantes copian el segmento de un padre y colocan los demás lugares en
 
 ::: {.referencias-capitulo #refs}
 :::
+
+<!-- Adenda de precisión del 2026-10-30, revisión del piloto PDF: leída visualmente la nota histórica de RAND P-510, p. ii (página 3 del PDF local Recursos/dantzig1954-rand-P510.pdf). Dice que Flood y Tucker recuerdan haberlo oído en el seminario de Whitney en 1934 y que Whitney, consultado, no parecía recordarlo. Se matiza el relato sin cambiar la entrada bibliográfica ni dar por cotejada de nuevo toda la versión publicada. -->
