@@ -5,6 +5,9 @@
 *.html
 !vendor/**/*.html
 
+# Plantillas fuente de Quarto
+!/plantillas/*.html
+
 **/*.quarto_ipynb
 
 # Numeración que calcula filtros/indices.py en cada render

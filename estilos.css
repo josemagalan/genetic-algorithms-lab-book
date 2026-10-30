@@ -190,3 +190,44 @@ main .katex-display {
 
 /* Acceso al SVG original para leer rótulos con el zoom del navegador. */
 a.ampliar-figura { display: inline-block; margin: 0 0 1rem; font-size: 0.9rem; }
+
+/* Autoría de la entrada: cada nombre permanece junto a su ORCID y filiaciones. */
+.libro-autoria .autores-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0.25rem 0 0.65rem;
+  font-size: 0.95em;
+  line-height: 1.9;
+  text-wrap: balance;
+}
+.libro-autoria .autor {
+  display: inline-block;
+  margin-right: 1.1em;
+  white-space: nowrap;
+}
+.libro-autoria .autor:last-child { margin-right: 0; }
+.libro-autoria .autor-referencias { margin-left: 0.2em; font-size: 0.7em; }
+.libro-autoria .autor-referencias a { color: inherit; text-decoration: none; }
+.libro-autoria .autor-referencias a:hover { text-decoration: underline; }
+.libro-autoria .filiaciones-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0.35rem 0 0.5rem;
+  font-size: 0.86em;
+  color: var(--bs-secondary-color, #555);
+}
+.libro-autoria .filiaciones-lista li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45em;
+  margin-bottom: 0.2em;
+}
+.libro-autoria .filiaciones-lista sup { min-width: 0.55em; }
+.libro-autoria .autor-correspondencia {
+  margin: 0.5rem 0 0;
+  font-size: 0.8em;
+  color: var(--bs-secondary-color, #555);
+}
+#title-block-header.quarto-title-block.default .libro-autoria + .quarto-title-meta {
+  grid-template-columns: 1fr;
+}

@@ -119,6 +119,8 @@ format:
   html:
     theme: default          # sin fuentes de Google: el libro no depende de CDN, como las herramientas
     css: estilos.css
+    template-partials:
+      - plantillas/title-metadata.html # autores agrupados; filiaciones numeradas debajo
     include-after-body:
       text: '<script src="comentarios.js"></script>'
     html-math-method:

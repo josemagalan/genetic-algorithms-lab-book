@@ -1,0 +1,58 @@
+<!-- Datos normalizados por Quarto; el parcial nativo conserva enlaces y ORCID. -->
+$if(by-author)$
+<div class="libro-autoria">
+  <div class="quarto-title-meta-heading" id="autores-titulo">$labels.authors$</div>
+  <ul class="autores-lista" role="list" aria-labelledby="autores-titulo">
+  $for(by-author)$
+    <li class="autor">$_title-meta-author.html()$<sup class="autor-referencias">$for(by-author.affiliations)$<a href="#filiacion-$it.number$" aria-label="Filiación $it.number$: $it.name$">$it.number$</a>$sep$,$endfor$$if(by-author.attributes.corresponding)$<a href="#correspondencia-$by-author.number$" aria-label="Autor de correspondencia">*</a>$endif$</sup></li>
+  $endfor$
+  </ul>
+  $if(by-affiliation)$
+  <div class="quarto-title-meta-heading" id="filiaciones-titulo">$labels.affiliations$</div>
+  <ol class="filiaciones-lista" role="list" aria-labelledby="filiaciones-titulo">
+  $for(by-affiliation)$
+    <li id="filiacion-$it.number$"><sup>$it.number$</sup><span>$it.name$</span></li>
+  $endfor$
+  </ol>
+  $endif$
+  $for(by-author)$
+  $if(by-author.attributes.corresponding)$
+  <p class="autor-correspondencia" id="correspondencia-$by-author.number$"><sup>*</sup> Autor de correspondencia.</p>
+  $endif$
+  $endfor$
+</div>
+$endif$
+
+<div class="quarto-title-meta">
+  $if(date)$
+  <div>
+    <div class="quarto-title-meta-heading">$labels.published$</div>
+    <div class="quarto-title-meta-contents"><p class="date">$date$</p></div>
+  </div>
+  $endif$
+  $if(date-modified)$
+  <div>
+    <div class="quarto-title-meta-heading">$labels.modified$</div>
+    <div class="quarto-title-meta-contents"><p class="date-modified">$date-modified$</p></div>
+  </div>
+  $endif$
+  $if(doi)$
+  <div>
+    <div class="quarto-title-meta-heading">$labels.doi$</div>
+    <div class="quarto-title-meta-contents"><p class="doi"><a href="https://doi.org/$doi$">$doi$</a></p></div>
+  </div>
+  $endif$
+</div>
+
+$if(abstract)$
+<div class="abstract">
+  <div class="block-title">$labels.abstract$</div>
+  $abstract$
+</div>
+$endif$
+$if(keywords)$
+<div class="keywords">
+  <div class="block-title">$labels.keywords$</div>
+  <p>$for(keywords)$$it$$sep$, $endfor$</p>
+</div>
+$endif$
