@@ -6,36 +6,36 @@
       "repositorio": "josemagalan/representation-ga",
       "url": "https://josemagalan.github.io/representation-ga/",
       "ejemplos": "4243830 (2026-10-15)",
-      "revisado": "59ff580",
-      "comentario": "983441d cambia la narración del empate entre la aptitud penalizada y la mejor factible; los ejemplos del capítulo 3 no empatan (100101: 11, 110110: 6, 101101: 14; óptimo 14), comprobado el 2026-10-16. 59ff580: nombres del portal y del libro."
+      "revisado": "e0eb73b",
+      "comentario": "983441d cambia la narración del empate entre la aptitud penalizada y la mejor factible; los ejemplos del capítulo 3 no empatan (100101: 11, 110110: 6, 101101: 14; óptimo 14), comprobado el 2026-10-16. 59ff580: nombres del portal y del libro. e0eb73b (2026-10-30) añade solo el enlace al capítulo y sus etiquetas ES/EN; fuente contrastada con la copia probada en la interfaz. No cambia los algoritmos."
     },
     "initialization-and-evaluation-ga": {
       "repositorio": "josemagalan/initialization-and-evaluation-ga",
       "url": "https://josemagalan.github.io/initialization-and-evaluation-ga/",
       "ejemplos": "49c1e2e (2026-10-15)",
-      "revisado": "c7090ce",
-      "comentario": "Hasta c7090ce solo cambian README, «Acerca de», el nombre del portal en js/i18n.js e index.html."
+      "revisado": "4d7c688",
+      "comentario": "Hasta c7090ce solo cambian README, «Acerca de», el nombre del portal en js/i18n.js e index.html. 4d7c688 (2026-10-30) coordina la explicación, narración, curva, práctica y descargas ES/EN de la aproximación determinista de la siembra, y añade el enlace al capítulo. Conserva los cálculos del módulo; fuente contrastada con la copia probada, interfaz ES/EN y descargas Python verificadas en 40 casos por idioma y la curva de copias. No se han repetido todos los ejemplos del capítulo."
     },
     "selection-ga": {
       "repositorio": "josemagalan/selection-ga",
       "url": "https://josemagalan.github.io/selection-ga/",
       "ejemplos": "7b7d8a9 (2026-10-15)",
-      "revisado": "b769673",
-      "comentario": "Hasta 424982e solo cambian README, «Acerca de» y el nombre del portal. b769673 (2026-10-29) añade la variante «worst-better» («Sustituir al peor si es mejor») del estado estacionario sin cambiar las demás (las pruebas comparan las cuatro variantes con una implementación directa); el ejercicio de 8.6 la usa y se comprobó con el código y en una copia local de la interfaz. Repetir en la web cuando se publique."
+      "revisado": "f23d758",
+      "comentario": "Hasta 424982e solo cambian README, «Acerca de» y el nombre del portal. b769673 (2026-10-29) añade la variante «worst-better» («Sustituir al peor si es mejor») del estado estacionario sin cambiar las demás (las pruebas comparan las cuatro variantes con una implementación directa); el ejercicio de 8.6 la usa y se comprobó con el código y en una copia local de la interfaz. Repetir en la web cuando se publique. f23d758 (2026-10-30) añade solo el enlace al capítulo y sus etiquetas ES/EN; fuente contrastada con la copia probada en la interfaz. No cambia los algoritmos."
     },
     "crossover-ga": {
       "repositorio": "josemagalan/crossover-ga",
       "url": "https://josemagalan.github.io/crossover-ga/",
       "ejemplos": "9848d5d (2026-10-15)",
-      "revisado": "8303f69",
-      "comentario": "Hasta d58793f solo cambian README y el nombre del portal. 8303f69 (2026-10-28) solo cambia textos y referencias de js/content (variante NWOX y Cicirello, 2023), sin tocar los operadores; el ejercicio 6.10 y los enlaces nuevos del capítulo 6 se comprobaron en la interfaz con esa versión."
+      "revisado": "e828276",
+      "comentario": "Hasta d58793f solo cambian README y el nombre del portal. 8303f69 (2026-10-28) solo cambia textos y referencias de js/content (variante NWOX y Cicirello, 2023), sin tocar los operadores; el ejercicio 6.10 y los enlaces nuevos del capítulo 6 se comprobaron en la interfaz con esa versión. e828276 (2026-10-30) añade solo el enlace al capítulo y sus etiquetas ES/EN; fuente contrastada con la copia probada en la interfaz. No cambia los algoritmos."
     },
     "mutation-ga": {
       "repositorio": "josemagalan/mutation-ga",
       "url": "https://josemagalan.github.io/mutation-ga/",
       "ejemplos": "cc94747 (2026-10-28)",
-      "revisado": "cc94747",
-      "comentario": "Hasta 3194258 solo cambian README y el nombre del portal. 853832a y cc94747 (2026-10-28) solo cambian textos y referencias de js/content y js/i18n.js (Cicirello, 2023, en las mutaciones de permutación; texto de la mezcla; descripción de «Orden relativo»; apartado 3.3.2.1 de Talbi), sin tocar los operadores; npm test sin fallos y todos los ejemplos del capítulo 7 recomprobados en la interfaz publicada con cc94747."
+      "revisado": "2aa6271",
+      "comentario": "Hasta 3194258 solo cambian README y el nombre del portal. 853832a y cc94747 (2026-10-28) solo cambian textos y referencias de js/content y js/i18n.js (Cicirello, 2023, en las mutaciones de permutación; texto de la mezcla; descripción de «Orden relativo»; apartado 3.3.2.1 de Talbi), sin tocar los operadores; npm test sin fallos y todos los ejemplos del capítulo 7 recomprobados en la interfaz publicada con cc94747. 2aa6271 (2026-10-30) añade solo el enlace al capítulo y sus etiquetas ES/EN; fuente contrastada con la copia probada en la interfaz. No cambia los algoritmos."
     },
     "evotraveller": {
       "repositorio": "jismartin/evotraveller",
