@@ -263,7 +263,7 @@ Si añades el truncamiento a las gráficas (por defecto muestran la ruleta, el r
 <!-- Comprobado el 2026-10-07: la tabla de la herramienta muestra estos valores con la simulación inicial. Los valores de la primera generación se obtuvieron con su código (`compare.simulate`, semilla 1). -->
 :::
 
-El truncamiento elimina de golpe a la mitad de la población. En cinco generaciones apenas quedan dos individuos distintos. Es el mecanismo que más diversidad pierde para una misma intensidad de selección [@blickle1996], y por eso lo usamos como contraejemplo. El torneo binario también concentra la población, pero más despacio al principio. La ruleta es la más lenta con estas aptitudes, que van de 1 a 100; ya vimos en la sección -@sec-seleccion-ruleta-deja-de-distinguir que su presión depende de la escala.
+El truncamiento elimina de golpe a la mitad de la población. En cinco generaciones apenas quedan dos individuos distintos. De los mecanismos que comparan @blickle1996, que son el torneo, el truncamiento y el ranking, es el que más diversidad pierde para una misma intensidad de selección, y por eso lo usamos como contraejemplo. El torneo binario también concentra la población, pero más despacio al principio. La ruleta es la más lenta con estas aptitudes, que van de 1 a 100; ya vimos en la sección -@sec-seleccion-ruleta-deja-de-distinguir que su presión depende de la escala.
 
 ## Selección y diversidad a lo largo de generaciones [[Básico]{.largo}[B]{.corto}]{.nivel .basico} {#sec-seleccion-seleccion-y-diversidad}
 
@@ -354,13 +354,13 @@ D solo puede recibir 1 o 2 copias, y A, 0 o 1. En este sorteo los padres son **A
 
 **La selección por media, completada.** Tal como se enuncia en la sección -@sec-seleccion-truncamiento, la regla no mantiene el tamaño de la población, porque no tiene por qué haber exactamente la mitad por encima de la media. Cambiar la media por la **mediana** tampoco basta: con las aptitudes 1, 2, 3, 4 y 5 solo dos individuos superan la mediana, y sus copias son cuatro, no cinco; con 1, 1, 1 y 1 no la supera ninguno. Para conservar el tamaño, el corte se hace por posiciones: se ordena la población, pasa la mitad mejor y se fija qué hacer con los empates en el corte (por ejemplo, deshacerlos al azar) y cuando *N* es impar (por ejemplo, redondear hacia arriba). Los *N* padres se eligen entre los que han pasado. Así definida, la regla es un truncamiento con τ = 0,5. Si *N* es par y no hay empates en el corte, cada individuo de la mitad mejor recibe dos copias **en promedio**. Copiar exactamente dos veces a cada uno, sin sorteo, es otra forma de completar la regla; no da los mismos resultados ejecución por ejecución.
 
-**Un mecanismo hay que especificarlo por completo.** La regla de @axelrod1986 viene de la simulación social: la usó en su modelo evolutivo de las normas. Se parece a la selección por media (sección -@sec-seleccion-truncamiento), pero con dos umbrales en lugar de uno. Se calculan la media $\bar f$ y la desviación típica σ de la población, y cada individuo tiene 2 hijos si $f \ge \bar f + \sigma$, ninguno si $f \le \bar f - \sigma$ y 1 en el resto.
+**Un mecanismo hay que especificarlo por completo.** La regla de @axelrod1986 [p. 1099] viene de la simulación social: la usó en su modelo evolutivo de las normas. Se parece a la selección por media (sección -@sec-seleccion-truncamiento), pero con dos umbrales en lugar de uno. Se calculan la media $\bar f$ y la desviación típica σ de la población, y cada individuo tiene 2 hijos si $f \ge \bar f + \sigma$, ninguno si $f \le \bar f - \sigma$ y 1 en el resto.
 
 La regla no dice qué hacer cuando el número de hijos *M* no coincide con el tamaño *N* de la población, y lo normal es que no coincida. Con las aptitudes 1, 2, 3 y 10 ($\bar f = 4$, σ ≈ 3,54), solo D llega a $\bar f + \sigma \approx 7{,}54$ y nadie queda por debajo de $\bar f - \sigma \approx 0{,}46$, así que salen 5 hijos para 4 huecos. Con 1, 8, 9 y 10 ($\bar f = 7$, σ ≈ 3,54) ocurre lo contrario: A no pasa de $\bar f - \sigma \approx 3{,}46$, nadie llega a $\bar f + \sigma$ y salen 3 hijos. Tampoco dice qué hacer si todos tienen la misma aptitud: entonces σ = 0 y cada individuo cumple a la vez las dos condiciones.
 
 Hay varias formas de completar la regla:
 
-- **Ajustar al azar.** Si sobran hijos, se eliminan al azar de uno en uno; si faltan, se duplican hijos elegidos al azar. Es lo que hicieron @galan2005 al reimplementar el modelo, y lo que hace selection-ga.
+- **Ajustar al azar.** Si sobran hijos, se eliminan al azar los que sobran; si faltan, se duplican al azar los que faltan. Es lo que hicieron @galan2005 [párr. 3.4] al reimplementar el modelo, y lo que hace selection-ga.
 - **Usar percentiles.** Se dan 2 hijos a una proporción de los mejores y ninguno a la misma proporción de los peores, de modo que siempre hay *N* hijos.
 
 ::: {.callout-tip .ejemplo #ejemplo-seleccion-ampliaciones title="Ejemplo reproducible · El mismo individuo, dos sorteos"}
@@ -380,7 +380,7 @@ En el primer sorteo se elimina uno de los hijos de D, y los padres son **A, B, C
 
 <!-- Comprobado el 2026-10-08 en la interfaz (Chromium sin interfaz, paso 11 de 11): r=1 → «los padres son A B C D»; r=6 → «A B D D»; con f=1-8-9-10 y r=2 → «B C D D». Código: js/operators/axelrod.js, commit f2de292. -->
 
-La regla de Axelrod no pierde diversidad tan deprisa como el truncamiento. En la simulación del ejemplo [](#ejemplo-seleccion-truncamiento) quedan 6,4 individuos distintos en la generación 5, frente a 2,2 con el truncamiento, y el mejor no se pierde en ninguna repetición. Pero el detalle importa. @galan2005 repitieron el modelo de las normas con otros mecanismos de selección, y los resultados cambiaron mucho. Elegir el mecanismo de selección, y describirlo por completo, forma parte del modelo.
+La regla de Axelrod no pierde diversidad tan deprisa como el truncamiento. En la simulación del ejemplo [](#ejemplo-seleccion-truncamiento) quedan 6,4 individuos distintos en la generación 5, frente a 2,2 con el truncamiento, y el mejor no se pierde en ninguna repetición. Pero el detalle importa. @galan2005 [párrs. 6.11–6.16] repitieron el modelo, en su versión con *metanormas* (también se castiga a quien no castiga), con otros tres mecanismos de selección, y los resultados cambiaron mucho, a corto y a largo plazo. Elegir el mecanismo de selección, y describirlo por completo, forma parte del modelo.
 
 <!-- Comprobado el 2026-10-08: la tabla «Varias generaciones solo con selección» de «Comparar mecanismos» muestra para Axelrod 6,4 / 1,2 / generación 8 (100 %) / 0 %. Que los resultados cambian con el mecanismo: Galán e Izquierdo (2005, §6.11–6.16), según el texto docente de selection-ga; pendiente de cotejo con el artículo. -->
 
@@ -395,6 +395,8 @@ La regla de Axelrod no pierde diversidad tan deprisa como el truncamiento. En la
 ## Referencias del capítulo {.unnumbered #referencias}
 
 <!-- Seguimiento interno: entradas en referencias.bib, tomadas de la bibliografía de selection-ga (commit f2de292), pendientes de cotejo con las obras. La lista se genera con las obras citadas en el capítulo. -->
+
+<!-- Adenda de cotejo del 2026-10-30: axelrod1986 (Recursos/axelrod1986.pdf, escaneo de JSTOR): regla de una desviación típica y «adjusted to maintain a constant population of 20», sin decir cómo, p. 1099; nota 1 (p. 1110): inspirada en el AG de Holland. galan2005 (Recursos/galan2005.html, párrafos numerados): ajuste al azar de «as many agents as needed», párr. 3.4 (nota 4: pagos iguales); otros tres mecanismos (torneo, ruleta y selección por media) con el juego de las metanormas, párrs. 6.11–6.16 y 7.1; sustituye la fuente anterior (texto docente de selection-ga). blickle1996: cotejado con el TIK-Report 11 (2.ª ed., diciembre de 1995; Recursos/blickle1995-tikreport11.pdf), no con el artículo de la revista: §2.4–2.5, cap. 5, cap. 6 (p. 34), §8.3 (p. 48; la comparación no incluye la ruleta) y §8.5 (p. 50). eiben2015: apartado 5.2.2, pp. 81–82. -->
 
 ::: {.referencias-capitulo #refs}
 :::

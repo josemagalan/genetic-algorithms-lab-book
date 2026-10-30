@@ -50,7 +50,7 @@ En el **cruce en un punto** se elige al azar un punto de corte. El Hijo 1 se que
 
 En el **cruce en dos puntos** se eligen dos cortes y los hijos intercambian el tramo que queda entre ellos. El Hijo 1 conserva los dos extremos del Padre 1 y toma el tramo central del Padre 2.
 
-Los dos se describen con una **máscara de cruce**, un bit por posición [@syswerda1989]. Con un 0, cada hijo copia el gen de su propio padre; con un 1, los hijos lo intercambian: el Hijo 1 toma el gen del Padre 2 y el Hijo 2, el del Padre 1. En el cruce en un punto, la máscara es un bloque de ceros seguido de uno de unos. En el de dos puntos, el bloque de unos queda en el centro.
+Los dos se describen con una **máscara de cruce**, un bit por posición [@syswerda1989, p. 2]. Con un 0, cada hijo copia el gen de su propio padre; con un 1, los hijos lo intercambian: el Hijo 1 toma el gen del Padre 2 y el Hijo 2, el del Padre 1. En el cruce en un punto, la máscara es un bloque de ceros seguido de uno de unos. En el de dos puntos, el bloque de unos queda en el centro.
 
 ::: {.callout-tip .ejemplo #ejemplo-cruce-uno-y-dos-puntos title="Ejemplo reproducible · Un corte y dos cortes"}
 **Datos.** Dos padres de 8 bits, que coinciden en las posiciones 2 y 6:
@@ -129,7 +129,7 @@ Se intercambian las posiciones 4 y 5: el Hijo 1 es (2, 4, 1, **2, 3**, 1) y el H
 
 En el **cruce uniforme**, para cada posición se saca un número aleatorio $r_i \in [0, 1)$. Si $r_i \le p$, los hijos intercambian el gen de esa posición; si no, cada hijo copia el de su propio padre. Con $p = 0{,}5$, la versión original, cada gen del Hijo 1 viene con la misma probabilidad de cada padre. Con un *p* menor, cada hijo se parece más a su propio padre.
 
-Es la misma idea de la máscara de la sección -@sec-cruce-uno-y-dos-puntos, pero ahora la máscara se sortea bit a bit y puede tener cualquier forma [@syswerda1989]. Por eso el cruce uniforme rompe más los bloques de genes contiguos que los cruces por cortes. Tiene ventajas e inconvenientes. Los cruces por cortes tienden a transmitir juntos, generación tras generación, los mismos grupos de genes; el uniforme los mezcla más, pero también deshace con más facilidad las combinaciones que ya funcionaban [@pavai2016].
+Es la misma idea de la máscara de la sección -@sec-cruce-uno-y-dos-puntos, pero ahora la máscara se sortea bit a bit y puede tener cualquier forma [@syswerda1989, p. 2]. Por eso el cruce uniforme rompe más los bloques de genes contiguos que los cruces por cortes. Tiene ventajas e inconvenientes. Los cruces por cortes tienden a transmitir juntos, generación tras generación, los mismos grupos de genes; el uniforme los mezcla más, pero también deshace con más facilidad las combinaciones que ya funcionaban [@pavai2016].
 
 ::: {.callout-tip .ejemplo #ejemplo-cruce-uniforme title="Ejemplo reproducible · Una máscara sorteada, con bits y con enteros"}
 **Datos.** Los mismos padres del ejemplo [](#ejemplo-cruce-uno-y-dos-puntos), con $p = 0{,}5$. Números aleatorios de las posiciones 1 a 8: 0,28; 0,07; 0,58; 0,94; 0,15; 0,01; 0,69 y 0,64.
@@ -635,6 +635,8 @@ Con la variante clásica, los dos hijos son **1 2 3 4 5 6 7 8 9**, iguales a los
 ## Referencias del capítulo {.unnumbered #referencias}
 
 <!-- Seguimiento interno: entradas nuevas en referencias.bib, tomadas de la bibliografía de crossover-ga (commit e6fb577). Cotejadas el 2026-10-08 con los PDF de Recursos: talbi2009 (pp. 213–214 y 218), davis1985 (título, autor y páginas), eshelman1993 (título, autores y pp. 187–202) y deb1995 (revista, volumen y páginas). Las demás, pendientes de cotejo. La lista se genera con las obras citadas en el capítulo. Añadidas el 2026-10-28: pavai2016 y cicirello2023, leídas completas en los PDF de Recursos (3009966.pdf y cicirello2023ecta.pdf, versión aceptada), con los datos cotejados en las páginas del editor (ACM vía gpbib y SciTePress); starkweather1991, cotejada el 2026-10-28 con la versión de los autores (Recursos/Starkweather.pdf): título, autores y la variante mejorada de ERX, que da prioridad a las aristas comunes a los dos padres; el autor confirmó las páginas 69–76. Lo atribuido a Cicirello (2006) y a Eshelman y colaboradores procede de cicirello2023 y pavai2016. Kora y Yadlapalli (2017) se leyó y se descartó por decisión del autor (fuente poco sólida y redundante). -->
+
+<!-- Adenda de cotejo del 2026-10-30: syswerda1989, Recursos/Syswerda.pdf (escaneado; OCR con tesseract): máscara de cruce, máscaras de uno y dos puntos (la inversa también vale) y uniforme con probabilidad 0,5 por posición, todo en la p. 2 (paginación deducida: el escaneo no la muestra). El término «uniform» lo había usado ya Ackley (1987), según su nota 1. -->
 
 ::: {.referencias-capitulo #refs}
 :::
