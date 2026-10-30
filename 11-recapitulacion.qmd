@@ -82,7 +82,7 @@ Casi todo lo que depende de la representación son la inicialización, la decodi
 | **Validez y factibilidad** | Toda cadena es válida, pero puede no ser factible (la mochila que se pasa de peso) (-@sec-representacion-validez) | Válido si cada gen está en su rango | Todo vector es válido; fuera del intervalo, la solución no es factible (-@sec-representacion-fuera-caja) | Cada elemento una sola vez: los operadores tienen que respetarlo |
 | **Cruce** | Un punto, dos puntos, uniforme (-@sec-cruce-uno-y-dos-puntos–-@sec-cruce-uniforme) | Los mismos que en la binaria | Uniforme y aritmético (-@sec-cruce-reales) | OX, PMX y CX (-@sec-cruce-ox–-@sec-cruce-cx) |
 | **Mutación** | Inversión de bits con *pm* por gen (-@sec-mutacion-inversion-bits) | Reinicio aleatorio para categorías; deslizamiento para cantidades ordenadas (-@sec-mutacion-enteros) | Gaussiana, con tamaño σ (-@sec-mutacion-gaussiana) | Intercambio, inserción e inversión (-@sec-mutacion-intercambio-insercion-inversion) |
-| **Avanzado** | Código Gray (-@sec-representacion-gray); cruce en *n* puntos; mutación de un bit | Deslizamiento circular | Inicialización cuasialeatoria e hipercubo latino (-@sec-inicializar-evaluar-cuasialeatoria); BLX-α y SBX; mutación uniforme, no uniforme y polinómica | Variantes de OX y CX y ERX (-@sec-cruce-otros-cruces); mutación por mezcla (-@sec-mutacion-otras-mutaciones) |
+| **Avanzado** | Código Gray (-@sec-representacion-gray); cruce en *k* puntos; mutación de un bit | Deslizamiento circular | Inicialización cuasialeatoria e hipercubo latino (-@sec-inicializar-evaluar-cuasialeatoria); BLX-α y SBX; mutación uniforme, no uniforme y polinómica | Variantes de OX y CX y ERX (-@sec-cruce-otros-cruces); mutación por mezcla (-@sec-mutacion-otras-mutaciones) |
 
 Tres ideas recorren la tabla. La primera: los operadores **se eligen por la representación**, no al revés. El cruce en un punto y el reinicio aleatorio funcionan con bits y con enteros, pero repiten ciudades si se aplican a una permutación (secciones -@sec-cruce-permutaciones y -@sec-mutacion-permutaciones). La segunda: dentro de una representación, el operador adecuado depende de **lo que significan los genes**. Si el gen es una categoría, como una máquina, el reinicio aleatorio es natural; si es una cantidad ordenada, el deslizamiento da cambios pequeños (sección -@sec-mutacion-enteros). La tercera: un cromosoma **válido** no tiene por qué ser una solución **factible**. Cuando la representación no absorbe una restricción, hay que penalizar, reparar o rechazar (secciones -@sec-representacion-validez y -@sec-inicializar-evaluar-penalizacion).
 
@@ -120,7 +120,7 @@ A lo largo del libro han aparecido varios contraejemplos: decisiones que parecen
 | Usar la ruleta con aptitudes muy parecidas | Todos tienen casi la misma probabilidad: la selección deja de distinguir | Torneo, ranking o escalado | -@sec-seleccion-ruleta-deja-de-distinguir |
 | Dejar reproducirse solo a los mejores | El truncamiento reduce la diversidad muy deprisa | Una selección que dé oportunidades a todos | -@sec-seleccion-truncamiento |
 | Aplicar a una permutación operadores de cadenas | El cruce en un punto y el reinicio aleatorio repiten elementos | Operadores de permutación | -@sec-cruce-permutaciones, -@sec-mutacion-permutaciones |
-| Mutar demasiado | La búsqueda se vuelve aleatoria | *pm* pequeña, por ejemplo $1/k$ por gen | -@sec-mutacion-cuanto-mutar |
+| Mutar demasiado | La búsqueda se vuelve aleatoria | *pm* pequeña, por ejemplo $1/L$ por gen, con *L* genes | -@sec-mutacion-cuanto-mutar |
 | Reemplazo generacional sin élite | La mejor solución puede perderse | Una élite pequeña | -@sec-reemplazo-elitismo |
 | Comparar generaciones entre algoritmos distintos | Una generación estacionaria evalúa un hijo, y una generacional, *N* | Contar evaluaciones | -@sec-inicializar-evaluar-coste, -@sec-reemplazo-estacionario |
 | Sacar conclusiones de una sola ejecución | El resultado depende de la semilla | Varias réplicas, medias y desviaciones | -@sec-experimentos-replicas–-@sec-experimentos-comparar |
@@ -210,6 +210,7 @@ Un centro tiene que colocar 40 exámenes en 8 franjas horarias. Algunos pares de
 a) Con 12 exámenes y 4 franjas, ¿usarías un algoritmo genético? ¿Y con 40 exámenes y 8 franjas?
 b) Diseña un algoritmo genético para el caso de 40 exámenes: las nueve decisiones y unos parámetros de partida.
 c) ¿Cómo comprobarías que el diseño funciona antes de usarlo con el calendario real?
+d) Repasa tu diseño con la tabla de errores de la sección -@sec-recapitulacion-errores, como pide el paso 6 del procedimiento. ¿Qué errores evita y cuáles tendrías que vigilar?
 
 <details>
 <summary>**Ver la solución**</summary>
@@ -233,6 +234,8 @@ b) Una propuesta:
 Parámetros de partida: una población de 50 a 100 y *Pc* = 0,8, dentro de los valores clásicos. Otras opciones son razonables si se justifican: por ejemplo, la ruleta con una aptitud transformada, o tratar la capacidad con una reparación que mueva exámenes de las franjas llenas.
 
 c) Con calendarios de cursos anteriores, que son casos parecidos al real: probar varios valores de λ, *pm* y del tamaño del torneo, con 30 réplicas por configuración, y comparar las medias y las desviaciones. Después, comprobar la configuración elegida con calendarios que no se usaron para ajustarla (secciones -@sec-experimentos-casos-parecidos y -@sec-viajante-caso-real). El calendario se hace una vez por cuatrimestre y hay días para calcularlo, así que es un problema táctico, casi de diseño (sección -@sec-experimentos-objetivo): se puede permitir una población grande y muchas generaciones, y hacer varias ejecuciones con el calendario real para quedarse con la mejor.
+
+d) La propuesta evita varios errores de la tabla: la población inicial es aleatoria, sin sembrar; el torneo no necesita transformar el coste ni deja de distinguir con aptitudes parecidas; los operadores son de vectores de enteros, no de cadenas aplicadas a permutaciones; *pm* = 1/40 es pequeña; hay élite; y en c) se usan réplicas, y casos distintos para elegir la configuración y para estimar su calidad. Quedan dos cosas que vigilar: el peso λ de la penalización, que conviene probar con varios valores, y el presupuesto, que hay que fijar según los días disponibles. Si se compara con una versión de estado estacionario, hay que contar evaluaciones, no generaciones.
 </details>
 ::::
 

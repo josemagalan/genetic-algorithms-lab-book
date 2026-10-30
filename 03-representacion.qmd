@@ -73,8 +73,8 @@ El cromosoma representa el punto $(1{,}6667;\ -3)$, donde $f \approx 139{,}38$. 
 
 Mutar un solo bit de ese cromosoma, por ejemplo el primero, da 0 0 1 0 0 0 1 1: $z_1$ pasa de 10 a 2 y $x_1$, de 1,6667 a −3,6667. Un bit ha movido el punto $8\,\Delta \approx 5{,}33$, más de la mitad del lado de la caja. Esto no es un fallo, sino una consecuencia de la representación; volveremos a ello en la sección -@sec-representacion-gray.
 
-:::: {.callout-note .ejercicio #ejercicio-representacion-genotipo-fenotipo title="Ejercicio · Decodificar"}
-Con la misma representación (Himmelblau, $[-5, 5]^2$, *k* = 4), decodifica el cromosoma 0 0 0 0 1 1 1 1 y calcula *f* en ese punto. ¿Hay algún cromosoma que represente exactamente el punto (0; 0)?
+:::: {.callout-note .ejercicio #ejercicio-representacion-genotipo-fenotipo title="Ejercicio · Decodificar y codificar"}
+Con la misma representación (Himmelblau, $[-5, 5]^2$, *k* = 4), decodifica el cromosoma 0 0 0 0 1 1 1 1 y calcula *f* en ese punto. ¿Hay algún cromosoma que represente exactamente el punto (0; 0)? ¿Y el punto (1; −1)? Si lo hay, escríbelo.
 
 <details>
 <summary>**Ver la solución**</summary>
@@ -82,6 +82,8 @@ Con la misma representación (Himmelblau, $[-5, 5]^2$, *k* = 4), decodifica el c
 Los cuatro primeros bits dan $z_1 = 0$, así que $x_1 = -5$; los cuatro últimos dan $z_2 = 15$, así que $x_2 = -5 + 15 \times 10/15 = 5$. El punto es $(-5;\ 5)$, una esquina de la caja, y $f = (25 + 5 - 11)^2 + (-5 + 25 - 7)^2 = 19^2 + 13^2 = 530$.
 
 Para representar $x = 0$ haría falta $z = 5/\Delta = 7{,}5$, que no es un entero. Ningún cromosoma de este tipo representa el punto (0; 0); los más cercanos usan $z = 7$ o $z = 8$, que dan $x = \mp 0{,}3333$.
+
+Para codificar se recorre el camino al revés: del punto a *z* y de *z* a sus bits. $x_1 = 1$ necesita $z_1 = 6/\Delta = 9$, y $x_2 = -1$, $z_2 = 4/\Delta = 6$. Los dos son enteros, así que el punto (1; −1) sí está en la rejilla: $9 = 1001$ y $6 = 0110$, y el cromosoma es **1 0 0 1 0 1 1 0**.
 </details>
 ::::
 
@@ -178,7 +180,7 @@ Hace falta $10/(2^k - 1) \le 0{,}01$, es decir, $2^k - 1 \ge 1\,000$. Con $k = 9
 ::: {.callout-note .en-app title="En la aplicación · representation-ga, «Optimización de una función continua»"}
 [Explorar en representation-ga](https://josemagalan.github.io/representation-ga/#enc=function-bits&lang=es&fn=himmelblau&v=standard){.explorar target="_blank"}
 
-- Cambia los **Bits por variable (k)**, de 2 a 12, y fíjate en el panel que muestra Δ y el «Mejor de la rejilla». ¿A partir de qué *k* baja ese valor de 0,1?
+- Avanza hasta la etapa **Validez**, cambia los **Bits por variable (k)**, de 2 a 12, y fíjate en el panel que muestra Δ y el «Mejor de la rejilla». ¿A partir de qué *k* baja ese valor de 0,1?
 - En el paso de **Validez**, comprueba que todas las cadenas caen dentro de la caja: la codificación binaria no puede salirse de ella.
 - Cambia a **Rastrigin**, cuyo óptimo está en el origen, ¿hay algún *k* para el que la rejilla contenga el punto (0; 0)? Razónalo y compruébalo con varios *k*. Para ayudarte, mira el ejercicio [](#ejercicio-representacion-genotipo-fenotipo).
 :::
@@ -247,7 +249,7 @@ Parte del cromosoma 2 1 3 2 1 del ejemplo [](#ejemplo-representacion-entera). (a
 ::::
 
 ::: {.callout-note .en-app title="En la aplicación · representation-ga, «Asignación de tareas a máquinas»"}
-[Explorar en representation-ga](https://josemagalan.github.io/representation-ga/#enc=assignment-int&lang=es){.explorar target="_blank"}
+[Explorar en representation-ga](https://josemagalan.github.io/representation-ga/#enc=assignment-int&lang=es&step=5){.explorar target="_blank"}
 
 - Haz clic en un gen del cromosoma para pasar su tarea a la máquina siguiente y fíjate en cómo cambian las cargas y el makespan.
 - Intenta llegar al makespan óptimo, la línea discontinua, solo cambiando genes. ¿Cuántos cambios necesitas?
@@ -302,7 +304,7 @@ Ese 327,4 está lejos del óptimo, 239,6, que es el circuito 1 3 5 6 4 2. Cambia
 ::::
 
 ::: {.callout-note .en-app title="En la aplicación · representation-ga, «Problema del viajante (TSP)»"}
-[Explorar en representation-ga](https://josemagalan.github.io/representation-ga/#enc=tsp-perm&lang=es){.explorar target="_blank"}
+[Explorar en representation-ga](https://josemagalan.github.io/representation-ga/#enc=tsp-perm&lang=es&step=5){.explorar target="_blank"}
 
 - Haz clic en dos genes del cromosoma para intercambiarlos y comprueba que el resultado sigue siendo una permutación. ¿Cuánto cambia la longitud del circuito?
 - Pulsa **Cromosoma no válido** para ver un cromosoma con una ciudad repetida y sigue el paso de **Reparación**.
@@ -358,7 +360,7 @@ El vector de reales tiene un problema que la binaria no tenía: un gen puede val
 
 Hay que distinguir dos cosas. Un cromosoma es **válido** cuando tiene la estructura que exige la representación: en las permutaciones, cada ciudad una sola vez; en el vector de enteros, un valor del rango en cada gen. Y la solución que describe es **factible** cuando cumple las restricciones del problema [@talbi2009, p. 48]. En la binaria, la entera y la de permutaciones de las secciones anteriores, las dos cosas coinciden; el vector de reales, en cambio, puede salirse de la caja (sección -@sec-representacion-fuera-caja). En el problema de la **mochila** la diferencia aparece incluso con bits.
 
-En el problema de la mochila 0/1 hay *n* objetos, cada uno con un peso $w_i$ y un valor $v_i$, y una mochila con capacidad *W*. Hay que decidir qué objetos se meten para maximizar el valor total sin pasarse de peso. Es uno de los problemas clásicos de la optimización combinatoria. @karp1972 [p. 95] incluyó entre los 21 problemas NP-completos de su artículo una versión de decisión, que no pregunta cuál es la mejor selección, sino si hay alguna cuyos pesos sumen exactamente una cantidad dada. Dicho de manera informal, para estos problemas no se conoce ningún método que encuentre siempre la solución exacta con un esfuerzo que crezca de forma polinómica con el tamaño de los datos. La representación natural es binaria, con un bit por objeto: el gen *i* vale 1 si el objeto *i* entra [@talbi2009, p. 36]. Toda cadena de *n* bits es un cromosoma válido, porque describe una selección de objetos. Pero la selección es factible solo si $\sum_i w_i x_i \le W$.
+En el problema de la mochila 0/1 hay *n* objetos, cada uno con un peso $w_i$ y un valor $v_i$, y una mochila con capacidad *W*. Hay que decidir qué objetos se meten para maximizar el valor total sin pasarse de peso. Es uno de los problemas clásicos de la optimización combinatoria, y es difícil: con muchos objetos, no se conoce ningún método que encuentre siempre la mejor selección en un tiempo razonable (sección -@sec-representacion-ampliaciones). La representación natural es binaria, con un bit por objeto: el gen *i* vale 1 si el objeto *i* entra [@talbi2009, p. 36]. Toda cadena de *n* bits es un cromosoma válido, porque describe una selección de objetos. Pero la selección es factible solo si $\sum_i w_i x_i \le W$.
 
 Usaremos un problema con 6 objetos y capacidad *W* = 10:
 
@@ -415,7 +417,7 @@ Un cromosoma de 7 bits no es válido: el problema tiene 6 objetos y haría falta
 ::::
 
 ::: {.callout-note .en-app title="En la aplicación · representation-ga, «Problema de la mochila»"}
-[Explorar en representation-ga](https://josemagalan.github.io/representation-ga/#enc=knapsack-bits&lang=es&v=penalty-linear&l=2){.explorar target="_blank"}
+[Explorar en representation-ga](https://josemagalan.github.io/representation-ga/#enc=knapsack-bits&lang=es&v=penalty-linear&l=2&step=5){.explorar target="_blank"}
 
 - Haz clic en un gen para cambiarlo y observa en la mochila qué objetos entran y cuándo aparece el exceso sobre la capacidad.
 - En el paso de **Formalización**, lee cuántos cromosomas hay y cuántos son factibles.
@@ -569,7 +571,7 @@ Es una de las dos asignaciones óptimas de este problema. Las cargas son 2, 5 y 
 [Explorar en representation-ga](https://josemagalan.github.io/representation-ga/#cmp=assignment&lang=es&s=1&n=5&m=3&p=4.6.3-5.2.7-3.3.5-6.4.2-2.5.6&a=2-1-3-2-1){.explorar target="_blank"}
 
 - Comprueba en la tabla del espacio de búsqueda los valores de la tabla de esta sección: tamaños, porcentaje de factibles y redundancia.
-- Pulsa **Instancia aleatoria** y comprueba cómo cambia el número de cromosomas; ¿cuántos más son infactibles al aumentar tareas y máquinas?
+- Mueve los controles **Tareas** y **Máquinas** y comprueba cómo cambia el número de cromosomas; ¿cuántos más son infactibles al aumentar tareas y máquinas? (**Instancia aleatoria** solo sortea otros tiempos, con el mismo tamaño.)
 - Abre el nombre de cada codificación para ver su página con la misma instancia y la misma asignación.
 :::
 
@@ -699,7 +701,7 @@ La distancia a la caja es $d = 2{,}2$. Penalizando, $f(-7{,}2;\ 2) = 42{,}84^2 +
 ::::
 
 ::: {.callout-note .en-app title="En la aplicación · representation-ga, «Optimización de una función continua»"}
-[Explorar en representation-ga](https://josemagalan.github.io/representation-ga/#enc=function-real&lang=es&fn=himmelblau&v=clamp){.explorar target="_blank"}
+[Explorar en representation-ga](https://josemagalan.github.io/representation-ga/#enc=function-real&lang=es&fn=himmelblau&v=clamp&step=5){.explorar target="_blank"}
 
 - Arrastra el punto del mapa hasta sacarlo de la caja y cambia el tratamiento en **Fuera de la caja**: **Acotar**, **Reflejar** o **Penalizar**. Observa a qué punto se lleva en cada caso.
 - Fíjate en la tabla **Los tres tratamientos sobre este punto**: ¿cuándo coinciden los tres?
@@ -754,6 +756,8 @@ Di si la correspondencia entre soluciones y cromosomas es uno a uno o uno a much
 ::::
 
 ## Ampliaciones [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas} {#sec-representacion-ampliaciones}
+
+**Por qué la mochila es difícil.** @karp1972 [p. 95] incluyó entre los 21 problemas NP-completos de su artículo una versión de decisión de la mochila, que no pregunta cuál es la mejor selección, sino si hay alguna cuyos pesos sumen exactamente una cantidad dada. Dicho de manera informal, para estos problemas no se conoce ningún método que encuentre siempre la solución exacta con un esfuerzo que crezca de forma polinómica con el tamaño de los datos.
 
 **Elegir la representación reduce el espacio.** En el problema de las 8 reinas hay que colocar ocho reinas en un tablero de 8 × 8 sin que ninguna ataque a otra. Si el cromosoma es la posición de cada reina, hay más de 4 000 millones de casos; si se obliga a que cada reina esté en una fila distinta, quedan $8^8 = 16\,777\,216$, y si se les prohíbe también compartir columna, el cromosoma es una permutación y quedan solo $8! = 40\,320$ [@talbi2009, p. 37]. La representación elegida decide de qué tamaño es el espacio que tiene que explorar el algoritmo.
 

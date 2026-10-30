@@ -137,6 +137,24 @@ Las copias esperadas solo se cumplen en promedio. Cada giro es independiente, as
 <!-- Comprobado el 2026-10-07: la herramienta muestra las copias 0, 1, 1 y 2. -->
 :::
 
+:::: {.callout-note .ejercicio #ejercicio-seleccion-ruleta title="Ejercicio · Seleccionar en papel"}
+Cuatro individuos tienen aptitudes A = 2, B = 5, C = 1 y D = 8.
+
+a) Torneo binario con reemplazo. Los contendientes sorteados son (A, C), (D, B), (C, B) y (A, A). ¿Quién gana cada torneo?
+b) Ruleta con los números aleatorios 0,05; 0,47; 0,60 y 0,95. ¿Qué padres salen?
+c) ¿Puede salir C, el peor, con cada mecanismo? Si quieres que el peor tenga alguna oportunidad, pequeña y que no dependa de la escala de la aptitud, ¿qué mecanismo eliges?
+
+<details>
+<summary>**Ver la solución**</summary>
+
+a) Gana el de mayor aptitud: **A, D, B y A**. En el último torneo, A se enfrenta a sí mismo. C pierde los dos torneos en que participa.
+
+b) La suma de aptitudes es 16, así que las probabilidades son 0,125; 0,3125; 0,0625 y 0,5, y las acumuladas, 0,125; 0,4375; 0,5 y 1. El 0,05 cae en el tramo de A; el 0,47, en el de C (0,4375–0,5); el 0,60 y el 0,95, en el de D. Los padres son **A, C, D y D**.
+
+c) Sí, con los dos. En el torneo con reemplazo, C solo gana si se enfrenta a sí mismo: probabilidad $1/16$ en cada torneo; sin reemplazo, nunca. En la ruleta sale con probabilidad $1/16 = 0{,}0625$ en cada giro, y aquí ha salido una vez. Con estas aptitudes las dos probabilidades coinciden por casualidad: la del torneo solo depende del orden, y la de la ruleta cambia si se suma una constante a las aptitudes (sección -@sec-seleccion-ruleta-deja-de-distinguir). Por eso el torneo cumple lo que se pide.
+</details>
+::::
+
 ::: {.callout-note .en-app title="En la aplicación · selection-ga, «Ruleta»"}
 [Explorar en selection-ga](https://josemagalan.github.io/selection-ga/#op=roulette&lang=es&f=1-2-3-4){.explorar target="_blank"}
 
@@ -217,7 +235,7 @@ El orden es el mismo con las tres conversiones, pero la presión cambia. Con $20
 
 En la **selección por truncamiento** se ordena la población por aptitud y solo pasa el corte una proporción τ de los mejores; los demás no tienen ninguna oportunidad. En selection-ga, cada padre se elige al azar entre los que pasan el corte.
 
-Hay otra regla de la misma familia, la **selección por media**: quien supera la aptitud media se copia dos veces y quien no, se elimina. El tamaño de la población no se mantiene, porque no tiene por qué haber exactamente la mitad por encima de la media. Cambiar la media por la **mediana** tampoco basta: con las aptitudes 1, 2, 3, 4 y 5 solo dos individuos superan la mediana, y sus copias son cuatro, no cinco; con 1, 1, 1 y 1 no la supera ninguno. Para conservar el tamaño, el corte se hace por posiciones: se ordena la población, pasa la mitad mejor y se fija qué hacer con los empates en el corte (por ejemplo, deshacerlos al azar) y cuando *N* es impar (por ejemplo, redondear hacia arriba). Los *N* padres se eligen entre los que han pasado. Así definida, la regla es un truncamiento con τ = 0,5. Si *N* es par y no hay empates en el corte, cada individuo de la mitad mejor recibe dos copias **en promedio**. Copiar exactamente dos veces a cada uno, sin sorteo, es otra forma de completar la regla; no da los mismos resultados ejecución por ejecución.
+Hay otra regla de la misma familia, la **selección por media**: quien supera la aptitud media se copia dos veces y quien no, se elimina. Así enunciada, no conserva el tamaño de la población; completada para que lo conserve, es un truncamiento con τ = 0,5 (sección -@sec-seleccion-ampliaciones).
 
 Estas reglas parecen razonables, pero se desaconsejan: reducen la diversidad muy deprisa.
 
@@ -326,6 +344,8 @@ D solo puede recibir 1 o 2 copias, y A, 0 o 1. En este sorteo los padres son **A
 **Cómo medir la selección.** @blickle1996 comparan los mecanismos por su **intensidad de selección**, cuánto sube la aptitud media en desviaciones típicas, y por la **pérdida de diversidad**. @baker1987 estudia el sesgo y la dispersión del muestreo. @goldberg1991 analizan el tiempo de toma de control. selection-ga calcula estas medidas en «Comparar mecanismos».
 
 **Dinámica a lo largo de muchas generaciones.** [SelectionMechanisms](https://josemagalan.shinyapps.io/SelectionMechanisms/) permite comparar mecanismos durante muchas generaciones y simulaciones, con su efecto sobre la convergencia, la aptitud y la diversidad. Es la aplicación en la que se inspira la simulación de selection-ga. Se describe en un artículo aceptado en CIO 2026, cuya referencia definitiva se añadirá cuando se publique.
+
+**La selección por media, completada.** Tal como se enuncia en la sección -@sec-seleccion-truncamiento, la regla no mantiene el tamaño de la población, porque no tiene por qué haber exactamente la mitad por encima de la media. Cambiar la media por la **mediana** tampoco basta: con las aptitudes 1, 2, 3, 4 y 5 solo dos individuos superan la mediana, y sus copias son cuatro, no cinco; con 1, 1, 1 y 1 no la supera ninguno. Para conservar el tamaño, el corte se hace por posiciones: se ordena la población, pasa la mitad mejor y se fija qué hacer con los empates en el corte (por ejemplo, deshacerlos al azar) y cuando *N* es impar (por ejemplo, redondear hacia arriba). Los *N* padres se eligen entre los que han pasado. Así definida, la regla es un truncamiento con τ = 0,5. Si *N* es par y no hay empates en el corte, cada individuo de la mitad mejor recibe dos copias **en promedio**. Copiar exactamente dos veces a cada uno, sin sorteo, es otra forma de completar la regla; no da los mismos resultados ejecución por ejecución.
 
 **Un mecanismo hay que especificarlo por completo.** La regla de @axelrod1986 viene de la simulación social: la usó en su modelo evolutivo de las normas. Se parece a la selección por media (sección -@sec-seleccion-truncamiento), pero con dos umbrales en lugar de uno. Se calculan la media $\bar f$ y la desviación típica σ de la población, y cada individuo tiene 2 hijos si $f \ge \bar f + \sigma$, ninguno si $f \le \bar f - \sigma$ y 1 en el resto.
 

@@ -236,7 +236,7 @@ Un algoritmo genético con élite busca el máximo de un problema cuyo óptimo e
 |---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | Mejor aptitud | 31 | 35 | 35 | 42 | 42 | 42 | 47 | 47 | 47 | 47 | 50 |
 
-¿En qué generación para con cada criterio: (a) 3 generaciones sin mejora; (b) 5 generaciones sin mejora; (c) alcanzar el óptimo; (d) un máximo de 8 generaciones? ¿Qué aptitud devuelve en cada caso? Si algún criterio no se cumple antes de la generación 10, supón que el algoritmo sigue y que ya no mejora.
+¿En qué generación para con cada criterio: (a) 3 generaciones sin mejora; (b) 5 generaciones sin mejora; (c) alcanzar el óptimo; (d) un máximo de 8 generaciones? ¿Qué aptitud devuelve en cada caso? Si algún criterio no se cumple antes de la generación 10, supón que el algoritmo sigue y que ya no mejora. (e) Combina (b) y (c): parar al alcanzar el óptimo o tras 5 generaciones sin mejora, lo que ocurra antes. (f) Ahora no conoces el óptimo y cada generación tarda una hora. ¿Qué dos criterios combinarías y por qué?
 
 <details>
 <summary>**Ver la solución**</summary>
@@ -247,6 +247,8 @@ Contamos las generaciones desde la última mejora: hubo mejoras en las generacio
 - (b) Antes de la generación 10 nunca pasan 5 generaciones seguidas sin mejora. En la 10 se alcanza el óptimo y ya no puede mejorar, así que para en la **generación 15** y devuelve **50**, tras cinco generaciones que no aportan nada.
 - (c) Para en la **generación 10** y devuelve **50**.
 - (d) Para en la **generación 8** y devuelve **47**.
+- (e) Para en la **generación 10** y devuelve **50**: el óptimo llega antes que las 5 generaciones sin mejora.
+- (f) Sin el óptimo, (c) no sirve. Una opción razonable es (b) con un máximo de generaciones que limite el tiempo, como (d): con esta tabla pararía en la generación 8 con 47, tras 8 horas. Solo con (b) habría llegado a 50, pero tras 15 horas. No hay una respuesta única: depende de cuánto valga pasar de 47 a 50 frente a 7 horas más de cálculo, y en un caso real no sabríamos que el 50 llega en la generación 10.
 
 Con un criterio de 3 generaciones sin mejora, el algoritmo abandona justo antes de encontrar el óptimo.
 </details>

@@ -228,7 +228,7 @@ Aquí están todas las cajas de trabajo del libro. Los **ejemplos reproducibles*
 | Actividad | Título | Sección | Herramienta | Nivel |
 |---|---|:-:|---|:-:|
 | [Ejemplo 3.1](03-representacion.qmd#ejemplo-representacion-genotipo-fenotipo) | De bits a un punto | [3.1](03-representacion.qmd#sec-representacion-genotipo-fenotipo) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
-| [Ejercicio 3.1](03-representacion.qmd#ejercicio-representacion-genotipo-fenotipo) | Decodificar | [3.1](03-representacion.qmd#sec-representacion-genotipo-fenotipo) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 3.1](03-representacion.qmd#ejercicio-representacion-genotipo-fenotipo) | Decodificar y codificar | [3.1](03-representacion.qmd#sec-representacion-genotipo-fenotipo) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
 | [En la aplicación](03-representacion.qmd#sec-representacion-genotipo-fenotipo) | «Optimización de una función continua» | [3.1](03-representacion.qmd#sec-representacion-genotipo-fenotipo) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
 | [Ejercicio 3.2](03-representacion.qmd#ejercicio-representacion-binaria) | Una sola variable en otro intervalo | [3.2](03-representacion.qmd#sec-representacion-binaria) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
 | [Ejemplo 3.3](03-representacion.qmd#ejemplo-representacion-precision) | Más bits, mejor rejilla | [3.3](03-representacion.qmd#sec-representacion-precision) | representation-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
@@ -309,6 +309,7 @@ Aquí están todas las cajas de trabajo del libro. Los **ejemplos reproducibles*
 | [Ejemplo 5.2](05-seleccion.qmd#ejemplo-seleccion-torneo) | Cuatro torneos binarios | [5.2](05-seleccion.qmd#sec-seleccion-torneo) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
 | [En la aplicación](05-seleccion.qmd#sec-seleccion-torneo) | «Selección por torneo» | [5.2](05-seleccion.qmd#sec-seleccion-torneo) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
 | [Ejemplo 5.3](05-seleccion.qmd#ejemplo-seleccion-ruleta) | Cuatro giros de la ruleta | [5.3](05-seleccion.qmd#sec-seleccion-ruleta) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
+| [Ejercicio 5.3](05-seleccion.qmd#ejercicio-seleccion-ruleta) | Seleccionar en papel | [5.3](05-seleccion.qmd#sec-seleccion-ruleta) | — | [[B]{.corto}]{.nivel .basico .solo-corto} |
 | [En la aplicación](05-seleccion.qmd#sec-seleccion-ruleta) | «Ruleta» | [5.3](05-seleccion.qmd#sec-seleccion-ruleta) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
 | [Ejemplo 5.4](05-seleccion.qmd#ejemplo-seleccion-ruleta-deja-de-distinguir) | Sumar una constante a la aptitud | [5.4](05-seleccion.qmd#sec-seleccion-ruleta-deja-de-distinguir) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |
 | [En la aplicación](05-seleccion.qmd#sec-seleccion-ruleta-deja-de-distinguir) | «Contraejemplo: aptitud desplazada» | [5.4](05-seleccion.qmd#sec-seleccion-ruleta-deja-de-distinguir) | selection-ga | [[B]{.corto}]{.nivel .basico .solo-corto} |

@@ -25,6 +25,20 @@ Al terminar el recorrido básico de este capítulo podrás:
 
 En los capítulos anteriores hemos estudiado cada pieza por separado: la representación, la población inicial y la aptitud, la selección, el cruce, la mutación, el reemplazo y los parámetros. En este capítulo las juntamos en un solo problema, el del viajante, con EvoTraveller [@santos2025]. Ya la usamos en la sección -@sec-ciclo-ejecucion y en el capítulo [](#sec-experimentos-azar){.capitulo}. Antes de explicar nada, vamos a mirar una ejecución entera y a anotar lo que vemos. Las explicaciones llegarán en las secciones siguientes.
 
+Esta tabla resume qué piezas reaparecen, dónde se estudiaron y dónde las encontrarás aquí. Si no recuerdas alguna, conviene repasarla antes:
+
+| Pieza | Dónde se estudió | Dónde reaparece |
+|---|---|---|
+| Permutación | Sección -@sec-representacion-permutaciones | Sección -@sec-viajante-problema |
+| Aptitud de un coste: la inversa | Sección -@sec-inicializar-evaluar-objetivo-aptitud | Sección -@sec-viajante-problema |
+| Torneo | Sección -@sec-seleccion-torneo | Sección -@sec-viajante-a-mano |
+| Cruce OX y sus variantes | Secciones -@sec-cruce-ox y -@sec-cruce-otros-cruces | Sección -@sec-viajante-a-mano |
+| Mutación por intercambio | Sección -@sec-mutacion-intercambio-insercion-inversion | Sección -@sec-viajante-a-mano |
+| Élite | Sección -@sec-reemplazo-elitismo | Secciones -@sec-viajante-a-mano y -@sec-viajante-elite |
+| Convergencia prematura | Sección -@sec-experimentos-diversidad | Sección -@sec-viajante-interpretar |
+| Réplicas y casos parecidos | Secciones -@sec-experimentos-replicas y -@sec-experimentos-casos-parecidos | Sección -@sec-viajante-caso-real |
+| Horizonte y presupuesto | Sección -@sec-experimentos-objetivo | Sección -@sec-viajante-caso-real |
+
 EvoTraveller tiene tres gráficas. **Fitness** muestra la aptitud de la mejor ruta de cada generación; la aptitud es la inversa de la longitud, así que si sube, la mejor ruta es más corta. **Best solution** dibuja la mejor ruta al final. Y bajo **Solutions**, el control **Generation** elige una generación y la gráfica dibuja todas las rutas de la población en esa generación, cada una en su casilla.
 
 ::: {.callout-tip .ejemplo #ejemplo-viajante-observa title="Ejemplo reproducible · Una ejecución, de principio a fin"}

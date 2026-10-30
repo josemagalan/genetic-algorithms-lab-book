@@ -246,7 +246,7 @@ La media de los tres pares es $(0{,}5 + 0{,}83 + 0{,}67)/3 = 2/3 \approx 0{,}67$
 ::: {.callout-note .en-app title="En la aplicación · initialization-and-evaluation-ga, «Aleatoria uniforme»"}
 [Explorar en initialization-and-evaluation-ga](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=uniform&lang=es&enc=knapsack-bits){.explorar target="_blank"}
 
-- Al final del paso a paso, mira la tabla **Diversidad y calidad de la población**. Pulsa **Sortear la población** varias veces: ¿cuánto varía la distancia media? ¿Y el número de factibles?
+- Al final del paso a paso, mira la tabla **Diversidad y calidad de la población**. Pulsa **Sortear la población** varias veces (cada sorteo vuelve al principio: avanza hasta el final o pulsa **Reproducir**): ¿cuánto varía la distancia media? ¿Y el número de factibles?
 - Cambia a **Asignación · matriz binaria** y comprueba cuántos individuos son asignaciones válidas.
 - Cambia a **Viajante · permutación** con 5 ciudades y 20 individuos. ¿Cuántos circuitos distintos salen?
 :::
@@ -259,13 +259,19 @@ Parece buena idea, y en métodos que parten de una sola solución, como la búsq
 
 Una **heurística voraz** construye una solución tomando en cada paso la decisión que parece mejor. En la mochila, se ordenan los objetos por su relación valor/peso, de mayor a menor, una idea que se remonta a @dantzig1957, y se mete cada uno si cabe. En nuestra mochila, el orden es 6 (4/2 = 2), 3 (9/5 = 1,8), 5 (7/4 = 1,75), 2, 1 y 4. Entran el 6, el 3 y el 5, que pesan 11; los demás ya no caben. La solución voraz es **0 0 1 0 1 1**, que vale 20: buena, pero no la óptima, que vale 21.
 
-¿Cuánto tarda en invadir la población? Supongamos que hay *k* copias de la mejor solución entre *N* individuos y que solo actúa la selección por **torneo binario** con reemplazo, sin cruce, mutación ni élite, que elige dos individuos al azar y se queda con el mejor (lo verás en la sección -@sec-seleccion-torneo). Un torneo deja escapar la solución solo si sus dos contendientes son otros, lo que ocurre con probabilidad $(1 - k/N)^2$. Dado ese número actual de copias, el número esperado en la generación siguiente es
-$$
-k' = N\left[1 - \left(1 - \frac{k}{N}\right)^2\right].
-$$
-Si el mejor individuo inicial llega a ocupar toda la población, el número de generaciones hasta que ocurre es el **tiempo de toma de control** (*takeover time*) [@goldberg1991].
+¿Cuánto tarda en invadir la población? Supongamos que solo actúa la selección por **torneo binario** con reemplazo, sin cruce, mutación ni élite: se eligen dos individuos al azar y se queda el mejor (lo verás en la sección -@sec-seleccion-torneo). La mejor solución gana todos los torneos en los que participa, así que, mientras tiene pocas copias, casi las duplica en cada generación. Si llega a ocupar toda la población, el número de generaciones hasta que ocurre es el **tiempo de toma de control** (*takeover time*) [@goldberg1991].
 
-Para dibujar su expansión, la herramienta aplica sucesivamente la fórmula al número medio de copias del paso anterior. Es una **aproximación determinista**: deja de lado las fluctuaciones del sorteo. La fórmula da la esperanza de una generación cuando se conoce *k*, pero iterarla así no da la media exacta de muchas poblaciones pequeñas. En ellas, la semilla también puede perderse por azar (sección -@sec-seleccion-seleccion-y-diversidad).
+<details>
+<summary>**Cómo calcula la herramienta las copias**</summary>
+
+Si hay *K* copias de la mejor solución entre *N* individuos, un torneo la deja escapar solo si sus dos contendientes son otros, lo que ocurre con probabilidad $(1 - K/N)^2$. Dado ese número actual de copias, el número esperado en la generación siguiente es
+$$
+K' = N\left[1 - \left(1 - \frac{K}{N}\right)^2\right].
+$$
+
+Para dibujar su expansión, la herramienta aplica sucesivamente la fórmula al número medio de copias del paso anterior. Es una **aproximación determinista**: deja de lado las fluctuaciones del sorteo. La fórmula da la esperanza de una generación cuando se conoce *K*, pero iterarla así no da la media exacta de muchas poblaciones pequeñas. En ellas, la semilla también puede perderse por azar (sección -@sec-seleccion-seleccion-y-diversidad).
+
+</details>
 
 ::: {.callout-tip .ejemplo #ejemplo-inicializar-evaluar-sembrar title="Ejemplo reproducible · Una copia sembrada"}
 **Datos.** La mochila de la sección -@sec-inicializar-evaluar-diversidad, una población de *N* = 10 individuos: 9 aleatorios uniformes, el mejor de los cuales vale 18, y una copia de la solución voraz, 001011.
@@ -552,7 +558,7 @@ Con la misma población y la penalización cuadrática, $F = \text{valor} - (\la
 ::: {.callout-note .en-app title="En la aplicación · initialization-and-evaluation-ga, «Restricciones como penalización»"}
 [Explorar en initialization-and-evaluation-ga](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=penalty&lang=es&enc=knapsack-bits){.explorar target="_blank"}
 
-- Mueve el **Peso λ** y fíjate en la tabla **Penalización en esta población**: ¿en qué valor cambia el mejor individuo?
+- Mueve el **Peso λ**, avanza hasta el final (o pulsa **Reproducir**) y fíjate en la tabla **Penalización en esta población**: ¿en qué valor cambia el mejor individuo?
 - Cambia la **Penalización** a cuadrática y compara la forma de las líneas en la etapa **El peso λ**.
 - Cambia a **Asignación · matriz binaria**, donde se minimiza. Si la población no tiene ningún factible, ¿qué pasa con λ\*?
 :::

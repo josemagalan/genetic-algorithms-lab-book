@@ -591,7 +591,7 @@ Con NWOX, el Padre 2 sin las ciudades del segmento (4, 5, 6 y 7) es 9 2 3 8 1, y
 
 - Cambia **Media con** entre «estos padres» y «padres al azar». ¿Qué columnas dependen más de los padres concretos?
 - Haz la misma comparación con [los cruces binarios](https://josemagalan.github.io/crossover-ga/#cmp=binary&lang=es){target="_blank"} (columnas «Del padre propio» y «Tramos») y con [los reales](https://josemagalan.github.io/crossover-ga/#cmp=real&lang=es){target="_blank"} (columnas «Dentro del intervalo» y «Distancia»).
-- Despliega «Qué mide cada columna» para ver la definición exacta de cada medida.
+- Lee «Qué mide cada columna», debajo de la tabla, para ver la definición exacta de cada medida.
 :::
 
 ## Ampliaciones [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas} {#sec-cruce-ampliaciones}
