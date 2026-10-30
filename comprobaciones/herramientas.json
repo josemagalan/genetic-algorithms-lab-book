@@ -41,9 +41,9 @@
       "repositorio": "jismartin/evotraveller",
       "url": "https://evotraveller.streamlit.app/",
       "marcas": ["evotraveller.streamlit.app", "EvoTraveller"],
-      "ejemplos": "41205ad (2026-10-15)",
-      "revisado": "41205ad",
-      "comentario": "Fallo conocido (A037, revisión beta E01): la población crece si la élite y los hijos de cruce suman más que N. Si se corrige, volver a comprobar los ejemplos de los capítulos 2, 9 y 10."
+      "ejemplos": "a283c15 (2026-10-30)",
+      "revisado": "b3fcd87",
+      "comentario": "b3fcd87 (pull request 2) solo cambia el README (nombres del portal y del libro). a283c15 (pull request 3) corrige el fallo A037 (revisión beta E01): si la élite y los hijos de cruce suman más que N, los hijos de cruce se reducen a N − e (par). Solo cambian 14 combinaciones de los controles que el libro no usa; los ejemplos de los capítulos 2, 9 y 10 dan lo mismo con el código (recomprobado el 2026-10-30)."
     },
     "SelectionMechanisms": {
       "repositorio": "josemagalan/SelectionMechanisms",
