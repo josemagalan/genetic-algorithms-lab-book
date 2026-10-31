@@ -10,6 +10,17 @@ Este libro está dirigido a estudiantes de grado que empiezan con los algoritmos
 
 Conviene manejar operaciones elementales, fracciones y porcentajes. Las [potencias y los factoriales](#sec-evolucion-optimizar) se recuerdan al contar soluciones; las [probabilidades](#sec-ciclo-seleccionar) se trabajan con sorteos concretos, y la [media y la desviación típica](#sec-experimentos-replicas), con resultados de varias ejecuciones. La distribución normal se presenta de forma intuitiva con la [mutación gaussiana](#sec-mutacion-gaussiana); las secciones avanzadas añaden conceptos como el error típico, y pueden dejarse para una segunda lectura.
 
+## El laboratorio {.unnumbered #laboratorio}
+
+Las actividades del libro se hacen con el [Laboratorio de algoritmos genéticos](https://josemagalan.github.io/genetic-algorithms-lab/) (*genetic-algorithms-lab*), un portal gratuito que reúne todas las herramientas. Se usan en el navegador, sin instalar nada ni crear una cuenta, y están en español y en inglés, salvo los dos simuladores, que están en inglés.
+
+- **Cinco módulos**, uno por cada paso del algoritmo: representación, inicialización y evaluación, selección, cruce y mutación. Muestran paso a paso qué hace cada operador sobre un ejemplo concreto, permiten comparar alternativas y tienen un **modo práctica**: plantean un ejercicio con sus datos, corrigen tu respuesta y enlazan con su resolución paso a paso.
+- **Dos simuladores.** EvoTraveller ejecuta un algoritmo genético completo sobre el problema del viajante, y SelectionMechanisms repite muchas generaciones para comparar mecanismos de selección, convergencia y diversidad.
+
+No hace falta entrar por el portal: cada actividad del libro enlaza con la herramienta que necesita y, en los ejemplos, la abre en el estado exacto del ejemplo.
+
+## Explicaciones y actividades {.unnumbered #explicaciones-actividades}
+
 El libro distingue a simple vista lo que se lee de lo que se hace. La teoría va como texto normal; todo lo que te pide trabajar va dentro de una caja.
 
 **Explicaciones.** Son el texto y las figuras que presentan los conceptos. Se leen como cualquier libro y no necesitan ninguna herramienta.
@@ -35,8 +46,24 @@ Cada capítulo empieza con sus **objetivos**, en una caja como esta:
 Lo que podrás hacer al terminar el recorrido básico del capítulo.
 :::
 
+## Niveles e itinerarios {.unnumbered #niveles}
+
 Las secciones llevan una etiqueta de nivel: [[Básico]{.largo}[B]{.corto}]{.nivel .basico}, [[Avanzado]{.largo}[A]{.corto}]{.nivel .avanzado} y [[Para saber más]{.largo}[+]{.corto}]{.nivel .saber-mas}. En el índice lateral «En esta página» aparecen abreviadas como [[B]{.corto}]{.nivel .basico .solo-corto}, [[A]{.corto}]{.nivel .avanzado .solo-corto} y [[+]{.corto}]{.nivel .saber-mas .solo-corto}. El recorrido básico puede leerse de forma continua sin las ampliaciones: incluye los objetivos y el resumen de cada capítulo.
+
+Según las secciones que sigas, el libro cubre tres niveles de profundidad:
+
+- **Solo el recorrido básico.** Basta para entender cómo funciona un algoritmo genético, diseñarlo decisión a decisión y ajustarlo con experimentos sencillos: para cada representación, los operadores más usados y las estrategias de reemplazo adecuadas. Es el contenido de una primera asignatura de grado sobre algoritmos genéticos o metaheurísticas.
+- **Básico y avanzado.** Las secciones avanzadas añaden requisitos y profundidad: restricciones e infactibilidad, códigos y representaciones alternativos, inicializaciones más elaboradas, aptitud con ruido, más operadores y variantes del reemplazo, y el diseño estadístico de experimentos. Sirven para una asignatura más completa o para quien vaya a aplicar el algoritmo a un problema propio.
+- **Para saber más.** Cada capítulo termina con ampliaciones: historia, conexiones con otros métodos y lecturas para seguir por cuenta propia.
 
 El [índice general](indice.qmd) muestra todas las secciones con su nivel, y el [índice de actividades](actividades.qmd) reúne los ejemplos, las cajas «En la aplicación» y los ejercicios, por capítulo y por herramienta.
 
-Todas las herramientas se abren desde el portal [Laboratorio de algoritmos genéticos](https://josemagalan.github.io/genetic-algorithms-lab/) (*genetic-algorithms-lab*).
+## Para el profesorado {.unnumbered #profesorado}
+
+Si vas a usar el libro como manual, el laboratorio ofrece, además de las actividades del texto, recursos para la clase y para la evaluación:
+
+- **En el aula**, las animaciones paso a paso de los módulos pueden proyectarse para explicar cada operador, y los simuladores, para discutir sus efectos sobre la población.
+- **Para el trabajo autónomo**, el modo práctica de los cinco módulos sirve de autoevaluación: el estudiante resuelve un ejercicio, la herramienta lo corrige y le muestra la resolución paso a paso.
+- **Para la evaluación**, cada módulo genera bancos de preguntas para Moodle (formato Moodle XML), en tres niveles de dificultad: calcular un resultado, identificar el operador o encontrar el error, según el módulo. Están organizados en categorías para usar preguntas aleatorias en un cuestionario. La retroalimentación de cada pregunta da la solución y enlaza con la resolución paso a paso de ese mismo ejercicio en la herramienta, de modo que el estudiante ve, de forma visual e interactiva, por qué la respuesta es la correcta.
+
+El [índice de actividades](actividades.qmd) ordena los ejemplos, las cajas «En la aplicación» y los ejercicios por herramienta, para preparar una sesión con una aplicación concreta. Las sugerencias del profesorado nos ayudan a mejorar el libro: [cuéntanoslas](avisos.qmd#contacto).
