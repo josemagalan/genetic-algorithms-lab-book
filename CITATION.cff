@@ -1,5 +1,5 @@
 # Metadatos de cita. GitHub los muestra en «Cite this repository» y Zenodo los lee al archivar una release.
-# Sin correos electrónicos (D056). DOI de la edición 1.0, publicada el 31 de octubre de 2026.
+# Sin correos electrónicos (D056). DOI de la edición 1.0, publicada el 31 de octubre de 2026; DOI de concepto en identifiers.
 cff-version: 1.2.0
 message: "Si usas este libro, cítalo así. / If you use this book, please cite it as below."
 type: software
@@ -7,6 +7,16 @@ title: "Evolución a la vista. Algoritmos genéticos en un laboratorio interacti
 version: "1.0"
 doi: "10.5281/zenodo.23835733"
 date-released: "2026-10-31"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.23835733"
+    description: "Edición 1.0 / Version 1.0"
+  - type: doi
+    value: "10.5281/zenodo.23835732"
+    description: "Todas las versiones; resuelve a la más reciente / All versions (concept DOI)"
+  - type: url
+    value: "https://zenodo.org/records/23835733"
+    description: "Archivos de la edición 1.0 en Zenodo / Version 1.0 files on Zenodo"
 authors:
   - given-names: José Manuel
     family-names: Galán

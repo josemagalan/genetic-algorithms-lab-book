@@ -12,7 +12,7 @@ Libro para aprender algoritmos genéticos de forma práctica, con actividades so
 
 Galán, J. M., Díaz-de la Fuente, S., Ahedo, V., Pereda, M., y Santos, J. I. (2026). *Evolución a la vista. Algoritmos genéticos en un laboratorio interactivo* (versión 1.0). Zenodo. DOI: [10.5281/zenodo.23835733](https://doi.org/10.5281/zenodo.23835733).
 
-El DOI identifica esta edición; la web puede incorporar revisiones posteriores. Los metadatos de cita están en [`CITATION.cff`](CITATION.cff). El archivo independiente de la versión 1.0.0 del portal tiene el DOI [10.5281/zenodo.23834485](https://doi.org/10.5281/zenodo.23834485); contiene el portal y su inventario, con enlaces a las herramientas externas.
+El DOI identifica esta edición, cuyos archivos (PDF, HTML y fuentes) están en [Zenodo](https://zenodo.org/records/23835733); la web puede incorporar revisiones posteriores. Para remitir siempre a la versión más reciente, el DOI de todas las versiones es [10.5281/zenodo.23835732](https://doi.org/10.5281/zenodo.23835732). Los metadatos de cita están en [`CITATION.cff`](CITATION.cff). El archivo independiente de la versión 1.0.0 del portal tiene el DOI [10.5281/zenodo.23834485](https://doi.org/10.5281/zenodo.23834485); contiene el portal y su inventario, con enlaces a las herramientas externas.
 
 <!-- ga-series-links:start -->
 ## Teaching resources / Materiales docentes

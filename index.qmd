@@ -1,7 +1,7 @@
 # Cómo leer este libro {.unnumbered}
 
 ::: {.version-beta}
-**Versión {{< meta libro-version >}}**, revisada el {{< meta libro-revision >}}. DOI de esta edición: [{{< meta libro-doi >}}](https://doi.org/10.5281/zenodo.23835733){target="_blank"}. [Cómo citar este libro](avisos.qmd#como-citar). Si encuentras una errata o un resultado que no coincide, [cuéntanoslo](avisos.qmd#contacto).
+**Versión {{< meta libro-version >}}**, revisada el {{< meta libro-revision >}}. DOI de esta edición: [{{< meta libro-doi >}}](https://doi.org/10.5281/zenodo.23835733){target="_blank"}; de la versión más reciente: [10.5281/zenodo.23835732](https://doi.org/10.5281/zenodo.23835732){target="_blank"}. [Cómo citar este libro](avisos.qmd#como-citar). Si encuentras una errata o un resultado que no coincide, [cuéntanoslo](avisos.qmd#contacto).
 :::
 
 Este libro está dirigido a estudiantes de grado que empiezan con los algoritmos genéticos. Las actividades del recorrido básico se hacen con papel, calculadora y las herramientas del laboratorio.
