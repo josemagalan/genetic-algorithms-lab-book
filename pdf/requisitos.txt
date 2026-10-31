@@ -1,0 +1,10 @@
+# Paquetes de Python del generador del PDF (versiones con las que se generó la edición 1.0).
+PyYAML==6.0.3
+pyphen==0.18.1
+pypdf==6.10.0
+fonttools==4.68.0
+brotli==1.2.1
+reportlab==4.4.9
+Pillow==13.0.0
+# Solo si no hay pdftotext (Poppler) en el PATH; es mucho más lento.
+pdfplumber==0.11.9

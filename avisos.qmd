@@ -1,5 +1,11 @@
 # Agradecimientos y avisos {.unnumbered #sec-avisos}
 
+## Cómo citar este libro {#como-citar}
+
+Galán, J. M., Díaz-de la Fuente, S., Ahedo, V., Pereda, M., y Santos, J. I. (2026). *Evolución a la vista. Algoritmos genéticos en un laboratorio interactivo* (versión {{< meta libro-version >}}). Zenodo. DOI: [10.5281/zenodo.23835733](https://doi.org/10.5281/zenodo.23835733){target="_blank"}.
+
+El DOI identifica esta edición del libro. La [versión web](https://josemagalan.github.io/genetic-algorithms-lab-book/){target="_blank"} puede incorporar revisiones posteriores. El portal del laboratorio tiene un archivo independiente: [versión 1.0.0, DOI {{< meta portal-doi >}}](https://doi.org/10.5281/zenodo.23834485){target="_blank"}.
+
 ## Sobre este libro {#sobre-este-libro}
 
 La portada de este libro ha sido diseñada con la ayuda de Codex.
@@ -10,7 +16,7 @@ Los autores agradecen el apoyo del plan Claude Team para científicos de Anthrop
 
 ## Uso de asistentes de IA {#uso-ia}
 
-En la elaboración de este material se han utilizado asistentes de inteligencia artificial. Los contenidos originales y de partida —herramientas, vídeos, materiales docentes y publicaciones— son obra de los autores. Los autores revisan, corrigen y verifican todos los materiales y son los responsables de esta publicación. Esta edición es una versión beta ({{< meta libro-version >}}): esa revisión sigue en curso.
+En la elaboración de este material se han utilizado asistentes de inteligencia artificial. Los contenidos originales y de partida —herramientas, vídeos, materiales docentes y publicaciones— son obra de los autores. Los autores revisan, corrigen y verifican todos los materiales y son los responsables de esta publicación.
 
 ## Licencia {#licencia}
 

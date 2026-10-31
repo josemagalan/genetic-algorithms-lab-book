@@ -1,0 +1,42 @@
+{
+  "_nota": "Sustituciones exclusivas de la edición PDF. Cada «buscar» debe aparecer exactamente una vez en el HTML del archivo indicado; si la fuente cambia, el generador se detiene en lugar de imprimir un texto desajustado. No modifican los .qmd.",
+  "index.html": [
+    {
+      "buscar": "Intenta predecir el resultado antes de abrirlo; después ejecuta la herramienta y explica qué coincide con tu predicción y qué te ha hecho cambiar de idea. Hay dos tipos de botón verde:",
+      "poner": "Intenta predecir el resultado antes de leerlo: en esta edición aparece justo después del ejemplo, con el rótulo «Resultado». Después ejecuta la herramienta y explica qué coincide con tu predicción y qué te ha hecho cambiar de idea. Hay dos tipos de enlace:"
+    },
+    {
+      "buscar": "<strong>Abrir</strong>, relleno, lleva a la aplicación exactamente en el estado del ejemplo, de modo que el resultado coincide con el del libro. Muchas veces también puede desplegarse la herramienta dentro de la página.",
+      "poner": "<strong>Abrir</strong> lleva a la aplicación exactamente en el estado del ejemplo, de modo que el resultado coincide con el del libro."
+    },
+    {
+      "buscar": "<strong>⚙ Abrir y configurar</strong>, con borde, se usa",
+      "poner": "<strong>Abrir y configurar</strong> se usa"
+    },
+    {
+      "buscar": "El botón <strong>Explorar</strong> abre la pantalla correspondiente para probar por tu cuenta.",
+      "poner": "El enlace <strong>Explorar</strong> abre la pantalla correspondiente para probar por tu cuenta."
+    },
+    {
+      "buscar": "Cuando tiene solución, está plegada al final de la caja; intenta resolverlo antes de abrirla.",
+      "poner": "Cuando tiene solución, está al final del capítulo, en «Soluciones de los ejercicios»; intenta resolverlo antes de consultarla. Cada ejercicio enlaza con su solución, y cada solución con su ejercicio."
+    },
+    {
+      "buscar": "En el índice lateral «En esta página» aparecen abreviadas como",
+      "poner": "En el índice del libro aparecen abreviadas como"
+    }
+  ],
+  "avisos.html": [
+    {
+      "buscar": "Al final de cada página, y en el índice lateral, está el enlace <strong>Enviar un comentario sobre esta página</strong>. Abre un formulario de GitHub con la página y la versión del libro ya rellenas.",
+      "poner": "En la versión web, al final de cada página y en el índice lateral, está el enlace <strong>Enviar un comentario sobre esta página</strong>. Abre un formulario de GitHub con la página y la versión del libro ya rellenas. Si escribes a partir de este PDF, indica el número de la sección o de la actividad."
+    }
+  ],
+  "pdf_leer_final": "<section id=\"leer--edicion-pdf\" class=\"level2 unnumbered pdf-edicion\"><h2 class=\"unnumbered\">Esta edición en PDF</h2><p>Este PDF reproduce, en páginas, el texto de la versión web del libro y se genera a partir de las mismas fuentes. Conserva la numeración de capítulos, secciones, figuras y actividades, de modo que puede usarse junto con la web.</p><p><strong>La versión en línea es gratuita</strong> y está en <a href=\"{site}\">{site_text}</a>. Conviene tenerla a mano mientras lees: desde ella las herramientas se abren con un clic, algunas pueden desplegarse dentro de la propia página y siempre recoge la última revisión del texto.</p><p>Las aplicaciones no se ejecutan dentro del PDF. Los enlaces <strong>Abrir</strong>, <strong>Abrir y configurar</strong> y <strong>Explorar</strong> llevan a cada herramienta en la web y necesitan conexión; cuando la herramienta no guarda su estado en la dirección, el ejemplo da por escrito los valores que hay que poner. Los resultados de los ejemplos aparecen a continuación de cada ejemplo, y las soluciones de los ejercicios, al final de su capítulo.</p><p>Las remisiones a otras partes del libro son enlaces internos del PDF.</p></section>",
+  "actividades.html": [
+    {
+      "buscar": "el botón <strong>⚙ Abrir y configurar</strong> abre",
+      "poner": "el enlace <strong>Abrir y configurar</strong> abre"
+    }
+  ]
+}

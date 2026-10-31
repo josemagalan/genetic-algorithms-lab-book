@@ -2,11 +2,17 @@
 
 *Algoritmos genéticos en un laboratorio interactivo*
 
-> **Estado: versión 0.9 beta, revisada el 29 de octubre de 2026** (primera publicación: 7 de octubre de 2026). Los autores siguen revisando el texto y los ejemplos; el contenido, la estructura y el índice pueden cambiar. La versión y la fecha están en `_quarto.yml` (`libro-version` y `libro-revision`).
+> **Versión 1.0, revisada el 31 de octubre de 2026** (primera publicación: 7 de octubre de 2026). La versión y la fecha de revisión están en `_quarto.yml` (`libro-version` y `libro-revision`).
 
 Libro para aprender algoritmos genéticos de forma práctica, con actividades sobre las herramientas interactivas del [Laboratorio de algoritmos genéticos](https://josemagalan.github.io/genetic-algorithms-lab/) (*genetic-algorithms-lab*). Está pensado para estudiantes de grado que empiezan.
 
 **Versión para leer:** <https://josemagalan.github.io/genetic-algorithms-lab-book/>
+
+## Cómo citar
+
+Galán, J. M., Díaz-de la Fuente, S., Ahedo, V., Pereda, M., y Santos, J. I. (2026). *Evolución a la vista. Algoritmos genéticos en un laboratorio interactivo* (versión 1.0). Zenodo. DOI: [10.5281/zenodo.23835733](https://doi.org/10.5281/zenodo.23835733).
+
+El DOI identifica esta edición; la web puede incorporar revisiones posteriores. Los metadatos de cita están en [`CITATION.cff`](CITATION.cff). El archivo independiente de la versión 1.0.0 del portal tiene el DOI [10.5281/zenodo.23834485](https://doi.org/10.5281/zenodo.23834485); contiene el portal y su inventario, con enlaces a las herramientas externas.
 
 <!-- ga-series-links:start -->
 ## Teaching resources / Materiales docentes
@@ -25,14 +31,14 @@ Libro para aprender algoritmos genéticos de forma práctica, con actividades so
 | SelectionMechanisms | [Open / Abrir](https://josemagalan.shinyapps.io/SelectionMechanisms/) | [GitHub](https://github.com/josemagalan/SelectionMechanisms) |
 | Book / Libro: *Evolución a la vista* | [Read / Leer](https://josemagalan.github.io/genetic-algorithms-lab-book/) | [GitHub](https://github.com/josemagalan/genetic-algorithms-lab-book) |
 
-El libro está en versión beta: su contenido y estructura pueden cambiar. / The book, in Spanish, is in beta: its content and structure may change.
+El libro está en español. / The book is in Spanish.
 <!-- ga-series-links:end -->
 
 ## Qué hay ahora
 
 | Capítulo | Estado |
 |---|---|
-| Cómo leer este libro | Borrador |
+| Cómo leer este libro | Revisado (31 de octubre de 2026) |
 | Índice general | Generado (`filtros/indices.py`) |
 | 1. Evolución y optimización | Revisado (20 de octubre de 2026) |
 | 2. El ciclo y las decisiones de diseño | Revisado (21 de octubre de 2026) |
@@ -48,7 +54,7 @@ El libro está en versión beta: su contenido y estructura pueden cambiar. / The
 | Índice de actividades | Generado (`filtros/indices.py`) |
 | Agradecimientos y avisos | Texto aprobado |
 
-Los once capítulos tienen un borrador completo y una primera revisión del autor. El 29 de octubre se incorpora una revisión docente de precisión y coherencia; la edición sigue en beta.
+Los once capítulos están completos y cuentan con la revisión del autor indicada en la tabla. El 29 de octubre se incorporó una revisión docente de precisión y coherencia; «Cómo leer este libro» se amplió el 31 de octubre.
 
 ## Cómo está hecho
 
@@ -68,6 +74,8 @@ Para generarlo en local hacen falta Quarto (≥ 1.10) y Python 3:
 quarto render      # resultado en _book/
 quarto preview     # vista previa que se actualiza al guardar
 ```
+
+La edición en PDF se genera desde estas mismas fuentes con `pdf/generar.py`: la web se imprime en Chromium con una hoja de estilo de impresión que traslada las soluciones al final de cada capítulo, añade portada, créditos e índice con páginas y comprueba el resultado. Requisitos e instrucciones en [`pdf/LEEME.md`](pdf/LEEME.md).
 
 Las figuras propias están en `figuras/`, junto al guion de Python que las genera. Los SVG se versionan, así que para generar el libro no hace falta ejecutar los guiones. Para regenerar una figura, se ejecuta su guion desde `figuras/` (por ejemplo, `python3 03-representacion.py`). Casi todos usan solo la biblioteca estándar; `03-himmelblau.py` necesita además matplotlib y NumPy.
 
@@ -89,11 +97,11 @@ Cada página del libro tiene el enlace «Enviar un comentario sobre esta página
 
 ## Agradecimientos y uso de IA
 
-Los autores agradecen el apoyo del plan Claude Team para científicos de Anthropic. En la elaboración de este material se han utilizado asistentes de inteligencia artificial; los contenidos originales son obra de los autores, que revisan, corrigen y verifican todos los materiales y son los responsables de la publicación; en esta versión beta, esa revisión sigue en curso. El texto completo está en la página «Agradecimientos y avisos» del libro.
+Los autores agradecen el apoyo del plan Claude Team para científicos de Anthropic. En la elaboración de este material se han utilizado asistentes de inteligencia artificial; los contenidos originales son obra de los autores, que revisan, corrigen y verifican todos los materiales y son los responsables de la publicación. El texto completo está en la página «Agradecimientos y avisos» del libro.
 
 ## Licencia
 
 - Texto, figuras propias y ejercicios: [CC BY 4.0](LICENSE-CONTENT.md).
-- Código (guiones de `figuras/`, `filtros/`, `comprobaciones/` y `comentarios.js`): [MIT](LICENSE).
-- Los componentes de terceros conservan su licencia: las imágenes de terceros de `figuras/` (ficha en `figuras/01-imagenes.md`), KaTeX (MIT, `vendor/katex/LICENSE`) y el estilo APA de CSL (CC BY-SA 3.0, `vendor/csl/LEEME.md`).
+- Código (guiones de `figuras/`, `filtros/`, `comprobaciones/`, `pdf/` y `comentarios.js`): [MIT](LICENSE).
+- Los componentes de terceros conservan su licencia: las imágenes de terceros de `figuras/` (ficha en `figuras/01-imagenes.md`), KaTeX (MIT, `vendor/katex/LICENSE`), la tipografía Noto Sans del PDF (SIL OFL 1.1, `pdf/fuentes/OFL-NotoSans.txt`) y el estilo APA de CSL (CC BY-SA 3.0, `vendor/csl/LEEME.md`).
 - La licencia del portal no se extiende al libro ni a las herramientas: cada recurso indica la suya.

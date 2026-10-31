@@ -1,0 +1,156 @@
+/* Edición PDF completa de «Evolución a la vista».
+   Base: CSS del cierre del piloto del capítulo 10 (impresion.css + ajustes.css, 2026-10-30),
+   generalizado al libro entero. Las reglas nuevas van marcadas con «Libro completo». */
+
+/* Libro completo: tipografía explícita y libre (Noto Sans, OFL), servida en local por el generador.
+   Noto Sans pertenece a la pila de fuentes del HTML de Quarto; declararla evita depender de las
+   fuentes del sistema (Segoe UI en Windows, otra en Linux) y hace reproducible la paginación. */
+@font-face{font-family:"Noto Sans PDF";font-style:normal;font-weight:400;src:url(/pdf-assets/fuentes/noto-sans-latin-400-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:"Noto Sans PDF";font-style:normal;font-weight:400;src:url(/pdf-assets/fuentes/noto-sans-latin-ext-400-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:"Noto Sans PDF";font-style:normal;font-weight:400;src:url(/pdf-assets/fuentes/noto-sans-greek-400-normal.woff2) format("woff2");unicode-range:U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-03FF;}
+@font-face{font-family:"Noto Sans PDF";font-style:italic;font-weight:400;src:url(/pdf-assets/fuentes/noto-sans-latin-400-italic.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:"Noto Sans PDF";font-style:italic;font-weight:400;src:url(/pdf-assets/fuentes/noto-sans-latin-ext-400-italic.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:"Noto Sans PDF";font-style:italic;font-weight:400;src:url(/pdf-assets/fuentes/noto-sans-greek-400-italic.woff2) format("woff2");unicode-range:U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-03FF;}
+@font-face{font-family:"Noto Sans PDF";font-style:normal;font-weight:600;src:url(/pdf-assets/fuentes/noto-sans-latin-600-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:"Noto Sans PDF";font-style:normal;font-weight:600;src:url(/pdf-assets/fuentes/noto-sans-latin-ext-600-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:"Noto Sans PDF";font-style:normal;font-weight:600;src:url(/pdf-assets/fuentes/noto-sans-greek-600-normal.woff2) format("woff2");unicode-range:U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-03FF;}
+@font-face{font-family:"Noto Sans PDF";font-style:italic;font-weight:600;src:url(/pdf-assets/fuentes/noto-sans-latin-600-italic.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:"Noto Sans PDF";font-style:normal;font-weight:700;src:url(/pdf-assets/fuentes/noto-sans-latin-700-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:"Noto Sans PDF";font-style:normal;font-weight:700;src:url(/pdf-assets/fuentes/noto-sans-latin-ext-700-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+@font-face{font-family:"Noto Sans PDF";font-style:normal;font-weight:700;src:url(/pdf-assets/fuentes/noto-sans-greek-700-normal.woff2) format("woff2");unicode-range:U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-03FF;}
+@font-face{font-family:"Noto Sans PDF";font-style:italic;font-weight:700;src:url(/pdf-assets/fuentes/noto-sans-latin-700-italic.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+
+@page { size: A4; margin: 17mm 18mm 18mm; }
+/* Libro completo: portada a sangre, sin márgenes ni folio. */
+@page portada { margin: 0; }
+
+@media print {
+ html,body {font-size:var(--pdf-cuerpo,10.5pt)!important; line-height:1.38!important;background:white!important;}
+ body, .pdf-libro {font-family:"Noto Sans PDF", system-ui, "Segoe UI", sans-serif !important;}
+ #quarto-sidebar,#quarto-margin-sidebar,header#quarto-header,nav.page-navigation,.nav-footer,.quarto-navigation-tool,.toc-actions,.anchorjs-link,.quarto-comment-link,#quarto-search-results,.quarto-secondary-nav,footer.footer {display:none!important;}
+ #quarto-content,.page-columns,.page-rows-contents,main.content {display:block!important;max-width:none!important;width:auto!important;margin:0!important;padding:0!important;}
+ main {grid-column:auto!important;}
+ h1 {font-size:23pt!important;line-height:1.18!important;margin:8mm 0 5mm!important;}
+ h2 {font-size:15pt!important;line-height:1.2!important;margin-top:6mm!important;break-after:avoid;}
+ h3 {font-size:12pt!important;line-height:1.25!important;break-after:avoid;}
+ h4 {break-after:avoid;}
+ /* Libro completo: cada sección abre con una pregunta breve; título y pregunta pasan juntos a la página siguiente. */
+ section.level2 > h2 + p {break-after:avoid;}
+ p,li {orphans:3;widows:3;}
+ p {margin:0 0 2.5mm!important;}
+ main p,main li {text-align:justify;text-align-last:start;hyphens:manual;hyphenate-character:"-";}
+ main th p,main td p,main figcaption p,main .pdf-box-title,main .pdf-notice p {text-align:start;text-align-last:auto;hyphens:none;}
+ main .csl-entry {text-align:start;text-align-last:auto;hyphens:none;}
+ main a,main code,main .katex {hyphens:none;}
+ a {color:#135eaa!important;text-decoration:none!important;overflow-wrap:anywhere;}
+ .callout {break-inside:auto!important;margin:4mm 0!important;border-radius:1mm!important;padding:0 3mm 1mm!important;box-decoration-break:clone;-webkit-box-decoration-break:clone;}
+ .callout-title-container,.callout-header {break-after:avoid!important;}
+ .callout-body {font-size:10.2pt!important;line-height:1.36!important;}
+ .callout p,.callout li {font-size:inherit!important;}
+ .callout .callout-header {background:transparent!important;}
+ .callout .callout-icon-container {display:none!important;}
+ .callout-tip {border-left:1.2mm solid #087a62!important;}
+ .callout-warning {border-left:1.2mm solid #e0ac2c!important;}
+ .ejercicio {border-left:1.2mm solid #92632c!important;}
+ .en-app {border-left:1.2mm solid #7554a4!important;}
+ .nivel {font-size:8pt!important;line-height:1.35!important;display:inline-block!important;vertical-align:middle!important;white-space:nowrap;}
+ .nivel .corto {display:none!important;}.nivel .largo {display:inline!important;}
+ .nivel.solo-corto .corto {display:inline!important;}
+ main table {display:table!important;width:100%!important;max-width:100%!important;overflow:visible!important;font-size:9.3pt!important;}
+ main th,main td {padding:1.3mm 1.5mm!important;word-break:normal!important;overflow-wrap:anywhere;font-variant-numeric:tabular-nums;}
+ /* Libro completo: las cabeceras no se parten dentro de una palabra («Capítul-o»); fijan el ancho mínimo. */
+ main th, main td {overflow-wrap:break-word!important;hyphens:none!important;}
+ thead {display:table-header-group;}tr {break-inside:avoid!important;}
+ .quarto-table,.table-responsive {overflow:visible!important;}
+ figure,.quarto-figure {break-inside:avoid!important;}
+ figure img {max-width:100%!important;max-height:170mm;object-fit:contain;}
+ figcaption {font-size:9pt!important;line-height:1.28!important;}
+ .csl-entry {font-size:9.3pt!important;line-height:1.3!important;break-inside:avoid;}
+ pre,code {white-space:pre-wrap;overflow-wrap:anywhere;}
+ .abrir,.configurar,.explorar {display:inline!important;background:none!important;color:#135eaa!important;border:none!important;padding:0!important;box-shadow:none!important;}
+ .abrir::before,.configurar::before,.explorar::before {display:none!important;}
+ main a.abrir, main a.configurar, main a.explorar {color:#135eaa!important;-webkit-text-fill-color:#135eaa!important;}
+ .ampliar-figura,.incrustada,iframe,.page-tools-pdf,.comentario-pagina {display:none!important;}
+
+ /* Cajas: el cuerpo puede continuar en la página siguiente; se protegen los rótulos. */
+ .callout-body, .callout-body-container, .pdf-details {display:block!important;break-inside:auto!important;}
+ main .pdf-box-title {font-size:10pt!important;font-weight:600;line-height:1.3;padding:1.8mm 0 1mm!important;margin:0 0 1.5mm!important;break-after:avoid!important;hyphens:none!important;text-align:left!important;}
+ .pdf-result-title {font-weight:600;color:#59636e;margin:1mm 0!important;break-after:avoid!important;text-align:left!important;}
+ .pdf-details > p {orphans:2;widows:2;}
+ main .pdf-return {margin-top:2.5mm!important;text-align:left!important;break-before:avoid-page!important;}
+ /* El retorno no puede quedar solo al principio de una página (PDF 43 de la candidata del 31-10):
+    se impide el salto entre el último bloque de la solución y su «Volver al ejercicio». */
+ main .pdf-solution > :nth-last-child(2) {break-after:avoid-page!important;}
+ main .pdf-solution-link {text-align:left;font-size:9pt!important;}
+ /* Libro completo: el criterio local del piloto (ejemplos 10.2 y 10.6) se sustituye por una
+    medida: el generador marca .pdf-keep las cajas que caben en una fracción de la página. */
+ .en-app, .objetivos, .ejercicio, .pdf-keep {break-inside:avoid-page!important;}
+ .pdf-solutions {break-before:page;}
+ .pdf-solution {border-left:1.2mm solid #92632c!important;margin-bottom:5mm!important;}
+ .pdf-solution.pdf-keep {break-inside:avoid-page!important;}
+
+ /* Matemáticas (piloto). */
+ .pdf-short-math, .pdf-short-math .katex {white-space:nowrap!important;}
+ .katex {font-size:1em!important;}
+ main .math.display {display:block!important;width:100%!important;text-align:center!important;text-align-last:center!important;}
+ main .katex-display {display:block!important;overflow:visible!important;max-width:100%!important;text-align:center!important;padding:0!important;margin:.8em 0!important;font-size:1em!important;}
+ main .katex-display > .katex {display:block!important;text-align:center!important;}
+ main .katex-display > .katex > .katex-html {text-align:center!important;}
+ main .katex-display, main .katex-display .katex, main .katex-display .katex-html {text-align-last:center!important;}
+
+ /* Tablas (piloto). */
+ main th.pdf-num, main td.pdf-num, main td.pdf-num p {text-align:right!important;text-align-last:right!important;}
+ main th.pdf-id, main td.pdf-id {text-align:center!important;}
+ main .pdf-fixed-table {table-layout:fixed!important;}
+ main table.pdf-short-table, main .pdf-keep-group {break-inside:avoid;}
+ main .pdf-keep-group > p {break-after:avoid;}
+ /* La frase que presenta una tabla, una figura o una fórmula pasa con ella. */
+ main p:has(+ table), main p:has(+ .quarto-figure), main p:has(+ div > figure), main p:has(+ p > .math.display), main p:has(+ .math.display), main .pdf-result-title {break-after:avoid!important;}
+ /* Libro completo: tablas que no caben con la letra general (medidas por el generador). */
+ main table.pdf-wide {font-size:8.2pt!important;}
+ main table.pdf-wide th, main table.pdf-wide td {padding:1mm .9mm!important;}
+ main table.pdf-wide-break th, main table.pdf-wide-break td {overflow-wrap:anywhere!important;}
+
+ /* ---------- Libro completo: estructura ---------- */
+ .pdf-part {break-before:page;}
+ .pdf-part:first-child {break-before:auto;}
+ .pdf-chapter-head {margin:0 0 7mm;padding-top:14mm;break-after:avoid;}
+ .pdf-chapter-head .pdf-chapter-label {font-size:10pt;letter-spacing:.08em;text-transform:uppercase;color:#59636e;margin:0 0 2mm!important;text-align:left!important;}
+ .pdf-chapter-head h1 {margin:0!important;font-size:24pt!important;}
+ .pdf-chapter-head::after {content:"";display:block;width:28mm;border-bottom:.9mm solid #0f6e56;margin-top:5mm;}
+ .pdf-part > section.level1 > h1 {display:none!important;}
+
+ .pdf-portada {page:portada;break-after:page;height:20mm;margin:0;padding:0;}
+
+ .pdf-creditos {break-after:page;}
+ .pdf-creditos h1 {font-size:26pt!important;margin:26mm 0 3mm!important;}
+ .pdf-creditos .pdf-subtitulo {font-size:14pt;color:#3e4852;margin:0 0 12mm!important;text-align:left!important;}
+ .pdf-creditos .pdf-autores {list-style:none;padding:0;margin:0 0 4mm;font-size:11.5pt;}
+ .pdf-creditos .pdf-autores li {margin:0 0 1.2mm;text-align:left;}
+ .pdf-creditos .pdf-filiaciones {list-style:none;padding:0;margin:0 0 14mm;font-size:8.6pt;color:#3e4852;line-height:1.35;}
+ .pdf-creditos .pdf-filiaciones li {text-align:left;margin-bottom:.8mm;}
+ .pdf-creditos sup {font-size:.7em;}
+ .pdf-notice {border:0.3mm solid #c2cad2;padding:3mm 4mm;margin:0 0 5mm;font-size:9pt;line-height:1.35;color:#3e4852;background:#f4f7fa!important;break-inside:avoid;}
+ .pdf-notice p:last-child {margin-bottom:0!important;}
+ .pdf-legal {font-size:8.6pt;line-height:1.38;color:#3e4852;}
+ .pdf-legal p {text-align:left!important;margin-bottom:1.8mm!important;}
+
+ .pdf-indice h1 {margin-top:4mm!important;}
+ .pdf-toc {list-style:none;padding:0;margin:0;font-size:9.6pt;line-height:1.28;}
+ .pdf-toc li {margin:0;text-align:left!important;}
+ .pdf-toc a {color:inherit!important;-webkit-text-fill-color:currentColor;display:flex;align-items:baseline;gap:1.5mm;}
+ .pdf-toc .toc-num {flex:none;min-width:9mm;font-variant-numeric:tabular-nums;}
+ .pdf-toc .toc-title {flex:0 1 auto;}
+ .pdf-toc .toc-fill {flex:1 1 4mm;border-bottom:.25mm dotted #9aa3ad;transform:translateY(-.9mm);min-width:4mm;}
+ .pdf-toc .toc-page {flex:none;min-width:8mm;text-align:right;font-variant-numeric:tabular-nums;}
+ .pdf-toc .toc-l1 {font-weight:600;margin-top:2.6mm;break-after:avoid;}
+ .pdf-toc .toc-l1 .toc-num {min-width:6mm;}
+ .pdf-toc .toc-l2 {padding-left:6mm;margin-top:.7mm;color:#2b333b;}
+ .pdf-toc .toc-l2 .nivel {font-size:7pt!important;margin-left:1mm;}
+ .pdf-toc .toc-front {font-weight:600;margin-top:3.2mm;}
+
+ .pdf-edicion {break-inside:avoid;}
+ #avisos li {break-inside:avoid;text-align:left!important;}
+ .version-beta {border-left:1.2mm solid #0f6e56!important;padding:.5mm 0 .5mm 3mm!important;}
+ img.quarto-cover-image {display:none!important;}
+}

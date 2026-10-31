@@ -95,8 +95,10 @@ book:
     - avisos.qmd            # siempre al final: los capítulos nuevos van antes
 
 lang: es
-libro-version: "0.9 beta"                 # versión que muestran la portada y el formulario de comentarios (D055)
-libro-revision: "29 de octubre de 2026"   # fecha de la última revisión; cambiarla con cada versión
+libro-version: "1.0"                     # versión que muestran la portada y el formulario de comentarios (D055)
+libro-revision: "31 de octubre de 2026"   # fecha de la última revisión; cambiarla con cada versión
+libro-doi: "10.5281/zenodo.23835733"       # DOI de esta edición; reservado antes del depósito
+portal-doi: "10.5281/zenodo.23834485"      # archivo del portal 1.0.0, recurso independiente
 
 language:   # etiquetas accesibles (revisión beta, M07)
   search-submit-button-title: "Buscar en el libro"

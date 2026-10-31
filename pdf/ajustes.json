@@ -1,0 +1,26 @@
+{
+  "_nota": "Parámetros de paginación del libro completo. Sustituyen las reglas locales del piloto por criterios medidos; revisar tras cada cambio de contenido.",
+  "borrador": null,
+  "mantener_enteras": {
+    "_nota": "Fracción del alto de la caja de texto por debajo de la cual una caja no se parte entre páginas. Por encima, la caja puede continuar en la página siguiente con su borde repetido.",
+    "objetivos": 0.5,
+    "en-app": 0.33,
+    "ejercicio": 0.33,
+    "solucion": 0.33,
+    "ejemplo": 0.25,
+    "otra": 0.33
+  },
+  "cajas_enteras": {
+    "_nota": "Cajas que se mantienen completas aunque superen su fracción, si caben en una página. Al partirse, su «Resultado» (tabla corta que no se parte) pasaba entero a la página siguiente y dejaba un hueco dentro de la caja; se prefiere el blanco fuera de ella. Lista ligada a la paginación de la 1.0: revisarla al cambiar el contenido.",
+    "ids": [
+      "c04--ejemplo-inicializar-evaluar-cuasialeatoria",
+      "c06--ejemplo-cruce-uno-y-dos-puntos",
+      "c06--ejemplo-cruce-cx",
+      "c06--ejemplo-cruce-que-conserva"
+    ]
+  },
+  "figuras": {
+    "c10--fig-mapa": "104mm"
+  },
+  "css": []
+}
