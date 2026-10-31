@@ -255,7 +255,7 @@ With a criterion of 3 generations without improvement, the algorithm gives up ju
 - Elitism speeds up the search, but it can reduce diversity and lead to premature convergence. That is why the elite is usually small.
 - The algorithm stops when it reaches the optimum, if known, when it exhausts its resources, or when it has gone several generations without improvement. It returns the best solution found.
 
-To continue along the basic path, go to the [“Designing Experiments” chapter](09-experimentos.qmd).
+To continue along the basic path, go to [“Parameters and Randomness”](09-experimentos.qmd).
 
 ## Steady-State Variants [[Advanced]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-reemplazo-variantes-estacionario}
 

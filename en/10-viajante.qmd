@@ -1,0 +1,563 @@
+---
+aliases:
+  - 11-viajante.html
+---
+
+# The Traveling Salesman from Start to Finish {#sec-viajante}
+
+<!-- AI translation and naturalness pass: Claude (Cowork, configured model claude-opus-5-5), 2026-10-31. Source: Spanish v1.0, 75b82d8. EvoTraveller has an English-only interface; its control and chart names are quoted as in the source. crossover-ga and mutation-ga labels quoted from their English interfaces (lang=en). "Child 1 / Child 2" follow crossover-ga; "offspring" is used in general prose. Figures 10.1 and 10.2 use English SVG variants derived from en/figuras.json. The source edition's experimental and bibliographic verification records remain applicable; translating them does not constitute a new experiment or source review. -->
+
+**Tools:** [EvoTraveller](https://evotraveller.streamlit.app/), [crossover-ga](https://josemagalan.github.io/crossover-ga/#lang=en), and [mutation-ga](https://josemagalan.github.io/mutation-ga/#lang=en), available through the [portal](https://josemagalan.github.io/genetic-algorithms-lab/#lang=en). EvoTraveller has an English-only interface.
+
+::: {.callout-warning .objetivos title="Chapter Objectives"}
+After completing the basic path through this chapter, you will be able to:
+
+- describe the traveling salesman problem, its representation with permutations, and its fitness, and calculate the length of a route;
+- apply by hand a complete generation to a population of routes: evaluate, select, cross over, mutate, and replace;
+- interpret what EvoTraveller shows during a run: the fitness curve, the best route, and the population's loss of diversity;
+- explain what the elite does in replacement and why its size matters less than its existence;
+- choose EvoTraveller's parameters with maps similar to the real case and estimate the quality of the choice with maps that were not used to make it.
+:::
+
+## First, Observe [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-viajante-observa}
+
+What does a genetic algorithm do with a routing problem, from the first generation to the last?
+
+In the previous chapters we studied each piece separately: representation, the initial population and fitness, selection, crossover, mutation, replacement, and parameters. In this chapter we put them together in a single problem, the traveling salesman problem, with EvoTraveller [@santos2025]. We already used it in section -@sec-ciclo-ejecucion and in chapter [](#sec-experimentos-azar){.capitulo}. Before explaining anything, we will watch an entire run and note down what we see. The explanations will come in the following sections.
+
+This table summarizes which pieces reappear, where they were studied, and where you will find them here. If you do not remember one of them, it is a good idea to review it first:
+
+| Piece | Where it was studied | Where it reappears |
+|---|---|---|
+| Permutation | Section -@sec-representacion-permutaciones | Section -@sec-viajante-problema |
+| Fitness from a cost: the inverse | Section -@sec-inicializar-evaluar-objetivo-aptitud | Section -@sec-viajante-problema |
+| Tournament | Section -@sec-seleccion-torneo | Section -@sec-viajante-a-mano |
+| OX crossover and its variants | Sections -@sec-cruce-ox and -@sec-cruce-otros-cruces | Section -@sec-viajante-a-mano |
+| Swap mutation | Section -@sec-mutacion-intercambio-insercion-inversion | Section -@sec-viajante-a-mano |
+| Elite | Section -@sec-reemplazo-elitismo | Sections -@sec-viajante-a-mano and -@sec-viajante-elite |
+| Premature convergence | Section -@sec-experimentos-diversidad | Section -@sec-viajante-interpretar |
+| Replicates and similar cases | Sections -@sec-experimentos-replicas and -@sec-experimentos-casos-parecidos | Section -@sec-viajante-caso-real |
+| Horizon and budget | Section -@sec-experimentos-objetivo | Section -@sec-viajante-caso-real |
+
+EvoTraveller has three charts. **Fitness** shows the fitness of the best route in each generation; fitness is the inverse of length, so if it rises, the best route is shorter. **Best solution** draws the best route at the end. And under **Solutions**, the **Generation** control chooses a generation, and the chart draws all the routes in the population in that generation, each in its own cell.
+
+::: {.callout-tip .ejemplo #ejemplo-viajante-observa title="Reproducible Example · One Run, from Start to Finish"}
+**Data.** In EvoTraveller, keep the [reference values](09-experimentos.qmd#configuracion-evotraveller) in the sidebar: **Number of places** 10, **Seed** 1111, **Population size** 100, **Generations** 50, **Tournament size** 4, **Mutation rate** 0.05, **Elitism** 0.05, and **Crossover** 0.6. Click **Run**. Then, under **Solutions**, move **Generation** to 0, to 10, and to 49, the last value.
+
+**Predict.** Does the **Fitness** curve keep rising until generation 50? Are the routes in the population similar to one another at the beginning? And at the end?
+
+[Open and configure: EvoTraveller](https://evotraveller.streamlit.app/){.abrir .configurar target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+- **The curve rises at first and then stays flat.** Fitness goes from 0.0230 in generation 0 to 0.0293 in generation 3, and it does not change during the next 47 generations. The best route has length 34.11, the inverse of 0.02932.
+- **In generation 0, the 100 chromosomes are all different** (99 routes: two are the same route traveled in reverse), and almost all of them are very tangled.
+- **In generation 10, there are many repeated routes.** Only 30 distinct routes remain, and 43 of the 100 drawings are the same route: the best one, of length 34.11.
+- **In generation 49, the best route is still the same.** There are 23 distinct routes, and 46 drawings are the best route. The others are variations of it, some of them considerably worse.
+
+From generation 1 onward, the population is drawn in order, and the drawing that stands alone in the top row is the best route in that generation.
+</details>
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-viajante-observa title="Exercise · Three Questions for Later"}
+With what you have seen in example [](#ejemplo-viajante-observa), write down a provisional answer to each question. We will answer them in the following sections.
+
+a) Why does the **Fitness** curve never go down, not even a little?
+b) Why does the population fill up with copies of the same route?
+c) The best possible route on this map has length 31.50 (section -@sec-experimentos-azar). Why does the algorithm stop improving in generation 3 if it still has 47 generations left?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+a) You already saw it in exercise [](#ejercicio-ciclo-ejecucion): because of the elite, the best routes pass unchanged into the next generation. We will see this in section -@sec-viajante-elite.
+
+b) Because the elite and the copies of tournament winners, which are almost always the best route, take up a large part of the population, and mutation changes only 5% of the individuals. We will calculate this in exercise [](#ejercicio-viajante-interpretar).
+
+c) Because the population has lost diversity: almost everything that is crossed over consists of copies of the same route or small variations of it, and nothing better appears. This is the premature convergence of section -@sec-experimentos-diversidad. We will see this in section -@sec-viajante-interpretar.
+</details>
+::::
+
+## The Problem and Its Representation [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-viajante-problema}
+
+How is a route turned into a chromosome, and how many routes are there?
+
+The **traveling salesman problem** is probably the most popular combinatorial optimization problem. Given *n* cities and the distance between each pair, we must find the shortest tour that visits each city exactly once and returns to the starting point [@talbi2009, p. 7]. It is easy to state and very hard to solve, and because so much is known about it, it is used as a test bed: new combinatorial optimization methods are usually tried on the traveling salesman problem to get an idea of how useful they are [@larranaga1999, p. 132]. In EvoTraveller, the starting point is an **origin** O at position (0, 0), and the other places are at integer points on a 10 × 10 grid. The distance between two places is the straight-line distance, and the length of a route is the sum of the distances of its legs.
+
+**Representation.** A tour is an order of visits, so the natural representation is a **permutation** of the places, as in section -@sec-representacion-permutaciones: each place appears exactly once [@talbi2009, p. 36]. It is also the representation most used in genetic algorithms for the traveling salesman problem [@larranaga1999, p. 134]; there are others, which you will see in section -@sec-viajante-ampliaciones. The origin is not part of the chromosome, because it is always first and last. The chromosome is the **genotype**; the complete route, with the origin at the beginning and at the end, is the **phenotype** (section -@sec-representacion-genotipo-fenotipo). In this chapter, we write the chromosome with the numbers of the places: 3 4 1 2 5 is the route O → 3 → 4 → 1 → 2 → 5 → O.
+
+**Fitness.** We want to minimize the length *L*, and EvoTraveller uses its inverse as fitness, $f = 1/L$, which is larger the shorter the route is (section -@sec-inicializar-evaluar-objetivo-aptitud). Because EvoTraveller's selection is a tournament, which only looks at which route is better than another, choosing the shorter route directly would give the same result.
+
+**Size of the search space.** With *n* places counting the origin, there are $(n-1)!$ different chromosomes. But a route and the same route traveled in reverse have the same length: 3 4 1 2 5 and 5 2 1 4 3 are the same tour. The distinct routes are half as many:
+
+| Places (*n*) | Chromosomes, $(n-1)!$ | Distinct routes, $(n-1)!/2$ |
+|:---:|---:|---:|
+| 6 | 120 | 60 |
+| 10 | 362 880 | 181 440 |
+| 15 | 87 178 291 200 | 43 589 145 600 |
+
+Each additional place multiplies the number of routes by the number of places there already were: going from 10 to 11, by 10. With 15 places there are more than 40 000 million, which is why they cannot all be checked except on small maps.
+
+To work by hand, we will use a small EvoTraveller map with the usual seed: **Number of places** 6 and **Seed** 1111. That is the origin and five places (figure -@fig-mapa).
+
+![EvoTraveller's six-place map with seed 1111 and the best of its 60 routes, O 3 4 1 2 5 O, of length 24.29. Original figure, generated with `figuras/10-viajante.py` in the book's repository.](figuras/10-mapa.svg){#fig-mapa fig-alt="A 10 by 10 grid with the origin O in the lower left corner, at (0, 0), and five numbered places: 1 at (7, 8), 2 at (5, 6), 3 at (1, 4), 4 at (2, 8), and 5 at (4, 6). The best route goes from the origin to 3, up to 4, across to the right to 1, down to 2, over to 5, which is next to it, and back to the origin. It has length 24.29."}
+
+[Enlarge figure](figuras/10-mapa.svg){.ampliar-figura target="_blank" rel="noopener"}
+
+Distances between the places, rounded to two decimal places:
+
+|   | O | 1 | 2 | 3 | 4 | 5 |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **O** | — | 10.63 | 7.81 | 4.12 | 8.25 | 7.21 |
+| **1** | 10.63 | — | 2.83 | 7.21 | 5.00 | 3.61 |
+| **2** | 7.81 | 2.83 | — | 4.47 | 3.61 | 1.00 |
+| **3** | 4.12 | 7.21 | 4.47 | — | 4.12 | 3.61 |
+| **4** | 8.25 | 5.00 | 3.61 | 4.12 | — | 2.83 |
+| **5** | 7.21 | 3.61 | 1.00 | 3.61 | 2.83 | — |
+
+The route lengths in this chapter are calculated with the unrounded distances. If you add up those in the table, you will sometimes get a difference of one hundredth.
+
+::: {.callout-tip .ejemplo #ejemplo-viajante-problema title="Reproducible Example · Six Places in EvoTraveller"}
+**Data.** In EvoTraveller, set **Number of places** to 6 and keep the other [reference values](09-experimentos.qmd#configuracion-evotraveller) (**Seed** 1111, **Population size** 100, **Generations** 50). Click **Run**. Then set **Population size** to 10 and **Generations** to 10, and click **Run** again.
+
+**Predict.** With 100 individuals, how many generations will the algorithm need to find the route in figure -@fig-mapa? And with 10?
+
+[Open and configure: EvoTraveller](https://evotraveller.streamlit.app/){.abrir .configurar target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+**With 100 individuals, none: the Fitness curve is flat from generation 0**, at 0.0412, which is 1/24.29. There are only 120 possible chromosomes, and it is likely (about 81%) that an initial population of 100 random chromosomes contains one of the two that give the best route; in this run, it does. **Best solution** draws the route O 3 4 1 2 5 O.
+
+**With 10 individuals, nine generations.** The best fitness starts at 0.0384 (length 26.01), rises to 0.0390 (25.66) in generation 1 and to 0.0403 (24.80) in generation 8, and reaches 0.0412 (24.29) in generation 9.
+
+With such a small problem, the genetic algorithm is not needed: it is enough to check the 60 routes. We use it because it can be followed by hand.
+</details>
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-viajante-problema title="Exercise · The Length of a Route"}
+a) Using the distance table, calculate the length of route 3 1 2 4 5.
+b) Write the chromosome of the same route traveled in reverse. Why does it have the same length?
+c) Why is a vector of five integers from 1 to 5, chosen freely, not suitable as a chromosome?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+a) The route is O → 3 → 1 → 2 → 4 → 5 → O. The lengths of its legs add up to 4.12 + 7.21 + 2.83 + 3.61 + 2.83 + 7.21 = **27.81**.
+
+b) In reverse, the route is O → 5 → 4 → 2 → 1 → 3 → O, with chromosome **5 4 2 1 3**. It uses the same six legs, traveled in the opposite direction, and the distance between two places is the same in both directions.
+
+c) Because a vector of integers can repeat places and leave others unvisited, for example 3 1 3 4 5, which passes through 3 twice and never through 2. It would not be a valid tour. A permutation guarantees that each place appears exactly once (section -@sec-representacion-permutaciones).
+</details>
+::::
+
+## One Generation by Hand [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-viajante-a-mano}
+
+What happens to a population of routes in one generation?
+
+We will carry out by hand a generation like those in EvoTraveller, with a population of only four routes on the map in figure -@fig-mapa. Each EvoTraveller generation has three parts: the **elite**, which passes unchanged; **copies** of selected individuals, which may mutate; and **offspring** of pairs of selected individuals, which are crossed over and may mutate. With four individuals, we will take one elite individual (EvoTraveller would round it up to 2; here we use 1 to keep things simple), one copy, and one pair, which gives two children. Selection is a tournament of two; crossover is EvoTraveller's OX; and mutation is a swap of two places, with *pm* = 0.2 per individual, the highest value the tool allows.
+
+The draws are fixed in advance. We chose them so that all the cases we want to see appear in a single generation.
+
+**1. Evaluate.** The initial population has four randomly drawn routes:
+
+| Individual | Chromosome | Length *L* | Fitness $1/L$ |
+|:---:|:---:|:---:|:---:|
+| A | 5 2 1 3 4 | 30.62 | 0.0327 |
+| B | 3 1 2 4 5 | 27.81 | 0.0360 |
+| C | 2 1 3 5 4 | 32.53 | 0.0307 |
+| D | 1 5 4 2 3 | 29.26 | 0.0342 |
+
+The mean length is 30.06, and the best route is B.
+
+**2. Elite.** The best route, B, passes unchanged into the next generation (section -@sec-reemplazo-elitismo).
+
+**3. Select.** Three tournaments are played between two distinct individuals, and the one with the shorter route wins (section -@sec-seleccion-torneo):
+
+| Tournament | Contestants | Winner | Destination |
+|:---:|:---:|:---:|---|
+| 1 | B and C | B | Parent 1 |
+| 2 | A and C | A | Parent 2 |
+| 3 | D and A | D | Copy |
+
+C, the worst route, does not win any tournament. With two distinct contestants, the worst can never win.
+
+**4. Cross over.** EvoTraveller crosses with OX in the variant that crossover-ga calls “Order from the start”, which is not the classic one from section -@sec-cruce-ox, but the one from section -@sec-cruce-otros-cruces. The cuts fall after the first gene and after the third, so the segment is positions 2–3. To form Child 1:
+
+- copy the segment of Parent 1 (B): · 1 2 · ·;
+- read Parent 2 (A) **from the first position**, skipping the places already present: from 5 2 1 3 4, this leaves 5, 3, and 4;
+- fill the gaps in that order **starting after the second cut**: positions 4 and 5 and then, wrapping around, position 1.
+
+Child 1 is **4 1 2 5 3**. Child 2 is formed in the same way, with the roles swapped: it takes the segment from A, · 2 1 · ·, and from B, read from the beginning, 3, 4, and 5 remain. Child 2 is **5 2 1 3 4**, the same as A.
+
+**5. Mutate.** Each new individual, except the elite, mutates with probability *pm* = 0.2. A number is drawn for each one: 0.71 for the copy of D, 0.48 for Child 1, and 0.13 for Child 2. Only the last is less than 0.2, so only Child 2 mutates. The swap draws two positions, 4 and 5, and exchanges them: 5 2 1 3 4 becomes **5 2 1 4 3**.
+
+::: {.callout-tip .ejemplo #ejemplo-viajante-a-mano title="Reproducible Example · The Generation's Crossover and Mutation"}
+**Data.** OX crossover in the “Order from the start” variant, with Parent 1 = 3 1 2 4 5 (B), Parent 2 = 5 2 1 3 4 (A), and the segment at positions 2–3. Then, swap mutation of Child 2, 5 2 1 3 4, at positions 4 and 5.
+
+**Predict.** What are the lengths of the two children and of the mutant? Does any of them improve on B, the best route in the population?
+
+[Open: OX crossover as in EvoTraveller](https://josemagalan.github.io/crossover-ga/#op=ox&lang=en&v=from_start&p1=3-1-2-4-5&p2=5-2-1-3-4&c=1-3){.abrir target="_blank"}
+[Open: swap mutation of Child 2](https://josemagalan.github.io/mutation-ga/#op=swap&lang=en&p=5-2-1-3-4&c=3-4){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+| Individual | Chromosome | Length |
+|---|:---:|:---:|
+| Child 1 | **4 1 2 5 3** | 24.80 |
+| Child 2 | **5 2 1 3 4** | 30.62 |
+| Mutated Child 2 | **5 2 1 4 3** | 24.29 |
+
+Child 1 improves on both its parents. Of its six legs, four come from them: 1–2, which both have; 2–5 and 4–O, from A; and O–3, from B. Child 2 is a copy of A, because A already has the places outside the segment (3, 4, and 5, counting from position 4 and wrapping around) in the same order as B. The mutation reverses the end of the route and turns it into **the best possible route**, the one in figure -@fig-mapa traveled in reverse.
+</details>
+
+<details class="incrustada">
+<summary>Show the tool here (OX crossover, “Order from the start”)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/crossover-ga/#op=ox&lang=en&v=from_start&p1=3-1-2-4-5&p2=5-2-1-3-4&c=1-3" loading="lazy" title="crossover-ga: OX crossover"></iframe>
+</details>
+:::
+
+**6. Replace.** The next generation consists of the elite, the copy, and the two children (figure -@fig-generacion):
+
+| Individual | Origin | Chromosome | Length |
+|:---:|---|:---:|:---:|
+| B | Elite | 3 1 2 4 5 | 27.81 |
+| D | Copy, not mutated | 1 5 4 2 3 | 29.26 |
+| H1 | Child 1, not mutated | 4 1 2 5 3 | 24.80 |
+| H2 | Child 2, mutated | 5 2 1 4 3 | 24.29 |
+
+The mean length falls from 30.06 to 26.54, and the best route from 27.81 to 24.29. C has disappeared, and all that remains of A is what has passed to the children.
+
+![The generation by hand from section -@sec-viajante-a-mano. Top, the initial population; bottom, the next one. In orange, the shortest route in each population. Original figure, generated with `figuras/10-viajante.py` in the book's repository.](figuras/10-generacion.svg){#fig-generacion fig-alt="Two rows of four small maps. Top: routes A, of length 30.62; B, 27.81, in orange; C, 32.53; and D, 29.26. All four cross themselves. Bottom: B, which passes as the elite; D, copied; H1, 24.80; and H2, in orange, 24.29, which is the best possible route and does not cross itself."}
+
+[Enlarge figure](figuras/10-generacion.svg){.ampliar-figura target="_blank" rel="noopener"}
+
+With five destinations and the origin, there are only 60 routes, and it is easy to hit on the best one. On a map of 15 places, with more than 40 000 million routes, one generation does not go nearly as far: improvement is slow and depends on many generations.
+
+:::: {.callout-note .ejercicio #ejercicio-viajante-a-mano title="Exercise · With the Classic OX"}
+Repeat step 4 with the classic OX from section -@sec-cruce-ox, which reads the other parent starting after the second cut. With the same parents, the same segment, and the same mutation of Child 2 at positions 4 and 5, which children come out, and what is the best route in the next generation?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+Child 1: the segment from B is · 1 2 · ·. A, read starting after the second cut, is 3 4 5 2 1; without 1 and 2, this leaves 3, 4, and 5, which go to positions 4, 5, and 1. Child 1 is **5 1 2 3 4**, of length 30.49.
+
+Child 2: the segment from A is · 2 1 · ·. B, read starting after the second cut, is 4 5 3 1 2; 4, 5, and 3 remain. Child 2 is **3 2 1 4 5**, of length 26.46. Mutated at positions 4 and 5, it becomes 3 2 1 5 4, of length 26.10.
+
+The next generation would be B (27.81), D (29.26), 5 1 2 3 4 (30.49), and 3 2 1 5 4 (26.10). The best route would be 3 2 1 5 4, which improves on B but does not reach 24.29. With the same draws, the crossover variant changes the children. Both variants preserve the segment of one parent and the relative order of the other, and neither is better in general; in the traveling salesman problem, what matters are the legs (section -@sec-experimentos-operadores).
+</details>
+::::
+
+::: {.callout-note .en-app title="In the Application · crossover-ga, “OX crossover”"}
+[Explore in crossover-ga](https://josemagalan.github.io/crossover-ga/#op=ox&lang=en&v=from_start&p1=3-1-2-4-5&p2=5-2-1-3-4){.explorar target="_blank"}
+
+- The tool opens with parents B and A and the “Order from the start” **Variant**, EvoTraveller's. Drag the cuts to try other segments and note down the children. With this variant, no segment gives the best route, 3 4 1 2 5 or 5 2 1 4 3.
+- Change the **Variant** to “Classic (Goldberg, 1989)” and try segments again. With which one does Child 2 give the best route?
+:::
+
+## What Happened in the Run [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-viajante-interpretar}
+
+With what we have done by hand, how can we explain what we saw in the run in example [](#ejemplo-viajante-observa)?
+
+**The curve never goes down** because there is an elite: the best route in one generation passes unchanged into the next, like B in section -@sec-viajante-a-mano. The best fitness can only rise or stay the same.
+
+**The population fills up with copies** because several pieces push in the same direction. The elite already consists of 6 copies of the best route. The tournament favors the best routes, and the more copies of the best route there are, the more tournaments it wins. An unmutated copy is identical to its parent, and with **Mutation rate** 0.05, only one individual in twenty mutates. In generation 10, 43 of the 100 individuals were the best route.
+
+**The algorithm stops improving** because it has lost diversity. Almost half the population is the same route, and many crossovers are between two copies of it. With EvoTraveller's OX, which is not pure, because two identical parents do not always give an identical child (example [](#ejemplo-cruce-ampliaciones)), crossing two copies gives the same route only if the segment starts at the first position; otherwise, it gives the same route with a piece shifted. On this map, none of those children is shorter than the best route: of the 36 possible pairs of cuts, 8 repeat it and 28 make it longer. And what mutation brings is not enough to find a better route. The search gets stuck around a route of 34.11, while the best possible one measures 31.50: this is the **premature convergence** of section -@sec-experimentos-diversidad. The population keeps changing, but nothing better appears.
+
+Selection pressure (chapter -@sec-seleccion) determines how fast diversity is lost. In EvoTraveller it is controlled by **Tournament size**.
+
+::: {.callout-tip .ejemplo #ejemplo-viajante-interpretar title="Reproducible Example · Tournaments of 2 and 10"}
+**Data.** EvoTraveller's [reference values](09-experimentos.qmd#configuracion-evotraveller), except **Tournament size**, which takes two values: 2 and 10. Click **Run** with each one and look at the population with **Generation** 10.
+
+**Predict.** With which tournament are there more copies of the best route in generation 10?
+
+[Open and configure: EvoTraveller](https://evotraveller.streamlit.app/){.abrir .configurar target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+| Tournament size | Distinct routes in generation 10 | Copies of the best route | Length of the best route |
+|:---:|:---:|:---:|:---:|
+| 2 | 73 | 14 | 31.86 |
+| 4 (initial value) | 30 | 43 | 34.11 |
+| 10 | 22 | 57 | 31.50 |
+
+With the tournament of 10, more than half the population consists of copies of the best route; with the tournament of 2, only 14. The larger the tournament, the higher the selection pressure and the faster diversity is lost.
+
+Look at the last column: on this map, the tournament of 10 finds the best possible route and the tournament of 4 does not. But this is a single run on a single map, and we already know that this is not enough (section -@sec-experimentos-replicas).
+</details>
+:::
+
+To find out what happens in general, we repeated the experiment with 30 maps of 10 places, those of seeds 1111 to 1140, with one run on each map. A separate program gives us the best route on each map, and we count on how many of them EvoTraveller finds it:
+
+| Configuration | Distinct routes in generation 10 (mean) | Maps on which it finds the best route |
+|---|:---:|:---:|
+| Tournament of 2 | 72.8 | 29 of 30 |
+| Tournament of 4 ([reference values](09-experimentos.qmd#configuracion-evotraveller)) | 43.3 | 17 of 30 |
+| Tournament of 10 | 22.0 | 13 of 30 |
+| Tournament of 4 with **Mutation rate** 0.2 | 58.9 | 28 of 30 |
+
+With more selection pressure, fewer distinct routes are kept and the algorithm gets stuck more often. Mutating more also preserves diversity. EvoTraveller's [reference values](09-experimentos.qmd#configuracion-evotraveller) are not the best for these maps.
+
+:::: {.callout-note .ejercicio #ejercicio-viajante-interpretar title="Exercise · How Many Copies of the Best Route"}
+In generation 10 of example [](#ejemplo-viajante-observa), 43 of the 100 individuals are the best route. With the [reference values](09-experimentos.qmd#configuracion-evotraveller), each EvoTraveller generation has 6 elite routes, 34 copies of tournament winners, and 60 crossover offspring (we will see this in section -@sec-viajante-por-dentro). Each tournament pits 4 distinct individuals against one another, and each copy or child mutates with probability 0.05.
+
+a) What is the probability that a copy of the best route wins a tournament?
+b) How many of the 34 copies will be, on average, the unmutated best route?
+c) Crossing two copies of the best route repeats it only if the segment starts at the first position, which happens in 2 of every 9 draws of cuts with 9 places. How many of the 60 children will be, on average, the best route? How many copies do you expect in total?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+a) There are 57 individuals that are not the best route. The probability that all 4 contestants are drawn from them is
+
+    $$\frac{57}{100} \cdot \frac{56}{99} \cdot \frac{55}{98} \cdot \frac{54}{97} \approx 0.10.$$
+
+    If there is at least one copy of the best route in the tournament, it wins, so the probability is $1 - 0.10 = 0.90$.
+
+b) Each copy is the best route with probability 0.90 and does not mutate with probability 0.95: on average, $34 \times 0.90 \times 0.95 \approx 29$.
+
+c) Both parents are the best route with probability $0.90^2 \approx 0.81$. On average, $60 \times 0.81 \times \frac{2}{9} \times 0.95 \approx 10$ children. In total, $6 + 29 + 10 = 45$ copies, very close to the 43 observed. Most come from the elite and the copies, not from crossover.
+</details>
+::::
+
+## The Elite in Replacement [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-viajante-elite}
+
+How many of the best routes should be kept from one generation to the next?
+
+EvoTraveller uses **generational replacement with an elite** (section -@sec-reemplazo-elitismo): the *e* best routes pass unchanged, and the rest of the population is replaced by copies and offspring. The size of the elite is set by **Elitism**, as a fraction of the population. With the [reference values](09-experimentos.qmd#configuracion-evotraveller), **Elitism** 0.05 and 100 individuals, the elite consists of 6 routes (in section -@sec-viajante-por-dentro we will see why 6 and not 5).
+
+But the elite is the first 6 **positions** of the sorted population, not 6 distinct routes. In example [](#ejemplo-viajante-observa), from generation 5 onward, the 6 positions are occupied by copies of the same route, because the best one already has many copies. An elite of 6 then keeps the same as an elite of 1.
+
+::: {.callout-tip .ejemplo #ejemplo-viajante-elite title="Reproducible Example · Small Elite and Large Elite"}
+**Data.** EvoTraveller's [reference values](09-experimentos.qmd#configuracion-evotraveller), except **Elitism**, which takes three values: 0.01, 0.05, and 0.1. Click **Run** with each one.
+
+**Predict.** With which elite is the shortest route found?
+
+[Open and configure: EvoTraveller](https://evotraveller.streamlit.app/){.abrir .configurar target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+| Elitism | Elite routes | Final fitness | Final length |
+|:---:|:---:|:---:|:---:|
+| 0.01 | 2 | 0.0317 | 31.50 |
+| 0.05 | 6 | 0.0293 | 34.11 |
+| 0.1 | 10 | 0.0317 | 31.50 |
+
+The small and the large elite find the best possible route; the intermediate one does not. There is no reason to expect a monotonic order: we are comparing a single run with each value. Changing **Elitism** also changes the draws of the whole run, and each one follows its own path.
+</details>
+:::
+
+With the 30 maps of 10 places from section -@sec-viajante-interpretar, one run per map, the number of maps on which the best route is found is:
+
+| Mutation rate | Elitism 0.01 | Elitism 0.05 | Elitism 0.1 |
+|:---:|:---:|:---:|:---:|
+| 0.05 | 26 | 17 | 20 |
+| 0.2 | 23 | 28 | 27 |
+
+There is no clear order: with little mutation the small elite wins, and with more mutation the intermediate one. The differences change direction when another parameter changes. This is what we would expect if the elite almost always keeps the same route, the best one, whatever its size.
+
+What does matter is that there **is** an elite. EvoTraveller does not allow it to be removed, but we can do it by changing one line of its code, and repeat the experiment with 30 maps of 15 places (seeds 1111 to 1140) and *pm* = 0.2:
+
+| Replacement | Mean gap above the best route | The best-route curve gets worse at some point | The final route is worse than the best found |
+|---|:---:|:---:|:---:|
+| With an elite (6 routes) | 6.1% | 0 of 30 | 0 of 30 |
+| Without an elite | 10.2% | 28 of 30 | 13 of 30 |
+
+Without an elite, the best route in a generation can be lost: if it mutates or is crossed over, its offspring may be worse. In 13 of the 30 runs, the route the algorithm delivers at the end is worse than another it had found earlier. With *pm* = 0.05 the difference is much smaller (13.7% with an elite and 13.5% without one), because the copies of the best route almost never mutate. The elite makes heavy mutation cheap, as seen in section -@sec-experimentos-interaccion.
+
+:::: {.callout-note .ejercicio #ejercicio-viajante-elite title="Exercise · Without an Elite, by Hand"}
+Repeat the replacement from section -@sec-viajante-a-mano without an elite. Instead of B, a second copy passes, that of the winner of a fourth tournament between B and D, and it does not mutate. a) What is the next generation, and what is its best route? b) Now imagine that the fourth tournament is played by C and D, Child 2 does not mutate, and Child 1 turns out worse than B. What happens to the best route?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+a) B wins the tournament against D, so the next generation would be the same: B (as a copy), D, H1, and H2. Its best route is H2, of 24.29. Here the elite changes nothing, because the tournament has already chosen B.
+
+b) D wins the fourth tournament against C. D passes twice, along with Child 1 and Child 2 unmutated (5 2 1 3 4, of 30.62). No route reaches 27.81: the best route in the next generation is worse than B, and the best-fitness curve goes down. The elite guarantees that this does not happen.
+</details>
+::::
+
+## From Trial to Real Case [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-viajante-caso-real}
+
+Every week, a company delivers from its warehouse to 14 customers, whose positions change from one week to the next. How do we choose EvoTraveller's parameters to calculate their routes?
+
+It is a **tactical** problem (section -@sec-experimentos-objetivo): it is solved every week, the quality of the route matters, and there is limited time to calculate it. Suppose the time allows about 5000 route evaluations per week, those of EvoTraveller's [reference values](09-experimentos.qmd#configuracion-evotraveller): 100 routes in each of the 51 generations, from 0 to 50. We are going to bring together everything we have seen in chapter -@sec-experimentos and in this one.
+
+**1. Cases similar to the real one.** We do not know the maps for the coming weeks, but we do know what they are like: 15 places counting the warehouse. We will use EvoTraveller maps of that size (section -@sec-experimentos-casos-parecidos).
+
+**2. A measure.** On each map, how much longer the algorithm's route is than the best possible one, as a percentage. Here the best route is calculated by an exact program; in a real case, it would be compared with the best known route.
+
+**3. Three groups of maps.** We tune with 10 maps (seeds 1111 to 1120). With another 20, the **validation** maps (seeds 1121 to 1140), we compare the configurations and choose one. And we keep 20 more, the **test** maps (seeds 1141 to 1160), which we will use only at the end, once, with the chosen configuration. If we chose and evaluated with the same maps, the result would be too optimistic (section -@sec-experimentos-ampliaciones). That is why the figure that matters is the test figure: the tuning and validation maps are used for choosing.
+
+**4. Candidate configurations.** With what we have seen in this chapter and the previous one, we try four:
+
+- **A**, the [reference values](09-experimentos.qmd#configuracion-evotraveller);
+- **B**, with **Mutation rate** 0.2, to preserve more diversity;
+- **C**, like B but with **Tournament size** 7;
+- **D**, like B but with **Population size** 50 and **Generations** 100: 50 routes in each of 101 generations, about 5000 evaluations, like the others.
+
+::: {.callout-tip .ejemplo #ejemplo-viajante-caso-real title="Reproducible Example · Three Maps, Two Configurations"}
+**Data.** In EvoTraveller, set **Number of places** to 15 and try configurations B and D with three seeds: 1111, 1112, and 1117. B: [reference values](09-experimentos.qmd#configuracion-evotraveller) with **Mutation rate** 0.2. D: the same, with **Population size** 50 and **Generations** 100. That makes six runs. Read the approximate final fitness from the **Fitness** curve, and calculate an approximate length as its inverse.
+
+**Predict.** Which configuration gives shorter routes?
+
+[Open and configure: EvoTraveller](https://evotraveller.streamlit.app/){.abrir .configurar target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+| Seed | Best possible route | B | D |
+|:---:|:---:|:---:|:---:|
+| 1111 | 37.04 | **38.46** (+3.8%) | 40.03 (+8.1%) |
+| 1112 | 39.81 | 45.72 (+14.8%) | **39.91** (+0.2%) |
+| 1117 | 37.00 | **40.16** (+8.6%) | 41.02 (+10.9%) |
+| **Mean** | | +9.1% | +6.4% |
+
+The lengths in the table are calculated from the unrounded fitness values. That is why they may differ from the ones you get by inverting an approximate fitness: 0.0251 gives 39.84, whereas the exact fitness of D for seed 1112 gives 39.91.
+
+B wins on two of the three maps, but D has the lower mean, because for seed 1112, B falls far short. With three maps, the answer depends on which maps we look at. More are needed.
+
+The final fitness values are 0.0260, 0.0219, and 0.0249 with B, and 0.0250, 0.0251, and 0.0244 with D.
+</details>
+:::
+
+With the 10 tuning maps, one run per map, the result is:
+
+| Configuration | Mean gap above the best route | Worst map | Maps with the best route |
+|---|:---:|:---:|:---:|
+| A, [reference values](09-experimentos.qmd#configuracion-evotraveller) | 13.3% | 17.6% | 0 of 10 |
+| B, *pm* = 0.2 | 5.2% | 14.8% | 1 of 10 |
+| C, *pm* = 0.2 and tournament of 7 | 4.7% | 16.9% | 2 of 10 |
+| D, *pm* = 0.2, population of 50, and 100 generations | 5.4% | 27.3% | 3 of 10 |
+
+:::: {.callout-note .ejercicio #ejercicio-viajante-caso-real title="Exercise · Which Would You Choose?"}
+With the table of the 10 tuning maps, which configuration would you choose for the company? How much do you trust the difference between B and C? Map by map, C improves on B on 5 maps, is worse on 4, and ties on 1.
+
+<details>
+<summary>**Show the Solution**</summary>
+
+The step from A to B is clear: the mean falls from 13.3% to 5.2%, and B improves on A on 9 of the 10 maps. Among B, C, and D, the difference in means is less than one point, whereas the results vary much more from one map to another (the worst map for each lies between 15% and 27%). That C wins on 5 maps and loses on 4 is what we would expect if they were equally good. With these data, we do not know whether C is better than B. Choosing C just because it has the lowest mean would mean trusting the luck of ten runs. We will check it with the validation maps.
+</details>
+::::
+
+We compare the four configurations on the 20 validation maps:
+
+| Configuration | Mean gap | Worst map | Maps with the best route |
+|---|:---:|:---:|:---:|
+| A, [reference values](09-experimentos.qmd#configuracion-evotraveller) | 13.9% | 32.5% | 0 of 20 |
+| B, *pm* = 0.2 | 6.5% | 16.2% | 3 of 20 |
+| C, *pm* = 0.2 and tournament of 7 | 8.2% | 30.4% | 2 of 20 |
+| D, *pm* = 0.2, population of 50, and 100 generations | 4.4% | 14.6% | 4 of 20 |
+
+The improvement from A to B holds on the new maps: from 13.9% to 6.5%. C's small advantage over B, on the other hand, did not hold: on the new maps, C is worse than B on 12 of 20. And D, which in tuning looked like the worst of the three because of its worst map, now comes out ahead. Its advantage over B, 2.1 points on average, is not much larger than the variation between maps either; more maps would be needed to be sure.
+
+The decision must be made **before** looking at the test maps. We choose D, which has the smallest mean gap in validation and also the best worst map. Now, and only now, we run it on the 20 test maps:
+
+| Configuration D | Mean gap | Worst map | Maps with the best route |
+|---|:---:|:---:|:---:|
+| On the 20 validation maps | 4.4% | 14.6% | 4 of 20 |
+| On the 20 test maps | 9.1% | 25.4% | 1 of 20 |
+
+On the test maps, D's mean gap is twice what validation promised. D has not gotten worse: the validation figure was optimistic. We chose D precisely because it did better than the others on those 20 maps, and part of that advantage was luck, as happened to C in tuning. With one run per map and so much variation from one map to another, 20 maps are not enough to separate B, C, and D.
+
+And what if we now try B on the test maps? It does better: 5.0% on average. But if we change our choice because of this, the test maps will have been used for choosing and will become validation maps, and that 5.0% will be as optimistic as D's 4.4% was. What it does tell us is that there is no clear winner between B and D: D won in validation and B in testing. To separate them, more maps or several runs per map would be needed, and then new test maps.
+
+For the company, the reasonable decision is still B or D, not the [reference values](09-experimentos.qmd#configuracion-evotraveller), which lag far behind in tuning and validation. We have chosen D, and the test tells us what to expect from it: routes that are, on average, 9% longer than the best possible one, and on some map, 25% longer. If time allows, there is another lever: with configuration B and **Generations** 100, twice as many evaluations, the mean gap on the validation maps falls to 4.6% and the worst map stays at 10.4%. Before adopting it, its quality would also have to be estimated with new test maps. Buying quality with time is a decision about the problem, not about the algorithm (section -@sec-experimentos-objetivo).
+
+## Summary {.unnumbered #resumen}
+
+- In the traveling salesman problem, a route is represented by a permutation of the places, and the origin is added at the beginning and at the end; EvoTraveller's fitness is the inverse of the length. With *n* places there are $(n-1)!/2$ distinct routes, too many to check except on small maps.
+- An EvoTraveller generation has three parts: the elite, which passes unchanged; copies of the individuals selected by tournament; and offspring of pairs crossed over with OX. The copies and the offspring may undergo swap mutation.
+- During a run, the best fitness does not go down thanks to the elite, and the population fills up with copies of the best route. The larger the tournament, the sooner diversity is lost and the more often the algorithm gets stuck.
+- What matters is that there is an elite, not so much its size, because the elite positions are usually occupied by copies of the same route.
+- Parameters are chosen with maps similar to the real case: some for tuning, others for validation to choose, and others for testing, which are used only at the end with the chosen configuration. A small advantage on some maps can disappear on others, and the winner's figure on the maps used to choose it is optimistic.
+
+To continue along the basic path, go to [“Recap”](11-recapitulacion.qmd).
+
+## EvoTraveller Under the Hood [[Advanced]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-viajante-por-dentro}
+
+What exactly does EvoTraveller do in each generation, and how does it differ from what we did by hand?
+
+EvoTraveller's code is public. Read carefully, each generation does the following [see also @santos2025, pp. 8–9]:
+
+1. **Sort** the population by fitness, from best to worst.
+2. **Elite.** Calculate $e = \max(1, \lfloor \text{Elitism} \times N \rfloor)$ and, if it is odd, add 1. With *N* = 100, **Elitism** 0.01 gives *e* = 2; 0.05 gives 5, which becomes 6; and 0.1 gives 10. The first *e* routes pass unchanged. Because *e* is at least 2, EvoTraveller cannot be run without an elite.
+3. **Selection.** Play *N* tournaments, each with **Tournament size** distinct individuals from the whole population, elite included, and shuffle the winners.
+4. **Copies.** The first $N - n_c - e$ winners pass as copies, which may mutate. Here $n_c = \lfloor \text{Crossover} \times N \rfloor$, which is also raised to the next even number if it is odd.
+5. **Crossover.** Another $n_c$ winners form $n_c/2$ pairs (the *e* left over are not used), and **all** of them are crossed over with the “Order from the start” OX. The two cuts are drawn among the positions, and the last gene is never inside the segment.
+6. **Mutation.** Each copy and each child mutates with probability **Mutation rate**, by swapping two randomly drawn positions. The elite does not mutate.
+
+There are three differences from what we have studied in other chapters:
+
+- **Crossover is not a crossover probability.** In chapter -@sec-cruce, each pair is crossed over with probability *Pc*, and the number of crossover offspring varies from one generation to another. In EvoTraveller, **Crossover** is a fixed fraction: with 0.6 and 100 individuals, there are exactly 60 crossover offspring in each generation. On average it is the same, but without variation.
+- **Mutation is per individual, not per gene.** With *pm* = 0.2, an individual changes on average $2 \times 0.2 = 0.4$ positions (section -@sec-experimentos-pc-pm).
+- **The problem and the algorithm share the seed.** **Seed** fixes both the positions of the places and the algorithm's draws. That is why, to repeat with different randomness, the map must change, and each map is a single run (section -@sec-experimentos-azar).
+
+Two more details help in reading the tool. The places are drawn at random on the grid, and nothing prevents two of them from falling on the same point: **Best solution** then shows one place fewer. This happens often; with 15 places, on 18 of the 30 maps of seeds 1111 to 1140. And the **Generation** control goes up to **Generations** − 1, so the last population cannot be seen.
+
+:::: {.callout-note .ejercicio #ejercicio-viajante-por-dentro title="Exercise · Counting the Parts of a Generation"}
+With **Population size** 100, **Elitism** 0.07, and **Crossover** 0.5, how many routes form the elite, how many are copies, and how many are crossover offspring? How many may mutate?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+Elite: $\lfloor 0.07 \times 100 \rfloor = 7$, which is odd, so *e* = 8. Crossover offspring: $\lfloor 0.5 \times 100 \rfloor = 50$, which is even: 25 pairs. Copies: 100 − 50 − 8 = 42. The 42 copies and the 50 children may mutate, 92 routes; with *pm* = 0.05, about 4.6 will mutate per generation on average.
+</details>
+::::
+
+## Improving the Algorithm [[Advanced]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-viajante-mejorar}
+
+This section requires sections -@sec-cruce-que-conserva, -@sec-mutacion-que-conserva, and -@sec-experimentos-operadores.
+
+In EvoTraveller, we can only change the parameters. If we could also change the operators, which would we change?
+
+In section -@sec-experimentos-operadores we saw that, in the traveling salesman problem, the length of a route depends on its legs, and that operators that preserve them work better: inversion mutation breaks two legs and swap mutation up to four; ERX crossover preserves almost all of the parents' legs, and OX fewer. We checked this then with our own algorithm. Now we have repeated it with EvoTraveller's own code, changing only the operator, with configuration B from section -@sec-viajante-caso-real (*pm* = 0.2) and the 30 maps of 15 places:
+
+| Crossover | Mutation | Mean gap above the best route | Worst map | Maps with the best route |
+|---|---|:---:|:---:|:---:|
+| OX “Order from the start” | Swap | 7.1% | 24.1% | 4 of 30 |
+| Classic OX | Swap | 7.2% | 25.4% | 7 of 30 |
+| OX “Order from the start” | Inversion | 2.1% | 10.9% | 9 of 30 |
+| ERX | Swap | 2.8% | 23.4% | 15 of 30 |
+| ERX | Inversion | **1.1%** | **5.9%** | **15 of 30** |
+
+The first row is EvoTraveller's operators. It does not match configuration B from section -@sec-viajante-caso-real exactly (6.1% on those same 30 maps) because, to be able to use ERX, this program treats places that fall on the same point as distinct places (section -@sec-viajante-por-dentro).
+
+Changing the OX variant hardly changes the mean: both variants preserve relative order, not legs. Replacing swap with inversion divides the mean gap by more than three, and ERX with inversion brings it down to 1.1%, with the worst map at 5.9%. With EvoTraveller's operators, no configuration from section -@sec-viajante-caso-real gets that low, not even the one that uses twice as many generations (3.6% on these 30 maps). Parameters are tuned **after** choosing operators that preserve what matters in the problem (section -@sec-experimentos-operadores).
+
+This conclusion does not rest only on these 30 maps. @larranaga1999 [pp. 162–165] compared 8 crossovers and 6 permutation mutations on three traveling salesman instances, one of them with the 47 provincial capitals of mainland Spain, and in all three, ERX was the crossover with the best mean results. They also warn that the best operator depends on the problem: those that work well when adjacencies matter, as in the traveling salesman problem, may not be useful in other ordering problems. In one of them, ordering the variables of a Bayesian network, which is not a tour, ERX was not among the best crossovers [@larranaga1999, pp. 165–166].
+
+:::: {.callout-note .ejercicio #ejercicio-viajante-mejorar title="Exercise · Why Is Changing the OX Variant Not Enough?"}
+In exercise [](#ejercicio-viajante-a-mano), the classic variant of OX gave different children. Why, then, does changing the variant not improve the mean in the table? What do the two variants have in common, and what do they lack?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+Both variants copy the segment of one parent and place the other places in the order in which they appear in the other parent; only the point where reading starts changes. Both preserve **relative order**, and neither cares about which places end up **together**. In the traveling salesman problem, length depends on the legs, that is, on which places are neighbors. An OX child preserves order, but when it fits in the places from the other parent, it creates new legs, which are almost always long. ERX builds the child from the parents' legs, and inversion breaks only two.
+</details>
+::::
+
+## Further Reading [[Further reading]{.largo}[+]{.corto}]{.nivel .saber-mas} {#sec-viajante-ampliaciones}
+
+**A little history.** The problem was circulating among mathematicians at least since the thirties: Merrill Flood and Albert Tucker remembered hearing it in a talk by Hassler Whitney at Princeton in 1934, although Whitney himself, when asked later, did not remember it [@dantzig1954, p. 393]. Twenty years later, @dantzig1954 found the shortest route among 49 cities, one in each of the 48 states that the United States then had and another in Washington, and proved that there was no better one. Exact methods have gone much further since then: the shortest route among 85 900 points has been proved optimal, with a computation of more than 136 years of processor time [@applegate2009, p. 11]. For the traveling salesman problem as such, there are therefore specialized methods much more powerful than a genetic algorithm; we use one here because it can be seen and understood. Genetic algorithms have been applied to the traveling salesman problem since 1985, among others with the PMX crossover from section -@sec-cruce-pmx, which @goldberg1985 proposed for this purpose [@larranaga1999, p. 133].
+
+**Other representations.** The permutation is not the only way to write a route. @larranaga1999 [pp. 134–155, 166–167] review others and conclude that the permutation, which they call the path representation, is the most natural and gives the best results. In the **binary** representation, each place is a bit string, and classic crossover and mutation give chromosomes that repeat places or skip them, and they have to be repaired, as in section -@sec-representacion-infactibles. In the **ordinal** representation, each gene says which position the next place occupies in the list of places still to be visited. With the list 1 2 3 4 5, the route 3 4 1 2 5 is written 3 3 1 1 1: 3 is the third in the list; once 3 is removed, 4 is the third of 1 2 4 5; once 4 is removed, 1 is the first of 1 2 5, and so on to the end. Any chromosome in which each gene is between 1 and the number of places still to be visited is a valid route, so one-point crossover needs no repair. But the results are poor: what lies to the right of the cut changes meaning when what lies to the left changes, and that part of the route is scrambled almost at random. Valid offspring are not enough: they must inherit what matters in the problem, which is the locality of section -@sec-experimentos-operadores.
+
+**Hybrid algorithms.** Genetic algorithms explore the search space well, but they refine the solutions they find poorly. That is why the most effective ones are usually combined with a local search, which improves each child before evaluating it. @larranaga1999 [p. 160] sum this up with an image they attribute to Goldberg: the genetic algorithm finds the hills and the local search climbs them. Talbi calls these hybrids *low-level teamwork hybrids* and includes **memetic algorithms** among them [@talbi2009, p. 388]. In the traveling salesman problem, a classic local search is 2-opt, which reverses stretches of the route as long as some reversal shortens it [@croes1958; @talbi2009, p. 92]. Its move is that of inversion mutation (section -@sec-mutacion-ampliaciones).
+
+**Seeding the population.** One can start with routes built by a heuristic, such as nearest neighbor, instead of random routes. It does not always help: the population can quickly fill up with copies of those routes and converge prematurely [@larranaga1999, p. 160]; we saw this in section -@sec-inicializar-evaluar-sembrar. Talbi reports a traveling salesman case in which a local search gives worse results starting from the routes of a greedy heuristic than starting from random routes [@talbi2009, p. 102].
+
+**The real traveling salesman.** The traveling salesman problem in this chapter is the simplest one: straight-line distances, the same in both directions, and a single vehicle. Real problems add time windows, specific route requirements, or several vehicles, as in the vehicle routing problem [@talbi2009, p. 102]. Genetic algorithms can be adapted to constraints such as these [@santos2025, p. 8], at the cost of carefully designing the representation, the fitness, and the handling of infeasible routes (section -@sec-inicializar-evaluar-penalizacion).
+
+**EvoTraveller.** @santos2025 describe the tool: its parameters, the three charts, and the purpose of each one. They highlight the population chart as its most distinctive feature, because it shows how the parameters affect the convergence and diversity of the routes, as we have done in sections -@sec-viajante-observa and -@sec-viajante-interpretar.
+
+## Chapter References {.unnumbered #referencias}
+
+<!-- Bibliographic entries and their verification status are inherited from the Spanish v1.0 source. No new source verification is claimed by this translation. -->
+
+::: {.referencias-capitulo #refs}
+:::

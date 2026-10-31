@@ -1,0 +1,358 @@
+---
+numeracion-cajas: correlativa
+aliases:
+  - 12-recapitulacion.html
+---
+
+# Recap {#sec-recapitulacion}
+
+<!-- AI translation and naturalness pass: Claude (Cowork, configured model claude-opus-5-5), 2026-10-31. Source: Spanish v1.0, 75b82d8. Portal section titles quoted from its English interface (js/content.js, lang=en); the initialization-and-evaluation-ga screen name from its English interface. Exercises keep the chapter's consecutive numbering (numeracion-cajas). Figures 11.1–11.3 use English SVG variants derived from en/figuras.json. The source edition's experimental and bibliographic verification records remain applicable; translating them does not constitute a new experiment or source review. -->
+
+**Tools:** the [portal](https://josemagalan.github.io/genetic-algorithms-lab/?lang=en#tools), which brings together all the tools from the previous chapters. This is a review chapter: almost all the activities are pencil-and-paper exercises.
+
+::: {.callout-warning .objetivos title="Chapter Objectives"}
+After completing the basic path through this chapter, you will be able to:
+
+- list the nine design decisions of a genetic algorithm and, for each one, the starting option from the basic path;
+- choose the representation for a new problem and, with it, the initialization, crossover, and mutation;
+- recognize in a design the mistakes revealed by the book's counterexamples, and correct them;
+- decide whether a genetic algorithm, or another metaheuristic, is a reasonable option for a problem;
+- design a complete genetic algorithm for a new problem and plan how to tune it according to the time available;
+- recognize where genetic algorithms are used and how they are combined with other methods, and name the main topics that this book leaves out.
+:::
+
+## The Nine Decisions at a Glance [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-recapitulacion-decisiones}
+
+You have seen each piece of a genetic algorithm separately. What has to be decided to assemble the whole thing, and where is the best place to start?
+
+In section -@sec-ciclo-decisiones we gathered the design into nine decisions. The table lists them again, now with the starting option we saw in the basic path of each chapter. It is a starting point, not a recipe: each option has alternatives and counterexamples, and the chapters explain when it is better to change it.
+
+| Decision | Question | Starting option | Where |
+|---|---|---|:---:|
+| 1. Representation | How is a solution written? | The most natural one for the problem: bits for yes-or-no decisions, integers for choosing among options, a permutation for ordering, and real numbers for continuous variables | -@sec-representacion |
+| 2. Initialization | What population do we start with? | Random and uniform; permutations, by shuffling with Fisher–Yates. It must be diverse, not good | -@sec-inicializar-evaluar-uniforme–-@sec-inicializar-evaluar-diversidad |
+| 3. Genotype and phenotype | How do we go from the chromosome to the solution? | Direct in integer, real, and permutation representations; in a yes-or-no binary representation, each bit indicates whether the element is included; for numerical variables, read each group of bits as an integer and, if appropriate, map it to the interval | -@sec-representacion-genotipo-fenotipo–-@sec-representacion-real |
+| 4. Fitness | How do we measure how good a solution is? | From the objective function. If a cost is minimized, it must be transformed for the roulette wheel; constraints that the representation does not absorb are handled with a penalty | -@sec-inicializar-evaluar-evaluar–-@sec-inicializar-evaluar-penalizacion |
+| 5. Mutation | How are small changes introduced? | Bit-flip; random resetting or creep in the integer representation; Gaussian in the real one; swap, insertion, or inversion in the permutation. With a small *pm* | -@sec-mutacion |
+| 6. Crossover | How are two parents combined? | One-point, two-point, or uniform in binary and integer representations; uniform or arithmetic in the real one; OX, PMX, or CX in the permutation | -@sec-cruce |
+| 7. Selection | Who reproduces? | Tournament, which depends only on the ranking; roulette wheel, with care for the scale of the fitness | -@sec-seleccion |
+| 8. Replacement | Who passes into the next generation? | Generational with a small elite | -@sec-reemplazo-generacional–-@sec-reemplazo-elitismo |
+| 9. Stopping | When does the run end? | On reaching the optimum, if it is known; on exhausting the resources; or after several generations without improvement | -@sec-reemplazo-cuando-parar |
+
+In addition to the decisions, there are the **parameters**: the population size *N* and the crossover and mutation probabilities *Pc* and *pm*. Classic studies used populations of 20 to 100 individuals, *Pc* between 0.6 and 0.95, and *pm* between 0.001 and 0.01 per bit, but those values were obtained with particular problems, and there is no set of values that is best for all of them (section -@sec-experimentos-casos-parecidos). That is why parameters are tuned with cases similar to the real one and compared using several runs (chapter -@sec-experimentos). And before tuning them, we need to know how much time there is for the search, which depends on the horizon of the decision (section -@sec-experimentos-objetivo). In a **strategic** problem, which is solved once and whose consequences last for years, a lot can be spent on the search: large populations, many generations, and several runs to keep the best one. In an **operational** problem, which is solved very frequently, sometimes in real time, the evaluation budget is small, and a fast configuration that rarely fails is preferable. **Tactical** problems, in the medium term, lie between the two [@talbi2009, pp. 33–34; @eiben2015, pp. 147–149].
+
+The order of the table is the order of design. Representation comes first, because fitness is calculated on the decoded solution, and crossover and mutation have to be designed for the chromosome (section -@sec-ciclo-decisiones). Selection, replacement, and stopping, on the other hand, do not depend on the representation: they look at fitness (and stopping also at the cost), so they work the same for any representation.
+
+:::: {.callout-note .ejercicio #ejercicio-recapitulacion-decisiones title="Exercise · An Incomplete Description"}
+A paper says: "We used a genetic algorithm with a population of 100 individuals, a crossover probability of 0.8, and a mutation probability of 0.01, for 200 generations." With this information, could you repeat the experiment? Which decisions are missing?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+It could not be repeated. Only the parameters and one of the nine decisions are known: stopping (200 generations). What is missing:
+
+- the **representation** and the **decoding**: how each solution is written;
+- the **initialization**;
+- the **fitness**: how to go from the objective to fitness and what is done with the constraints;
+- **which crossover and which mutation**. Moreover, "0.01" does not say whether it is the probability that each gene mutates or that each individual does, and these are not the same (section -@sec-experimentos-pc-pm);
+- the **selection**, with its parameters, such as the tournament size;
+- the **replacement**: whether there is an elite and how large it is.
+
+And, to be able to compare results, how many runs were made, with which seeds, and on which cases (section -@sec-experimentos-replicas). Details that seem secondary can change the results considerably, as happened when Axelrod's model was repeated with other selection mechanisms (section -@sec-seleccion-ampliaciones).
+</details>
+::::
+
+## A Map by Representation [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-recapitulacion-mapa}
+
+The previous table says what has to be decided. But once the representation has been chosen, what options remain for the other decisions?
+
+First, it is worth recalling how the representation is chosen. The starting question is what a solution to the problem is: a subset of elements, an option for each element, an order, or a set of numbers. Each answer points to one of the book's four representations, as figure [-@fig-tipos-representacion] summarizes [@talbi2009, pp. 36–37]. It is a guide, not a rule: the same problem sometimes admits another representation, such as the knapsack written with a permutation and a decoder (section -@sec-representacion-infactibles) or the traveling salesman problem written with random keys (section -@sec-representacion-ampliaciones). Nor is it exclusive to genetic algorithms: any metaheuristic has to decide how a solution is written. What is specific to the genetic algorithm is the distinction between the chromosome, which crossover and mutation manipulate, and the solution that is evaluated (section -@sec-representacion-genotipo-fenotipo).
+
+![The book's four representations, with the examples from chapter -@sec-representacion. Top, the chromosome: what crossover and mutation manipulate. Bottom, the solution it describes, which is what gets evaluated. Original figure, generated with `figuras/11-tipos-de-representacion.py` in the book's repository.](figuras/11-tipos-de-representacion.svg){#fig-tipos-representacion fig-alt="Four panels in two rows; in each, at the top, a chromosome shown as a row of cells and, below it, an arrow to the solution it describes. Binary, for membership problems such as the knapsack: chromosome 1 0 1 1 0 1 puts items 1, 3, 4, and 6 into the knapsack, drawn with a width proportional to their weight, which exactly fill the capacity W equal to 10; items 2 and 5 are left out; it weighs 10 of 10 and is worth 14. Integer, for assignment problems such as tasks and machines: chromosome 2 1 3 2 1, with each cell in its machine's color, becomes a time bar chart; machine 1 does tasks 2 and 5, machine 2 tasks 1 and 4, and machine 3 task 3; a dashed line marks the makespan, 10. Real, for continuous optimization: chromosome 3.00 and 2.00 is a point marked on the contour lines of the Himmelblau function, at one of its four minima, with f equal to 0. Permutation, for ordering problems such as the traveling salesman problem: chromosome 1 3 5 2 6 4 is a tour with arrows through six numbered cities, of length 327.4."}
+
+[Enlarge figure](figuras/11-tipos-de-representacion.svg){.ampliar-figura target="_blank" rel="noopener"}
+
+Almost everything that depends on the representation comes down to initialization, decoding, and the two variation operators. For each of the book's four representations, the table brings together what we saw in the basic path and, in the last row, the alternatives from the advanced sections.
+
+| | Binary | Integer | Real | Permutation |
+|---|---|---|---|---|
+| **What for** | Yes-or-no decisions (the knapsack, which projects are funded) and numbers in an interval | Choosing an option for each element (assigning tasks to machines, time slots to exams, or a site to each warehouse) | Continuous variables (the Himmelblau function, fitting the parameters of a model) | Ordering (the traveling salesman, job sequencing, the order of the stops on a delivery route) |
+| **Decode** | Yes or no: each bit indicates whether the element is included. For numerical variables: bits → integer → interval, with precision $\Delta = (b-a)/(2^k-1)$ (-@sec-representacion-binaria–-@sec-representacion-precision) | Direct: the gene is the option (-@sec-representacion-entera) | None: the chromosome is the point (-@sec-representacion-real) | The order of the permutation; in the traveling salesman problem, plus the origin at the beginning and the end (-@sec-representacion-permutaciones) |
+| **Initialize** | Each bit 0 or 1 with equal probability (-@sec-inicializar-evaluar-uniforme) | Each gene uniform over its range | Each gene uniform over its interval | Shuffle with Fisher–Yates (-@sec-inicializar-evaluar-fisher-yates) |
+| **Validity and feasibility** | Every string is valid but may not be feasible (an overweight knapsack) (-@sec-representacion-validez) | Valid if each gene is within its range | Every vector is valid; outside the interval, the solution is not feasible (-@sec-representacion-fuera-caja) | Each element exactly once: the operators must respect this |
+| **Crossover** | One-point, two-point, uniform (-@sec-cruce-uno-y-dos-puntos–-@sec-cruce-uniforme) | The same as for binary | Uniform and arithmetic (-@sec-cruce-reales) | OX, PMX, and CX (-@sec-cruce-ox–-@sec-cruce-cx) |
+| **Mutation** | Bit-flip with *pm* per gene (-@sec-mutacion-inversion-bits) | Random resetting for categories; creep for ordered quantities (-@sec-mutacion-enteros) | Gaussian, with step size σ (-@sec-mutacion-gaussiana) | Swap, insertion, and inversion (-@sec-mutacion-intercambio-insercion-inversion) |
+| **Advanced** | Gray code (-@sec-representacion-gray); *k*-point crossover; single-bit mutation | Circular creep | Quasi-random initialization and Latin hypercube (-@sec-inicializar-evaluar-cuasialeatoria); BLX-α and SBX; uniform, non-uniform, and polynomial mutation | Variants of OX and CX, and ERX (-@sec-cruce-otros-cruces); scramble mutation (-@sec-mutacion-otras-mutaciones) |
+
+Three ideas run through the table. First, operators **are chosen according to the representation**, not the other way around. One-point crossover and random resetting work with bits and integers, but they repeat cities if they are applied to a permutation (sections -@sec-cruce-permutaciones and -@sec-mutacion-permutaciones). Second, within a representation, the right operator depends on **what the genes mean**. If the gene is a category, such as a machine, random resetting is natural; if it is an ordered quantity, creep gives small changes (section -@sec-mutacion-enteros). Third, a **valid** chromosome need not be a **feasible** solution. When the representation does not absorb a constraint, we have to penalize, repair, or reject (sections -@sec-representacion-validez and -@sec-inicializar-evaluar-penalizacion).
+
+:::: {.callout-note .ejercicio #ejercicio-recapitulacion-mapa title="Exercise · Which Representation?"}
+For each problem, choose the representation, a crossover, and a mutation from the basic path. Is there any constraint that the representation does not absorb?
+
+a) A company has an advertising budget and 25 possible ads, each with its price and estimated reach. Which ads should it buy?
+b) 30 orders have to be distributed among 5 trucks.
+c) The order in which 10 jobs are processed on a single machine has to be decided so that they are as little delayed as possible.
+d) The diameter, between 10 and 50 mm, and the wall thickness, between 1 and 5 mm, of a pipe have to be chosen.
+
+<details>
+<summary>**Show the Solution**</summary>
+
+| | Representation | Crossover | Mutation | Constraint |
+|---|---|---|---|---|
+| a) | Binary, one bit per ad (like the knapsack) | One-point, two-point, or uniform | Bit-flip | The budget: a string can exceed it. We must penalize or repair |
+| b) | Integer, one gene per order with its truck, from 1 to 5 | One-point, two-point, or uniform | Random resetting: the truck number is a label, not a quantity | If the trucks have a capacity, a truck can be overloaded: penalty |
+| c) | Permutation of the 10 jobs | OX, PMX, or CX | Swap, insertion, or inversion | None, if the operators respect the permutation |
+| d) | Real, with two genes | Uniform or arithmetic | Gaussian | The intervals: Gaussian mutation can take a gene outside its interval (section -@sec-representacion-fuera-caja) |
+
+In d), the binary representation could also be used, with *k* bits per variable (section -@sec-representacion-precision), but the real representation is the natural encoding for continuous variables.
+</details>
+::::
+
+## Common Mistakes [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-recapitulacion-errores}
+
+Throughout the book, several counterexamples have appeared: decisions that seem reasonable but are not. Which ones are worth remembering when designing a genetic algorithm?
+
+| Mistake | What happens | What to do | Where |
+|---|---|---|:---:|
+| Seeding without caring about diversity | Selection can concentrate the population around a few solutions | A random initial population; if seeding, a randomized heuristic that gives different solutions | -@sec-inicializar-evaluar-sembrar |
+| Using a cost as fitness with the roulette wheel | The roulette wheel favors the worst, or cannot be built if there are negative values | Transform the cost ($C - f$, $1/(1+f)$, the rank) or use the tournament | -@sec-inicializar-evaluar-objetivo-aptitud |
+| Choosing the penalty weight badly | If λ is small, infeasible solutions win; if it is very large, promising infeasible solutions are lost | Try several weights with similar cases | -@sec-inicializar-evaluar-penalizacion |
+| Using the roulette wheel with very similar fitness values | Everyone has almost the same probability: selection stops distinguishing | Tournament, ranking, or scaling | -@sec-seleccion-ruleta-deja-de-distinguir |
+| Letting only the best reproduce | Truncation reduces diversity very quickly | A selection that gives everyone a chance | -@sec-seleccion-truncamiento |
+| Applying string operators to a permutation | One-point crossover and random resetting repeat elements | Permutation operators | -@sec-cruce-permutaciones, -@sec-mutacion-permutaciones |
+| Mutating too much | The search becomes random | A small *pm*, for example $1/L$ per gene, with *L* genes | -@sec-mutacion-cuanto-mutar |
+| Generational replacement without an elite | The best solution can be lost | A small elite | -@sec-reemplazo-elitismo |
+| Comparing generations across different algorithms | A steady-state generation evaluates one child, and a generational one *N* | Count evaluations | -@sec-inicializar-evaluar-coste, -@sec-reemplazo-estacionario |
+| Drawing conclusions from a single run | The result depends on the seed | Several replicates, means, and standard deviations | -@sec-experimentos-replicas–-@sec-experimentos-comparar |
+| Tuning without thinking about the time available | The chosen configuration does not finish in time in an operational problem, or falls short in a strategic one | Set the budget first according to the horizon of the decision | -@sec-experimentos-objetivo |
+| Tuning and evaluating with the same cases | The parameters look better than they are | Choose with some cases (tuning and validation) and estimate the quality with others (test) | -@sec-experimentos-casos-parecidos, -@sec-viajante-caso-real |
+
+Many of the mistakes in the table have the same root: breaking the balance between the two forces of section -@sec-evolucion-dos-fuerzas, exploitation and exploration from section -@sec-evolucion-explorar-explotar. Seeding without preserving variety, truncating, or removing mutation can give too much exploitation, and the population gets stuck; mutating too much or removing the elite means that what has been found can be lost. The others are mistakes of representation, measurement, or planning: a fitness that does not distinguish, an experiment that does not allow conclusions to be drawn, or a budget that does not match the problem.
+
+:::: {.callout-note .ejercicio #ejercicio-recapitulacion-errores title="Exercise · What Is Wrong with This Design?"}
+A team designs a genetic algorithm for a traveling salesman problem with 30 cities:
+
+1. Each route is a permutation of the cities.
+2. The initial population consists of 50 copies of the nearest-neighbor route, each with one random swap.
+3. Fitness is the length of the route, and parents are chosen with the roulette wheel.
+4. One-point crossover, with *Pc* = 0.9.
+5. Swap mutation, with *pm* = 0.05 per individual.
+6. The offspring replace all the parents.
+7. The run stops after 500 generations.
+8. To choose between *pm* = 0.05 and *pm* = 0.2, they do one run with each value and keep the one that gives the shorter route.
+
+Which decisions are wrong? How would you correct them?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+- **2.** This is seeding with a heuristic: the 50 routes are almost the same, and the population starts with no diversity (section -@sec-inicializar-evaluar-sembrar). Better: random permutations with Fisher–Yates.
+- **3.** Length is minimized, but the roulette wheel gives more probability to higher fitness: it would favor the longest routes (section -@sec-inicializar-evaluar-objetivo-aptitud). It must be transformed, for example with the inverse of the length, as EvoTraveller does, or the tournament must be used.
+- **4.** One-point crossover gives offspring with repeated cities (section -@sec-cruce-permutaciones). OX, PMX, or CX must be used.
+- **6.** Without an elite, the best route can be lost (section -@sec-reemplazo-elitismo). The best individual should be passed on unchanged.
+- **8.** One run per value is not enough: the difference may be due to the seed (section -@sec-experimentos-comparar). The means of several replicates must be compared, on maps similar to the real one.
+
+Decisions 1, 5, and 7 are reasonable.
+</details>
+::::
+
+## Designing for a New Problem [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-recapitulacion-problema-nuevo}
+
+You have a problem that nobody has given you as an exercise. Where do you start?
+
+**First, is it worth it?** A genetic algorithm is not the best option for everything. Mitchell reports an intuition shared by many researchers, although it is not a rigorous rule: a genetic algorithm has a good chance of competing with other general methods when the search space is large, is not smooth or does not have a single peak, or is poorly understood, when the fitness is noisy, and when it is enough to find a good-enough solution quickly. On the other hand, if the space is small, it can be searched exhaustively; if it is smooth or has a single peak, a method that climbs the slope is much more efficient; and if the problem is well understood, like the traveling salesman problem, methods that use specific heuristics usually give better results [@mitchell1998, section 5.1]. A recent review sums it up in the same way: genetic algorithms are useful above all in large, complex, and poorly understood search spaces, where classic methods, such as enumeration or heuristics, are not suitable [@garciamartinez2025, p. 652]. We saw this when estimating the size of a search space (section -@sec-evolucion-optimizar) and when combining the genetic algorithm with a local search (section -@sec-viajante-ampliaciones).
+
+A **metaheuristic** is a general search method, applicable to almost any optimization problem, that gives satisfactory solutions in a reasonable time, although with no guarantee of finding the optimum; the genetic algorithm is one of them (section -@sec-recapitulacion-fuera). These three questions (is the space small? is it smooth? are there specific heuristics?) actually apply to any metaheuristic: they decide whether an approximate, general method is needed. A fourth one remains, the one that chooses among them. What is specific to the genetic algorithm is that crossover combines the information of two solutions, whereas many other methods explore the neighborhood of a single one [@garciamartinez2025, p. 629]. In general, population-based methods tend to explore the space, and those that transform a single solution, **trajectory** methods, tend to exploit a region [@talbi2009, p. 25]. A genetic algorithm makes most sense when combining parts of good solutions yields good solutions, that is, when crossover passes on meaningful pieces (section -@sec-cruce-para-que-cruzar), or when it is useful to search with many solutions at once, because there are several peaks or several objectives. Figure -@fig-que-metodo summarizes the path. It is a guide, not a rule, and often the best thing is to combine both types of method.
+
+![Which method should I use? The first three questions are those of @mitchell1998 [section 5.1]; the fourth separates population-based metaheuristics, such as the genetic algorithm, from trajectory-based ones [@talbi2009, p. 25; @garciamartinez2025, p. 629]. Original figure, generated with `figuras/11-que-metodo.py` in the book's repository.](figuras/11-que-metodo.svg){#fig-que-metodo fig-alt="Diagram of four cascading questions. First: is the space small? If so, check all the solutions and keep the best. If not, second: is it smooth with a single peak? If so, climb the slope. If not, third: are there specific heuristics, as in the traveling salesman problem? If so, use them, alone or inside a metaheuristic. If not, a metaheuristic is needed, and the fourth question chooses which one: is it useful to combine good solutions or to search with many at once, because there are several peaks or objectives? If not, a trajectory method (local search, annealing, tabu); if so, a population method, such as the genetic algorithm. A dashed arrow between the two indicates that they can be combined in a memetic algorithm. At the bottom, in all cases: set the evaluation budget according to the horizon, strategic, tactical, or operational, and tune with cases similar to the real one."}
+
+[Enlarge figure](figuras/11-que-metodo.svg){.ampliar-figura target="_blank" rel="noopener"}
+
+**Then, the design.** If the answer is a genetic algorithm, go through the nine decisions in the order of section -@sec-recapitulacion-decisiones:
+
+1. Write down a solution: choose the representation with the table in section -@sec-recapitulacion-mapa and count how many chromosomes there are.
+2. Write down the objective and the constraints. Decide which ones the representation absorbs and how you will handle the rest.
+3. Choose the initialization, crossover, and mutation that correspond to the representation and to the meaning of the genes.
+4. Choose the selection, the replacement, and the stopping criterion.
+5. Decide how much time there is for the search, according to the problem's horizon. Set some starting parameters and tune them with cases similar to the real one, with several replicates per configuration. Check the result on new cases.
+6. Go over the table of mistakes in section -@sec-recapitulacion-errores.
+
+::: {.callout-note .en-app title="In the Application · genetic-algorithms-lab Portal"}
+[Explore the portal](https://josemagalan.github.io/genetic-algorithms-lab/?lang=en#tools){.explorar target="_blank"}
+
+- In **Five modules. One shared process.**, match each module with the decisions in section -@sec-recapitulacion-decisiones. Which decisions do not have a module of their own?
+- Scroll down to **How they fit into the algorithm** and compare the cycle with figure -@fig-ciclo. Why must the offspring be evaluated before replacement, if replacement compares parents and offspring?
+- In **Experiment across generations**, choose the simulator you would use to check the effect of selection pressure over many generations and the one you would use to tune *pm* in the traveling salesman problem.
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-recapitulacion-problema-nuevo title="Exercise · A Genetic Algorithm?"}
+Would you use a genetic algorithm in these cases? Explain your answer.
+
+a) Choosing which of 15 projects to fund without exceeding the budget. A computer evaluates a million combinations per second.
+b) Finding the minimum of a smooth function with a single minimum and a known derivative.
+c) Tuning six real parameters of a simulation of a factory. Each evaluation takes one minute, gives a noisy result, and there are many local optima. A good configuration is enough.
+d) Finding a very short route for a traveling salesman problem with 1 000 cities and straight-line distances.
+
+<details>
+<summary>**Show the Solution**</summary>
+
+a) **No.** With 15 projects there are $2^{15} = 32\,768$ combinations, which can all be checked in a few hundredths of a second, and this finds the best one with certainty.
+
+b) **No.** A method that climbs (or descends) the slope uses the derivative and reaches the minimum much sooner.
+
+c) **Yes, it is a good candidate.** The space is continuous and has many local optima, the fitness is noisy, and a good-enough solution is sufficient. But each evaluation is expensive: the evaluation budget must be counted (section -@sec-inicializar-evaluar-coste), and we must decide how to handle the noise (section -@sec-inicializar-evaluar-ruido).
+
+d) **Not as the only method.** The traveling salesman problem is very well studied, and there are specific heuristics that usually work better. If a genetic algorithm is used, the sensible thing is to combine it with a local search, such as 2-opt (section -@sec-viajante-ampliaciones).
+</details>
+::::
+
+:::: {.callout-note .ejercicio #ejercicio-recapitulacion-problema-nuevo-2 title="Exercise · An Exam Timetable"}
+A school has to schedule 40 exams in 8 time slots. Some pairs of exams have students in common and cannot be in the same slot. In addition, because of the rooms available, there can be no more than 6 exams in one slot. The goal is the timetable with the fewest conflicts. A computer evaluates a million timetables per second.
+
+a) With 12 exams and 4 slots, would you use a genetic algorithm? And with 40 exams and 8 slots?
+b) Design a genetic algorithm for the case of 40 exams: the nine decisions and some starting parameters.
+c) How would you check that the design works before using it on the real timetable?
+d) Go over your design with the table of mistakes in section -@sec-recapitulacion-errores, as step 6 of the procedure asks. Which mistakes does it avoid, and which would you have to watch out for?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+a) With 12 exams and 4 slots there are $4^{12} = 16\,777\,216$ timetables: at a million per second, they can all be checked in about 17 seconds. **A genetic algorithm is not needed.** With 40 exams and 8 slots there are $8^{40} = 2^{120} \approx 1.3 \times 10^{36}$, and checking them all would take about $4 \times 10^{22}$ years. Here it **does make sense**.
+
+b) One proposal:
+
+| Decision | Proposal |
+|---|---|
+| 1. Representation | Integer: 40 genes, one per exam, with its slot, from 1 to 8. Every chromosome is valid but may not be feasible |
+| 2. Initialization | Each gene uniform between 1 and 8 |
+| 3. Genotype and phenotype | Direct: gene *i* is the slot of exam *i* |
+| 4. Fitness | Minimize the number of pairs of exams with students in common in the same slot plus λ for each exam over the limit in a slot. The value 0 is a conflict-free timetable that fits in the rooms |
+| 5. Mutation | Random resetting: as far as conflicts are concerned, the slot is a label, and there is no reason to prefer nearby slots. With *pm* = 1/40 per gene |
+| 6. Crossover | Uniform: the numbering of the exams is arbitrary, so there is no reason to keep neighboring genes together |
+| 7. Selection | Binary tournament: it depends only on the ranking, so there is no need to transform the cost |
+| 8. Replacement | Generational with an elite of 1 |
+| 9. Stopping | When the fitness reaches 0, or on exhausting a maximum number of evaluations, or after many generations without improvement |
+
+Starting parameters: a population of 50 to 100 and *Pc* = 0.8, within the classic values. Other options are reasonable if they are justified: for example, the roulette wheel with a transformed fitness, or handling capacity with a repair that moves exams out of full slots.
+
+c) With timetables from previous years, which are cases similar to the real one: try several values of λ, *pm*, and the tournament size, with 30 replicates per configuration, and compare the means and standard deviations. Then check the chosen configuration on timetables that were not used to tune it (sections -@sec-experimentos-casos-parecidos and -@sec-viajante-caso-real). The timetable is made once per semester and there are days to calculate it, so it is a tactical problem, almost a design problem (section -@sec-experimentos-objetivo): a large population and many generations can be afforded, and several runs can be made on the real timetable to keep the best one.
+
+d) The proposal avoids several mistakes in the table: the initial population is random, without seeding; the tournament needs no transformation of the cost and does not stop distinguishing with similar fitness values; the operators are integer-vector operators, not string operators applied to permutations; *pm* = 1/40 is small; there is an elite; and in c), replicates are used, along with different cases for choosing the configuration and for estimating its quality. Two things remain to watch: the penalty weight λ, which should be tried with several values, and the budget, which must be set according to the days available. If it is compared with a steady-state version, evaluations must be counted, not generations.
+</details>
+::::
+
+## Genetic Algorithms in Practice [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-recapitulacion-practica}
+
+Outside of exercises, who uses genetic algorithms, for what, and how?
+
+**Where they are used.** In almost every field. A Scopus search in April 2024 found 71 147 documents with "genetic algorithm" in the title. For about the last fifteen years, more than 3500 have appeared each year, and the fields with the most papers are engineering and computer science, followed by mathematics, physics, materials science, and energy [@garciamartinez2025, pp. 652–653]. Engineering problems are often the hardest: they have several objectives, change over time, have many interrelated variables, and have strict constraints [@garciamartinez2025, p. 653]. Many resemble those in the book: distributing tasks among machines and sequencing jobs, designing delivery routes, building timetables, or fitting the parameters of a model. They are also used in machine learning: to choose which variables or which data a model uses, to find classification rules, to tune a model's hyperparameters, or to search for the architecture of a neural network [@garciamartinez2025, pp. 654–655].
+
+**How they are used.** Almost never alone, and almost never programmed from scratch:
+
+- **Combined with other methods.** A common use is for the genetic algorithm to find promising regions and for another method to refine them, as local search does in memetic algorithms (section -@sec-viajante-ampliaciones). They are also combined with mathematical programming, in **matheuristics**, and with simulation, in **simheuristics**, when evaluating a solution requires simulating a system under uncertainty, like the factory in exercise [](#ejercicio-recapitulacion-problema-nuevo) [@garciamartinez2025, p. 648]. Section -@sec-recapitulacion-fuera gives more details.
+- **With a library.** The portal's tools let you follow each step with its code in Python and JavaScript, but this book does not teach how to program a complete genetic algorithm. To do so, besides writing it from scratch, you can use a library. Libraries save work and make it easier to repeat and extend experiments, and if the algorithms being compared are programmed with the same library, the comparison is fairer [@talbi2009, p. 67]. Some well-known ones in Python are DEAP, for evolutionary algorithms in general [@fortin2012], PyGAD, for genetic algorithms [@gad2024], and pymoo, for multi-objective optimization [@blank2020]; in R, the GA package [@scrucca2013]. With any of them, the nine decisions of section -@sec-recapitulacion-decisiones remain the same: the library makes them easier, but it does not make them for us.
+
+:::: {.callout-note .ejercicio #ejercicio-recapitulacion-practica title="Exercise · Choosing Variables"}
+A team wants to predict the demand for a product with a statistical model. It has 200 candidate variables and wants to choose a subset with which the model predicts well. To evaluate a subset, the model must be fitted and its error measured on data not used to fit it, which takes about 3 seconds.
+
+a) What representation would you use? Which problem in the book does it resemble?
+b) Besides predicting well, a model with few variables is preferred. How could the fitness take this into account?
+c) Go through the four questions in figure -@fig-que-metodo. Is a genetic algorithm reasonable?
+d) How many evaluations fit into one night of computing, of 8 hours?
+e) Is it enough that the data used to compare subsets have not been used to fit the model's coefficients? How would you measure the final error of the choice?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+a) **Binary**, with one bit per variable: 1 if it enters the model and 0 if not. It is like the knapsack: each item is a variable (section -@sec-representacion-binaria). One-point, two-point, or uniform crossover and bit-flip mutation all work.
+
+b) For example, minimize the error plus λ for each variable used, a penalty like the one in section -@sec-inicializar-evaluar-penalizacion. Because it is minimized, the tournament or a transformation of the fitness is advisable. Another option is to treat it as a problem with two objectives, error and number of variables (section -@sec-recapitulacion-fuera).
+
+c) The space is not small: there are $2^{200} \approx 1.6 \times 10^{60}$ subsets. It is not smooth, because removing or adding one variable can change the error a lot, and the measured error depends on which data are set aside to measure it, so it is somewhat noisy. There are specific heuristics, such as stepwise selection, which adds or removes variables one at a time, but they do not guarantee the best subset. And combining makes sense: if two subsets predict well, each may have useful variables that crossover brings together in one child. **Yes, it is reasonable**, although it should be compared with stepwise selection.
+
+d) $8 \times 3600 / 3 = 9600$ evaluations, for example about 95 generations of 100 individuals. The budget is tight: evaluations must be counted (section -@sec-inicializar-evaluar-coste), and a small population may be advisable. Choosing the variables is done once, when building the model, so it is a design problem: if there are more nights, several runs can be made.
+
+e) No. The data used to compare subsets are **validation** data: they also help choose the model, even though they do not fit its coefficients. Once the variables are fixed, their final error should be measured on other **test** data that played no part in that choice. It is the same separation we made with the maps in section [-@sec-viajante-caso-real] [@hastie2009, section 7.2, p. 222].
+</details>
+::::
+
+**What we have not covered.** This book covers the basic genetic algorithm, with a single objective and a single population. It leaves out, among other things, optimization with several objectives, populations divided into islands, hybrid methods, and other metaheuristics. Section -@sec-recapitulacion-fuera introduces them briefly, with further reading; they may be covered in more detail in future editions.
+
+## Summary {.unnumbered #resumen}
+
+- Designing a genetic algorithm means making nine decisions, starting with the representation, and setting parameters that are tuned according to the time available, which depends on the horizon of the decision, with cases similar to the real one and several replicates.
+- The representation determines the initialization, the decoding, and the operators. Selection, replacement, and stopping do not depend on it and work for any representation.
+- Many of the common mistakes break the balance between exploration and exploitation (seeding, truncating, mutating too much, removing the elite) or prevent good measurement (a fitness that does not distinguish, a single run).
+- A genetic algorithm is appropriate when the space is large and difficult, a good solution is enough, and combining solutions makes sense; if the space is small, smooth, or very well understood, there are usually better methods, and trajectory metaheuristics are the other major alternative.
+- Genetic algorithms are used in many fields, from engineering to machine learning, almost always combined with other methods and programmed with a library. Left out of this edition are multi-objective optimization, niching, island populations, hybrids, other metaheuristics, and theory.
+
+This is the end of the basic path. The [activity index](actividades.qmd) gathers the examples and exercises so that you can practice them again.
+
+## What Is Left Out [[Further reading]{.largo}[+]{.corto}]{.nivel .saber-mas} {#sec-recapitulacion-fuera}
+
+An introductory book has to make choices. These are the most important topics left out of this edition. Some of them have already appeared in the further reading of earlier chapters.
+
+### Several Objectives {#fuera-objetivos}
+
+Many real problems have several conflicting objectives: when designing a product, we want at the same time to reduce its cost, improve its quality, and reduce its environmental impact. In these problems, the terms **multi-objective** and **multicriteria** are used as synonyms [@talbi2009, p. 308]. There is no single solution better than all the others, but a set of **Pareto optima**: solutions in which one objective cannot be improved without worsening another. With a metaheuristic, the aim is to approximate that set with two properties: the solutions should be close to the true Pareto front and spread uniformly along it. The final choice among them is made by the decision maker [@talbi2009, pp. 308–309].
+
+In section -@sec-inicializar-evaluar-ampliaciones we saw dominance, fronts, and the drawback of the weighted sum. A multi-objective algorithm adds three components to the design: a **fitness assignment** that turns the vector of objectives into a number, by aggregation, by separate criteria, by dominance, or with quality indicators; a mechanism that **preserves diversity** along the front; and a form of **elitism** that keeps the best solutions found [@talbi2009, p. 323]. Population-based algorithms fit well, because they can find many Pareto optima in a single run [@talbi2009, p. 337]. The “[Several objectives](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=multi&lang=en&enc=knapsack-bits&n=6&N=8&s=21&ps=5&w=0.5&step=3){target="_blank"}” screen in initialization-and-evaluation-ga is a first way in.
+
+The first genetic algorithm with several objectives was VEGA, by @schaffer1985, which filled each part of the parent pool by selecting with a different objective. @goldberg1989 [p. 201] proposed assigning fitness by non-dominated fronts, and from the idea of selecting by dominance came MOGA, which scores each individual according to how many individuals dominate it [@fonseca1993], NSGA [@srinivas1994], and NPGA [@horn1994]. A second generation added elitism: SPEA [@zitzler1999], which was tested precisely on multi-objective knapsacks, SPEA2 [@zitzler2001; @talbi2009, p. 337], and NSGA-II [@deb2002], the best known. NSGA-II sorts the population into non-dominated fronts and, within each front, prefers the most isolated solutions according to their **crowding distance**. In each generation, it pools parents and offspring and keeps the better half, and it chooses parents with a binary tournament that compares the front first and, in case of a tie, the distance [@talbi2009, p. 346]. Other ideas followed: decomposing the problem into many single-objective subproblems, as in MOEA/D [@zhang2007]; choosing survivors with an indicator of front quality, such as the hypervolume in SMS-EMOA [@beume2007]; or guiding the search with reference points when there are more than three objectives, as in NSGA-III [@deb2014].
+
+For further study, there are the textbooks by @deb2001 and @coello2007 and several reviews: the classic one by @coello1999, the one by @zhou2011 on the state of the art, the one by @li2015 on many-objective problems, the one by @falconcardona2020 on indicator-based algorithms, and the one by @liang2023 on problems with several objectives and constraints, such as a knapsack with a capacity.
+
+### Variants of the Algorithm {#fuera-variantes}
+
+**Niching and speciation.** The genetic algorithm in this book tends to drive the whole population to a single peak. To spread it across several peaks, De Jong proposed crowding, in which each child replaces the most similar of a few individuals taken at random (section -@sec-reemplazo-ampliaciones). Goldberg and Richardson proposed **fitness sharing**: the fitness of each individual decreases the more similar individuals it has around it, so that being different is rewarded and the population can spread across several peaks. Crossover has also been restricted, allowing it only between similar individuals so that "species" form, or forbidding it in order to maintain diversity [@mitchell1998, section 5.5]. Sharing divides the fitness of each individual by its number of neighbors within a radius σ, weighted by their distance [@talbi2009, p. 344].
+
+**Structured and parallel populations.** In this book's algorithm, any individual can be crossed with any other. In the **island model**, the population is divided into subpopulations that evolve separately, each possibly with its own parameters or operators, and from time to time they exchange some individuals (**migration**). The goal is to delay the convergence of the whole population and encourage diversity. In the **cellular model**, each individual occupies a cell of a grid, and selection takes place only among its neighbors, so the selection pressure is lower [@talbi2009, pp. 468–469]. Both models also make it possible to distribute the work across several processors.
+
+**Hybrid algorithms.** Combining the genetic algorithm with a local search gives memetic algorithms (section -@sec-viajante-ampliaciones). It is also combined with exact mathematical programming methods, with constraint programming, and with machine learning techniques [@talbi2009, chapter “5”]. To sort out so many combinations, @garciamartinez2025 [pp. 648–649], building on the classifications of Talbi and of Raidl, cross two questions. The first is whether the methods collaborate as black boxes that only exchange solutions or parameters (**collaborative**) or whether one goes inside the other, as one of its parts (**integrative**). The second is whether they work at the same time (**teamwork**) or one after the other, so that what one returns is the starting point of the next (**relay**). A genetic algorithm that explores and, when it finishes, passes its best solutions to a local search is collaborative and relay; a memetic algorithm, which applies local search to the individuals in each generation, is integrative and teamwork [@garciamartinez2025, p. 650]. The combination with mathematical programming methods is called a **matheuristic**, and with simulation, a **simheuristic**: the simulation evaluates the solutions in a system under uncertainty, and the metaheuristic searches for them [@garciamartinez2025, p. 648].
+
+**Changing problems.** In **dynamic optimization**, the objective function changes over time: in a routing problem, new customers may appear during the search. The algorithm has to detect the change and track the optimum, which also moves [@talbi2009, p. 16]. This is different from the noisy fitness of section -@sec-inicializar-evaluar-ruido, in which the optimum does not change, but each evaluation measures it with error. In **coevolution**, several populations evolve at the same time, and the fitness of each depends on the others, like a predator and its prey [@talbi2009, p. 228]. Something similar happens in evolutionary game theory, in which the fitness of a strategy depends on the other strategies in the population (section -@sec-evolucion-ampliaciones).
+
+### Other Metaheuristics {#fuera-familias}
+
+A genetic algorithm is a **metaheuristic**: a general search method that can be applied to almost any optimization problem and gives satisfactory solutions in a reasonable time, although with no guarantee of finding the optimum [@blum2003, pp. 269–271]. The term first appeared in a paper by Glover on tabu search [@glover1986, p. 541]. There are many others, and a simple way to classify them is by the number of solutions they work with: a population, or a single solution that moves through the space, a **trajectory** [@blum2003, p. 272]. Figure -@fig-metaheuristicas places the best-known ones between the two extremes of section -@sec-evolucion-explorar-explotar: random search, which only explores, and the local search that always moves to the best neighbor, which only exploits.
+
+![A map of metaheuristics. Population-based ones tend to explore, and trajectory-based ones to exploit; the position indicates the tendency of each family and does not rank the methods within each box. Original figure based on the idea in @talbi2009 [pp. 24–25], generated with `figuras/11-metaheuristicas.py` in the book's repository.](figuras/11-metaheuristicas.svg){#fig-metaheuristicas fig-alt="A horizontal arrow runs from exploring, or diversifying, on the left, to exploiting, or intensifying, on the right. At the left end is random search; at the right end, the local search that moves to the best neighbor. Between them are two boxes. The population box, which tends to explore, contains the evolutionary methods (genetic algorithms, highlighted, evolution strategies, genetic programming, differential evolution, and estimation of distribution) and the swarm methods (ant colonies and particle swarms). The trajectory box, which tends to exploit, contains simulated annealing, tabu search, iterated local search, variable neighborhood search, and GRASP. A brace under the two boxes indicates that hybrid methods, such as memetic algorithms, combine both."}
+
+[Enlarge figure](figuras/11-metaheuristicas.svg){.ampliar-figura target="_blank" rel="noopener"}
+
+**Population-based.** Genetic algorithms are one of the families of evolutionary computation (section -@sec-ciclo-ampliaciones), and there are other widely used population-based metaheuristics:
+
+- **Evolution strategies.** They work with real vectors and Gaussian mutation, and in them each individual can carry its own step sizes, which also evolve (section -@sec-mutacion-ampliaciones). One of their variants, CMA-ES, also adapts the covariance matrix of the mutation, that is, its shape and not just its size [@hansen2001].
+- **Genetic programming.** It evolves programs, represented as trees [@koza1992].
+- **Differential evolution.** For continuous problems, it creates new individuals by perturbing those in the population with differences between other individuals [@storn1997].
+- **Estimation of distribution algorithms.** They replace crossover and mutation with a probability model that is estimated from the best individuals and from which new ones are sampled [@muhlenbein1996].
+- **Swarm intelligence.** It is inspired by the collective behavior of animals. **Ant colony** methods were proposed for combinatorial problems, starting with the traveling salesman problem [@dorigo1996], and **particle swarms** for continuous problems [@kennedy1995].
+
+**Trajectory-based.** They transform a single solution, which moves from one neighbor to another (section -@sec-ciclo-poblacion). The local search that always moves to the best neighbor stops at the first local optimum (section -@sec-evolucion-optimizar), and these methods are ways of escaping from it: sometimes accepting worse neighbors, changing the neighborhood, or starting again from other solutions [@blum2003, pp. 270 and 272]:
+
+- **Simulated annealing.** It tries a random neighbor. If it is better, it accepts it; if it is worse, it accepts it with a probability that depends on how much worse it is and on a parameter, the temperature, which decreases little by little, as when a metal is cooled [@kirkpatrick1983].
+- **Tabu search.** It moves to the best neighbor even if it is worse than the current solution and, to avoid going back, it stores the recent moves in a memory, the **tabu list**, and forbids undoing them for a while [@glover1986, p. 541].
+- **Iterated local search.** When local search reaches a local optimum, it perturbs it, applies local search again, and decides whether to continue from the new optimum or return to the previous one [@lourenco2003].
+- **Variable neighborhood search (VNS).** It changes the neighborhood, because a local optimum for one neighborhood may not be one for another [@mladenovic1997].
+- **GRASP.** It repeats two steps: it builds a solution with a randomized greedy heuristic, like the one for the knapsack in section -@sec-inicializar-evaluar-sembrar, and improves it with a local search [@feo1995].
+
+In Spanish, @bautistavalhondo2020 devotes chapters to local search, GRASP, simulated annealing, and tabu search, as well as to genetic algorithms.
+
+### Theory and Parameters {#fuera-teoria}
+
+**Why does it work?** The classic theory, Holland's theory of schemata and building blocks, appeared briefly in sections -@sec-ciclo-ampliaciones and -@sec-cruce-ampliaciones. It does not fully describe the behavior of a genetic algorithm, and other approaches have been developed, such as exact mathematical models and those based on statistical mechanics or on population genetics [@mitchell1998, chapter “6”].
+
+**No algorithm is best for everything.** The *no free lunch* theorem shows that, under certain conditions, averaged over all possible problems, all optimization algorithms perform the same, random search included: if *A* is better than *B* on some problems, *B* is better than *A* on others [@wolpert1997]. Asking whether one algorithm is better than another only makes sense for a class of problems or instances [@talbi2009, p. 103]. This is the underlying reason for tuning with cases similar to the real one (section -@sec-experimentos-casos-parecidos). It also explains why there are so many crossovers and mutations designed for particular problems: a genetic algorithm works well to the extent that its components, above all the operators, exploit what is known about the problem [@garciamartinez2025, p. 634].
+
+**Self-adjusting parameters.** Parameters can change during the run, according to a fixed schedule, according to the progress of the search, or encoded in the chromosome itself (section -@sec-experimentos-ampliaciones). Mitchell pointed to this as one of the most promising directions: natural evolution also adapts its own parameters [@mitchell1998, chapter “6”].
+
+### Further Reading {#fuera-lecturas}
+
+@eiben2015 is a complete textbook on evolutionary computation, and @garciamartinez2025, a brief, recent review of genetic algorithms, from their design to diversity, hybrids, and applications. Their chapter is part of the *Handbook of Heuristics*, which devotes other chapters to evolutionary algorithms, memetic algorithms, and multi-objective optimization [@garciamartinez2025, p. 655]. @talbi2009 devotes entire chapters to multi-objective optimization (chapter “4”), hybrid algorithms (chapter “5”), and parallel algorithms (chapter “6”). And the last chapter of @mitchell1998 lists the open questions she saw in the field, such as incorporating ecological interactions between individuals, more mechanisms from genetics, development, and learning, adaptive encodings, and evolving parameters.
+
+## Chapter References {.unnumbered #referencias}
+
+<!-- Bibliographic entries and their verification status are inherited from the Spanish v1.0 source. No new source verification is claimed by this translation. -->
+
+::: {.referencias-capitulo #refs}
+:::

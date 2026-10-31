@@ -15,10 +15,13 @@
     "05-seleccion.qmd": "Codex (GPT-6)",
     "06-cruce.qmd": "Claude (Cowork; configured model claude-opus-5-5)",
     "07-mutacion.qmd": "Claude (Cowork; configured model claude-opus-5-5)",
-    "08-reemplazo.qmd": "Claude (Cowork; configured model claude-opus-5-5)"
+    "08-reemplazo.qmd": "Claude (Cowork; configured model claude-opus-5-5)",
+    "09-experimentos.qmd": "Claude (Cowork; configured model claude-opus-5-5)",
+    "10-viajante.qmd": "Claude (Cowork; configured model claude-opus-5-5)",
+    "11-recapitulacion.qmd": "Claude (Cowork; configured model claude-opus-5-5)"
   },
   "language": "en-US",
-  "status": "translation-in-progress",
+  "status": "translation-complete-pending-human-review",
   "translated_chapters": [
     "01-evolucion.qmd",
     "02-ciclo.qmd",
@@ -27,7 +30,10 @@
     "05-seleccion.qmd",
     "06-cruce.qmd",
     "07-mutacion.qmd",
-    "08-reemplazo.qmd"
+    "08-reemplazo.qmd",
+    "09-experimentos.qmd",
+    "10-viajante.qmd",
+    "11-recapitulacion.qmd"
   ],
   "chapter_titles": {
     "01-evolucion.qmd": "Evolution and Optimization",
@@ -38,11 +44,11 @@
     "06-cruce.qmd": "Crossover",
     "07-mutacion.qmd": "Mutation",
     "08-reemplazo.qmd": "Replacement and Stopping",
-    "09-experimentos.qmd": "Designing Experiments",
-    "10-viajante.qmd": "The Traveling Salesman Problem",
-    "11-recapitulacion.qmd": "Looking Back and Looking Ahead"
+    "09-experimentos.qmd": "Parameters and Randomness",
+    "10-viajante.qmd": "The Traveling Salesman from Start to Finish",
+    "11-recapitulacion.qmd": "Recap"
   },
   "human_review": "Author expressed a favorable general view of chapter 5; no exhaustive human linguistic or technical review is claimed.",
   "naturalness_pass": "Required after source comparison by D095; performed by the assistant, separately from human review.",
-  "scope": "Chapters 1-8 translated after the approved chapter 5 pilot; chapters 9-11 pending. No translation DOI or publication."
+  "scope": "Chapters 1-11 translated (1-5 by Codex, 6-11 by Claude) after the approved chapter 5 pilot. No human review of chapters 6-11; no translation DOI or publication."
 }

@@ -1,0 +1,546 @@
+---
+aliases:
+  - 10-experimentos.html
+---
+
+# Parameters and Randomness {#sec-experimentos}
+
+<!-- AI translation and naturalness pass: Claude (Cowork, configured model claude-opus-5-5), 2026-10-31. Source: Spanish v1.0, 75b82d8. EvoTraveller and SelectionMechanisms have English-only interfaces; their control names are quoted as in the source. "Replicate" translates "réplica" (a run with a different seed); "standard error" (SE) translates "error típico" (EE). Figures 9.1–9.4 use English SVG variants derived from en/figuras.json. The source edition's experimental and bibliographic verification records remain applicable; translating them does not constitute a new experiment or source review. -->
+
+**Tools:** [EvoTraveller](https://evotraveller.streamlit.app/) and [SelectionMechanisms](https://josemagalan.shinyapps.io/SelectionMechanisms/), available through the [portal](https://josemagalan.github.io/genetic-algorithms-lab/#lang=en). Both have English-only interfaces.
+
+::: {.callout-warning .objetivos title="Chapter Objectives"}
+After completing the basic path through this chapter, you will be able to:
+
+- explain why two runs of the same genetic algorithm give different results and what role the seed plays;
+- calculate the mean and standard deviation of several runs and interpret them;
+- explain why a difference between single runs may be due to chance and why the means of several replicates must be compared;
+- explain why there are no values of *Pc* and *pm* that are good for every problem and how to tune them with cases similar to the real one;
+- relate selection pressure to loss of diversity and to mutation.
+:::
+
+## An Algorithm That Depends on Chance [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-experimentos-azar}
+
+If we run the same genetic algorithm twice, do we get the same solution?
+
+A genetic algorithm uses random numbers in almost every step: to create the initial population, to choose parents (chapter -@sec-seleccion), to decide whether a pair is crossed over and where (chapter -@sec-cruce), and to decide which individuals mutate and how (chapter -@sec-mutacion). It is a **stochastic** algorithm: with the same data and the same parameters, each run can end up in a different place.
+
+On a computer, "random" numbers are produced by a generator that starts from an initial value, the **seed**. With the same seed, the generator always gives the same sequence, and the run is repeated identically; with another seed, it is another run. Fixing the seed lets us **reproduce** a result, but it does not make the result more reliable: it is one run among many possible ones.
+
+EvoTraveller solves the traveling salesman problem with a genetic algorithm [@santos2025]. There is an origin at position (0, 0) and several places scattered over a grid; the algorithm looks for the shortest route that passes through all of them and returns to the origin. Each individual is a permutation of the places, and its fitness is the inverse of the route length, so higher fitness means a shorter route. It uses tournament selection, permutation crossover and mutation, and generational replacement with an elite, as in the previous chapters. With 10 places, the origin and 9 others, there are 9! = 362 880 possible routes. A separate program checks them all and tells us which is best, with length 31.50. With that figure, we can measure how far from the optimum the algorithm ends up.
+
+### EvoTraveller Reference Settings {#configuracion-evotraveller}
+
+These are the starting values for the examples. Before each activity, check the eight controls and change only those the activity mentions. An earlier activity may have left them with other values.
+
+| Control | Reference value |
+|---|---:|
+| **Number of places** | 10 |
+| **Seed** | 1111 |
+| **Population size** | 100 |
+| **Generations** | 50 |
+| **Tournament size** | 4 |
+| **Mutation rate** | 0.05 |
+| **Elitism** | 0.05 |
+| **Crossover** | 0.6 |
+
+If **Zzzz** appears when you open EvoTraveller, the application is asleep: click **Yes, get this app back up!** and wait for the controls to appear. Then set the values and click **Run**. For a class, it is a good idea to open it before starting.
+
+::: {.callout-tip .ejemplo #ejemplo-experimentos-azar title="Reproducible Example · One Run"}
+**Data.** In EvoTraveller, keep the [reference values](09-experimentos.qmd#configuracion-evotraveller): **Number of places** 10, **Seed** 1111, **Population size** 100, **Generations** 50, **Tournament size** 4, **Mutation rate** 0.05, **Elitism** 0.05, and **Crossover** 0.6. Click **Run**.
+
+**Predict.** Does the algorithm find the best possible route, of length 31.50? If you click **Run** again without changing anything, which route will you get?
+
+[Open and configure: EvoTraveller](https://evotraveller.streamlit.app/){.abrir .configurar target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+The **Fitness** curve rises from 0.0230 in generation 0 to 0.0293 at the end, and it stops improving around generation 3. The inverses of those values are the route lengths: from 43.45 to 34.11. The optimum is 31.50, so the route found is 8.3% longer.
+
+If you click **Run** again, you get exactly the same route: the seed is the same, and the generator repeats the same sequence of numbers.
+</details>
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-experimentos-azar title="Exercise · Changing the Seed"}
+Change only the **Seed** to 1112 and click **Run**. What has changed: only the algorithm's random numbers, or the problem as well? What does this imply for comparing two runs with different seeds?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+In EvoTraveller, the seed fixes both the algorithm's random numbers and the positions of the places, so with another seed the map changes too: it is another problem, and its best route may be longer or shorter. Comparing two runs with different seeds mixes the effect of the algorithm's randomness with the difficulty of each map. To compare two configurations, you must use the same seed, and therefore the same map, and change only the parameter.
+</details>
+::::
+
+## Crossover and Mutation Probabilities [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-experimentos-pc-pm}
+
+How much should we cross over, and how much should we mutate?
+
+Chapters -@sec-cruce and -@sec-mutacion introduced two parameters that control how much the population changes in each generation. The **crossover probability** *Pc* is the probability that a pair of parents is crossed over; if it is not, its offspring are copies of the parents. The **mutation probability** *pm* is the probability that a gene or, in a permutation, an individual mutates [@eiben2015]. In EvoTraveller, **Mutation rate** is *pm*: each individual except the elite mutates with that probability, by swapping two places. **Crossover** plays the role of *Pc*: it is the fraction of the population formed by crossover; the rest are copies of the parents, which can also mutate. The **elite** (**Elitism**) is another fraction of the population: the best individuals, which pass into the next generation without being crossed over or mutated [@santos2025, p. 9], as we saw in section -@sec-reemplazo-elitismo. *Pc* and *pm* are only two of the algorithm's parameters. The others are the population size, the tournament size, the elite fraction, and the number of generations.
+
+Remember that *pm* does not mean the same thing in every representation. With bits, *pm* is the probability that **each gene** mutates. The usual values are small, from 0.001 to 0.01, or $\mathit{pm} = 1/L$, where *L* is the number of genes, so that on average only one gene mutates in each individual [@talbi2009, p. 208]. We saw this in section -@sec-mutacion-cuanto-mutar. In EvoTraveller, by contrast, *pm* is the probability that **the individual** receives a swap, which changes two positions. On average, each child changes $2 \times \mathit{pm}$ positions: with *pm* = 0.05, a tenth of a position; with *pm* = 0.5, one position, as the $1/L$ rule asks. To compare values of *pm* across representations, they must be translated into how many genes change, on average, in each child.
+
+::: {.callout-tip .ejemplo #ejemplo-experimentos-pc-pm title="Reproducible Example · No Mutation, a Little, and More"}
+**Data.** The same problem as in example [](#ejemplo-experimentos-azar), with all the [reference values](09-experimentos.qmd#configuracion-evotraveller) except **Mutation rate**, which takes three values: 0; 0.05; and 0.2. Click **Run** with each one.
+
+**Predict.** With which value does the route end up shortest? And longest?
+
+[Open and configure: EvoTraveller](https://evotraveller.streamlit.app/){.abrir .configurar target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+| Mutation rate | Final fitness | Final length | Above the optimum (31.50) |
+|:---:|:---:|:---:|:---:|
+| 0 | 0.0261 | 38.34 | +21.7% |
+| 0.05 | 0.0293 | 34.11 | +8.3% |
+| 0.2 | 0.0317 | 31.50 | 0% |
+
+Without mutation, the final route is the worst of the three; with 0.2, the algorithm finds the best possible route, around generation 6. In all three, the curve stops improving before generation 10. What changes is the value at which it stagnates.
+</details>
+:::
+
+But be careful: this is one run with each value. That 0.2 won here does not tell us that it is better in general. We will see this in the next sections.
+
+:::: {.callout-note .ejercicio #ejercicio-experimentos-pc-pm title="Exercise · Why It Stagnates"}
+In example [](#ejemplo-experimentos-pc-pm), without mutation, the best fitness stops improving around generation 5. Why does it not keep improving, if crossover keeps combining routes?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+Selection only copies routes that already exist. When the population fills up with copies of a few routes, many recombinations stop producing improvements. EvoTraveller's OX, “Order from the start”, can create another route even when it crosses two copies, because it is not pure (example [](#ejemplo-cruce-ampliaciones)); but a new route need not be better. Mutation provides another way of varying the routes. In section -@sec-viajante-interpretar we will see why the changes made by crossover are not enough in this run.
+</details>
+::::
+
+## One Run Is Not Enough [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-experimentos-replicas}
+
+If the result depends on chance, how do we know what a genetic algorithm gives in general?
+
+By repeating the run. Each repetition with a different seed is a **replicate**, and what interests us is how the results of many replicates are distributed. EvoTraveller does not allow repeated runs on the same map, because the seed also changes the map. That is why we have programmed an algorithm with the same design: permutations, a tournament of 3, OX crossover with *Pc* = 0.6, swap mutation with *pm* = 0.05 per individual, and generational replacement with one elite individual. In our program we use the **classic** OX from section -@sec-cruce-ox; EvoTraveller uses “Order from the start”. They share the general components, but they do not reproduce the same implementation or the same draws. We applied it to a map with 20 destinations and the origin, where the route starts and ends: 21 cities in total. In EvoTraveller, **Number of places** also counts the origin, so this map would be 21 places, more than the 15 it allows. We used a population of 30 and 100 generations. One map, 30 different seeds (1 to 30).
+
+![Length of the best route in each generation, in 30 runs of the same algorithm on the same map of 20 destinations, with *pm* = 0.05. The gray lines are the runs; in color, the best and worst of the final results, and in a dashed line, the mean. Lower is better. Original figure, generated with `figuras/09-experimentos.py` in the book's repository.](figuras/09-replicas.svg){#fig-replicas fig-alt="Line chart of the length of the best route against generation, from 0 to 100, for 30 runs. All start at lengths from 87 to 113, fall quickly at first and more slowly afterward. They end between 50.3 and 78.0, with a mean of 62.6."}
+
+[Enlarge figure](figuras/09-replicas.svg){.ampliar-figura target="_blank" rel="noopener"}
+
+<details>
+<summary>Show the Figure Data</summary>
+
+Final length of the best route in the 30 runs, from lowest to highest: 50.3; 55.8; 56.8; 57.6; 57.9; 58.3; 58.7; 58.7; 58.8; 60.0; 60.0; 61.1; 61.2; 61.4; 61.5; 62.5; 63.4; 64.4; 64.6; 64.7; 65.1; 65.4; 65.4; 65.9; 66.0; 67.6; 67.7; 68.7; 69.0; 78.0.
+
+The mean length of the best route goes from 101.9 in generation 0 to 68.9 in generation 50 and 62.6 in generation 100.
+</details>
+
+All the runs improve, and quickly at first. But they do not end in the same place: the best finishes at 50.3 and the worst at 78.0. With a single run, the result could have been any one of those thirty.
+
+Two numbers are used to summarize many replicates. The **mean** is the typical result, and the **standard deviation** measures how far the replicates stray from it:
+
+$$\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i, \qquad s = \sqrt{\frac{1}{n-1}\sum_{i=1}^{n} (x_i - \bar{x})^2}$$
+
+where $x_i$ is the result of replicate *i* and *n* is the number of replicates. In our 30 replicates, the mean final length is 62.6 and the standard deviation is 5.2. A small standard deviation indicates that the algorithm is **robust**: it gives similar results even when the randomness changes [@talbi2009, p. 63]. If the spread is large, a particular run can turn out much worse than the mean, and whoever relies on it has no way of knowing.
+
+::: {.callout-tip .ejemplo #ejemplo-experimentos-replicas title="Reproducible Example · Five Maps, Three Values of pm"}
+**Data.** In EvoTraveller, with **Number of places** 15 and the other [reference values](09-experimentos.qmd#configuracion-evotraveller), do one run with each seed, from 1111 to 1115, and with each **Mutation rate**: 0; 0.05; and 0.2. That makes 15 runs. The results table gives the final length; the fitness is its inverse.
+
+**Predict.** Does 0.2 always beat the other two? And does 0.05 always beat 0?
+
+[Open and configure: EvoTraveller](https://evotraveller.streamlit.app/){.abrir .configurar target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+| Seed | Optimum | Mutation rate 0 | 0.05 | 0.2 |
+|:---:|:---:|:---:|:---:|:---:|
+| 1111 | 37.04 | 47.64 | 43.08 | 38.46 |
+| 1112 | 39.81 | 46.98 | 46.52 | 45.72 |
+| 1113 | 32.31 | 41.28 | 37.29 | 35.40 |
+| 1114 | 34.49 | 43.84 | 38.99 | 37.03 |
+| 1115 | 38.38 | 40.86 | 44.90 | 39.53 |
+| **Mean** | | **44.12** | **42.16** | **39.23** |
+
+With 0.2, the route is the shortest of the three for all five seeds. But for seed 1115, mutating with 0.05 is worse than not mutating (44.90 versus 40.86), and for seed 1112 the differences are small. If we had tried only seed 1115, we would have concluded that mutating at 0.05 makes the result worse. The mean over the five seeds gives a more reliable picture.
+</details>
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-experimentos-replicas title="Exercise · Mean and Standard Deviation"}
+The first five replicates in figure -@fig-replicas, with seeds 1 to 5, end at 66.0; 56.8; 61.2; 58.7; and 57.9. Calculate their mean and standard deviation. Compare them with those of the 30 replicates (62.6 and 5.2). What would have happened if you had done only the run with seed 1?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+The mean is $(66.0 + 56.8 + 61.2 + 58.7 + 57.9)/5 = 60.12$. The deviations from the mean are 5.88; −3.32; 1.08; −1.42; and −2.22, and their squares add up to 53.7. Divided by $n - 1 = 4$, this gives 13.4, and its square root is the standard deviation: 3.7.
+
+With five replicates, the mean comes out somewhat lower than with 30 (60.1 versus 62.6) and the standard deviation somewhat smaller (3.7 versus 5.2): with few replicates, the estimates are unreliable. With seed 1 we would have obtained 66.0, which is above the mean of the 30 replicates: we would have overestimated the typical length of its routes (66.0 versus 62.6).
+</details>
+::::
+
+## Comparing Two Configurations [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-experimentos-comparar}
+
+If one configuration gives a lower mean than another, is it better?
+
+With the same map and the same 30 seeds, we repeated the experiment with three values of *pm*: 0; 0.05; and 0.2. All of them use the same map and the same 30 seeds, and therefore the same 30 initial populations.
+
+![Final length of the best route in 30 runs (one dot each) for *pm* = 0; 0.05; and 0.2, on the same map of 20 destinations. The horizontal line is the mean, and the vertical bar is the mean ± one standard deviation. Lower is better. Original figure, generated with `figuras/09-experimentos.py` in the book's repository.](figuras/09-comparar-pm.svg){#fig-comparar-pm fig-alt="Chart of three clouds of dots, one per value of pm. With pm equal to 0, the dots range from 56 to 99 and the mean is 80.1. With 0.05, from 50 to 78, and the mean is 62.6. With 0.2, from 43 to 65, and the mean is 55.4. The clouds for 0.05 and 0.2 overlap."}
+
+[Enlarge figure](figuras/09-comparar-pm.svg){.ampliar-figura target="_blank" rel="noopener"}
+
+<details>
+<summary>Show the Figure Data</summary>
+
+| *pm* | Mean | Standard deviation | Minimum | Maximum |
+|:---:|:---:|:---:|:---:|:---:|
+| 0 | 80.1 | 9.2 | 56.2 | 99.0 |
+| 0.05 | 62.6 | 5.2 | 50.3 | 78.0 |
+| 0.2 | 55.4 | 5.7 | 42.7 | 65.2 |
+</details>
+
+The difference between 0 and 0.05 is large compared with the spread of the clouds. The difference between 0.05 and 0.2 is smaller and the clouds overlap, but it is still clear: the mean falls from 62.6 to 55.4. Because the three configurations use the same seeds, each seed forms a pair: two runs that start from the same initial population and differ only in *pm*. The natural comparison is made within each pair. With 0.05, the final route is **shorter** than with 0.2 for 3 of the 30 seeds, 10%; without mutation, it is shorter than with 0.05 for 1 of the 30.
+
+We can also ask what would happen to someone who did a single run of each configuration, with different seeds for each one. To simulate this, we combine each run with 0.05 with each run with 0.2: 30 × 30 = 900 pairs. In 146 of them, 16%, the run with 0.05 ends with a shorter route. And the run without mutation beats the one with 0.05 in 5% of the 900 pairs (47).
+
+If we had done a single run with each value, we would have wrongly concluded that 0.05 is better than 0.2 for 3 of the 30 seeds, and in one in six pairs with different seeds. With only 30 seeds, these two figures cannot really be told apart: here, sharing the seed fixes only the initial population and has little influence on the final result, as we will see in section -@sec-experimentos-numero-replicas. With 30 replicates, the mean of each configuration has a much smaller error, and the conclusion is reliable. Comparing means of several replicates, not single runs, is what makes a comparison credible.
+
+There is one more condition: the comparison is valid only for what has been tested. Here, for this map, this population size, and these 100 generations. We do not yet know anything about other cases; we will come back to this in section -@sec-experimentos-casos-parecidos.
+
+:::: {.callout-note .ejercicio #ejercicio-experimentos-comparar title="Exercise · How Often Am I Wrong?"}
+A classmate compares *pm* = 0.05 and *pm* = 0.2 with a single run of each, with different seeds chosen at random. According to the 900 pairs in section -@sec-experimentos-comparar, how often will they find that 0.05 is better? And if they use the same seed for both? And what would they find if they compared the means of 30 replicates?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+With one run of each, 0.05 comes out better in 146 of 900 pairs, 16%: they would be wrong about once in every six comparisons. With the same seed, 0.05 comes out better for 3 of the 30 seeds. With so few pairs, this figure is compatible with 16%: in this algorithm, sharing the seed does not protect against being wrong. With the means of 30 replicates, the means are 62.6 and 55.4: the difference is 7.2, and the advantage of 0.2 holds. In section -@sec-experimentos-numero-replicas we will see how to measure whether this difference is credible: it is about five times its standard error, so with 30 replicates it would almost never come out the other way around.
+</details>
+::::
+
+## Tuning with Similar Cases [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-experimentos-casos-parecidos}
+
+Which values of *Pc* and *pm* should we use in a new problem?
+
+There is no universal recipe. Suitable values depend above all on the problem, even on the particular instance, and on how much search time we want to spend; there is no set of values that is optimal for every case [@talbi2009, p. 54; @eiben2015, p. 124]. The first systematic studies produced combinations that were widely used. De Jong, with a battery of test functions, found that the best was a population of 50 to 100 individuals, a *Pc* of 0.6 per pair, and a *pm* of 0.001 per bit [@dejong1975; according to @schaffer1989, p. 52]. Grefenstette, with a genetic algorithm that tuned the parameters of another one, obtained a population of 30, *Pc* = 0.95, and *pm* = 0.01 [@grefenstette1986, p. 126]. And Schaffer and his colleagues, after testing many combinations, obtained a population of 20 to 30, *Pc* between 0.75 and 0.95, and *pm* between 0.005 and 0.01 [@schaffer1989, p. 54]. But those values were obtained with particular batteries of problems, and it is not known how well they hold outside them [@mitchell1998, section 5.6]. A different criterion gives a different answer. Grefenstette himself found this. His values were the best for **online** performance, the mean of all the solutions evaluated during the search. For **offline** performance, which looks only at the best solution found up to each moment, the best configuration had 80 individuals and *Pc* = 0.45 [@grefenstette1986, pp. 125–126]. Tuning with different measures can give values that differ by orders of magnitude, so a recommendation that does not say which measure it was obtained with should be taken with caution [@eiben2015, p. 126]. Haupt and Haupt counted how many evaluations were needed to reach an acceptable solution on functions of two variables, and the best were small populations, of 8 to 20 individuals, with mutation rates between 0.03 and 0.37, depending on the function; the larger the population, the lower the best rate [@haupt2004, pp. 131–132]. The criterion matters: they stopped as soon as an acceptable solution was reached [@haupt2004, p. 134], and what counts as a good value depends on what we are looking for (section -@sec-experimentos-objetivo). Moreover, their *pm* is per bit: with chromosomes of 24 bits, 0.11 means about 2.6 bits changed per child. And we have already seen that *pm* is defined differently in a permutation.
+
+To see how much it depends on the problem, we repeated the experiment with three sizes: 10, 20, and 30 destinations, plus the origin, one map of each size, and 30 replicates per value of *pm*. Figure -@fig-tamano does not show lengths, because they are not comparable across maps. For each size, it shows how much longer the mean for each value of *pm* is than that of the best of the five values tested.
+
+![How much worse each value of *pm* is than the best of the five tested, on a map of 10, 20, and 30 destinations. Each dot is the mean of 30 runs, expressed as a percentage above the best mean on the same map. Original figure, generated with `figuras/09-experimentos.py` in the book's repository.](figuras/09-tamano.svg){#fig-tamano fig-alt="Line chart with three series, one per problem size, of the percentage above the best mean against pm, with the values 0; 0.01; 0.05; 0.2; and 0.5. All three lines fall to zero at pm equal to 0.5. With pm equal to 0.05, the lines are at 7% for 10 destinations, 21% for 20, and 24% for 30."}
+
+[Enlarge figure](figuras/09-tamano.svg){.ampliar-figura target="_blank" rel="noopener"}
+
+<details>
+<summary>Show the Figure Data</summary>
+
+Mean final length of 30 runs and, in parentheses, the percentage above the best mean on the same map:
+
+| *pm* | 10 destinations | 20 destinations | 30 destinations |
+|:---:|:---:|:---:|:---:|
+| 0 | 41.8 (+32%) | 80.1 (+55%) | 123.9 (+66%) |
+| 0.01 | 37.2 (+17%) | 72.1 (+40%) | 110.3 (+47%) |
+| 0.05 | 33.9 (+7%) | 62.6 (+21%) | 92.9 (+24%) |
+| 0.2 | 33.0 (+4%) | 55.4 (+7%) | 79.2 (+6%) |
+| 0.5 | 31.8 (0%) | 51.6 (0%) | 74.9 (0%) |
+</details>
+
+On these three maps, a low value of *pm*, such as 0.05, fares worse on the larger ones. Because there is only one map per size, we cannot separate the effect of size from that of each map's structure. With *pm* = 0.05, the mean is 7% above the best with 10 destinations, 21% with 20, and 24% with 30. Of the five values tested, the best is the same for all three sizes: 0.5. It is not a strange value: as we saw in section -@sec-experimentos-pc-pm, it amounts to changing one position per child on average, which is what the $1/L$ rule asks for, and 0.05 amounts to mutating ten times less. EvoTraveller only goes up to 0.2. In section -@sec-experimentos-interaccion we will see why this algorithm tolerates so much mutation. If we had tuned *pm* on the problem with 10 destinations, we would have believed that 0.05 is close to the best, but on the problem with 30 destinations it is not.
+
+This leads to a practical rule: **tune the parameters with cases similar to the real one**, in size and in structure, not with a small, convenient case. And preferably with several cases rather than just one. This has a limit that we will see in the [further reading](#sec-experimentos-ampliaciones): if we tune the parameters on some cases and evaluate the algorithm on the same ones, the result is too optimistic.
+
+:::: {.callout-note .ejercicio #ejercicio-experimentos-casos-parecidos title="Exercise · Tuning with a Small Case"}
+You have a real problem with 30 destinations, but to tune *pm* you use only the one with 10, because it is faster. With the data in figure -@fig-tamano, what difference do you see between *pm* = 0.05 and *pm* = 0.2 for each size? What conclusion would you draw from the small case about how much choosing *pm* well matters, and what would happen with the real one?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+With 10 destinations, 0.05 and 0.2 are 7% and 4% above the best mean: only 3 points apart. With 30 destinations they are 24% and 6% above: 18 points. With the small case, the difference looks negligible, and we might think that we could just as well keep the usual value, 0.05. Applied to the problem with 30 destinations, we would lose much more: the route would be, on average, 24% longer than with the best value tested. In these examples, using only the small map would have underestimated how much *pm* matters on the large map.
+</details>
+::::
+
+::: {.callout-note .en-app title="In the Application · EvoTraveller"}
+[Explore in EvoTraveller](https://evotraveller.streamlit.app/){.explorar target="_blank"}
+
+- With **Number of places** 10 and **Mutation rate** 0.05, do one run with each seed, from 1111 to 1115. Repeat with **Mutation rate** 0.2. For how many seeds does the route improve? With 10 places, going from 0.05 to 0.2 improves the route for only 2 of the 5 seeds (1111 and 1114); for the other 3, the final route is the same.
+- Do the same with **Number of places** 15. For all five seeds, 0.2 gives a shorter route than 0.05. On these five maps with 15 places, the improvement appears more often than on those with 10; the pattern may change with other maps.
+:::
+
+## What Are You Looking For? [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-experimentos-objetivo}
+
+What is a good result: the best possible solution, or a good solution right away?
+
+When tuning an algorithm, two measures are at stake: solution quality and search time. Which matters more depends on the problem. Talbi distinguishes three classes according to the weight of each [@talbi2009, pp. 33–34]:
+
+- **Design or strategic problems.** They are solved only once, the time available is long (hours, days, months), and a bad solution has lasting consequences, for example the design of a telecommunications network. Quality matters, and spending a lot on the search is justified.
+- **Control or operational problems.** They must be solved frequently and in real time, with decisions in fractions of a second, for example routing messages in a network. Very fast heuristics are needed, and quality matters less.
+- **Planning or tactical problems.** They lie between the two extremes, in the medium term. Quality and time must be balanced.
+
+This translates into parameters. In a genetic algorithm, a larger population or more generations cost more evaluations and therefore more time, and repeating the run to obtain replicates multiplies the cost. The same algorithm with different values can be suitable for a design problem and useless for an operational one. That is why, before tuning parameters, we must ask how much time there is and what quality is needed. The two questions determine what a "good" value is.
+
+Eiben and Smith make a similar division. They separate **design** problems, which are solved once, from **repetitive** problems, which are solved again and again with new data, such as a transport company's daily routes; real-time control is the extreme case of repetitive problems [@eiben2015, pp. 147–149]. And they draw a consequence for comparing configurations. In a design problem there is time for several runs and for keeping the best one, so what matters is the best solution reached, even if some runs end badly. In a repetitive problem there may be time for only one run, and the configuration with a good mean and little spread is preferable, because it is the least risky [@eiben2015, pp. 148, 155–156]. That is why the standard deviation from section -@sec-experimentos-replicas matters: between two configurations with the same mean, the one with less spread is better for a repetitive problem, and the one that sometimes goes further may be better for a design problem.
+
+:::: {.callout-note .ejercicio #ejercicio-experimentos-objetivo title="Exercise · What Comes First?"}
+Classify each case as strategic, tactical, or operational and say whether quality or time would come first: (a) designing a company's communications network once; (b) calculating a company's delivery routes every week; (c) deciding in fractions of a second over which link each message is sent in a network.
+
+<details>
+<summary>**Show the Solution**</summary>
+
+(a) It is strategic: it is solved once, there is time, and a mistake weighs heavily for years. Quality comes first, and many replicates and a large population can be afforded. (b) It is tactical: it is repeated every week, and computing time must be balanced against the quality of the routes. Because there may be time for only one run each week, a configuration with a good mean and little spread is preferable. (c) It is operational: the decision must be made in real time, so time comes first and a very fast heuristic is needed; a genetic algorithm with many generations is not suitable here.
+</details>
+::::
+
+## Selection Pressure and Diversity [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-experimentos-diversidad}
+
+If we always choose the best, what happens to the population?
+
+**Selection pressure** measures how much selection favors the best individuals (chapter -@sec-seleccion). With high pressure, the population quickly fills up with copies of a few individuals and loses **diversity**: this leads to **premature convergence**, which traps the search in one region of the space without exploring the others. With low pressure, evolution is slow. Selection must be balanced against the variation brought by crossover and mutation [@mitchell1998, section 5.4]; what matters is not crossover or mutation separately, but the balance among crossover, mutation, and selection [@mitchell1998, section 5.5].
+
+Losing diversity is not bad in itself: the disappearance of the genes of bad solutions is exactly what we want. What is bad is losing genes that are part of the best solutions, because then only mutation can recover them. That is why some authors define premature convergence by its effect: crossover and mutation no longer manage to produce offspring better than their parents [@affenzeller2009, pp. 66–67].
+
+To see how diversity is lost, SelectionMechanisms repeatedly simulates a population subject only to selection, without crossover or mutation. Each individual has an identifier (ID), which its copies inherit. The number of **distinct IDs** remaining in the population measures diversity: it starts at N and reaches 1 when all are copies of the same individual.
+
+::: {.callout-tip .ejemplo #ejemplo-experimentos-diversidad title="Reproducible Example · Ten Generations of Selection"}
+**Data.** In SelectionMechanisms, enter **Population size (N)** 100, **Generations (G)** 10, **Simulations** 30, **Fitness distribution per ID** “Permutation 1..N (no repetition)”, **Seed (optional)** 1, and **Elitism (n elites)** 1. Click **Run** with three values of **Method**: **Tournament** (with **Tournament size (k)** 2), **Roulette wheel**, and **SUS**. Look at the **Summary** tab.
+
+**Predict.** Which mechanism keeps the most distinct IDs after 10 generations? And which has the highest mean fitness?
+
+[Open and configure: SelectionMechanisms](https://josemagalan.shinyapps.io/SelectionMechanisms/){.abrir .configurar target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+The table gives, for the last generation and averaged over the 30 simulations:
+
+| Method | Distinct IDs | Mean fitness |
+|---|:---:|:---:|
+| Tournament, *k* = 2 | 1.07 | 99.99 |
+| Roulette | 10.8 | 93.7 |
+| SUS | 25.7 | 93.4 |
+
+With the tournament, in almost all the simulations the population consists of 100 copies of the best individual, which is why the mean fitness is almost the maximum, 100. With the roulette wheel, about 11 distinct individuals remain, and with SUS, about 26, and the mean fitness is lower. This is what we saw in section -@sec-seleccion-ruleta-deja-de-distinguir: the tournament looks only at the ranking and keeps up the pressure as long as there are differences, while the roulette wheel looks at the ratios between fitness values, and when the population fills up with good, similar individuals, the best one no longer has a clear advantage. SUS distributes copies with less randomness than the roulette wheel (section -@sec-seleccion-otros-mecanismos) and loses fewer individuals through drift.
+</details>
+:::
+
+Diversity is lost in two ways: because the best individuals multiply and because the randomness of the draw eliminates individuals, whether good or bad (genetic drift, section -@sec-seleccion-seleccion-y-diversidad). Without crossover or mutation, nothing new comes in. In a complete genetic algorithm, mutation replenishes the diversity that selection removes. In the algorithm of figures -@fig-replicas to -@fig-interaccion, with *pm* = 0.05, the population of 30 routes shrinks on average to 4.5 distinct routes by generation 20 and to 2.8 at the end. With *pm* = 0.5, it keeps about 26 in generation 20 and 21 at the end, and it finishes with shorter routes (51.6 versus 62.6). When the population consists of copies of a few routes, crossing two copies gives another copy, and only what mutation contributes moves the search forward. We will return to this relationship in section -@sec-experimentos-interaccion. To slow down the loss, besides mutating more, we can **lower the selection pressure**: a smaller tournament, a mechanism such as ranking (chapter [](#sec-seleccion-otros-mecanismos){.capitulo}), or a small elite (chapter [](#sec-reemplazo-elitismo-ejecucion){.capitulo}).
+
+:::: {.callout-note .ejercicio #ejercicio-experimentos-diversidad title="Exercise · Tournaments of 2 and 5"}
+In SelectionMechanisms, with **Method** set to **Tournament**, **Population size (N)** 100, **Generations (G)** 60, **Simulations** 30, **Seed (optional)** 1, and **Elitism (n elites)** 1, look at the distinct-ID chart in the **Diversity** tab with **Tournament size (k)** 2 and with 5. In which generation does the average number of distinct IDs fall below 10 with each value? How does this relate to selection pressure?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+The average number of distinct IDs in generations 0 to 6 is:
+
+| Generation | 0 | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| *k* = 2 | 100 | 56.6 | 34.9 | 22.1 | 13.3 | 7.9 | 4.5 |
+| *k* = 5 | 100 | 39.3 | 13.8 | 4.2 | 1.3 | 1 | 1 |
+
+With *k* = 2 it falls below 10 in generation 5, and with *k* = 5, in generation 3. A larger tournament means more selection pressure: the best individuals multiply faster, and the population loses its diversity sooner. With *k* = 5, 1.3 IDs remain on average in generation 4; in generation 5, the table rounds the mean to 1.
+</details>
+::::
+
+## Summary {.unnumbered #resumen}
+
+- A genetic algorithm uses random numbers, so each run can give a different result. The seed makes it possible to repeat a particular run, but a single run is not enough to know how the algorithm works.
+- Runs are repeated with several seeds, and the results are summarized with the mean and the standard deviation. A difference between two configurations is credible only if it holds when the means of many replicates are compared.
+- There are no values of *Pc* and *pm* that are good for every problem: they depend on the representation, the size of the problem, and the time available. They must be tuned with cases similar to the real one.
+- High selection pressure quickly causes a loss of diversity, and mutation replenishes it. That is why the parameters interact and are tested in combination, not one at a time.
+
+To continue along the basic path, go to [“The Traveling Salesman from Start to Finish”](10-viajante.qmd).
+
+## How Many Replicates? [[Advanced]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-experimentos-numero-replicas}
+
+How much can we trust a mean of 30 replicates? And a mean of 10?
+
+The mean of the replicates also depends on chance: with another 30 replicates, a somewhat different value would come out. This variation is measured with the **standard error** of the mean, which is the standard deviation of the replicates divided by the square root of the number of replicates:
+
+$$\mathrm{SE} = \frac{s}{\sqrt{n}}$$
+
+When *n* is large, if we repeated the experiment many times, the means obtained would be distributed approximately according to a normal distribution centered on the algorithm's mean and with standard deviation SE, and a **95% confidence interval** can be given for the mean [@talbi2009, p. 64]:
+
+$$\bar{x} \pm 1.96 \, \frac{s}{\sqrt{n}}$$
+
+In figure -@fig-replicas, with *pm* = 0.05, $\bar{x} = 62.6$, $s = 5.2$, and $n = 30$. The standard error is $5.2/\sqrt{30} \approx 0.95$, and the interval runs from 60.7 to 64.4 (using the unrounded mean, 62.55). The 1.96 comes from the normal distribution: 95% of its values lie less than 1.96 standard deviations from the mean. If we repeated the experiment many times, 95% of the intervals calculated in this way would contain the algorithm's mean on this map, the one that infinitely many replicates would give. With fewer replicates, the interval is wider.
+
+To compare two configurations, we do the same with their difference, and how it is calculated depends on the design of the experiment. In section -@sec-experimentos-comparar, *pm* = 0.05 and *pm* = 0.2 use the same 30 seeds, so the design is **paired**: for each seed we calculate the difference $d_i$ between the final length with 0.05 and with 0.2, and we apply the previous formulas to those 30 differences. Their mean is 7.2, the difference between the means (62.6 − 55.4); their standard deviation is 7.6, and the standard error is $7.6/\sqrt{30} \approx 1.39$. The 95% interval runs from 4.5 to 9.9. It does not include 0, so it is hard to explain the difference by the chance of the 30 replicates alone: *pm* = 0.2 is better on this map.
+
+If each configuration had been run with its own seeds, there would be no pairs: the two samples would be **independent**, and the standard error of the difference would be calculated from those of the two means, $\sqrt{0.95^2 + 1.03^2} \approx 1.40$. Here the two calculations give almost the same result, because sharing the initial population has little influence on the final result: what comes out with a seed and 0.05 says almost nothing about what comes out with that seed and 0.2. When the seed influences both configurations in the same way, the paired design gives a narrower interval, and treating the data as independent wastes that advantage.
+
+Because *n* is inside a square root, much more work is needed to improve precision a little: **to halve the error, the number of replicates must be multiplied by four**. Talbi recommends at least 10 runs and, if possible, more than 100 [@talbi2009, p. 64]. This effect can be seen with SelectionMechanisms: both the number of simulations and the seed are parameters.
+
+::: {.callout-tip .ejemplo #ejemplo-experimentos-numero-replicas title="Reproducible Example · 10 Simulations or 100"}
+**Data.** In SelectionMechanisms, with **Method** set to **Roulette wheel**, **Population size (N)** 100, **Generations (G)** 10, **Fitness distribution per ID** “Permutation 1..N (no repetition)”, and **Elitism (n elites)** 1, click **Run** with **Seed (optional)** 1000, 2000, 3000, 4000, and 5000, first with **Simulations** 10 and then with 100. In **Summary**, look at the value of `unique_ids_mean`.
+
+**Predict.** With which of the two numbers of simulations are the five results more similar to one another?
+
+[Open and configure: SelectionMechanisms](https://josemagalan.shinyapps.io/SelectionMechanisms/){.abrir .configurar target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+| Seed | 10 simulations | 100 simulations |
+|:---:|:---:|:---:|
+| 1000 | 9.5 | 10.43 |
+| 2000 | 10.4 | 10.50 |
+| 3000 | 12.0 | 10.52 |
+| 4000 | 11.1 | 10.89 |
+| 5000 | 11.1 | 10.82 |
+
+With 10 simulations, the results range from 9.5 to 12.0; with 100, from 10.43 to 10.89. Repeating with 20 different seeds, the standard deviation of the result is 0.75 with 10 simulations, 0.40 with 30, and 0.22 with 100: it decreases roughly with the square root of the number of simulations, as the formula for the standard error says.
+</details>
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-experimentos-numero-replicas title="Exercise · How Many Replicates Are Needed"}
+With the standard deviation of 5.2 from figure -@fig-replicas, how many replicates are needed for the 95% confidence interval of the mean to have a half-width of at most 1, that is, $\bar{x} \pm 1$? And of 0.5?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+We need $1.96 \cdot 5.2/\sqrt{n} \leq 1$, that is, $n \geq (1.96 \cdot 5.2)^2 \approx 104$ replicates. For $\pm 0.5$, the half-width is halved, so four times as many are needed: $n \geq (1.96 \cdot 5.2/0.5)^2 \approx 416$. With 30 replicates, the half-width is $1.96 \cdot 0.95 \approx 1.9$, in line with the interval from 60.7 to 64.4. This is why Talbi speaks of "more than 100 if possible".
+</details>
+::::
+
+::: {.callout-note .en-app title="In the Application · SelectionMechanisms"}
+[Explore in SelectionMechanisms](https://josemagalan.shinyapps.io/SelectionMechanisms/){.explorar target="_blank"}
+
+- Set **Simulations** to 10 and look at the bands in the **Diversity** charts. Raise it to 100 and notice how the mean and the p05–p95 band change. The band does not narrow: it shows the variation of a single simulation, not the uncertainty of the mean.
+- Click **Run** several times with **Seed (optional)** empty: each time is a different seed, and the results change.
+- If you repeat with seeds, space them well apart (for example, in steps of 1000, starting at 1000): with consecutive seeds, the simulations overlap, and the results come out almost the same without really being independent.
+:::
+
+## Interacting Parameters [[Advanced]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-experimentos-interaccion}
+
+If each parameter has its best value, is it enough to tune them one at a time?
+
+No, because the parameters do not act separately: they interact nonlinearly, and that is why they cannot be optimized one by one [@mitchell1998, section 5.6]. Tuning the parameters one at a time, separately and without studying how they influence one another, does not guarantee finding the best combination [@talbi2009, p. 54; @eiben1999, p. 125]. For example, diversity can come from crossover as well as from mutation [@eiben2015, p. 123]. We have seen this: in section -@sec-experimentos-diversidad, selection pressure and diversity depend on *k*, and mutation replenishes diversity.
+
+With the same algorithm, the map of 20 destinations, and 30 replicates, we repeated the *pm* experiment with a tournament of size 2 and one of size 10.
+
+![Mean final length in 30 runs according to *pm*, for a tournament of 2 and one of 10, on the map of 20 destinations. The bars are the mean ± 2 standard errors; the large dot marks the best of the five values. Lower is better. Original figure, generated with `figuras/09-experimentos.py` in the book's repository.](figuras/09-interaccion.svg){#fig-interaccion fig-alt="Line chart with two series, tournament of 2 and tournament of 10, of the mean final length against pm, with the values 0; 0.05; 0.2; 0.5; and 1. With a tournament of 2, the line falls to 55.2 at pm equal to 0.2 and then rises to 63.1 at pm equal to 1. With a tournament of 10, the line falls from 90.2 to 48.8 and is lowest at pm equal to 1."}
+
+[Enlarge figure](figuras/09-interaccion.svg){.ampliar-figura target="_blank" rel="noopener"}
+
+<details>
+<summary>Show the Figure Data</summary>
+
+Mean final length of 30 runs and, in parentheses, the standard error:
+
+| *pm* | 0 | 0.05 | 0.2 | 0.5 | 1 |
+|---|:---:|:---:|:---:|:---:|:---:|
+| Tournament of 2 | 75.1 (1.3) | 59.6 (1.0) | **55.2** (1.0) | 56.1 (0.9) | 63.1 (0.6) |
+| Tournament of 10 | 90.2 (2.0) | 64.0 (1.2) | 55.8 (0.7) | 53.3 (0.9) | **48.8** (1.0) |
+</details>
+
+With a tournament of 2, the best value of *pm* among the five is 0.2; raising it to 0.5 does not improve the result, and with *pm* = 1 the mean rises from 55.2 to 63.1. With a tournament of 10, raising *pm* improves the result up to the last value, *pm* = 1. No value of *pm* is good in itself: it depends on *k*.
+
+With little mutation, the tournament of 10 is the worst: with *pm* = 0 it gives 90.2, because such strong selection quickly fills the population with copies (section -@sec-experimentos-diversidad). With *pm* = 1, by contrast, both tournaments keep the population full of different routes, about 30 of 30 until the end. The difference lies in which routes are mutated. With a tournament of 10, the parents are almost always the best individual or very good routes, and mutating all of them amounts to trying, in each generation, about 29 small variations of the best routes: a search around the best found so far. With a tournament of 2, many parents are mediocre routes, and mutating all of them scatters the search.
+
+There is a third piece: replacement. Heavy mutation spoils many offspring, but with an elite the best individual passes unchanged and is never lost (section -@sec-reemplazo-elitismo), so mistakes are cheap. Without an elite, the best value of *pm* drops to 0.2, and mutating every individual is a disaster. Mean final length of 30 runs on the map of 20 destinations, with a tournament of 3:
+
+| *pm* | 0.05 | 0.2 | 0.5 | 1 |
+|---|:---:|:---:|:---:|:---:|
+| With one elite individual | 62.6 | 55.4 | **51.6** | 54.8 |
+| Without an elite | 64.0 | **55.2** | 57.4 | 81.5 |
+
+The best value of *pm* therefore depends on selection and on replacement.
+
+There is also interaction between *Pc* and *pm*. With *pm* = 0.05, raising *Pc* from 0 to 0.6 and 0.9 lowers the mean from 69.0 to 62.6 and 59.9: crossing over helps. With *pm* = 0.5, the means are 51.2; 51.6; and 53.3, which means that crossover hardly matters. With a lot of mutation and OX, this algorithm hardly needs crossover: it is, above all, a search that mutates and selects many routes at once. In section -@sec-experimentos-operadores we will see that the same does not happen with a crossover that preserves what matters in the traveling salesman problem.
+
+<details>
+<summary>Show the Data on the Effect of *Pc*</summary>
+
+Mean final length of 30 runs and, in parentheses, the standard error, on the map of 20 destinations with a tournament of 3:
+
+| *Pc* | 0 | 0.6 | 0.9 |
+|---|:---:|:---:|:---:|
+| *pm* = 0.05 | 69.0 (1.2) | 62.6 (0.9) | 59.9 (1.0) |
+| *pm* = 0.5 | 51.2 (0.9) | 51.6 (1.0) | 53.3 (1.1) |
+</details>
+
+The practical consequence is that **combinations** must be tested. A full factorial design tests all combinations of the values ("levels") of each parameter ("factor"). With 4 parameters and 5 levels each, there are $5^4 = 625$ combinations [@eiben2015, p. 123], and with 30 replicates each, 18 750 runs. Schaffer and his colleagues carried out such a design with 6 population sizes, 10 values of *Pc*, 7 of *pm*, and one or two crossover points: 840 combinations with 10 replicates each. That came to 8400 runs, which took about a year and a half of computing time on the computers of 1989; among their test problems was a traveling salesman problem with 30 cities [@schaffer1989, p. 53]. It is a high cost, and combinations are cut down with designs such as the Latin hypercube, or bad configurations are discarded early with racing algorithms [@talbi2009, p. 55; @eiben2015, p. 129].
+
+:::: {.callout-note .ejercicio #ejercicio-experimentos-interaccion title="Exercise · The Trap of Tuning One at a Time"}
+You start with a tournament of 2 and tune *pm* with the data in figure -@fig-interaccion. Then, with that *pm*, you try a tournament of 10 in case it improves things. Which combination do you keep? Which is the best one in the figure? How much longer is the mean route of the one you choose?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+With a tournament of 2, the best *pm* among the five is 0.2 (55.2). With that *pm*, the tournament of 10 gives 55.8: it does not improve, and we keep the tournament of 2. But the best combination in the figure is a tournament of 10 with *pm* = 1, at 48.8. The route we chose is 13% longer (55.2/48.8 ≈ 1.13). Tuning one at a time has left us at a local optimum of the tuning itself. To find the best, combinations must be tested.
+</details>
+::::
+
+## Operators, Representation, and Locality [[Advanced]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-experimentos-operadores}
+
+This section requires sections -@sec-cruce-que-conserva and -@sec-mutacion-que-conserva.
+
+We have tuned *Pc*, *pm*, and *k* with EvoTraveller's operators, OX crossover and swap mutation. Does the value of the parameters matter as much as the choice of operators?
+
+In the traveling salesman problem, the length of a route depends only on which cities are neighbors: on its **edges** [@talbi2009, p. 92]. A good operator for this problem should preserve most of the parents' edges. This is the **locality** from section -@sec-mutacion-ampliaciones: a small change in the chromosome should produce a small change in the solution [@talbi2009, p. 209]. In crossover, it is the **heritability** from section -@sec-cruce-para-que-cruzar: offspring should resemble their parents in what made them good. What each operator preserves depends on how the chromosome is read. OX preserves above all the relative order, and ERX the adjacencies, which are the edges (section -@sec-cruce-que-conserva). Swap mutation breaks up to four edges, and inversion of a stretch only two (section -@sec-mutacion-que-conserva).
+
+We measured this on the map of 20 destinations, on 60 good, distinct routes with a mean length of 46.8. They are local optima of a local search with inversions, starting from random routes. Each route, including the departure from and return to the origin, has 21 edges. Each mutation was applied 50 times to each route, and each crossover 20 times to each of 30 pairs:
+
+| Operator | Edges kept (of 21) | Mean change in length |
+|---|:---:|:---:|
+| Swap mutation | 17.4 | 32.7% |
+| Inversion mutation | 19.0 | 18.3% |
+
+| Crossover | Child's edges that come from a parent | Child's length relative to the better parent |
+|---|:---:|:---:|
+| OX | 86% | +24% |
+| PMX | 88% | +24% |
+| CX | 81% | +42% |
+| ERX | 96% | +11% |
+
+Inversion and ERX are the most local operators for the traveling salesman problem: they break fewer edges, and their results are closer in length to the starting routes. Does this show in the genetic algorithm? We repeated it with each combination of crossover and mutation, with the rest of the parameters as in figure -@fig-replicas (*Pc* = 0.6 except in the row without crossover):
+
+| Crossover | Swap, *pm* = 0.05 | Swap, *pm* = 0.5 | Inversion, *pm* = 0.05 | Inversion, *pm* = 0.5 |
+|---|:---:|:---:|:---:|:---:|
+| No crossover | 69.0 | 51.2 | 60.0 | 43.0 |
+| OX | 62.6 | 51.6 | 53.9 | 42.5 |
+| PMX | 65.1 | 48.9 | 55.2 | 43.0 |
+| CX | 66.7 | 52.6 | 57.9 | 43.9 |
+| ERX | **53.9** | **43.3** | **53.1** | **42.4** |
+
+<details>
+<summary>Show All the Data</summary>
+
+Mean final length of 30 runs and, in parentheses, the standard error:
+
+| Mutation and *pm* | No crossover | OX | PMX | CX | ERX |
+|---|:---:|:---:|:---:|:---:|:---:|
+| Swap, 0.05 | 69.0 (1.2) | 62.6 (0.9) | 65.1 (0.9) | 66.7 (1.0) | 53.9 (0.9) |
+| Swap, 0.2 | 57.3 (0.9) | 55.4 (1.0) | 56.7 (0.7) | 55.5 (1.0) | 48.0 (0.7) |
+| Swap, 0.5 | 51.2 (0.9) | 51.6 (1.0) | 48.9 (1.0) | 52.6 (0.8) | 43.3 (0.6) |
+| Swap, 1 | 53.6 (0.9) | 54.8 (1.0) | 52.8 (0.8) | 52.5 (0.9) | 52.2 (0.7) |
+| Inversion, 0.05 | 60.0 (0.9) | 53.9 (0.8) | 55.2 (1.0) | 57.9 (0.7) | 53.1 (0.9) |
+| Inversion, 0.2 | 45.9 (0.6) | 44.7 (0.5) | 45.0 (0.6) | 46.3 (0.6) | 44.6 (0.5) |
+| Inversion, 0.5 | 43.0 (0.4) | 42.5 (0.4) | 43.0 (0.4) | 43.9 (0.5) | 42.4 (0.4) |
+| Inversion, 1 | 45.5 (0.5) | 48.8 (0.6) | 46.4 (0.4) | 49.5 (0.5) | 45.7 (0.5) |
+</details>
+
+With swap mutation, ERX improves the mean for every value of *pm* tested, and the best mean falls from 51.6 with OX to 43.3 with ERX, 16% less. No value of *pm* achieves that with OX. The best route we have found for this map, by repeating the local search with inversions from 300 random routes, has length 40.68. With ERX, moreover, crossover does help even when there is a lot of mutation: with *pm* = 0.5, the mean falls from 51.2 without crossover to 43.3. What we saw in section -@sec-experimentos-interaccion, that with a lot of mutation crossover hardly matters, was true for OX, which does not preserve edges well, not for every crossover.
+
+With inversion, on the other hand, the mutation already preserves the edges, and the crossovers resemble one another: with *pm* = 0.5, all of them end between 42.4 and 43.9, and without crossover, at 43.0. Crossover helps mainly when mutation is scarce (with *pm* = 0.05, from 60.0 without crossover to 53.1 with ERX). With both kinds of mutation, the best of the *pm* values tested is still 0.5 (with CX and swap mutation, 0.5 and 1 tie). For reference, a **hill climber** that starts from the best of 30 random routes and in each generation tries 29 mutations of the best route, keeping the best one if it is no worse, makes the same number of evaluations and reaches 54.9 with swaps and 42.2 with inversions.
+
+The conclusion is that parameters are tuned **after** choosing a representation and operators that preserve what matters in the problem. Fine-tuning *pm* does not make up for operators with poor locality. In EvoTraveller the operators are fixed (OX and swap); the “Compare operators” screens in crossover-ga and mutation-ga show what each one preserves (sections -@sec-cruce-que-conserva and -@sec-mutacion-que-conserva).
+
+:::: {.callout-note .ejercicio #ejercicio-experimentos-operadores title="Exercise · Parameter or Operator?"}
+With OX and swap mutation, our starting point, the mean is 62.6 with *pm* = 0.05. With the data in this section, which improves the mean more: raising *pm* to 0.5, or replacing OX with ERX without touching *pm*? And doing both? Why does it make almost no difference which crossover is used with inversion and *pm* = 0.5?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+Raising *pm* to 0.5 lowers the mean to 51.6, 18% less. Replacing OX with ERX with *pm* = 0.05 lowers it to 53.9, 14% less. Both at once, to 43.3, 31% less, within 6% of the best known route (40.68). With inversion, the mutation itself performs a local search that respects the edges: the algorithm reaches about 42–44 with any crossover when *pm* = 0.5, and the choice of crossover is no longer decisive.
+</details>
+::::
+
+## Further Reading [[Further reading]{.largo}[+]{.corto}]{.nivel .saber-mas} {#sec-experimentos-ampliaciones}
+
+**Prior tuning with another algorithm.** Because parameter tuning is an optimization problem, it can be solved with a genetic algorithm. Grefenstette did so with a "meta-level" genetic algorithm whose population consisted of 50 parameter sets, and each individual encoded the population size, *Pc*, *pm*, the generation gap, a scaling technique, and whether elitism was used; its fitness depended on the performance of a genetic algorithm with those parameters [@grefenstette1986, pp. 124–125; @mitchell1998, section 5.6]. In this way he evaluated 1000 configurations, each with five test functions. Because a single run depends on chance, he retested the 20 best with five different seeds before choosing the winner [@grefenstette1986, p. 125]. Talbi presents this as a two-level scheme: the upper level optimizes the parameters, and evaluating each set requires running the lower-level metaheuristic on the real problem, which makes it very expensive [@talbi2009, pp. 55–56]. Eiben and Smith call the quality of a parameter set its **utility**, to distinguish it from the fitness of a solution. Unlike fitness, utility always depends on chance, because it is measured with runs of a stochastic algorithm [@eiben2015, pp. 122–123]. Today there are specific tuning methods, such as F-race, SPO, or REVAC [@eiben2015, p. 124].
+
+**Controlling the parameters during the run.** The best value of a parameter can change during the search: for example, more mutation may be useful when the population has lost diversity. @eiben1999 [pp. 124, 129] distinguish between **tuning** the parameters before the run, after which they do not change, and **controlling** them during it. They classify control into three forms, also covered by Talbi: **dynamic** or deterministic updating, which does not look at how the search is going (for example, a value that decreases with the generations); **adaptive** updating, which changes it according to progress; and **self-adaptive** updating, in which the parameters are encoded in the chromosome and evolve with the solutions [@eiben1999, p. 129; @talbi2009, p. 56]. Mitchell notes that many researchers consider real-time adjustment the most promising approach, and that in evolution strategies the mutation rate is encoded in the chromosome [@mitchell1998, section 5.6].
+
+**Robustness and overfitting.** The word *robustness* is used in three senses: an algorithm can be robust to chance, if it gives similar results with different seeds (section -@sec-experimentos-replicas); to problems, if it works well on different instances; or to its parameters, if it works well with different values [@eiben2015, pp. 126–127]. If the parameters are tuned on some instances and the algorithm is evaluated on the same ones, the result is too favorable: the values are excellent for those instances and much worse for others, and robustness to unknown instances is lost [@talbi2009, p. 63]. This can also happen to a whole community that always compares its algorithms on the same test functions: it ends up with algorithms that are better and better for those functions, but not for other problems [@eiben2015, p. 159]. That is why tuning instances are kept separate from evaluation instances. But if several configurations are compared on the evaluation instances to keep the best one, those instances are also being used to choose, and the winner's figure is again optimistic. To estimate the quality of the chosen configuration without cheating, three groups are used: some cases for tuning, others for **validation** to choose, and others for **testing**, which are kept until the end and used only once, with the configuration already chosen [@hastie2009, section 7.2, p. 222]. We will do this in section -@sec-viajante-caso-real.
+
+**Statistical tests.** The confidence interval in section -@sec-experimentos-numero-replicas is a simple way to compare. Talbi mentions other tests: Student's *t*-test for paired data when they are approximately normal, and the Wilcoxon, permutation, and Mann–Whitney tests when they are not [@talbi2009, pp. 63–64]. To compare more than two configurations, one begins with an analysis of variance (ANOVA), which also makes it possible to study the interaction of two parameters, and if the data are not normal, rank-based tests are advisable [@eiben2015, pp. 157–158]. The **success rate** is also used: the ratio between the runs that reach a reference solution (the optimum, the best known solution, or another fixed in advance) and the total number of runs [@talbi2009, p. 64]. This is what we did in section -@sec-reemplazo-elitismo-ejecucion: without an elite, 17 of 30 runs reached the optimum, and with an elite, all 30. Together with the **mean best fitness** (the mean, across runs, of the best fitness at the end, which is what we have measured in this chapter with the length of the best route) and the **average number of evaluations to a solution** (counting only the runs that reach it), it forms the three most widely used measures [@eiben2015, pp. 126, 151–153]. The first two are measured with a computing limit fixed in advance, and if the limit changes, the winner may change: an algorithm that improves quickly and then stagnates wins with little time, and another that is slower but steady wins with a lot [@eiben2015, p. 152].
+
+## Chapter References {.unnumbered #referencias}
+
+<!-- Bibliographic entries and their verification status are inherited from the Spanish v1.0 source. No new source verification is claimed by this translation. -->
+
+::: {.referencias-capitulo #refs}
+:::

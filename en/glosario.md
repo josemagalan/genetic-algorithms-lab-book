@@ -1,6 +1,6 @@
 # Glosario de la traducción inglesa
 
-Traducción desde el español 1.0 (`75b82d8`), iniciada con el piloto del capítulo 5 y ampliada a los capítulos 1–4 y, después, 6–8. Inglés claro, ortografía estadounidense. Los términos conceptuales se mantienen estables; los rótulos citados reproducen cada interfaz inglesa, incluso cuando usa ortografía británica.
+Traducción desde el español 1.0 (`75b82d8`), iniciada con el piloto del capítulo 5 y ampliada a los capítulos 1–4, 6–8 y, por último, 9–11. Inglés claro, ortografía estadounidense. Los términos conceptuales se mantienen estables; los rótulos citados reproducen cada interfaz inglesa, incluso cuando usa ortografía británica.
 
 | Español | Inglés | Criterio |
 |---|---|---|
@@ -66,6 +66,29 @@ Traducción desde el español 1.0 (`75b82d8`), iniciada con el piloto del capít
 | apiñamiento (determinista) | (deterministic) crowding | Factor de apiñamiento: crowding factor *CF*. |
 | criterio de parada | stopping criterion | «k generations without improvement». |
 | estrategias evolutivas | evolution strategies | (μ + λ), (μ, λ). |
+| réplica | replicate | Ejecución con otra semilla; *run* para «ejecución». |
+| error típico | standard error (SE) | En la fórmula, \mathrm{SE}; el cotejo lo equipara a \mathrm{EE}. |
+| intervalo de confianza del 95 % | 95% confidence interval | Semianchura: *half-width*. |
+| diseño emparejado / independiente | paired / independent design | Mismas semillas / semillas propias. |
+| ajuste / validación / prueba | tuning / validation / test | Tres grupos de casos o mapas. |
+| rendimiento en línea / fuera de línea | online / offline performance | Grefenstette. |
+| utilidad (de unos parámetros) | utility | Eiben y Smith; distinta de la aptitud. |
+| ajustar / controlar los parámetros | tune / control | Control dinámico, adaptativo y autoadaptativo: *dynamic*, *adaptive*, *self-adaptive*. |
+| porcentaje de éxito / mejor aptitud media | success rate / mean best fitness | Más el número medio de evaluaciones hasta una solución. |
+| problema estratégico / táctico / operativo | strategic / tactical / operational problem | Talbi; de diseño / repetitivo: *design* / *repetitive* (Eiben y Smith). |
+| escalador | hill climber | *hill climbing* en el original. |
+| tramo (de una ruta) | leg | *Stretch* sigue reservado para los tramos del cromosoma. |
+| diferencia media sobre la mejor ruta | mean gap above the best route | En porcentaje. |
+| peor mapa | worst map | Columna de las tablas del capítulo 10. |
+| metaheurística de población / de trayectoria | population-based / trajectory-based metaheuristic | Blum y Roli. |
+| recocido simulado / búsqueda tabú / búsqueda local iterada | simulated annealing / tabu search / iterated local search | VNS: *variable neighborhood search*. |
+| estimación de distribuciones | estimation of distribution (EDA) | — |
+| nichos / compartición de la aptitud | niching / fitness sharing | *Crowding* para el apiñamiento. |
+| modelo de islas / celular | island model / cellular model | Migración: *migration*. |
+| mateheurística / simheurística | matheuristic / simheuristic | García-Martínez et al. |
+| colaborativo / integrador; en equipo / en relevo | collaborative / integrative; teamwork / relay | Taxonomía de híbridos. |
+| óptimos de Pareto / distancia de apiñamiento | Pareto optima / crowding distance | NSGA-II. |
+| representación de camino / ordinal | path / ordinal representation | Larrañaga et al. |
 
 ## Controles de selection-ga
 
@@ -109,3 +132,16 @@ frente a **Copy of the parent**, **Creep mutation**, **Clamp at the bounds**, **
 **Replace the worst if better**, **Number of offspring λ**, **Random population**,
 **Survives** y **Age**. crossover-ga usa ortografía británica en algunos textos
 (*neighbours*, *travelling*); la prosa sigue la estadounidense.
+
+## Rótulos de los capítulos 9–11
+
+EvoTraveller y SelectionMechanisms solo tienen interfaz inglesa: sus controles se citan
+tal cual (**Number of places**, **Mutation rate**, **Elitism**, **Crossover**, **Fitness**,
+**Best solution**, **Solutions**, **Generation**, **Method**, **Simulations**, **Seed (optional)**,
+**Elitism (n elites)**, “Permutation 1..N (no repetition)”). El botón «Abrir y configurar»
+se traduce como «Open and configure» (la hoja de estilos añade ⚙). Del portal, con
+`lang=en` (`js/content.js`): **Five modules. One shared process.**, **How they fit into
+the algorithm** y **Experiment across generations**. De crossover-ga: **Variant**, “Order
+from the start”, “Classic (Goldberg, 1989)” y “Compare operators”; de
+initialization-and-evaluation-ga, “Several objectives”. Las cifras con miles separados
+por espacio («40 000 million», «85 900») se conservan así para que el cotejo no cambie.

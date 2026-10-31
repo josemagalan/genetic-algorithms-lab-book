@@ -23,7 +23,8 @@ def clean(text):
 def normalizar_math(text):
     text = text.replace('{,}', '.')
     for a, b in [('coste', 'cost'), ('peso', 'weight'), ('valor', 'value'),
-                 ('maximizar', 'maximize'), ('minimizar', 'minimize')]:
+                 ('maximizar', 'maximize'), ('minimizar', 'minimize'),
+                 ('\\mathrm{EE}', '\\mathrm{SE}')]:
         text = text.replace(a, b)
     return re.sub(r'\s+', '', text)
 

@@ -2,11 +2,11 @@
 
 ## Translation Notice {#traduccion}
 
-This is an **AI-generated English translation in progress** of *Evolución a la vista. Algoritmos genéticos en un laboratorio interactivo*, Spanish edition **1.0**, published on October 31, 2026 ([DOI 10.5281/zenodo.23835733](https://doi.org/10.5281/zenodo.23835733)). The exact source is the repository tag `v1.0`, commit `75b82d8`.
+This is an **AI-generated English translation** of *Evolución a la vista. Algoritmos genéticos en un laboratorio interactivo*, Spanish edition **1.0**, published on October 31, 2026 ([DOI 10.5281/zenodo.23835733](https://doi.org/10.5281/zenodo.23835733)). The exact source is the repository tag `v1.0`, commit `75b82d8`.
 
-The Spanish edition is the original reference text prepared and reviewed by the authors. The English text translates that edition. Chapters 1–8 are translated; entries for the remaining chapters are navigation pages pointing to the Spanish original.
+The Spanish edition is the original reference text prepared and reviewed by the authors. The English text translates that edition. All eleven chapters are translated.
 
-Translation: **Codex (GPT-6)**, chapters 1–5, and **Claude (Cowork; configured model claude-opus-5-5)**, chapters 6–8, October 31, 2026. The assistants have compared the text with the source, checked technical invariants, and reviewed the English for naturalness, as described in the accompanying review report. The author gave the chapter 5 pilot a favorable general assessment; **a complete human review of the translation is pending**. The scope of any later review will be recorded explicitly. No independent DOI has been assigned to this translation.
+Translation: **Codex (GPT-6)**, chapters 1–5, and **Claude (Cowork; configured model claude-opus-5-5)**, chapters 6–11, October 31, 2026. The assistants have compared the text with the source, checked technical invariants, and reviewed the English for naturalness, as described in the accompanying review report. The author gave the chapter 5 pilot a favorable general assessment; **a complete human review of the translation is pending**. The scope of any later review will be recorded explicitly. No independent DOI has been assigned to this translation.
 
 ## Citing the Original {#como-citar}
 
