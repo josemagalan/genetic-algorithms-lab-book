@@ -1,5 +1,7 @@
 # Salidas de Quarto (las genera GitHub Actions)
 /_book/
+/_bilingue/
+/cotejo-ingles.json
 /.quarto/
 *_files/
 *.html

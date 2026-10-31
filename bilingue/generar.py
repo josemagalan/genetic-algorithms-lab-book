@@ -1,4 +1,4 @@
-"""Genera una vista bilingüe local en copias aisladas, sin modificar las fuentes.
+"""Genera el sitio bilingüe en copias aisladas, sin modificar las fuentes.
 
 Español: HEAD del repositorio. Inglés: edición fijada en en/traduccion.json,
 con las traducciones de en/ superpuestas. Los capítulos aún no traducidos son
@@ -68,7 +68,7 @@ def indices_ingles(module, caps, destino):
     niveles = {'basico': 'Basic', 'avanzado': 'Advanced', 'saber-mas': 'Further reading'}
     tipos = {'ejemplo': 'Example', 'ejercicio': 'Exercise', 'en-app': 'In the Application'}
     indice = ['# Contents {.unnumbered #sec-indice}', '',
-              'Translated chapters in this local edition. Other chapter entries lead to the Spanish original.', '']
+              'Contents of the English translation.', '']
     actividades = ['# Activity Index {.unnumbered #sec-actividades}', '',
                    'Activities in the translated chapters. Reproducible examples use fixed data; application boxes invite exploration. Exercise solutions remain folded.', '',
                    '| Activity | Title | Section | Level | Tool |', '|---|---|:---:|---|---|']
@@ -94,6 +94,12 @@ def preparar_ingles(destino, meta):
     figuras = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(figuras)
     variantes = figuras.generar(destino / 'figuras', destino / 'figuras', BOOK / 'en/figuras.json')
+    # La portada necesita composición inglesa propia, además de traducir rótulos.
+    # Se superpone solo en esta copia; el original español permanece intacto.
+    portadas = {}
+    for fuente in sorted((BOOK / 'en/figuras').glob('*.svg')):
+        shutil.copyfile(fuente, destino / 'figuras' / fuente.name)
+        portadas[fuente.name] = digest(fuente)
     module = modulo_indices(destino)
     caps = [module.leer(a, n) for n, a in enumerate(module.capitulos(), 1)]
     # Se calcula antes de preparar las páginas de acceso: conserva la numeración
@@ -158,6 +164,7 @@ def preparar_ingles(destino, meta):
         path.write_text(texto, encoding='utf-8')
     return {'chapters': len(traducidos), 'sections': sum(len(c['secciones']) for c in traducidos),
             'activities': sum(len(c['cajas']) for c in traducidos), 'translated_figures': variantes,
+            'english_cover_files': portadas,
             'source_files': {c['archivo']: digest(BOOK / 'en' / c['archivo']) for c in traducidos}}
 
 
@@ -165,6 +172,12 @@ CSS = '''\n/* Navegación entre ediciones, añadida solo a la vista bilingüe. *
 .ediciones {display:flex; flex-wrap:wrap; gap:.4rem 1rem; padding:.65rem 0;
 border-bottom:1px solid #d9dde3; margin:0 0 1.2rem; font-size:.88rem;}
 .ediciones a {text-decoration:none;} .ediciones [aria-current] {font-weight:700;}
+'''
+CSS_EN = '''\n/* La cita y la tabla de recapitulación caben también a 320 px. */
+#como-citar a {overflow-wrap:anywhere;}
+@media (max-width:400px) {
+  #sec-recapitulacion-decisiones table {display:block; max-width:100%; overflow-x:auto;}
+}
 '''
 JS = '''document.querySelectorAll('[data-edicion-equivalente]').forEach(a => {
   a.addEventListener('click', () => { if(location.hash) {
@@ -178,7 +191,7 @@ def enlaces_idioma(site, lang, meta):
     equivalentes |= {str(Path(f).with_suffix('.html')) for f in meta['translated_chapters']}
     (site / 'idiomas.js').write_text(JS, encoding='utf-8')
     estilos = site / 'estilos.css'
-    estilos.write_text(estilos.read_text(encoding='utf-8') + CSS, encoding='utf-8')
+    estilos.write_text(estilos.read_text(encoding='utf-8') + CSS + (CSS_EN if lang == 'en' else ''), encoding='utf-8')
     for p in site.glob('*.html'):
         if lang == 'en':
             nav = (f'<nav class="ediciones" aria-label="Book edition"><a href="../{p.name}" lang="es" data-edicion-equivalente>Español · Original</a>'
@@ -253,7 +266,7 @@ def main():
         for p in site.rglob('*'):
             if p.is_file():
                 z.write(p, str(p.relative_to(site)))
-    print(f'Vista inglesa: {site / "en/index.html"}', flush=True)
+    print(f'Edición inglesa: {site / "en/index.html"}', flush=True)
 
 
 if __name__ == '__main__':

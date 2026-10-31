@@ -2,6 +2,8 @@
 book:
   title: "Evolution Made Visible"
   subtitle: "Genetic Algorithms in an Interactive Laboratory"
+  cover-image: figuras/portada.svg
+  cover-image-alt: "Cover of Evolution Made Visible: Genetic Algorithms in an Interactive Laboratory, showing a digital laboratory panel with controls, binary chromosomes, and schematic charts."
   site-url: https://josemagalan.github.io/genetic-algorithms-lab-book/en/
   language: en
   date: "2026-10-31"

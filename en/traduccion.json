@@ -50,5 +50,5 @@
   },
   "human_review": "Author expressed a favorable general view of chapter 5; no exhaustive human linguistic or technical review is claimed.",
   "naturalness_pass": "Required after source comparison by D095; performed by the assistant, separately from human review.",
-  "scope": "Chapters 1-11 translated (1-5 by Codex, 6-11 by Claude) after the approved chapter 5 pilot. No human review of chapters 6-11; no translation DOI or publication."
+  "scope": "Chapters 1-11 translated (1-5 by Codex, 6-11 by Claude) after the approved chapter 5 pilot. HTML publication with an explicit AI translation notice; complete human review remains pending. No independent translation DOI."
 }

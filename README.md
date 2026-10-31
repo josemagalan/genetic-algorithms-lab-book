@@ -6,7 +6,9 @@
 
 Libro para aprender algoritmos genéticos de forma práctica, con actividades sobre las herramientas interactivas del [Laboratorio de algoritmos genéticos](https://josemagalan.github.io/genetic-algorithms-lab/) (*genetic-algorithms-lab*). Está pensado para estudiantes de grado que empiezan.
 
-**Versión para leer:** <https://josemagalan.github.io/genetic-algorithms-lab-book/>
+**Ediciones para leer:** [Español · original](https://josemagalan.github.io/genetic-algorithms-lab-book/) · [English · AI translation](https://josemagalan.github.io/genetic-algorithms-lab-book/en/).
+
+La edición inglesa se titula *Evolution Made Visible: Genetic Algorithms in an Interactive Laboratory* y traduce los once capítulos de la edición española 1.0. Identifica el original y los asistentes utilizados en su entrada y en sus avisos; la revisión humana completa está pendiente. Su publicación HTML no asigna un DOI a la traducción ni modifica el archivo español de Zenodo.
 
 ## Cómo citar
 
@@ -31,7 +33,7 @@ El DOI identifica esta edición, cuyos archivos (PDF, HTML y fuentes) están en 
 | SelectionMechanisms | [Open / Abrir](https://josemagalan.shinyapps.io/SelectionMechanisms/) | [GitHub](https://github.com/josemagalan/SelectionMechanisms) |
 | Book / Libro: *Evolución a la vista* | [Read / Leer](https://josemagalan.github.io/genetic-algorithms-lab-book/) | [GitHub](https://github.com/josemagalan/genetic-algorithms-lab-book) |
 
-El libro está en español. / The book is in Spanish.
+[Español · original](https://josemagalan.github.io/genetic-algorithms-lab-book/) · [English · AI translation](https://josemagalan.github.io/genetic-algorithms-lab-book/en/).
 <!-- ga-series-links:end -->
 
 ## Qué hay ahora
@@ -64,7 +66,7 @@ Los once capítulos están completos y cuentan con la revisión del autor indica
 - `indice.qmd` (índice general) y `actividades.qmd` (índice de actividades) también los genera `filtros/indices.py` en cada `quarto render`, a partir de los encabezados de sección y de las cajas de los capítulos. No se editan a mano.
 - Bibliografía en `referencias.bib`, con estilo APA en castellano (`vendor/csl/`).
 - Sin dependencias externas en la página: KaTeX va en local (`vendor/katex/`).
-- Al hacer *push* a `main`, GitHub Actions genera el libro y lo publica en GitHub Pages (`.github/workflows/publish.yml`).
+- Al hacer *push* a `main`, GitHub Actions coteja la traducción, genera ambas ediciones con `bilingue/generar.py`, comprueba sus enlaces y avisos y publica `site/` en GitHub Pages (`.github/workflows/publish.yml`). La edición española permanece en raíz y la inglesa en `/en/`; el selector permite cambiar de edición por capítulo. Instrucciones en [`bilingue/LEEME.md`](bilingue/LEEME.md).
 - `comprobaciones/` guarda la versión revisada de cada herramienta y un guion que avisa si una herramienta cambia o si el libro pide un valor que sus controles no permiten; lo ejecuta `.github/workflows/comprobar.yml` en cada *push* y cada lunes (`comprobaciones/LEEME.md`).
 - `.github/workflows/verificar-html.yml` comprueba además el HTML y una muestra de actividades en Chromium. Verifica la navegación del recorrido básico, el ciclo bilingüe, los enlaces al libro y resultados de selección, OX y siembra. Las instrucciones locales y los límites están en `comprobaciones/LEEME.md`.
 

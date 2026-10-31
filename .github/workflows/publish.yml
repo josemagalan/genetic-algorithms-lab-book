@@ -1,4 +1,4 @@
-# Genera el libro con Quarto y lo publica en GitHub Pages en cada push a main.
+# Genera ambas ediciones con Quarto y las publica en GitHub Pages.
 # Requisito (una sola vez): Settings → Pages → Build and deployment → Source: «GitHub Actions».
 name: Publicar el libro
 
@@ -21,14 +21,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # La traducción parte de la etiqueta española v1.0.
       - uses: quarto-dev/quarto-actions/setup@v2
         with:
           version: 1.10.19
-      - name: Generar el libro
-        run: quarto render          # el post-render usa python3, ya instalado en ubuntu-latest
+      - name: Cotejar la traducción
+        run: python3 bilingue/verificar.py --informe cotejo-ingles.json
+      - name: Generar y comprobar ambas ediciones
+        run: |
+          python3 bilingue/generar.py --salida _bilingue
+          python3 bilingue/comprobar.py --site _bilingue/site --informe _bilingue/comprobacion.json
       - uses: actions/upload-pages-artifact@v4
         with:
-          path: _book
+          path: _bilingue/site
 
   deploy:
     needs: build
