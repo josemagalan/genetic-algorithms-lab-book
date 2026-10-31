@@ -20,3 +20,6 @@
 /comprobaciones/node_modules/
 /comprobaciones/resultados/
 /_herramientas/
+
+# Cachés de Python de los guiones (bilingue/)
+__pycache__/

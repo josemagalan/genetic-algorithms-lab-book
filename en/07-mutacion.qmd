@@ -1,0 +1,566 @@
+---
+aliases:
+  - 08-mutacion.html
+---
+
+# Mutation {#sec-mutacion}
+
+<!-- AI translation and naturalness pass: Claude (Cowork, configured model claude-opus-5-5), 2026-10-31. Source: Spanish v1.0, 75b82d8. Interface labels quoted from mutation-ga (i18n.js, registry.js, content/*.js). "Bit-flip mutation" (binary) and "inversion" (permutation) translate two different Spanish uses of "inversión"; keep them apart. In mutation-ga a position mutates if r < pm (strict inequality). The source edition's experimental and bibliographic verification records remain applicable; translating them does not constitute a new experiment or source review. -->
+
+**Tools:** [mutation-ga](https://josemagalan.github.io/mutation-ga/#lang=en), available through the [portal](https://josemagalan.github.io/genetic-algorithms-lab/#lang=en).
+
+::: {.callout-warning .objetivos title="Chapter Objectives"}
+After completing the basic path through this chapter, you will be able to:
+
+- explain what mutation is for and the three conditions it must meet: being able to reach any solution, making small, controlled changes, and producing valid solutions;
+- apply bit-flip mutation by hand with given random numbers and work out how many bits change on average;
+- choose between random resetting and creep mutation according to what the integer genes mean, and apply them;
+- work out a Gaussian mutant and explain the role of σ;
+- use a counterexample to explain why permutations need mutations of their own, and apply swap, insertion, and inversion;
+- reason about what happens if the mutation probability is too low or too high.
+:::
+
+## Why Mutate? [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-mutacion-para-que-mutar}
+
+Crossover combines what the parents already have. Where do values that nobody in the population has come from?
+
+In the [crossover chapter](#sec-cruce) we saw that, with binary crossovers that swap parts of the chromosomes, wherever the two parents agree, the offspring agree too (example [](#ejemplo-cruce-uno-y-dos-puntos)). With these crossovers, each child receives at each position one of the values its parents had there. If a value disappears from a position across the whole population, no crossover of this kind can recover it, and neither can selection, which only copies individuals. With other representations, crossover can produce values that no parent had: arithmetic crossover, from two parents with a 2 and a 6 at the same position, can give a 4 (section -@sec-cruce-reales), and permutation crossovers rearrange genes. But what they can reach depends on what is already in the population: arithmetic crossover, for example, never leaves the interval the parents span. In addition, selection reduces the population's diversity generation after generation, as we saw in the [selection chapter](#sec-seleccion).
+
+**Mutation** is an operator that acts on a single individual and makes a small, random change to its chromosome [@talbi2009, p. 208]. It introduces new values and recovers lost ones, so that no point in the search space is out of reach [@herrera1998, p. 271; @whitley1994].
+
+In Holland's genetic algorithms, with bit strings, mutation plays a secondary role. Crossover is the main source of new combinations, and mutation ensures that no value disappears from the population forever; once a value is lost, crossover has no way to recover it [@holland1992, pp. 110–111]. @goldberg1989 [p. 14] compares it to an insurance policy against the premature loss of useful genetic material. In other evolutionary methods, such as evolutionary programming and the early evolution strategies, mutation was the only source of variation [@mitchell1998, section 5.5]. We return to this debate in section -@sec-mutacion-ampliaciones.
+
+Mutation is applied after crossover. Every offspring has a chance to mutate, including the copies from pairs that were not crossed, but each one changes only with a low probability. With elitism, by contrast, some parents pass to the next generation without crossover or mutation (section -@sec-reemplazo-elitismo).
+
+As in biological evolution, mutation does not know which change is beneficial; selection decides its fate. If the mutant is worse, it will most likely leave few descendants, and its change will disappear; if it is better, it will tend to leave more, and the change will spread through the population, like the bacterial resistance to antibiotics in exercise [](#ejercicio-evolucion-sistema-evolutivo-2). This is not guaranteed: in a finite population, even a favorable change can be lost by chance (section -@sec-seleccion-seleccion-y-diversidad).
+
+A good mutation must meet three conditions [@talbi2009, p. 209]:
+
+- **Able to reach any solution.** By chaining mutations, it must be possible to reach any individual from any other, even if only with a very low probability.
+- **Small, controlled change.** The mutant should resemble the individual it comes from, and the size of the change should be adjustable. Mutating too much destroys what selection and crossover have achieved; mutating too little adds no diversity.
+- **Validity.** The mutant must still be a solution to the problem.
+
+Like crossover, mutation acts on the genotype, so each representation has its own operators.
+
+**Notation.** We follow the tool's notation: the individual being mutated is the **Parent**, and the result is the **Mutant**. Positions are numbered from 1. The mutation probability is *pm*.
+
+:::: {.callout-note .ejercicio #ejercicio-mutacion-para-que-mutar title="Exercise · Predict"}
+In a population of 50 bit strings, every individual has a 0 at position 3. If only selection and crossover are applied, can any descendant have a 1 at that position? What if a mutation that flips bits at random is also applied? Write down your prediction: you will check it in section -@sec-mutacion-inversion-bits.
+::::
+
+## Binary: Bit-Flip Mutation [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-mutacion-inversion-bits}
+
+How do we change a bit string slightly?
+
+The classic mutation for the binary representation is **bit-flip mutation** [@goldberg1989, p. 14; @mitchell1998, section 1.5; @talbi2009, p. 209]. Each position is handled separately:
+
+1. A random number $r \in [0, 1)$ is drawn.
+2. If $r < \mathit{pm}$, the bit at that position is flipped: 0 becomes 1, and 1 becomes 0.
+3. Otherwise, the bit stays as it is.
+
+The number of bits that change is not fixed. On average, $\mathit{pm} \times L$ bits change, where *L* is the length of the chromosome, but sometimes more change, sometimes fewer, and sometimes none.
+
+::: {.callout-tip .ejemplo #ejemplo-mutacion-inversion-bits title="Reproducible Example · One Draw per Position"}
+**Data.** The parent 1 1 0 1 0 0 1 0 and $\mathit{pm} = 0.15$. Random numbers for positions 1 to 8:
+
+| Position | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Parent | 1 | 1 | 0 | 1 | 0 | 0 | 1 | 0 |
+| *r* | 0.28 | 0.07 | 0.58 | 0.94 | 0.15 | 0.01 | 0.69 | 0.64 |
+
+**Predict.** Which positions mutate? Does position 5 mutate? What is the mutant? How many bits did you expect to change?
+
+[Open: bit-flip mutation](https://josemagalan.github.io/mutation-ga/#op=bit-flip&lang=en&r=12&pm=0.15&p=1-1-0-1-0-0-1-0){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+Positions 2 and 6 mutate, the only ones with $r < 0.15$. Position 5 does not mutate: $r = 0.15$ is not less than *pm*.
+
+| Position | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Mutant** | 1 | **0** | 0 | 1 | 0 | **1** | 1 | 0 |
+
+In total, 2 bits changed. The expected number was $0.15 \times 8 = 1.2$, but the number of bits that change is random.
+</details>
+
+<details class="incrustada">
+<summary>Show the tool here (bit-flip mutation)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/mutation-ga/#op=bit-flip&lang=en&r=12&pm=0.15&p=1-1-0-1-0-0-1-0" loading="lazy" title="mutation-ga: bit-flip mutation"></iframe>
+</details>
+:::
+
+With $0 < \mathit{pm} < 1$, each bit can either change or stay the same, so any string can be produced, even if only with a very small probability: a string that differs from the parent in *d* of its *L* bits is produced with probability $\mathit{pm}^d \, (1 - \mathit{pm})^{L-d}$. Both bounds are needed. With $\mathit{pm} = 0$, nothing changes. With $\mathit{pm} = 1$, all bits change at once: from 000 you can only reach 111, and mutating again takes you back to 000. This answers exercise [](#ejercicio-mutacion-para-que-mutar): without mutation, the 0 at position 3 can never change; with mutation, it can.
+
+:::: {.callout-note .ejercicio #ejercicio-mutacion-inversion-bits title="Exercise · How Many Bits Change?"}
+A chromosome has 8 bits and is mutated with $\mathit{pm} = 1/8$. How many bits change on average? What is the probability that none changes? And exactly one?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+On average, $8 \times 1/8 = 1$ bit changes. Each bit stays the same with probability 7/8, and the draws are independent, so none changes with probability $(7/8)^8 \approx 0.34$. Exactly one changes with probability $8 \times (1/8) \times (7/8)^7 = (7/8)^7 \approx 0.39$. Even though one bit changes on average, in about one mutation in three the mutant is a copy of the parent.
+</details>
+::::
+
+::: {.callout-note .en-app title="In the Application · mutation-ga, “Bit-flip mutation”"}
+[Explore in mutation-ga](https://josemagalan.github.io/mutation-ga/#op=bit-flip&lang=en){.explorar target="_blank"}
+
+- Advance step by step and watch the row of *r* numbers: a position mutates when its number is less than *pm*.
+- Click **Draw again** several times and count the bits that change. How often do you get a copy of the parent?
+- Move the **Mutation probability pm** between 0.01 and 0.5 and see how many positions mutate.
+- Click **Practice**: the tool gives you the random numbers, and you type the mutant.
+:::
+
+## Integers: Random Resetting and Creep Mutation [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-mutacion-enteros}
+
+If each gene is an integer, does it matter which other value we change it to?
+
+In an **integer representation**, each gene is an integer within a range. In mutation-ga, the range is 0 to 9. There are two basic mutations, and in both, each position mutates with probability *pm*, as in bit-flip mutation:
+
+- **Random resetting.** If the position mutates, the gene takes any value in the range, all with the same probability. This is mutation as @holland1992 [pp. 109–110] defined it for any alphabet: the new value is chosen at random from all possible values, with equal probability. @talbi2009 [p. 209] describes it as replacing the gene's value with another value from the alphabet. In the tool, a second number *s* is drawn, and the new value is $\lfloor 10\, s \rfloor$, the integer part of $10\,s$. It may coincide with the old value.
+- **Creep mutation.** If the position mutates, a small positive or negative step of at most *s* units is added to the gene (*s* is the **maximum step**; do not confuse it with the number *s* in random resetting). With $s = 1$, a second number *u* is drawn: if $u < 0.5$, the gene goes down by one unit; otherwise, it goes up by one. If the value leaves the range, it stays at the boundary. The idea of creeping a gene up or down by a small amount, with a maximum creep set by the user, comes from real numbers [@herrera1998, p. 293].
+
+Which one to use depends on what each gene means [@eiben2015, p. 55]. If the values are **unordered categories**, such as the machine that performs each task or the supplier that handles each order, machine 3 is no more similar to machine 4 than to machine 9, and any value is as reasonable a change as any other: random resetting is appropriate. If the values are **ordered quantities**, such as the units in a batch or the workers on a shift, a nearby value usually gives a similar solution, and creep mutation makes small changes, as section -@sec-mutacion-para-que-mutar requires.
+
+::: {.callout-tip .ejemplo #ejemplo-mutacion-enteros title="Reproducible Example · Jumping or Creeping"}
+**Data.** The parent 3 7 1 4 9 0 6 2, with genes from 0 to 9. The numbers are drawn in order, and when a position mutates, the next number is used for the mutation. That is why, with the same draw, the *r* values of the two mutations stop matching after the first position that mutates.
+
+Random resetting with $\mathit{pm} = 0.2$:
+
+| Position | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Parent | 3 | 7 | 1 | 4 | 9 | 0 | 6 | 2 |
+| *r* | 0.92 | 0.33 | 0.22 | 0.08 | 0.50 | 0.07 | 0.62 | 0.69 |
+| *s* |  |  |  | 0.23 |  | 0.97 |  |  |
+
+Creep mutation with $\mathit{pm} = 0.3$ and maximum step $s = 1$:
+
+| Position | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Parent | 3 | 7 | 1 | 4 | 9 | 0 | 6 | 2 |
+| *r* | 0.92 | 0.33 | 0.22 | 0.23 | 0.07 | 0.62 | 0.69 | 0.76 |
+| *u* |  |  | 0.08 | 0.50 | 0.97 |  |  |  |
+
+**Predict.** What is the mutant produced by each operator? What is the largest jump for each? What happens to the 9 at position 5 under creep mutation?
+
+[Open: random resetting](https://josemagalan.github.io/mutation-ga/#op=random-resetting&lang=en&r=4&pm=0.2&p=3-7-1-4-9-0-6-2){.abrir target="_blank"}
+[Open: creep mutation](https://josemagalan.github.io/mutation-ga/#op=creep&lang=en&v=clamp&r=4&pm=0.3&smax=1&p=3-7-1-4-9-0-6-2){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+In random resetting, positions 4 and 6 mutate. Position 4 takes the value $\lfloor 10 \times 0.23 \rfloor = 2$, and position 6 takes $\lfloor 10 \times 0.97 \rfloor = 9$. In creep mutation, positions 3, 4, and 5 mutate: position 3 goes down ($u = 0.08 < 0.5$), position 4 goes up, and so does position 5, but 9 + 1 = 10 is out of range, so the gene stays at 9.
+
+| Position | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Resetting: **Mutant** | 3 | 7 | 1 | **2** | 9 | **9** | 6 | 2 |
+| Creep: **Mutant** | 3 | 7 | **0** | **5** | 9 | 0 | 6 | 2 |
+
+With random resetting, gene 6 jumped from 0 to 9 in one go. With creep mutation, no gene moved more than one unit: the mutant is a close neighbor of the parent.
+</details>
+
+<details class="incrustada">
+<summary>Show the tool here (creep mutation)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/mutation-ga/#op=creep&lang=en&v=clamp&r=4&pm=0.3&smax=1&p=3-7-1-4-9-0-6-2" loading="lazy" title="mutation-ga: creep mutation"></iframe>
+</details>
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-mutacion-enteros title="Exercise · Choose and Calculate"}
+1. With random resetting, $\mathit{pm} = 0.2$, and genes from 0 to 9, what is the probability that a gene's value changes?
+2. A company assigns each order to one of its ten suppliers, numbered 0 to 9. Which mutation would you use? What if each gene were the number of trucks, from 0 to 9, sent each day?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+1. The gene mutates with probability 0.2, but the new value matches the old one once in every ten draws. It changes with probability $0.2 \times 9/10 = 0.18$.
+2. Suppliers are unordered categories: random resetting. Creep mutation would make moving from supplier 4 to supplier 5 more likely than to supplier 9, for no reason. The number of trucks is an ordered quantity: creep mutation, which changes the quantity gradually.
+</details>
+::::
+
+::: {.callout-note .en-app title="In the Application · mutation-ga, “Creep mutation”"}
+[Explore in mutation-ga](https://josemagalan.github.io/mutation-ga/#op=creep&lang=en&v=clamp){.explorar target="_blank"}
+
+- Raise the **Maximum step s** from 1 to 3 and see how far the mutating genes move.
+- In **Enter the parent manually**, type a parent with several 0s and 9s and watch what happens at the ends of the range.
+- Switch to **Random resetting** with the same parent (the operator selector at the top keeps it) and compare the size of the jumps.
+:::
+
+## Real Numbers: Gaussian Mutation [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-mutacion-gaussiana}
+
+With real numbers, how do we take small steps most of the time and, now and then, a large one?
+
+In a **real-valued representation**, the most widely used mutation adds random noise to the gene. In **Gaussian mutation**, this noise follows a normal distribution with mean 0 and standard deviation σ:
+
+$$
+v' = v + \sigma\, z, \qquad z \sim N(0, 1).
+$$
+
+A normal distribution is bell-shaped: most values lie close to the mean, here 0, and the farther away a value is, the less likely it becomes. The standard deviation σ measures how wide the bell is; *z* comes from the simplest bell, with mean 0 and standard deviation 1, and multiplying it by σ widens or narrows the bell. Each position mutates with probability *pm*. Small jumps are the most likely: about 68 in 100 are smaller than σ in absolute value, and about 95 are smaller than 2σ. Large jumps are rare but possible. This is the characteristic mutation of evolution strategies [@herrera1998, p. 286]. σ is called the mutation **step size** [@eiben2015, p. 57], and it must be chosen carefully [@talbi2009, pp. 211–212]. If the mutant leaves the allowed interval, it must be repaired. In mutation-ga, genes range from 0 to 10, and a value outside that range is clamped to the boundary.
+
+The tool obtains *z* from two random numbers (we will see how in section -@sec-mutacion-otras-mutaciones). In the example, we give you *z* directly.
+
+::: {.callout-tip .ejemplo #ejemplo-mutacion-gaussiana title="Reproducible Example · The Step Size"}
+**Data.** The parent 2.0 8.5 4.0 1.5 6.0, with genes between 0 and 10, and $\mathit{pm} = 0.25$. With this draw, positions 2 and 3 mutate, with $z = 1.2288$ and $z = -0.0551$. We apply it with σ = 1 and with σ = 2, using the same numbers.
+
+**Predict.** What is the mutant for each σ? Does any gene leave the interval [0, 10]?
+
+[Open: Gaussian mutation with σ = 1](https://josemagalan.github.io/mutation-ga/#op=gaussian&lang=en&r=12&pm=0.25&sigma=1&p=2-8.5-4-1.5-6){.abrir target="_blank"}
+[Open: Gaussian mutation with σ = 2](https://josemagalan.github.io/mutation-ga/#op=gaussian&lang=en&r=12&pm=0.25&sigma=2&p=2-8.5-4-1.5-6){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+| Position | 1 | 2 | 3 | 4 | 5 |
+|---|:---:|:---:|:---:|:---:|:---:|
+| Parent | 2.0 | 8.5 | 4.0 | 1.5 | 6.0 |
+| σ = 1: **Mutant** | 2.0 | 9.73 | 3.94 | 1.5 | 6.0 |
+| σ = 2: **Mutant** | 2.0 | 10.0 | 3.89 | 1.5 | 6.0 |
+
+With σ = 1, $8.5 + 1.2288 = 9.73$ and $4.0 - 0.0551 = 3.94$. With σ = 2, the jumps are twice as large: $8.5 + 2 \times 1.2288 = 10.96$, which leaves the interval and is clamped to 10, and $4.0 - 2 \times 0.0551 = 3.89$.
+</details>
+
+<details class="incrustada">
+<summary>Show the tool here (Gaussian mutation)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/mutation-ga/#op=gaussian&lang=en&r=12&pm=0.25&sigma=1&p=2-8.5-4-1.5-6" loading="lazy" title="mutation-ga: Gaussian mutation"></iframe>
+</details>
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-mutacion-gaussiana title="Exercise · How Far Does It Go?"}
+A gene has the value 5.0 and undergoes Gaussian mutation. Between which values will about 95 in 100 mutants fall if σ = 0.5? And if σ = 2? Which would you use to fine-tune a solution that is already nearly optimal?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+About 95 in 100 jumps are smaller than 2σ. With σ = 0.5, the mutants will almost always fall between 4 and 6; with σ = 2, between 1 and 9. To fine-tune a nearly optimal solution, σ = 0.5 is better, because it takes small steps; σ = 2 explores more but has difficulty approaching the optimum precisely.
+</details>
+::::
+
+::: {.callout-note .en-app title="In the Application · mutation-ga, “Gaussian mutation”"}
+[Explore in mutation-ga](https://josemagalan.github.io/mutation-ga/#op=gaussian&lang=en){.explorar target="_blank"}
+
+- Look at the “Distribution of the mutated value” panel: it shows the values the gene can take if it mutates. Move the **Standard deviation σ** between 0.1 and 3 and watch the bell narrow or widen.
+- In **Enter the parent manually**, type a gene close to 10, for example 9.8, and find in the panel the peak that clamping creates at the boundary.
+- Click **Draw again** several times and compare the jumps with σ.
+:::
+
+## Permutations: Why Random Resetting Fails [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-mutacion-permutaciones}
+
+On a traveling salesman route, can we mutate by replacing a city with another one chosen at random?
+
+In a permutation representation, each number is a city (or a task) and must appear exactly once. Let us try random resetting from section -@sec-mutacion-enteros: each position mutates with probability *pm* and, if it mutates, takes a random value between 1 and *n*.
+
+::: {.callout-tip .ejemplo #ejemplo-mutacion-permutaciones title="Reproducible Example · Changing Cities at Random"}
+**Data.** The parent 1 2 3 4 5 6 7 8 9 and $\mathit{pm} = 0.25$. If a position mutates, its new value is $1 + \lfloor 9\, s \rfloor$.
+
+| Position | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| *r* | 0.67 | 0.19 | 0.16 | 0.76 | 0.28 | 0.54 | 0.25 | 0.68 | 0.79 |
+| *s* |  | 0.53 | 0.08 |  |  |  |  |  |  |
+
+**Predict.** What is the mutant? Is it a valid route?
+
+[Open: counterexample with random resetting](https://josemagalan.github.io/mutation-ga/#op=reset-perm&lang=en&r=17&pm=0.25&p=1-2-3-4-5-6-7-8-9){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+Positions 2 and 3 mutate (position 7 does not, because $r = 0.25$ is not less than *pm*). Position 2 takes the value $1 + \lfloor 9 \times 0.53 \rfloor = 5$, and position 3 takes $1 + \lfloor 9 \times 0.08 \rfloor = 1$.
+
+| Position | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Mutant** | 1 | **5** | **1** | 4 | 5 | 6 | 7 | 8 | 9 |
+
+It is not a permutation: it visits cities 1 and 5 twice and never visits 2 or 3.
+</details>
+:::
+
+With permutations, gene values cannot be changed one at a time: repeats almost always appear [@eiben2015, p. 68]. The mutant could be repaired or penalized in the evaluation function, but the natural approach is to use mutations that only rearrange genes, without changing any value, so that the validity condition from section -@sec-mutacion-para-que-mutar holds. The same happened with crossover (section -@sec-cruce-permutaciones).
+
+::: {.callout-note .en-app title="In the Application · mutation-ga, “Counterexample: random resetting”"}
+[Explore in mutation-ga](https://josemagalan.github.io/mutation-ga/#op=reset-perm&lang=en){.explorar target="_blank"}
+
+- Click **Show as routes** and see which cities are left unvisited.
+- Click **Draw again** several times. How often do you get a valid permutation? What has to happen for one to appear?
+:::
+
+## Swap, Insertion, and Inversion [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-mutacion-intercambio-insercion-inversion}
+
+How do we change a permutation slightly without repeating any city?
+
+The most widely used mutations for permutations are based on three operations [@talbi2009, p. 209; @eiben2015, pp. 69–70; @cicirello2023]:
+
+- **Swap:** two positions, *i* and *j*, are chosen at random, and their genes are exchanged.
+- **Insertion:** the gene at position *i* is removed and placed so that it ends up at position *j*. The genes between the two positions shift by one place to make room for it.
+- **Inversion** (or *reversal*): a stretch of the chromosome is chosen at random, and the order of its genes is reversed.
+
+All three only rearrange genes, so the mutant is always a valid permutation. And by chaining swaps, any ordering can be reached. Which one to use depends on what matters in the problem, as you will see in section -@sec-mutacion-que-conserva.
+
+In a permutation, genes cannot be mutated one at a time, so *pm* is interpreted as the probability that the individual mutates, not that each gene does [@eiben2015, p. 69]. In the tool, each operator is applied once, with positions chosen at random or dragged by hand.
+
+::: {.callout-tip .ejemplo #ejemplo-mutacion-intercambio-insercion-inversion title="Reproducible Example · Three Ways to Rearrange"}
+**Data.** The parent 1 2 3 4 5 6 7 8 9.
+
+- Swap of positions 3 and 7.
+- Insertion of the gene at position 3 so that it ends up at position 7.
+- Inversion of the stretch at positions 3–7.
+
+**Predict.** What is the mutant produced by each operator? How many genes stay in the same position as in the parent?
+
+[Open: swap](https://josemagalan.github.io/mutation-ga/#op=swap&lang=en&p=1-2-3-4-5-6-7-8-9&c=2-6){.abrir target="_blank"}
+[Open: insertion](https://josemagalan.github.io/mutation-ga/#op=insert&lang=en&p=1-2-3-4-5-6-7-8-9&c=2-6){.abrir target="_blank"}
+[Open: inversion](https://josemagalan.github.io/mutation-ga/#op=inversion&lang=en&p=1-2-3-4-5-6-7-8-9&c=2-7){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+| Position | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Swap: **Mutant** | 1 | 2 | **7** | 4 | 5 | 6 | **3** | 8 | 9 |
+| Insertion: **Mutant** | 1 | 2 | **4** | **5** | **6** | **7** | **3** | 8 | 9 |
+| Inversion: **Mutant** | 1 | 2 | **7** | **6** | 5 | **4** | **3** | 8 | 9 |
+
+The swap moves only two genes: 7 of the 9 stay in place. The insertion removes the 3 and shifts the 4, 5, 6, and 7 by one place: 4 stay in place, but the other genes remain in the same relative order. The inversion reverses the stretch 3 4 5 6 7: 5 stay in place, because the 5, at the center of the stretch, does not move.
+</details>
+
+<details class="incrustada">
+<summary>Show the tool here (inversion)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/mutation-ga/#op=inversion&lang=en&p=1-2-3-4-5-6-7-8-9&c=2-7" loading="lazy" title="mutation-ga: inversion mutation"></iframe>
+</details>
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-mutacion-intercambio-insercion-inversion title="Exercise · Rearranging by Hand"}
+Apply the three mutations to the parent 9 4 5 2 6 3 8 1 7: a swap of positions 2 and 6, an insertion of the gene at position 2 into position 6, and an inversion of the stretch at positions 2–6.
+
+<details>
+<summary>**Show the Solution**</summary>
+
+- Swap: the 4 and the 3 change places: **9 3 5 2 6 4 8 1 7**.
+- Insertion: the 4 is removed; the 5, 2, 6, and 3 shift to the left, and the 4 ends up at position 6: **9 5 2 6 3 4 8 1 7**.
+- Inversion: the stretch 4 5 2 6 3 becomes 3 6 2 5 4: **9 3 6 2 5 4 8 1 7**.
+
+You can check this in the tool by typing the parent in **Enter the parent manually** and dragging the markers.
+</details>
+::::
+
+::: {.callout-note .en-app title="In the Application · mutation-ga, permutation mutations"}
+- Open [Swap mutation](https://josemagalan.github.io/mutation-ga/#op=swap&lang=en){target="_blank"}, [Insert mutation](https://josemagalan.github.io/mutation-ga/#op=insert&lang=en){target="_blank"}, and [Inversion mutation](https://josemagalan.github.io/mutation-ga/#op=inversion&lang=en){target="_blank"}, and drag the ◆ markers to choose other positions or stretches.
+- Click **Show as routes**: each chromosome is drawn as a traveling salesman route. Count the mutant's new legs under each operator. Which one changes the route least?
+- Use **Practice** with **Random parent** until you get the mutants right on the first try.
+:::
+
+## How Much to Mutate? [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-mutacion-cuanto-mutar}
+
+If mutation adds diversity, why not mutate a lot?
+
+Normally *pm* is small. A widespread rule of thumb is $\mathit{pm} = 1/L$, where *L* is the number of genes, so that on average one gene mutates per offspring [@talbi2009, p. 208]; for bit strings it goes back to Mühlenbein [@eiben1999, p. 132]. With very little mutation, the population loses diversity and converges quickly. With too much, the mutant barely resembles the parent: what selection and crossover have achieved is lost, and, in the extreme case, the search becomes random search [@talbi2009, p. 209]. On its own, mutation is a random walk through the solution space [@goldberg1989, p. 14; @holland1992, p. 110]. The values proposed by early studies are given in section -@sec-mutacion-ampliaciones, and in chapter -@sec-experimentos we will see how to choose *pm* through experiments.
+
+In bit-flip mutation, the extreme case is $\mathit{pm} = 0.5$: each bit of the mutant is a 0 or a 1 with equal probability, whatever the parent's bit. Above 0.5, the mutant again resembles something, but it is the parent's complement: with $\mathit{pm} = 1$ it is exactly the complement. In the other representations, the size of the change also depends on other parameters, such as the maximum step *s* of creep mutation or σ in Gaussian mutation.
+
+::: {.callout-tip .ejemplo #ejemplo-mutacion-cuanto-mutar title="Reproducible Example · Little or Much Mutation"}
+**Data.** The “Compare operators” screen of mutation-ga applies all mutations for a representation and summarizes how much each one changes. With “Average with: random parents”, it averages over 1000 parents of the same length, with 10 mutations of each. We use 10-bit strings and bit-flip mutation with $\mathit{pm} = 0.1$ and with $\mathit{pm} = 0.5$.
+
+**Predict.** On average, in how many bits does the mutant differ from the parent for each *pm*? What percentage of mutants are copies of the parent?
+
+[Open: compare with pm = 0.1](https://josemagalan.github.io/mutation-ga/#cmp=binary&lang=en&from=bit-flip&avg=rand&pm=0.1&p=1-1-0-1-0-0-1-0-1-1){.abrir target="_blank"}
+[Open: compare with pm = 0.5](https://josemagalan.github.io/mutation-ga/#cmp=binary&lang=en&from=bit-flip&avg=rand&pm=0.5&p=1-1-0-1-0-0-1-0-1-1){.abrir target="_blank"}
+
+The average over random parents takes a few seconds to compute.
+
+<details>
+<summary>**Show the Result**</summary>
+
+| Mutation | Hamming distance | Copy of the parent |
+|---|:---:|:---:|
+| Bit-flip mutation, $\mathit{pm} = 0.1$ | 1.01 | 34% |
+| Bit-flip mutation, $\mathit{pm} = 0.5$ | 5.00 | 0% |
+| Single-bit mutation | 1.00 | 0% |
+
+The **Hamming distance** is the number of bits in which the mutant and the parent differ. With $\mathit{pm} = 0.1 = 1/L$, on average $10 \times 0.1 = 1$ bit changes, and a third of the mutants are copies: the theoretical probability is $0.9^{10} \approx 0.35$. With $\mathit{pm} = 0.5$, half of the bits change, and the mutant bears no relationship to the parent: it is a random string. The “Single-bit mutation” row of the table is explained in section -@sec-mutacion-otras-mutaciones.
+</details>
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-mutacion-cuanto-mutar title="Exercise · How Many Stay the Same?"}
+A population has 100 individuals of 10 bits. After crossover, bit-flip mutation is applied to all of them. On average, how many individuals remain completely unchanged with $\mathit{pm} = 0.01$? And with $\mathit{pm} = 0.1$?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+An individual stays the same if none of its 10 bits mutates. With $\mathit{pm} = 0.01$, this happens with probability $0.99^{10} \approx 0.90$: about 90 of the 100 individuals do not change. With $\mathit{pm} = 0.1$, $0.9^{10} \approx 0.35$: about 35. With a small *pm*, most individuals do not change, even though all of them, crossed or not, have a chance to mutate.
+</details>
+::::
+
+::: {.callout-note .en-app title="In the Application · mutation-ga, “Compare operators”"}
+[Explore in mutation-ga](https://josemagalan.github.io/mutation-ga/#cmp=binary&lang=en){.explorar target="_blank"}
+
+- From an operator's page, adjust its parameters and click **Compare operators**: the comparison keeps your settings for that operator.
+- Switch **Average with** between “this parent” and “random parents”.
+- Read “What each column measures”, below the table, for the exact definition of each measure.
+:::
+
+## Summary {.unnumbered #resumen}
+
+- Mutation randomly changes a small part of an individual. It provides values that selection and crossover cannot create or recover on their own (in binary, a bit that has been lost from the whole population), and it must be able to reach any solution, make small changes, and produce valid solutions.
+- In binary representations, each bit is flipped with probability *pm*. In integer representations, random resetting suits categories and creep mutation suits ordered quantities. In real-valued representations, Gaussian mutation adds noise of size σ.
+- Permutations need mutations that only rearrange genes: swap, insertion, and inversion.
+- A poorly chosen rate can prevent what has been learned from being kept. With bits, with *pm* = 0.5 the mutant is independent of the parent; with *pm* = 1 it is the parent's complement.
+
+To continue along the basic path, go to the [“Replacement and Stopping” chapter](08-reemplazo.qmd).
+
+## Other Mutations [[Advanced]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-mutacion-otras-mutaciones}
+
+This section extends the basic path. It requires the mutations from sections -@sec-mutacion-inversion-bits to -@sec-mutacion-intercambio-insercion-inversion.
+
+**Single-bit mutation.** A single position is chosen at random, and its bit is flipped. The mutant always differs from the parent in exactly one bit and is never a copy, as example [](#ejemplo-mutacion-cuanto-mutar) shows. It is the smallest possible change to a bit string, the same change that defines neighbors in a binary local search [@talbi2009, p. 209].
+
+**Random allele.** Some texts describe binary mutation as "replacing the bit with one chosen at random" rather than "flipping it". The original definition by @holland1992 [pp. 109–110] is of this kind. It is not the same thing: the drawn bit matches the old one half the time, so each bit changes only with probability *pm*/2. As @whitley1994 points out, the difference is only one of scale, provided one knows which of the two is being used. This is the “Random allele” variant of bit-flip mutation, and it corresponds to random resetting with two values (in exercise [](#ejercicio-mutacion-enteros), with ten values, the gene changed with probability $\mathit{pm} \times 9/10$).
+
+**Circular creep.** The “Wrap around” variant of creep mutation treats the range as a circle: 0 comes after 9. With the data from example [](#ejemplo-mutacion-enteros), gene 5 goes from 9 to 0, and the mutant is 3 7 0 5 **0** 0 6 2: a jump of 9 units with a maximum step of 1. It only makes sense if the variable is cyclic, such as the hour of the day or the day of the week.
+
+**Uniform mutation.** With probability *pm*, the real-valued gene is replaced by a value drawn uniformly from its whole interval, regardless of its old value [@michalewicz1996; @herrera1998, p. 293]. It is the real-valued counterpart of random resetting [@eiben2015, p. 57]: it can reach any value, but it does not make small changes. Watch out for names: @talbi2009 [p. 211] uses "uniform" for adding a uniform number between −*b* and *b* to the gene, which is a local perturbation, and @eiben2015 [p. 57] use "nonuniform" for Gaussian mutation, which is not the mutation described next.
+
+**Non-uniform mutation.** @michalewicz1996 proposed narrowing the jumps as the search progresses. If the gene mutates, a number τ decides whether it moves up (τ < 0.5) or down, and the gene covers a fraction of the gap *y* that remains to the bound in that direction:
+
+$$
+\Delta(t, y) = y \left(1 - u^{(1 - t/T)^{b}}\right),
+$$
+
+where *u* is a random number, *t* the current generation, *T* the maximum number of generations, and *b* a parameter that determines how quickly the jump narrows. At first, the search is uniform over the whole gap, and at the end it is very local [@herrera1998, p. 293]. Because Δ never exceeds the gap, the mutant never leaves the interval.
+
+::: {.callout-tip .ejemplo #ejemplo-mutacion-otras-mutaciones title="Reproducible Example · Narrowing Jumps"}
+**Data.** The parent 2.0 8.5 4.0 1.5 6.0 from example [](#ejemplo-mutacion-gaussiana), with the same draw: positions 2 and 3 mutate. Their numbers are τ = 0.5801 and *u* = 0.9413 at position 2, and τ = 0.0136 and *u* = 0.696 at position 3. With *b* = 5, we compare the beginning of the search (*t*/*T* = 0) with the midpoint (*t*/*T* = 0.5).
+
+**Predict.** Which way does each gene move? What is the mutant at each point of the search?
+
+[Open: non-uniform with t/T = 0](https://josemagalan.github.io/mutation-ga/#op=non-uniform&lang=en&r=12&pm=0.25&g=0&b=5&p=2-8.5-4-1.5-6){.abrir target="_blank"}
+[Open: non-uniform with t/T = 0.5](https://josemagalan.github.io/mutation-ga/#op=non-uniform&lang=en&r=12&pm=0.25&g=0.5&b=5&p=2-8.5-4-1.5-6){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+Gene 2 moves down (τ ≥ 0.5): its gap to 0 is *y* = 8.5. Gene 3 moves up (τ < 0.5): its gap to 10 is *y* = 6.
+
+- With *t*/*T* = 0, the exponent is $1^5 = 1$: $\Delta = 8.5 \times (1 - 0.9413) = 0.50$ and $\Delta = 6 \times (1 - 0.696) = 1.82$. The mutant is **2.0 8.0 5.82 1.5 6.0**.
+- With *t*/*T* = 0.5, the exponent is $0.5^5 = 0.03125$, and $u^{0.03125}$ is very close to 1: $\Delta = 0.016$ and $\Delta = 0.068$. The mutant is **2.0 8.48 4.07 1.5 6.0**.
+
+With the same random numbers, the jumps halfway through the search are about thirty times smaller.
+</details>
+:::
+
+**Polynomial mutation.** The polynomial mutation of @deb1996 usually accompanies the SBX crossover from section -@sec-cruce-otros-cruces. The gene is perturbed with $v' = v + \delta\,(b - a)$, where *a* and *b* are the bounds of the interval and δ, between −1 and 1, comes from a polynomial distribution centered at 0. The **distribution index** η controls its shape: the larger η is, the more δ concentrates near 0, and the more the mutant resembles the parent. η ≈ 20 is commonly used [@talbi2009, p. 212].
+
+**How *z* is obtained.** In Gaussian mutation, mutation-ga computes the normal number *z* from two uniform numbers, $u_1$ and $u_2$, using the Box–Muller transform: $z = \sqrt{-2 \ln(1 - u_1)}\, \cos(2\pi u_2)$.
+
+**Scramble mutation.** A stretch is chosen, and its genes are reordered at random so that all orderings are equally likely. Within the stretch, positions, order, and neighbors are all lost at once, but nothing changes outside it. @cicirello2023 considers it generally too disruptive, except when it matters which gene comes before another: that order can change only between two genes in the stretch, and on average it changes half the time. Sometimes, especially with short stretches, the stretch stays as it was. @davis1985 [p. 163] already used mutations that shuffle a segment of a list in a packing problem.
+
+::: {.callout-note .en-app title="In the Application · mutation-ga"}
+- Open [Single-bit mutation](https://josemagalan.github.io/mutation-ga/#op=one-bit&lang=en){target="_blank"} and drag the ◆ marker to choose the position.
+- In [Bit-flip mutation](https://josemagalan.github.io/mutation-ga/#op=bit-flip&lang=en&v=random){target="_blank"}, with the “Random allele” **Variant**, find a position that mutates without changing.
+- In [Creep mutation](https://josemagalan.github.io/mutation-ga/#op=creep&lang=en&v=wrap&r=4&pm=0.3&smax=1&p=3-7-1-4-9-0-6-2){target="_blank"}, with the data from example [](#ejemplo-mutacion-enteros), switch the **Variant** between “Clamp at the bounds” and “Wrap around”.
+- Compare the “Distribution of the mutated value” panel in [Uniform mutation](https://josemagalan.github.io/mutation-ga/#op=uniform-real&lang=en){target="_blank"}, [Non-uniform mutation](https://josemagalan.github.io/mutation-ga/#op=non-uniform&lang=en){target="_blank"} (move **Search progress t/T**), and [Polynomial mutation](https://josemagalan.github.io/mutation-ga/#op=polynomial&lang=en){target="_blank"} (move the **Distribution index η**).
+- In [Scramble mutation](https://josemagalan.github.io/mutation-ga/#op=scramble&lang=en){target="_blank"}, leave a two-gene stretch and click **Draw again** several times. How often does it stay the same?
+:::
+
+## What Each Operator Changes and Preserves [[Advanced]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-mutacion-que-conserva}
+
+This section requires the permutation mutations from sections -@sec-mutacion-intercambio-insercion-inversion and -@sec-mutacion-otras-mutaciones.
+
+The small-change condition from section -@sec-mutacion-para-que-mutar can be measured. With bits, by the Hamming distance. With integers and real numbers, by the percentage of genes that change and the size of the jumps. With permutations, a "small change" depends on what matters in the problem, as was the case for inheritance in crossover (section -@sec-cruce-que-conserva):
+
+- **Position:** the gene stays in the same position. Swap moves only two genes.
+- **Relative order:** the genes are traversed in the same order. Insertion changes only the placement of the moved gene relative to the genes it jumps over.
+- **Adjacencies:** genes that are neighbors in the mutant were already neighbors in the parent. Inversion preserves all adjacencies except the two at the ends of the stretch, but it traverses the inner ones in reverse. If going from one city to another does not cost the same as coming back, inversion changes much more: on average, it reverses about a third of the edges [@cicirello2023].
+- **Precedences:** if one gene comes before another in the parent, it still comes before it in the mutant, counting from the start of the chromosome (section -@sec-cruce-que-conserva). If a gene jumps *d* positions, insertion changes *d* precedences, and a swap at that distance changes 2*d* − 1; inverting a stretch changes all precedences among its genes.
+
+@eiben2015 [p. 68] distinguish two classes of permutation problems: in some, order matters, as in production scheduling, where it may be better to make one product before others; in others, adjacencies matter, as in the traveling salesman problem [@talbi2009, p. 92].
+
+::: {.callout-tip .ejemplo #ejemplo-mutacion-que-conserva title="Reproducible Example · Comparing Permutation Mutations"}
+**Data.** The permutation “Compare operators” screen, with “Average with: random parents”: 1000 parents of length 9, with 10 mutations of each operator per parent, at random positions and stretches. Adjacencies and relative order are measured by reading the chromosome as a circular route.
+
+**Predict.** Which operator preserves the most positions? Which preserves the most relative order? And the most adjacencies?
+
+[Open: compare permutation mutations](https://josemagalan.github.io/mutation-ga/#cmp=permutation&lang=en&avg=rand&p=1-2-3-4-5-6-7-8-9){.abrir target="_blank"}
+
+The average over random parents takes a few seconds to compute.
+
+<details>
+<summary>**Show the Result**</summary>
+
+| Operator | Position | Adjacencies | Relative order | Copy of the parent | Valid mutants |
+|---|:---:|:---:|:---:|:---:|:---:|
+| Counterexample: random resetting | 78% | 66% | 47% | 10% | 11% |
+| Swap | 78% | 67% | 75% | 0% | 100% |
+| Insertion | 52% | 71% | 86% | 0% | 100% |
+| Inversion | 63% | 79% | 64% | 0% | 100% |
+| Scramble | 69% | 70% | 82% | 21% | 100% |
+
+Among the valid mutations, swap preserves the most positions (7 of 9 by construction), insertion the most relative order, and inversion the most adjacencies. Scramble gives copies of the parent in 21% of cases, when the drawn stretch stays the same. Random resetting gives a valid permutation in only 11% of cases.
+</details>
+:::
+
+The tool does not measure precedences: its “Relative order” column reads the chromosome as a circuit. Using its code under the same conditions, insertion and scramble preserve about 91% of precedences, and inversion 81%. @cicirello2023 reaches the same conclusion through experiments on artificial problems: inversion is useful when undirected edges matter, but not when the edges are directed; insertion, when precedences matter; and swap, as a general-purpose choice, because it changes little whichever feature matters.
+
+:::: {.callout-note .ejercicio #ejercicio-mutacion-que-conserva title="Exercise · Counting Adjacencies and Precedences"}
+1. Read the parent and the mutants from example [](#ejemplo-mutacion-intercambio-insercion-inversion) as circular routes: the last gene is a neighbor of the first, and the parent has the 9 adjacencies 1–2, 2–3, …, 8–9, and 9–1. How many of the parent's adjacencies does each mutant preserve?
+2. Now read the same chromosomes from left to right. The parent has 36 precedences: 1 before 2, 1 before 3, and so on. How many does each mutant change?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+1. Adjacencies:
+   - Swap (1 2 7 4 5 6 3 8 9): preserves 5. The new ones are 2–7, 7–4, 6–3, and 3–8: each moved gene breaks both of its adjacencies.
+   - Insertion (1 2 4 5 6 7 3 8 9): preserves 6. The new ones are 2–4, 7–3, and 3–8.
+   - Inversion (1 2 7 6 5 4 3 8 9): preserves 7. Only 2–7 and 3–8, at the ends of the stretch, are new.
+2. Precedences:
+   - Swap: changes 7, the one between 3 and 7 and those between each of them and 4, 5, and 6 ($2 \times 4 - 1$).
+   - Insertion: changes 4. The 3 moves behind the 4, 5, 6, and 7.
+   - Inversion: changes 10, those among the five genes of the stretch 3 4 5 6 7.
+</details>
+::::
+
+::: {.callout-note .en-app title="In the Application · mutation-ga, “Compare operators”"}
+[Explore in mutation-ga](https://josemagalan.github.io/mutation-ga/#cmp=permutation&lang=en){.explorar target="_blank"}
+
+- Switch **Average with** between “this parent” and “random parents”. Which columns depend most on the particular parent?
+- Make the same comparison with [the integer mutations](https://josemagalan.github.io/mutation-ga/#cmp=integer&lang=en){target="_blank"} and [the real-valued ones](https://josemagalan.github.io/mutation-ga/#cmp=real&lang=en){target="_blank"}, and look at the “Average jump” and “Small jumps” columns. Which real-valued mutation gives the largest jumps?
+:::
+
+## Further Reading [[Further reading]{.largo}[+]{.corto}]{.nivel .saber-mas} {#sec-mutacion-ampliaciones}
+
+**The three properties, by name.** @talbi2009 [p. 209] calls the three conditions from section -@sec-mutacion-para-que-mutar **ergodicity** (being able to reach any solution), **validity**, and **locality**. Locality is measured on the solution, not on the chromosome: a mutation is highly local if a small change in the genotype produces a small change in the phenotype. If it is not, the search approaches random search. Talbi gives an example with clustering problems: if each gene gives the group of an element, changing a single gene of AAACCC gives AAABCC, which has a one-element group. It is a minimal change in the chromosome, but it can turn a good solution into a very bad one. That is why, as in section -@sec-mutacion-enteros, the right mutation depends on what the genes mean.
+
+**How much to mutate, according to the classics.** @goldberg1989 [p. 14] speaks of one mutation per thousand bits copied, @whitley1994 of per-bit probabilities below 1%, and @talbi2009 [p. 208] of per-gene values between 0.001 and 0.01, or $1/k$ with *k* variables. The first systematic parameter studies reached similar values: 0.001 per bit in the experiments of @dejong1975 [according to @schaffer1989, p. 52], 0.01 in those of @grefenstette1986 [p. 126], and between 0.005 and 0.01 in those of @schaffer1989 [pp. 51, 54], who also found performance to be more sensitive to the mutation rate than to the crossover rate. But these values were obtained on specific sets of problems, and nothing guarantees that they are best for another [@mitchell1998, section 5.6]. It also depends on what you are looking for: less mutation if you want the whole population to be good, and more if finding one very good individual is enough [@eiben2015, p. 52].
+
+**Mutation and local search.** Mutation is related to the neighborhoods of metaheuristics that work with a single solution, such as simulated annealing: a representation's neighborhood operators can serve as mutations [@talbi2009, p. 209]. Swap, insertion, and inversion are classic neighborhoods for permutations [@talbi2009, pp. 91–93]. Inverting a stretch is the **2-opt** move of the traveling salesman problem [@croes1958; @eiben2015, p. 70]: it removes two edges from the route and reconnects the two pieces the other way around. It is the smallest change that can be made when adjacencies matter [@eiben2015, pp. 69–70], although some inversions, like the one in the next example, remove no edges at all [@cicirello2023]. In the traveling salesman problem it produces a small change, but in a sequencing problem, where order matters, the same move produces a large change [@talbi2009, p. 92].
+
+::: {.callout-tip .ejemplo #ejemplo-mutacion-ampliaciones title="Reproducible Example · Inverting Almost Everything"}
+**Data.** The parent 1 2 3 4 5 6 7 8 9, seen as a traveling salesman route. The stretch at positions 2–9 is inverted.
+
+**Predict.** How many genes stay in their position? How many new legs does the mutant's route have? Does its length change?
+
+[Open: inversion, shown as routes](https://josemagalan.github.io/mutation-ga/#op=inversion&lang=en&p=1-2-3-4-5-6-7-8-9&c=1-9&m=1){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+The mutant is **1 9 8 7 6 5 4 3 2**. Only the 1 stays in its position, but the route is the same one traveled in reverse: it has no new legs, and its length does not change. Measured by positions, the change is enormous; for the traveling salesman, there is no change.
+</details>
+:::
+
+@cicirello2023 reviews fourteen permutation mutations, such as moving or swapping blocks of genes or the 3-opt move, and indicates which feature each one is suited to.
+
+**A secondary operator?** Holland's view of mutation as a background operator has been qualified. @spears1993 [sections 2 and 4] showed that, at the right rate, mutation can disrupt schemata as much as crossover does, or more, although crossover is better at building new ones. In addition, crossover preserves the values the parents share and mutation does not, so crossover explores less as the population loses diversity (section -@sec-mutacion-para-que-mutar). Mühlenbein, according to @mitchell1998 [section 5.5], argued that the power of mutation had been underestimated. @whitley1994 notes that mutation also acts as a hill-climbing mechanism, and that a genetic search with mutation and no crossover is often quite robust. What matters is the balance between selection, crossover, and mutation, which depends on the fitness function and the representation and changes over the course of a run [@mitchell1998, section 5.5].
+
+**A step size that adapts.** This is why algorithms have been proposed that adjust their own mutation and crossover probabilities during the search [@mitchell1998, section 5.6]. In Gaussian mutation, σ can stay fixed throughout the search or be adjusted according to what happens [@talbi2009, p. 212]. @eiben1999 [pp. 125–129] distinguish three ways of controlling a parameter during a run, which they illustrate with σ:
+
+- **Deterministic:** with a fixed rule, without looking at how the search is going; for example, σ decreases from 1 to 0.1 over the generations. The non-uniform mutation from section -@sec-mutacion-otras-mutaciones narrows its jumps in this way.
+- **Adaptive:** with a rule that uses what happens during the search. With Rechenberg's 1/5 rule, σ increases if more than one in five mutations produces a mutant better than its parent, and decreases if fewer do.
+- **Self-adaptive:** each individual carries its own σ values alongside its genes [@herrera1998, p. 286], and these values mutate too. In this way, steps that work well are passed on together with the solutions that produce them [@talbi2009, pp. 212–213]. Bäck applied the same idea to the mutation probability of bit strings [@eiben1999, p. 133].
+
+Theory and experiments agree that σ should decrease over the search: at first it pays to explore with large jumps and, near the optimum, to fine-tune [@eiben2015, p. 64].
+
+## Chapter References {.unnumbered #referencias}
+
+<!-- Bibliographic entries and their verification status are inherited from the Spanish v1.0 source. No new source verification is claimed by this translation. -->
+
+::: {.referencias-capitulo #refs}
+:::

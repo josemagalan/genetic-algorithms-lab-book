@@ -1,0 +1,23 @@
+# About This English Translation {.unnumbered}
+
+::: {.version-beta}
+**English translation in progress · Chapters 1–8 · October 31, 2026.** This is an AI-generated translation of the Spanish edition **1.0**, published on October 31, 2026: [DOI 10.5281/zenodo.23835733](https://doi.org/10.5281/zenodo.23835733). The Spanish edition is the original reference text prepared and reviewed by the authors.
+:::
+
+**Start with [“Evolution and Optimization”](01-evolucion.qmd), or open the [contents](indice.qmd).** Chapters 1–8 are translated in full, including their examples, exercises, solutions, figures, and further reading. The remaining chapter entries take you to the Spanish original through clearly marked navigation pages.
+
+The book is intended for undergraduate students who are new to genetic algorithms. You can follow the basic path using paper, a calculator, and the interactive tools of the [Genetic Algorithms Lab](https://josemagalan.github.io/genetic-algorithms-lab/#lang=en).
+
+## Levels {.unnumbered}
+
+- **Basic:** the main path, shown in blue. Follow the explanation, predict each example's result, and check it in the application.
+- **Advanced:** optional sections that extend the basic path and may require additional knowledge.
+- **Further reading:** optional discussions and references for exploring a topic beyond the basic path.
+
+Examples open the tool with fixed data. “In the Application” boxes invite you to explore. Exercises can be worked out on paper; their solutions remain folded until you choose to open them.
+
+## Translation and Review {.unnumbered}
+
+The translation was prepared on October 31, 2026, by **Codex (GPT-6)** (chapters 1–5) and **Claude (Cowork; configured model claude-opus-5-5)** (chapters 6–8). Each translated chapter is compared with the Spanish source for terminology, numbers, formulas, citations, links, and activity settings, then given a separate pass for natural English. The author gave the chapter 5 pilot a favorable general assessment. **A complete human review of the English translation is pending.** Checks and editorial review by an AI assistant do not constitute an independent human review.
+
+See the [translation notice, credits, license, and contact information](avisos.qmd), the [contents](indice.qmd), or the [activity index](actividades.qmd).

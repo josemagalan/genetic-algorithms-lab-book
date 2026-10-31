@@ -1,0 +1,379 @@
+---
+aliases:
+  - 06-seleccion.html
+---
+
+# Selecting Parents {#sec-seleccion}
+
+<!-- AI translation by Codex (GPT-6), 2026-10-31. Source: Spanish v1.0, commit 75b82d8, DOI 10.5281/zenodo.23835733. Translation and consistency checks by the assistant; author review pending. The source edition's experimental and bibliographic verification records remain applicable; translating them does not constitute a new experiment or source review. -->
+
+**Tools:** [selection-ga](https://josemagalan.github.io/selection-ga/#lang=en) and [SelectionMechanisms](https://josemagalan.shinyapps.io/SelectionMechanisms/), available through the [portal](https://josemagalan.github.io/genetic-algorithms-lab/#lang=en).
+
+::: {.callout-warning .objetivos title="Chapter Objectives"}
+After completing the basic path through this chapter, you will be able to:
+
+- explain why selection should favor the best individuals without excluding the others;
+- work out by hand which parents a binary tournament selects, given its contestants, and which parents roulette-wheel selection selects, given its random numbers;
+- predict how adding a constant to fitness changes the pressure of roulette-wheel selection, and why tournament selection does not change;
+- recognize truncation as a mechanism that reduces diversity very quickly;
+- explain why selection alone is not enough to improve a population.
+:::
+
+## Who Reproduces? [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-seleccion-quien-se-reproduce}
+
+If we already know which solutions are better, why not let only those solutions reproduce?
+
+After the population has been evaluated, **selection** decides which individuals will become parents. It selects as many parents as there are individuals in the population and collects them in the *parent pool*. The same individual may appear several times, while another may not appear at all. The parents are not new solutions: they are copies of individuals that already exist.
+
+Selection must balance two forces:
+
+- **Exploitation.** Better individuals should have a greater chance of reproducing because their genetic material is, in principle, more promising. If only they reproduce, the population soon fills with copies of a few individuals and loses diversity.
+- **Exploration.** Less fit individuals should also have some chance because they may contain useful parts whose value is not yet reflected in their fitness. But if we choose parents at random without considering fitness, the search stops making progress.
+
+We call the extent to which reproduction favors the best individuals **selection pressure**. Too much pressure leads to excessive exploitation; too little leads to aimless exploration. Each mechanism in this chapter regulates this pressure in a different way.
+
+:::: {.callout-note .ejercicio #ejercicio-seleccion-quien-se-reproduce title="Exercise · Predict"}
+Sorting the population and letting only the best half reproduce may seem the most natural choice. What will happen to the population's diversity after a few generations? Write down your prediction: you will check it in example [](#ejemplo-seleccion-truncamiento).
+::::
+
+## Tournament Selection [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-seleccion-torneo}
+
+How can we favor better individuals by comparing only a few individuals at a time?
+
+In a **binary tournament** (*k* = 2), two contestants are drawn from the whole population, and the one with higher fitness enters the parent pool. One tournament is held for each parent needed. It helps to distinguish two levels of replacement:
+
+- **Between tournaments**, sampling is always with replacement: after each tournament, all individuals are eligible again. A good individual can therefore win several tournaments and receive several copies.
+- **Within a tournament**, selection-ga offers two variants. In “With replacement,” the default option used here, contestants are drawn one by one from the whole population, so an individual can compete against itself. In “Without replacement,” the contestants in a tournament are distinct.
+
+With four individuals A, B, C, and D with fitness values 1, 2, 3, and 4, there are 4 × 4 = 16 possible draws of the two contestants, all equally likely. D wins every draw in which it appears (7), C wins those that do not include D (5), B wins those that include neither C nor D (3), and A wins only the tournament against itself (1):
+
+| | A | B | C | D |
+|---|:---:|:---:|:---:|:---:|
+| P(winning a tournament), with replacement | 1/16 | 3/16 | 5/16 | 7/16 |
+| Expected copies in 4 tournaments | 0.25 | 0.75 | 1.25 | 1.75 |
+| P(winning a tournament), without replacement | 0 | 1/6 | 1/3 | 1/2 |
+
+In the variant without replacement, the worst individual never wins. With replacement, it can win only if it competes against itself.
+
+::: {.callout-tip .ejemplo #ejemplo-seleccion-torneo title="Reproducible Example · Four Binary Tournaments"}
+**Data.** Fitness values 1, 2, 3, and 4 (A, B, C, and D). The tool draws these contestants:
+
+| Tournament | 1 | 2 | 3 | 4 |
+|---|:---:|:---:|:---:|:---:|
+| Contestants | B, B | A, D | A, C | B, D |
+
+**Predict.** Who wins each tournament? Does anything change if the fitness values are 101, 102, 103, and 104?
+
+[Open: tournament with fitness values 1–4](https://josemagalan.github.io/selection-ga/#op=tournament&lang=en&r=68&f=1-2-3-4){.abrir target="_blank"}
+[Open: tournament with fitness values 101–104](https://josemagalan.github.io/selection-ga/#op=tournament&lang=en&r=68&f=101-102-103-104){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+The winners are **B, D, C, and D** in both cases. The first tournament pits B against itself, so B wins. A enters two tournaments and loses both. D wins both tournaments it enters. With 101–104, the winners do not change because the tournament only compares which individual is better.
+</details>
+
+<details class="incrustada">
+<summary>Show the tool here (tournament with fitness values 1–4)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/selection-ga/#op=tournament&lang=en&r=68&f=1-2-3-4" loading="lazy" title="selection-ga: tournament selection"></iframe>
+</details>
+:::
+
+Tournament selection does not depend on the fitness scale: it only needs to know which of two individuals is better. Tournament size *k* controls the pressure. With *k* = 1, selection is random; the larger *k* is, the more likely each tournament is to include one of the best individuals.
+
+::: {.callout-note .en-app title="In the Application · selection-ga, “Tournament selection”"}
+[Explore in selection-ga](https://josemagalan.github.io/selection-ga/#op=tournament&lang=en&f=1-2-3-4){.explorar target="_blank"}
+
+- Click **Draw again** several times and notice how many copies A receives.
+- Click **Copies in 1000 repetitions** and compare the results with the expected copies in the table.
+- Increase *k* from 2 to 4, the maximum with four individuals, and observe how copies become concentrated in D.
+- Switch to **Without replacement** and check that A never wins.
+
+<!-- comprobar: https://josemagalan.github.io/selection-ga/#op=tournament&lang=en&k=4&f=1-2-3-4 -->
+:::
+
+## Roulette-Wheel Selection [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-seleccion-ruleta}
+
+What if each individual is given a probability proportional to its fitness?
+
+In **roulette-wheel selection**, each individual *i* receives probability
+
+$$
+p_i = \frac{f_i}{\sum_j f_j}.
+$$
+
+Think of distributing tickets for a draw: the higher the fitness, the more tickets an individual receives. To spin the wheel on a computer, we calculate the cumulative probabilities $q_i = p_1 + \dots + p_i$, draw a random number $r \in [0, 1)$, and select the first individual for which $r < q_i$. We spin the wheel as many times as there are parents needed. Fitness values must be nonnegative, and their sum must be greater than zero.
+
+| | A | B | C | D |
+|---|:---:|:---:|:---:|:---:|
+| Fitness $f$ | 1 | 2 | 3 | 4 |
+| Probability $p$ | 0.100 | 0.200 | 0.300 | 0.400 |
+| Cumulative probability $q$ | 0.100 | 0.300 | 0.600 | 1.000 |
+| Expected copies in 4 spins | 0.4 | 0.8 | 1.2 | 1.6 |
+
+Expected copies hold only on average. Each spin is independent, so in a particular run a good individual may receive no copies while a mediocre one receives several.
+
+::: {.callout-tip .ejemplo #ejemplo-seleccion-ruleta title="Reproducible Example · Four Spins of the Wheel"}
+**Data.** Fitness values 1, 2, 3, and 4. Random numbers: 0.11, 0.71, 0.80, and 0.45.
+
+**Predict.** Which interval does each number fall in? Which parents are selected?
+
+[Open: roulette with fitness values 1–4](https://josemagalan.github.io/selection-ga/#op=roulette&lang=en&r=135&f=1-2-3-4){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+0.11 falls in B's interval (0.10–0.30); 0.71 and 0.80 fall in D's interval (0.60–1); and 0.45 falls in C's interval (0.30–0.60). The parents are **B, D, D, and C**: the best individual is selected twice and the worst not at all. The observed copies (0, 1, 1, and 2) are similar to the expected copies, but they do not match exactly.
+</details>
+
+<details class="incrustada">
+<summary>Show the tool here (roulette with fitness values 1–4)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/selection-ga/#op=roulette&lang=en&r=135&f=1-2-3-4" loading="lazy" title="selection-ga: roulette-wheel selection"></iframe>
+</details>
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-seleccion-ruleta title="Exercise · Select on Paper"}
+Four individuals have fitness values A = 2, B = 5, C = 1, and D = 8.
+
+a) Binary tournament with replacement. The drawn contestants are (A, C), (D, B), (C, B), and (A, A). Who wins each tournament?
+b) Roulette-wheel selection with random numbers 0.05, 0.47, 0.60, and 0.95. Which parents are selected?
+c) Can C, the worst individual, be selected with each mechanism? If you want the worst to have a small chance that does not depend on the fitness scale, which mechanism would you choose?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+a) The individual with higher fitness wins: **A, D, B, and A**. In the last tournament, A competes against itself. C loses both tournaments it enters.
+
+b) The fitness values add up to 16, so the probabilities are 0.125, 0.3125, 0.0625, and 0.5, and the cumulative probabilities are 0.125, 0.4375, 0.5, and 1. The number 0.05 falls in A's interval; 0.47 falls in C's interval (0.4375–0.5); and 0.60 and 0.95 fall in D's interval. The parents are **A, C, D, and D**.
+
+c) Yes, with both. In a tournament with replacement, C wins only if it competes against itself: probability $1/16$ in each tournament; without replacement, it never wins. With roulette-wheel selection, its probability is $1/16 = 0.0625$ in each spin, and here it was selected once. With these fitness values, the two probabilities happen to coincide: tournament probability depends only on the ordering, whereas roulette probability changes if a constant is added to fitness (section -@sec-seleccion-ruleta-deja-de-distinguir). Tournament selection therefore meets the requirement.
+</details>
+::::
+
+::: {.callout-note .en-app title="In the Application · selection-ga, “Roulette wheel”"}
+[Explore in selection-ga](https://josemagalan.github.io/selection-ga/#op=roulette&lang=en&f=1-2-3-4){.explorar target="_blank"}
+
+- Advance step by step and follow each pointer on the wheel and its unrolled version.
+- Click **Copies in 1000 repetitions** to see how often each individual receives 0, 1, 2… copies. This is the sampling noise of roulette-wheel selection.
+- Click **Goldberg’s example (x²)** to see the classic example of four 5-bit strings with fitness $f(x) = x^2$ [@goldberg1989].
+- In **Practice** mode, the tool gives you the random numbers and checks your parents one slot at a time.
+:::
+
+## When Roulette Stops Distinguishing Individuals [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-seleccion-ruleta-deja-de-distinguir}
+
+With fitness values 1, 2, 3, and 4, the best individual, D, has probability $4/10 = 0.40$ in each spin. What happens if we add the same amount to every fitness value? The ordering does not change: D is still the best and A the worst. But roulette-wheel selection uses the ratios $f_i / \sum f$, rather than the ordering.
+
+::: {.callout-tip .ejemplo #ejemplo-seleccion-ruleta-deja-de-distinguir title="Reproducible Example · Adding a Constant to Fitness"}
+**Data.** The same four individuals and the same random numbers as in example [](#ejemplo-seleccion-ruleta) (0.11, 0.71, 0.80, and 0.45), but with the constant $C = 100$ (not to be confused with individual C) added to every fitness value: 101, 102, 103, and 104.
+
+**Predict.** What is D's probability now? Which parents are selected with the same numbers?
+
+[Open: counterexample with C = 100](https://josemagalan.github.io/selection-ga/#op=offset&lang=en&r=135&shift=100&f=1-2-3-4){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+| | A | B | C | D |
+|---|:---:|:---:|:---:|:---:|
+| Shifted fitness $f + C$ | 101 | 102 | 103 | 104 |
+| Probability $p$ | 0.246 | 0.249 | 0.251 | 0.254 |
+| Cumulative probability $q$ | 0.246 | 0.495 | 0.746 | 1.000 |
+| **Copies** | 1 | 1 | 1 | 1 |
+
+The same numbers now select **A, C, D, and B**: every individual is selected once. D's probability drops from 0.40 to $104/410 \approx 0.254$, almost the same as random selection (0.25).
+</details>
+
+<details class="incrustada">
+<summary>Show the tool here (counterexample with C = 100)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/selection-ga/#op=offset&lang=en&r=135&shift=100&f=1-2-3-4" loading="lazy" title="selection-ga: shifted-fitness counterexample"></iframe>
+</details>
+:::
+
+Roulette-wheel selection allocates probabilities according to the ratios $f_i / \sum f$. Adding a constant $C$ to every fitness value changes these ratios even though it leaves the ordering unchanged. Thus, **the selection pressure of roulette-wheel selection depends on the fitness scale**.
+
+- With $C > 0$, everyone receives the same extra “tickets,” probabilities become more similar, and pressure decreases.
+- With $C < 0$, provided all fitness values remain positive, the differences matter more and pressure increases. Starting with 101–104, $C = -100$ restores exactly the probabilities for 1–4.
+
+This happens in practice more often than it might seem. Toward the end of a search, when the population is already good and fitness values are similar, roulette-wheel selection loses its push just when fine-tuning is needed. Tournament selection, from section -@sec-seleccion-torneo, does not have this problem.
+
+::: {.callout-note .en-app title="In the Application · selection-ga, “Counterexample: shifted fitness”"}
+[Explore in selection-ga](https://josemagalan.github.io/selection-ga/#op=offset&lang=en&f=1-2-3-4){.explorar target="_blank"}
+
+- Move the **Shift C** control between 0 and 2000 in steps of 100, and observe how the wheel sectors and probability row become more uniform.
+- Click **Draw again**: different random numbers change the parents, but not the probabilities.
+- Open **Enter the fitness values manually** and try profits between €1000 and €1040.
+:::
+
+**Notation.** We follow the tool's notation: the constant is $C$, and the control is called “Shift C.”
+
+:::: {.callout-note .ejercicio #ejercicio-seleccion-ruleta-deja-de-distinguir title="Exercise · Convert Cost into Fitness"}
+The traveling salesman problem minimizes route length, so using roulette-wheel selection requires converting cost into fitness. Four routes have lengths 10, 12, 15, and 20. Calculate the roulette probabilities for three conversions: $f = 20 - \text{cost}$, $f = 25 - \text{cost}$, and $f = 1/(1 + \text{cost})$. Which one gives the longest route no chance of selection? Does the ordering change? Does the pressure change? What would happen with a binary tournament?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+| Conversion | Fitness values | Probabilities |
+|---|---|---|
+| $20 - \text{cost}$ | 10; 8; 5; 0 | 0.435; 0.348; 0.217; 0 |
+| $25 - \text{cost}$ | 15; 13; 10; 5 | 0.349; 0.302; 0.233; 0.116 |
+| $1/(1 + \text{cost})$ | 0.091; 0.077; 0.063; 0.048 | 0.327; 0.277; 0.225; 0.171 |
+
+The ordering is the same with all three conversions, but the pressure changes. With $20 - \text{cost}$, the longest route can never be selected. A binary tournament would give the same probabilities with any of the three because it only compares which route is shorter.
+</details>
+::::
+
+## Truncation: A Counterexample [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-seleccion-truncamiento}
+
+What happens if we let only the best individuals reproduce?
+
+In **truncation selection**, the population is sorted by fitness, and only a proportion τ of the best individuals passes the cutoff; the rest have no chance. In selection-ga, each parent is chosen at random from those that pass the cutoff.
+
+Another rule in the same family is **selection by mean fitness**: individuals above the mean fitness are copied twice, and the others are eliminated. As stated, this rule does not preserve population size. Once modified to preserve it, the rule becomes truncation with τ = 0.5 (section -@sec-seleccion-ampliaciones).
+
+These rules may seem reasonable, but they are discouraged: they reduce diversity very quickly.
+
+::: {.callout-tip .ejemplo #ejemplo-seleccion-truncamiento title="Reproducible Example · Forty Generations of Selection Only"}
+**Data.** The “Compare mechanisms” screen in selection-ga simulates 40 generations of selection only: each generation is the previous generation's parent pool, with no crossover or mutation. Populations have 50 individuals with random fitness between 1 and 100, and 50 repetitions are run. We compare three mechanisms with their default values: truncation with τ = 0.5, tournament with *k* = 2, and roulette-wheel selection. **Takeover** is the generation in which all individuals are copies of the initial best; the table gives the typical generation (the median) and the percentage of repetitions in which takeover occurs.
+
+**Predict.** Which mechanism leaves fewer distinct individuals after five generations? With which mechanism is the initial best individual lost most often?
+
+[Open: compare mechanisms](https://josemagalan.github.io/selection-ga/#cmp=all&lang=en){.abrir target="_blank"}
+
+The simulation takes a few seconds. Its result appears at the bottom of the page, under “Several generations of selection only.”
+
+<details>
+<summary>**Show the Result**</summary>
+
+| Mechanism | Distinct at generation 5 | Distinct at generation 20 | Takeover | The best is lost |
+|---|:---:|:---:|---|:---:|
+| Truncation (τ = 0.5) | 2.2 | 1.1 | generation 6 (in 76 % of repetitions) | 24 % |
+| Tournament (*k* = 2) | 4.5 | 1.1 | generation 8 (in 92 %) | 8 % |
+| Roulette | 10.7 | 3.2 | not in most (only in 16 %) | 48 % |
+
+If you add truncation to the charts (which show roulette, linear ranking, and tournament by default), you will also see that already in the first generation it leaves about 21 distinct individuals out of 50, compared with about 28 for tournament and roulette-wheel selection.
+</details>
+:::
+
+Truncation eliminates half the population at once. After five generations, barely two distinct individuals remain. Of the mechanisms compared by @blickle1996—tournament, truncation, and ranking—it loses the most diversity for a given selection intensity, which is why we use it as a counterexample. Binary tournament selection also concentrates the population, but more slowly at first. Roulette-wheel selection is the slowest with these fitness values, which range from 1 to 100; in section -@sec-seleccion-ruleta-deja-de-distinguir, we saw that its pressure depends on the scale.
+
+## Selection and Diversity Across Generations [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-seleccion-seleccion-y-diversidad}
+
+If we repeat selection generation after generation, does the population keep improving indefinitely?
+
+Selection changes the frequencies of existing individuals but creates no new ones. Without crossover or mutation, the population eventually consists of copies of a few individuals, or just one. Mean fitness rises as the worst individuals disappear, then stops when there is nothing left to choose between.
+
+Two causes drive this loss of diversity. One is selection pressure: better individuals receive more copies on average. The other is the randomness of the draw: in a finite population, the number of copies each individual receives varies around its expected value. This randomness alone is enough to change the population. Even if everyone had the same fitness, some would receive more copies by chance and, after a number of generations, the population would consist of copies of a single individual [@asoh1994]. This change due to chance, rather than fitness differences, is called **genetic drift**. When fitness differences do exist, drift acts alongside selection, which is why the initial best individual can be lost through bad luck.
+
+In example [](#ejemplo-seleccion-truncamiento), the initial best was lost in almost half the repetitions with roulette-wheel selection (48 %), in one in four with truncation (24 %), and in 8 % with tournament selection. **Takeover time** is the number of generations until all individuals are copies of the initial best [@goldberg1991].
+
+::: {.callout-note .en-app title="In the Application · selection-ga, “Compare mechanisms”"}
+[Explore in selection-ga](https://josemagalan.github.io/selection-ga/#cmp=all&lang=en){.explorar target="_blank"}
+
+- In the **Mean fitness** chart, notice when each mechanism stops improving.
+- Click **Simulate again** to repeat with other populations. In the next four simulations, the best is lost with roulette-wheel selection in 52, 66, 58, and 56 % of repetitions, and with tournament selection in 14, 12, 14, and 14 %.
+- Choose which mechanisms appear in the charts (up to four). Roulette, linear ranking, and tournament appear by default: add **Truncation** or **SUS**.
+:::
+
+Mean fitness stops improving as soon as the population fills with copies: after a few generations with truncation and tournament selection, and more slowly with roulette-wheel selection. **Selection alone is not enough.** We need operators that create new solutions (crossover and mutation, chapters -@sec-cruce and -@sec-mutacion) and replacement that preserves the best solution (elitism, chapter [](#sec-reemplazo-elitismo){.capitulo}). Since the result depends on chance, comparing mechanisms or parameters requires repeated runs (chapter [](#sec-experimentos-replicas){.capitulo}).
+
+:::: {.callout-note .ejercicio #ejercicio-seleccion-seleccion-y-diversidad title="Exercise · Is One Run Enough?"}
+A classmate runs the roulette simulation once, and the best individual is not lost. They conclude that roulette-wheel selection never loses the best. What would you say? How would you check this with the tool?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+One run is not enough to make a claim about frequencies. In the 50 repetitions of each simulation, the best is lost with roulette-wheel selection in about half the cases, and the proportion varies between simulations (from 48 to 66 % in the first five). Its survival in a particular run is perfectly consistent with that frequency. To check this, look at the “The best is lost” column and click “Simulate again” several times.
+</details>
+::::
+
+## Summary {.unnumbered #resumen}
+
+- Selection favors the best individuals but should leave opportunities for the others.
+- Tournament selection depends only on ordering. Roulette-wheel selection depends on the fitness scale and loses pressure when fitness values become similar.
+- Truncation reduces diversity very quickly.
+- Selection creates no new solutions, and the best can be lost by chance.
+
+To continue along the basic path, go to the [“Crossover” chapter](06-cruce.qmd).
+
+## Other Selection Mechanisms [[Advanced]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-seleccion-otros-mecanismos}
+
+This section extends the basic path. It requires familiarity with cumulative probabilities and the idea of expected copies from sections -@sec-seleccion-torneo and -@sec-seleccion-ruleta.
+
+**Stochastic universal sampling (SUS).** The method proposed by @baker1987 uses the roulette-wheel idea with a single random starting point. Each individual occupies a stretch equal to its expected copies, $e_i = N \cdot f_i / \sum f$. On a wheel of length $N$, we place $N$ pointers exactly 1 apart, starting from a single random number. Each individual receives its expected copies rounded down or up. The expected copies are the same as with roulette-wheel selection, but sampling variability is much lower. It does not disappear: the first pointer falls at random, so an individual with 0.4 expected copies may receive 0 copies or 1. With roulette-wheel selection, it could receive any number from 0 to *N*.
+
+::: {.callout-tip .ejemplo #ejemplo-seleccion-otros-mecanismos title="Reproducible Example · SUS versus Roulette"}
+**Data.** Fitness values 1, 2, 3, and 4, as in example [](#ejemplo-seleccion-ruleta). Expected copies: 0.4, 0.8, 1.2, and 1.6.
+
+**Predict.** With SUS, how many copies can D receive? What about A?
+
+[Open: SUS with fitness values 1–4](https://josemagalan.github.io/selection-ga/#op=sus&lang=en&r=135&f=1-2-3-4){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+D can receive only 1 or 2 copies, and A can receive 0 or 1. In this draw the parents are **A, B, C, and D**: each receives one copy, its expected copies rounded. With roulette-wheel selection (example [](#ejemplo-seleccion-ruleta)), D received 2 copies and A none, but in another draw it could have received 0, 1, 2, 3, or 4.
+</details>
+:::
+
+**Rank-based selection.** Only ordering matters. In **linear ranking**, the best individual expects *s* copies and the worst expects 2 − *s*, with *s* between 1 and 2 [@baker1985; @eiben2015]. In **exponential ranking**, individuals are ordered from worst to best, and each has 1/*c* times the probability of the previous one, with 0 < *c* < 1, allowing higher pressures [@blickle1996]. Neither depends on the fitness scale.
+
+**Fitness scaling.** This transforms fitness before spinning the roulette wheel [@goldberg1989]. **Linear scaling** preserves the mean and makes the best individual expect $c_m$ copies, a chosen parameter. **Sigma truncation** subtracts the baseline $\bar f - c\,\sigma$. Take care: this *c* is neither the one used in exponential ranking nor the constant *C* from section -@sec-seleccion-ruleta-deja-de-distinguir.
+
+**Boltzmann selection.** This assigns each individual a weight $\exp(f_i / T)$ [@delamaza1993]. Temperature *T* regulates pressure. Only fitness differences matter, so adding a constant changes nothing.
+
+**Tournament variants.** These include size *k*, the “Without replacement” variant, and stochastic tournament selection, in which the best contestant wins only with probability *p*. With *k* = 2 and sampling with replacement, expected copies match those of linear ranking with $s = 2 - 1/N$ [@blickle1996].
+
+::: {.callout-note .en-app title="In the Application · selection-ga"}
+- Open [Linear ranking](https://josemagalan.github.io/selection-ga/#op=linear-ranking&lang=en&f=1-2-3-4){target="_blank"} and move *s* between 1 and 2. With *s* = 1, what probability does each individual have?
+- Open [Exponential ranking](https://josemagalan.github.io/selection-ga/#op=exponential-ranking&lang=en&f=1-2-3-4){target="_blank"}, [Roulette wheel with scaling](https://josemagalan.github.io/selection-ga/#op=scaled-roulette&lang=en&f=1-2-3-4){target="_blank"}, and [Boltzmann selection](https://josemagalan.github.io/selection-ga/#op=boltzmann&lang=en&f=1-2-3-4){target="_blank"}. Enter fitness values 101, 102, 103, and 104 and compare them with what happened with roulette-wheel selection.
+- In [Compare mechanisms](https://josemagalan.github.io/selection-ga/#cmp=all&lang=en){target="_blank"}, the “Pressure and diversity in 1000 repetitions” table measures copies of the best, selection intensity, loss of diversity, and sampling variability for each mechanism.
+:::
+
+## Further Reading [[Further reading]{.largo}[+]{.corto}]{.nivel .saber-mas} {#sec-seleccion-ampliaciones}
+
+**Measuring selection.** @blickle1996 compare mechanisms by their **selection intensity**—how much mean fitness rises in standard deviations—and by their **loss of diversity**. @baker1987 studies bias and sampling spread. @goldberg1991 analyze takeover time. selection-ga calculates these measures in “Compare mechanisms.”
+
+**Dynamics over many generations.** [SelectionMechanisms](https://josemagalan.shinyapps.io/SelectionMechanisms/) allows comparisons of mechanisms over many generations and simulations, including their effects on convergence, fitness, and diversity. It is the application that inspired the simulation in selection-ga. It is described in a paper accepted at CIO 2026; the final reference will be added when published.
+
+**Completing selection by mean fitness.** As stated in section -@sec-seleccion-truncamiento, the rule does not preserve population size because exactly half the population need not lie above the mean. Replacing the mean with the **median** is not enough either: with fitness values 1, 2, 3, 4, and 5, only two individuals exceed the median, producing four copies, not five; with 1, 1, 1, and 1, none exceeds it. To preserve size, use positions to set the cutoff: sort the population, keep the best half, and specify how to handle ties at the cutoff (for example, break them at random) and an odd *N* (for example, round up). The *N* parents are selected from those that pass. Defined this way, the rule is truncation with τ = 0.5. If *N* is even and there are no ties at the cutoff, each individual in the best half receives two copies **on average**. Copying each individual exactly twice, without sampling, is another way to complete the rule; it does not give the same results run by run.
+
+**A mechanism must be fully specified.** The rule of @axelrod1986 [p. 1099] comes from social simulation: he used it in his evolutionary model of norms. It resembles selection by mean fitness (section -@sec-seleccion-truncamiento), but uses two thresholds instead of one. We calculate the population mean $\bar f$ and standard deviation σ. Each individual has 2 offspring if $f \ge \bar f + \sigma$, none if $f \le \bar f - \sigma$, and 1 otherwise.
+
+The rule does not say what to do when the number of offspring *M* differs from population size *N*, and a mismatch is common. With fitness values 1, 2, 3, and 10 ($\bar f = 4$, σ ≈ 3.54), only D reaches $\bar f + \sigma \approx 7.54$, and nobody is below $\bar f - \sigma \approx 0.46$, producing 5 offspring for 4 slots. With 1, 8, 9, and 10 ($\bar f = 7$, σ ≈ 3.54), the opposite happens: A is at or below $\bar f - \sigma \approx 3.46$, nobody reaches $\bar f + \sigma$, and there are 3 offspring. The rule also does not say what to do when everyone has equal fitness: then σ = 0, and every individual meets both conditions at once.
+
+There are several ways to complete the rule:
+
+- **Adjust at random.** If there are too many offspring, remove the excess at random; if there are too few, duplicate randomly chosen offspring. This is what @galan2005 [para. 3.4] did when reimplementing the model, and what selection-ga does.
+- **Use percentiles.** Give 2 offspring to a proportion of the best individuals and none to the same proportion of the worst, so that there are always *N* offspring.
+
+::: {.callout-tip .ejemplo #ejemplo-seleccion-ampliaciones title="Reproducible Example · The Same Individual, Two Draws"}
+**Data.** Fitness values 1, 2, 3, and 10. Before adjustment, A, B, and C have 1 offspring each and D has 2: 5 offspring for 4 slots. The tool removes one at random.
+
+**Predict.** What is the probability that D ends up with just one copy, like the others, despite standing out so much?
+
+[Open: first draw](https://josemagalan.github.io/selection-ga/#op=axelrod&lang=en&r=1&f=1-2-3-10){.abrir target="_blank"}
+[Open: second draw](https://josemagalan.github.io/selection-ga/#op=axelrod&lang=en&r=6&f=1-2-3-10){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+In the first draw, one of D's offspring is removed, and the parents are **A, B, C, and D**: the best ends up with one copy, like everyone else. In the second draw, C's offspring is removed, and the parents are **A, B, D, and D**. Since 2 of the 5 offspring belong to D, the first event has probability 2/5 = 0.4. The reward given by the rule depends on a step that the rule does not specify.
+</details>
+:::
+
+Axelrod's rule does not lose diversity as quickly as truncation. In the simulation from example [](#ejemplo-seleccion-truncamiento), 6.4 distinct individuals remain at generation 5, compared with 2.2 under truncation, and the best is not lost in any repetition. But the details matter. @galan2005 [paras. 6.11–6.16] repeated the model in its version with *metanorms* (which also punish those who do not punish), using three other selection mechanisms, and the results changed substantially in both the short and long term. Choosing the selection mechanism, and describing it fully, is part of the model.
+
+::: {.callout-note .en-app title="In the Application · selection-ga, “Axelrod’s selection (f̄ ± σ)”"}
+[Explore in selection-ga](https://josemagalan.github.io/selection-ga/#op=axelrod&lang=en&f=1-8-9-10){.explorar target="_blank"}
+
+- With fitness values 1, 8, 9, and 10, there are too few offspring. Advance step by step and see whose offspring is duplicated. Click **Draw again** several times.
+- Enter four equal fitness values and observe how the tool handles σ = 0.
+- In [Compare mechanisms](https://josemagalan.github.io/selection-ga/#cmp=all&lang=en){target="_blank"}, compare its “Sampling variability” with that of roulette-wheel and tournament selection.
+:::
+
+## Chapter References {.unnumbered #referencias}
+
+<!-- Bibliographic entries and their verification status are inherited from the Spanish v1.0 source. No new source verification is claimed by this translation. -->
+
+::: {.referencias-capitulo #refs}
+:::

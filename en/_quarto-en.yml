@@ -1,0 +1,24 @@
+# Perfil aplicado en una copia aislada por bilingue/generar.py.
+book:
+  title: "Evolution Made Visible"
+  subtitle: "Genetic Algorithms in an Interactive Laboratory"
+  site-url: https://josemagalan.github.io/genetic-algorithms-lab-book/en/
+  language: en
+  date: "2026-10-31"
+  repo-actions: []
+  page-footer:
+    center: "Text: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) · Code: [MIT](https://github.com/josemagalan/genetic-algorithms-lab-book/blob/main/LICENSE) · [Translation notice and contact](avisos.html#contacto)"
+lang: en-US
+libro-version: "1.0-en-progress"
+libro-revision: "October 31, 2026"
+language:
+  search-submit-button-title: "Search the book"
+  search-label: "Search the book"
+  search-text-placeholder: "Search the book"
+  code-tools-source-code: "Book repository"
+csl: vendor/csl/apa-en.csl
+crossref:
+  fig-title: Figure
+format:
+  html:
+    toc-title: "On this page"

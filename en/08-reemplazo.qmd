@@ -1,0 +1,409 @@
+---
+aliases:
+  - 09-reemplazo.html
+---
+
+# Replacement and Stopping {#sec-reemplazo}
+
+<!-- AI translation and naturalness pass: Claude (Cowork, configured model claude-opus-5-5), 2026-10-31. Source: Spanish v1.0, 75b82d8. Interface labels quoted from selection-ga (i18n.js, content/*.js). "Replacement" here means substituting individuals in the population, distinct from sampling "with replacement" in chapter 5. Figure 8.1 uses the English SVG variant derived from en/figuras.json. The source edition's experimental and bibliographic verification records remain applicable; translating them does not constitute a new experiment or source review. -->
+
+**Tools:** [selection-ga](https://josemagalan.github.io/selection-ga/#lang=en), available through the [portal](https://josemagalan.github.io/genetic-algorithms-lab/#lang=en).
+
+::: {.callout-warning .objetivos title="Chapter Objectives"}
+After completing the basic path through this chapter, you will be able to:
+
+- explain what replacement decides and distinguish generational replacement from steady-state replacement;
+- form the next generation by hand with and without an elite, and predict whether the best solution is kept;
+- explain what elitism gains and what it risks;
+- list the usual stopping criteria and choose one depending on whether the optimum is known and on the resources available;
+- read a best-fitness curve and point out where each criterion would stop.
+:::
+
+## Who Moves On to the Next Generation? [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-reemplazo-quien-sobrevive}
+
+We now have the current population and offspring created by crossover and mutation from the parents chosen by selection. Whom do we keep?
+
+In each generation, a genetic algorithm selects parents (chapter -@sec-seleccion), crosses them over (chapter -@sec-cruce), and mutates the offspring (chapter -@sec-mutacion). What remains is to decide which individuals form the population of the next generation: the offspring, the parents, or a mix of both. This decision is **replacement**, also called **survivor selection**: parent selection decides who reproduces, and replacement decides who stays in the population [@talbi2009, p. 221]. Because the population size is usually constant, if offspring come in, the same number of individuals must leave.
+
+There are two basic strategies [@talbi2009, p. 221; @mitchell1998, section 5.4]:
+
+- **Generational replacement.** The offspring replace the entire population of parents. This is the replacement used in Holland's canonical genetic algorithm and the most widespread one.
+- **Steady-state replacement.** At each step, only one or a few offspring come in, replacing the same number of population members. The rest stays the same.
+
+After replacement, the cycle starts again (section -@sec-ciclo-ciclo) until a **stopping criterion** is met. We discuss stopping in section -@sec-reemplazo-cuando-parar.
+
+**Notation.** We follow the tool's notation. In this chapter, we call all individuals in the current population parents, whether or not selection chose them. They are A, B, C, …, and their number is μ (*mu*), the population size, which other chapters call *N*; the offspring are a, b, c, …, and their number is λ (*lambda*). In chapter [](#sec-seleccion-torneo){.capitulo} we talked about drawing "with replacement" in the sense of returning an individual so that it can be drawn again; in this chapter, *replacement* means substituting some individuals in the population with others.
+
+:::: {.callout-note .ejercicio #ejercicio-reemplazo-quien-sobrevive title="Exercise · Predict"}
+In generational replacement, all the offspring replace all the parents. Can the population's best fitness be worse in the next generation than in the current one? And its mean fitness? Write down your prediction: you will check it in example [](#ejemplo-reemplazo-generacional).
+::::
+
+## Generational Replacement [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-reemplazo-generacional}
+
+If the offspring replace all the parents, what happens to the best parent?
+
+In generational replacement, as many offspring are created as there are parents ($\lambda = \mu$), and the next generation consists of the offspring alone [@talbi2009, p. 221]. It is simple, and each generation is a new population. But nothing guarantees that any offspring is as good as the best parent. A good individual can be lost because selection does not choose it or because crossover or mutation destroys what made it good [@mitchell1998, section 5.4].
+
+::: {.callout-tip .ejemplo #ejemplo-reemplazo-generacional title="Reproducible Example · The Offspring Replace Everyone"}
+**Data.** Six parents and six offspring, already created by crossover and mutation:
+
+| Parent | A | B | C | D | E | F |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| Fitness | 12 | 30 | 5 | 21 | 9 | 17 |
+
+| Offspring | a | b | c | d | e | f |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| Fitness | 25 | 3 | 18 | 9 | 14 | 7 |
+
+The screen is called “Generational with elitism”; with an **Elite size e** of 0, it is pure generational replacement.
+
+**Predict.** Who forms the next generation? How do the best fitness and the mean fitness change?
+
+[Open: generational replacement, e = 0](https://josemagalan.github.io/selection-ga/#op=elitism&lang=en&elite=0&f=12-30-5-21-9-17&g=25-3-18-9-14-7){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+The next generation is **a b c d e f**: all 6 offspring survive and no parent does. The best fitness falls from 30 to 25, because B has no equally good replacement, and the mean falls from 15.7 to 12.7. This answers exercise [](#ejercicio-reemplazo-quien-sobrevive): with pure generational replacement, both the best fitness and the mean can get worse from one generation to the next.
+</details>
+:::
+
+In a particular generation the opposite can happen: if some offspring outperforms the best parent, the best fitness rises. What pure generational replacement does not guarantee is that it will not fall.
+
+## Elitism [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-reemplazo-elitismo}
+
+How do we avoid losing the best solution without giving up generational replacement?
+
+**Elitism** means passing the best individual, or the *e* best, to the next generation without crossing or mutating them. They are called the **elite**. @dejong1975 [section 4.3] introduced it in his doctoral thesis [@goldberg1989, p. 115; @mitchell1998, section 5.4], and it is often added to generational replacement. The elite is not set apart from the population: it remains in it and can be chosen as a parent in the next generation, so its genes are also combined with those of others.
+
+To keep the population from growing, someone has to make room. There are two similar ways to organize this:
+
+- Create only $\mu - e$ offspring and add the elite to them.
+- Create μ offspring, as in pure generational replacement, and let the elite take the place of the *e* worst. This is what selection-ga does.
+
+In De Jong's original model, the population grew by one: if the best individual found so far was not among the offspring, it was added as member *N* + 1 [@goldberg1989, p. 115].
+
+With at least one elite individual, the population's best fitness never falls. Many studies have found that elitism clearly improves the algorithm's performance [@mitchell1998, section 5.4]. But it comes at a price, which we will see in section -@sec-reemplazo-elitismo-ejecucion.
+
+::: {.callout-tip .ejemplo #ejemplo-reemplazo-elitismo title="Reproducible Example · One Elite Individual"}
+**Data.** The same parents and offspring as in example [](#ejemplo-reemplazo-generacional), with an **Elite size e** of 1.
+
+**Predict.** Who forms the elite? Which offspring disappears? How do the best fitness and the mean change now?
+
+[Open: generational with elite e = 1](https://josemagalan.github.io/selection-ga/#op=elitism&lang=en&elite=1&f=12-30-5-21-9-17&g=25-3-18-9-14-7){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+The elite is B (30), the best parent. It takes the place of the worst offspring, b (3). The next generation is **B a c d e f**: one parent and five offspring. The best fitness stays at 30, and the mean rises from 15.7 to 17.2.
+
+With *e* = 0, the mean fell to 12.7. With the elite, we exchange the worst offspring for the best parent.
+</details>
+
+<details class="incrustada">
+<summary>Show the tool here (generational with elitism)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/selection-ga/#op=elitism&lang=en&elite=1&f=12-30-5-21-9-17&g=25-3-18-9-14-7" loading="lazy" title="selection-ga: generational with elitism"></iframe>
+</details>
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-reemplazo-elitismo title="Exercise · By Hand"}
+Four parents A–D with fitness values 8, 15, 4, and 11, and four offspring a–d with fitness values 10, 2, 13, and 6. Form the next generation with generational replacement and an elite of 1, as in selection-ga. What is the best fitness before and after? And if there were no elite?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+The elite is B (15), which takes the place of the worst offspring, b (2). The next generation is **B a c d**, with fitness values 15, 10, 13, and 6: the best is still 15. Without an elite, the next generation would be a b c d, and the best fitness would fall to 13. You can check this with the [exercise link](https://josemagalan.github.io/selection-ga/#op=elitism&lang=en&elite=1&f=8-15-4-11&g=10-2-13-6){target="_blank"}.
+</details>
+::::
+
+::: {.callout-note .en-app title="In the Application · selection-ga, “Generational with elitism”"}
+[Explore in selection-ga](https://josemagalan.github.io/selection-ga/#op=elitism&lang=en){.explorar target="_blank"}
+
+- Advance step by step and watch the **Survives** row: it shows 1 for whoever passes to the next generation.
+- Set the **Elite size e** to 0 and click **Random population** several times. How often is the best parent lost? Read the final message.
+- With *e* = 1, check that the best fitness never falls, although the mean can.
+:::
+
+## Steady-State Replacement [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-reemplazo-estacionario}
+
+Do we need to renew the whole population at once?
+
+In **steady-state replacement**, a few offspring are created, often one or two, and each enters the population by replacing a member. The rest of the population stays the same. In the extreme case, a single offspring is created at each step and replaces, for example, the worst individual in the population [@talbi2009, p. 221]. Generations overlap: a good offspring can be chosen as a parent right away, without waiting for a generation to be completed.
+
+What determines the behavior is who gets replaced. The most common choice is to replace the worst [@mitchell1998, section 5.4]. This is what GENITOR, the first steady-state algorithm, did [@whitley1994, section 8.1]. We will see other variants in section -@sec-reemplazo-variantes-estacionario.
+
+Most genetic algorithms described in the literature are generational [@mitchell1998, section 5.4]. Steady-state replacement has been used mainly in systems that learn incrementally and in which remembering what has already been learned matters, such as classifier systems [@mitchell1998, section 5.4].
+
+::: {.callout-tip .ejemplo #ejemplo-reemplazo-estacionario title="Reproducible Example · Two Offspring Enter the Population"}
+**Data.** The parents from the previous examples (A–F: 12, 30, 5, 21, 9, and 17) and two new offspring, a (25) and b (14). Variant **Replace the worst**.
+
+**Predict.** Whom does offspring a replace? And offspring b? Is the best lost?
+
+[Open: steady state, replace the worst](https://josemagalan.github.io/selection-ga/#op=steady-state&lang=en&v=worst&lambda=2&f=12-30-5-21-9-17&g=25-14&s=31){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+Offspring a replaces the worst in the population, C (5). After that, the worst is E (9), and b replaces it. The next generation is **A B a D b F**: four parents and two offspring. The best fitness stays at 30, and the mean rises from 15.7 to 19.8.
+
+Replacing the worst protects the best as much as elitism does, or more: the best would leave only if it were the worst in the population.
+</details>
+
+<details class="incrustada">
+<summary>Show the tool here (steady state)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/selection-ga/#op=steady-state&lang=en&v=worst&lambda=2&f=12-30-5-21-9-17&g=25-14&s=31" loading="lazy" title="selection-ga: steady state"></iframe>
+</details>
+:::
+
+::: {.callout-note .en-app title="In the Application · selection-ga, “Steady state”"}
+[Explore in selection-ga](https://josemagalan.github.io/selection-ga/#op=steady-state&lang=en){.explorar target="_blank"}
+
+- Change the **Number of offspring λ** between 1 and 3 and see how many slots in the population change.
+- Click **Random population** several times with **Replace the worst**. Is the best ever lost?
+:::
+
+## Elitism Over a Whole Run [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-reemplazo-elitismo-ejecucion}
+
+Elitism protects only one or a few individuals in each generation. Does it make a difference over a complete run?
+
+To find out, we programmed a genetic algorithm with the operators from the previous chapters and applied it to a simple problem: **OneMax**, which consists of finding a 40-bit string with as many ones as possible. Fitness is the number of ones, so the optimum is 40, and we know it in advance. The algorithm uses a population of 20 individuals, binary tournament selection, one-point crossover with *Pc* = 0.8, bit-flip mutation with *pm* = 1/40, and generational replacement, with no elite or with one elite individual. Both runs start from the same initial population.
+
+![Best fitness in the population at each generation, with and without an elite. OneMax with 40 bits, population of 20, seed 3. The vertical lines and dots mark where some criteria would stop in the run with an elite (section -@sec-reemplazo-cuando-parar). Original figure, generated with `figuras/08-elitismo-parada.py` in the book repository.](figuras/08-elitismo-parada.svg){#fig-elitismo-parada fig-alt="Line chart of best fitness against generation, from 0 to 100. With an elite, the line rises in steps, never falls, and reaches the optimum, 40, at generation 42. Without an elite, the line rises and falls between 34 and 38 from generation 15 onward and ends at 36 without reaching the optimum."}
+
+[Enlarge Figure](figuras/08-elitismo-parada.svg){.ampliar-figura target="_blank" rel="noopener"}
+
+<details>
+<summary>Show the Figure Data</summary>
+
+Best fitness in the population at selected generations:
+
+| Generation | 0 | 5 | 10 | 15 | 20 | 25 | 30 | 35 | 38 | 42 | 50 | 62 | 80 | 100 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Without elite | 28 | 30 | 32 | 37 | 36 | 36 | 36 | 34 | 36 | 36 | 37 | 37 | 38 | 36 |
+| With elite | 28 | 31 | 33 | 35 | 36 | 37 | 39 | 39 | 39 | 40 | 40 | 40 | 40 | 40 |
+</details>
+
+With an elite, the best fitness rises in steps and never falls: each improvement is kept until another one appears. Without an elite, it initially rises in a similar way, but, especially from generation 15 onward, it goes up and down: improvements are found and then lost again. In this run, the algorithm without an elite does not reach the optimum within 100 generations; with an elite, it reaches it at generation 42.
+
+A single run is not enough to draw conclusions, because the result depends on chance (we saw this in exercise [](#ejercicio-seleccion-seleccion-y-diversidad)). So we repeated the experiment with 30 different seeds. Without an elite, 17 of the 30 runs reached the optimum within 100 generations; with an elite, all 30 did, and more than half did so in 33 generations or fewer.
+
+Does it always help this much? No. OneMax has a single peak, and on problems like this elitism helps a great deal. De Jong found that elitism improved results on functions with a single optimum but worsened them on a function with many local optima: it improves local search at the expense of the global view [@goldberg1989, p. 115]. If the elite dominates the population, its copies crowd out the others and diversity is lost sooner; the population may converge prematurely on a local optimum [@talbi2009, p. 221]. That is why the elite is usually small, one or two individuals.
+
+:::: {.callout-note .ejercicio #ejercicio-reemplazo-elitismo-ejecucion title="Exercise · Reading the Figure"}
+In figure -@fig-elitismo-parada, without an elite, the best fitness at generation 80 is 38 and at generation 100 it is 36. If the algorithm stopped at generation 100 and returned the best individual in the last population, what would its fitness be? What should the algorithm do so as not to lose the 38?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+It would return an individual with fitness 36, even though it had found one with 38. Without an elite, the algorithm must store the **best solution found** so far separately and update it every generation; when it stops, it returns that solution, not the best in the last population. With an elite, the two coincide, because the best individual found is always in the population.
+</details>
+::::
+
+## When to Stop? [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-reemplazo-cuando-parar}
+
+The cycle of selection, crossover, mutation, and replacement can be repeated indefinitely. When do we consider the search finished?
+
+When it stops, the algorithm returns the best solution found, as we saw in exercise [](#ejercicio-reemplazo-elitismo-ejecucion). The most common stopping criteria are of two kinds [@talbi2009, pp. 198–199]:
+
+- **Fixed in advance.** It is known from the start when the search will end: a maximum number of generations, a computing-time limit, or a maximum number of fitness-function evaluations. These criteria reflect limited resources. Evaluation may be the most expensive part: if each evaluation takes an hour, 10 000 evaluations take more than a year, about 50 generations with a population of 200 [@whitley1994, section 1.1].
+- **Dependent on the search.** It is not known in advance when they will be met:
+  - **The optimum has been reached**, or a good enough solution. This requires knowing the optimum or a bound on its value, which is uncommon.
+  - ***k* generations have passed without improvement** in the best solution found.
+
+There are also criteria that look at the population's diversity; we will see them in section -@sec-reemplazo-ampliaciones.
+
+In figure -@fig-elitismo-parada, the run with an elite shows what each criterion would do:
+
+| Criterion | Stops at generation | Best fitness found |
+|---|:---:|:---:|
+| 10 generations without improvement | 38 | 39 |
+| Optimum reached (40) | 42 | 40 |
+| 20 generations without improvement | 62 | 40 |
+| Maximum of 100 generations | 100 | 40 |
+
+With 10 generations without improvement, the algorithm stops at generation 38, just before finding the optimum. With 20, it finds the optimum but then continues for 20 generations without gaining anything. With a maximum of 100 generations, the last 58 contribute nothing. Waiting too little can leave the search half-finished; waiting too long wastes resources. That is why criteria are often combined: for example, stop when the optimum is reached, if it is known, or after 20 generations without improvement, and in any case after 100 generations.
+
+:::: {.callout-note .ejercicio #ejercicio-reemplazo-cuando-parar title="Exercise · Where Does It Stop?"}
+A genetic algorithm with an elite is maximizing a problem whose optimum is 50. This is the best fitness in its population at each generation:
+
+| Generation | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Best fitness | 31 | 35 | 35 | 42 | 42 | 42 | 47 | 47 | 47 | 47 | 50 |
+
+At which generation does it stop under each criterion: (a) 3 generations without improvement; (b) 5 generations without improvement; (c) reaching the optimum; (d) a maximum of 8 generations? What fitness does it return in each case? If a criterion is not met before generation 10, assume the algorithm continues and no longer improves. (e) Combine (b) and (c): stop when the optimum is reached or after 5 generations without improvement, whichever comes first. (f) Now you do not know the optimum, and each generation takes one hour. Which two criteria would you combine, and why?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+We count generations since the last improvement: there were improvements at generations 1, 3, 6, and 10.
+
+- (a) At generation 5, 2 generations have passed without improvement since generation 3; at generation 9, 3 have passed since generation 6. It stops at **generation 9** and returns **47**.
+- (b) Before generation 10, 5 consecutive generations without improvement never occur. At generation 10 the optimum is reached and cannot be improved, so it stops at **generation 15** and returns **50**, after five generations that contribute nothing.
+- (c) It stops at **generation 10** and returns **50**.
+- (d) It stops at **generation 8** and returns **47**.
+- (e) It stops at **generation 10** and returns **50**: the optimum arrives before the 5 generations without improvement.
+- (f) Without the optimum, (c) is useless. A reasonable option is (b) with a maximum number of generations that limits the time, such as (d): with this table it would stop at generation 8 with 47, after 8 hours. With (b) alone it would have reached 50, but after 15 hours. There is no single answer: it depends on how much going from 47 to 50 is worth compared with 7 more hours of computation, and in a real case we would not know that 50 arrives at generation 10.
+
+With a criterion of 3 generations without improvement, the algorithm gives up just before finding the optimum.
+</details>
+::::
+
+## Summary {.unnumbered #resumen}
+
+- Replacement decides who forms the next generation. In generational replacement, the offspring replace all the parents; in steady-state replacement, only a few offspring come in at each step.
+- With pure generational replacement, the best solution can be lost. Elitism passes the *e* best, unchanged, to the next generation; as a result, the best fitness never falls.
+- Elitism speeds up the search, but it can reduce diversity and lead to premature convergence. That is why the elite is usually small.
+- The algorithm stops when it reaches the optimum, if known, when it exhausts its resources, or when it has gone several generations without improvement. It returns the best solution found.
+
+To continue along the basic path, go to the [“Designing Experiments” chapter](09-experimentos.qmd).
+
+## Steady-State Variants [[Advanced]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-reemplazo-variantes-estacionario}
+
+If each offspring replaces a member of the population, does it matter much which one?
+
+Between generational replacement and steady-state replacement with a single offspring there are intermediate positions: at each step, any number λ of individuals between 1 and μ can be replaced [@talbi2009, p. 221]. @dejong1975 called the fraction *G* of the population renewed in each generation the **generation gap**: *G* = 1 is generational replacement, and *G* < 1 is a population that overlaps with the previous one [@goldberg1989, p. 111; @mitchell1998, section 5.4]. In De Jong's model, the offspring took population slots chosen at random [@goldberg1989, p. 111].
+
+selection-ga offers three rules for choosing whom each offspring replaces:
+
+- **Replace the worst**, as in GENITOR. It is highly elitist: the best is never lost.
+- **Replace the oldest**: the individual that has been in the population longest leaves, whether good or bad. Each individual lives for a fixed number of steps. The tool shows each parent's age in the **Age** row; a newcomer starts at age 0, and everyone ages by one at each step.
+- **Replace a random one**: replacement adds no pressure, and all the pressure comes from parent selection.
+
+Choosing whom to replace is one decision; another is whether the offspring always enters or only when it is better than the individual it would replace. A widely used combination is to replace the worst only if the offspring is better [@lozano2008, p. 4422]. In selection-ga this is the **Replace the worst if better** variant.
+
+The choice changes selection pressure considerably. Goldberg and Deb showed that replacing the worst creates much greater pressure than replacing at random [@whitley1994, section 8.1]. Replacing the worst improves mean fitness quickly but can lead to premature convergence; that is why it is usually combined with large populations or with a rule that does not admit duplicate individuals [@eiben2015, pp. 88–89]. Replacing a random individual has another drawback: De Jong and Sarma observed that its results varied more than those of a comparable generational algorithm, and Smith and Vavak explained this by showing that it loses the best much more often than replacing the oldest does. For this reason it is not recommended [@eiben2015, p. 88].
+
+The name "steady state" can be misleading: these algorithms vary more than generational ones, which makes them more sensitive to sampling errors and genetic drift. In return, because GENITOR keeps the best points found, the search is more aggressive and is usually quite effective in practice [@whitley1994, section 8.1]. According to De Jong and Sarma, when steady-state replacement performs better than generational replacement, it is not because generations overlap but because of its greater selection pressure and the selection and replacement rules it uses [@lozano2008, pp. 4421–4422].
+
+::: {.callout-tip .ejemplo #ejemplo-reemplazo-variantes-estacionario title="Reproducible Example · Three Ways to Make Room"}
+**Data.** The parents and the two offspring from example [](#ejemplo-reemplazo-estacionario) (A–F: 12, 30, 5, 21, 9, and 17; a: 25; b: 14). The parents' ages are:
+
+| Parent | A | B | C | D | E | F |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| Fitness | 12 | 30 | 5 | 21 | 9 | 17 |
+| Age | 2 | 5 | 3 | 1 | 2 | 3 |
+
+**Predict.** What happens to B if the oldest is replaced? When ages are tied, the tool replaces the first one. With random replacement, can B be lost?
+
+[Open: replace the oldest](https://josemagalan.github.io/selection-ga/#op=steady-state&lang=en&v=oldest&lambda=2&f=12-30-5-21-9-17&g=25-14&s=31){.abrir target="_blank"}
+[Open: replace a random one](https://josemagalan.github.io/selection-ga/#op=steady-state&lang=en&v=random&r=19&lambda=2&f=12-30-5-21-9-17&g=25-14&s=31){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+| Variant | Next generation | Best fitness | Mean fitness |
+|---|:---:|:---:|:---:|
+| Replace the worst (example [](#ejemplo-reemplazo-estacionario)) | A B a D b F | 30 | 19.8 |
+| Replace the oldest | **A a b D E F** | 25 | 16.3 |
+| Replace a random one | **a b C D E F** | 25 | 15.2 |
+
+When the oldest is replaced, offspring a takes B's place (age 5), and the best is lost because of its age. Then everyone ages one step: C and F are now age 4, and b replaces C, the first of them. With the draw in the second URL, the slots chosen at random are those of A and B, and the best is lost here too. Only replacing the worst keeps B.
+</details>
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-reemplazo-variantes-estacionario title="Exercise · An Offspring Worse Than Everyone"}
+With the same parents, the **Replace the worst** variant, and two offspring, a (25) and b (3). Does b enter the population, even though it is worse than all the parents? Whom does it replace?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+With **Replace the worst**, each offspring enters unconditionally. Offspring a replaces C (5), the worst. After that, the worst is E (9), and b replaces it even though b is worse: the next generation is **A B a D b F**, with mean 18. You can check this with the [exercise link](https://josemagalan.github.io/selection-ga/#op=steady-state&lang=en&v=worst&lambda=2&f=12-30-5-21-9-17&g=25-3&s=31){target="_blank"}. With **Replace the worst if better**, b does not improve on E and is discarded: the next generation is **A B a D E F**, with mean 19 ([link](https://josemagalan.github.io/selection-ga/#op=steady-state&lang=en&v=worst-better&lambda=2&f=12-30-5-21-9-17&g=25-3&s=31){target="_blank"}).
+</details>
+::::
+
+::: {.callout-note .en-app title="In the Application · selection-ga, “Steady state”"}
+[Explore in selection-ga](https://josemagalan.github.io/selection-ga/#op=steady-state&lang=en){.explorar target="_blank"}
+
+- Change the **Variant** and click **Random population** several times. With which variant is the best lost most often?
+- With **Replace the oldest**, follow the **Age** row step by step. Can a newly arrived offspring be replaced by the next one?
+:::
+
+## (μ + λ), (μ, λ), and Larger Elites [[Advanced]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-reemplazo-mu-lambda}
+
+What if parents and offspring competed together to stay in the population?
+
+**Evolution strategies**, created by Rechenberg and Schwefel in the sixties at the Technical University of Berlin, use two other replacement schemes. These schemes appeared in the seventies, when the strategies moved from a single parent and a single offspring to populations of μ parents and λ offspring [@eiben2015, p. 101; @whitley1994, section 8]:
+
+- **(μ + λ).** The μ parents create λ offspring, and the μ best of the μ + λ individuals survive. A parent stays in the population until offspring better than it appear.
+- **(μ, λ).** The offspring replace the parents, and selection takes place among the offspring alone: the μ best of the λ survive. This requires $\lambda \geq \mu$.
+
+(μ + λ) is elitist: the best is never lost. (μ, λ) is not, and it resembles the generational replacement of the canonical genetic algorithm [@affenzeller2009, pp. 9–10]. GENITOR also keeps the best solution by replacing the worst [@eiben2015, p. 89; @whitley1994, section 8.1]. But admitting any offspring, even one worse than the individual it replaces, is not exactly the same as (μ + λ): the mean can fall. In exercise [](#ejercicio-reemplazo-variantes-estacionario), after a enters, the mean is 19, and when b, worse than E, enters, it falls to 18.
+
+With a single offspring, **Replace the worst if better** is equivalent, in fitness, to keeping the μ best among the population and that offspring: it is (μ + 1). If several offspring are created, one must specify whether they are inserted one at a time under that condition or selected together from all the candidates.
+
+Elitism with *e* individuals lies between the two schemes, although it matches neither. With *e* = 0 it is pure generational replacement. The larger *e* is, the more parents stay, but without competing with the offspring as in (μ + λ): the *e* best parents stay even if some discarded offspring is better than they are.
+
+::: {.callout-tip .ejemplo #ejemplo-reemplazo-mu-lambda title="Reproducible Example · Competing Together or Only Among Offspring"}
+**Data.** The usual parents (A–F: 12, 30, 5, 21, 9, and 17) and nine offspring (λ = 9):
+
+| Offspring | a | b | c | d | e | f | g | h | i |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Fitness | 25 | 3 | 18 | 9 | 14 | 7 | 28 | 11 | 20 |
+
+**Predict.** Who survives under (μ + λ)? And under (μ, λ)? How many parents remain in each case?
+
+[Open: (μ + λ)](https://josemagalan.github.io/selection-ga/#op=mu-plus-lambda&lang=en&lambda=9&f=12-30-5-21-9-17&g=25-3-18-9-14-7-28-11-20){.abrir target="_blank"}
+[Open: (μ, λ)](https://josemagalan.github.io/selection-ga/#op=mu-comma-lambda&lang=en&lambda=9&f=12-30-5-21-9-17&g=25-3-18-9-14-7-28-11-20){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+| Scheme | Survivors, from best to worst | Parents | Best fitness | Mean fitness |
+|---|:---:|:---:|:---:|:---:|
+| (μ + λ) | **B g a D i c** (30, 28, 25, 21, 20, 18) | 2 | 30 | 23.7 |
+| (μ, λ) | **g a i c e h** (28, 25, 20, 18, 14, 11) | 0 | 28 | 19.3 |
+
+With (μ + λ), B and D stay because they are among the six best of the fifteen. With (μ, λ), all the parents disappear, B included, and the best fitness falls from 30 to 28.
+</details>
+:::
+
+Why use a scheme that can lose the best? Because always keeping the best has the price we saw in section -@sec-reemplazo-elitismo-ejecucion: the population loses diversity quickly and may converge prematurely [@talbi2009, p. 221]. With (μ + λ), a very good individual can stay in the population indefinitely. With (μ, λ), no individual lasts more than one generation.
+
+In evolution strategies, (μ, λ) is usually preferred, with many more offspring than parents: λ is typically 5 to 7 times μ. Because it discards all the parents, it can escape small local optima; if the problem changes over time, it does not cling to outdated solutions; and it does not hinder self-adaptation, in which the mutation parameters evolve together with each solution [@eiben2015, pp. 80, 89–90].
+
+:::: {.callout-note .ejercicio #ejercicio-reemplazo-mu-lambda title="Exercise · Limiting Cases"}
+With parents A–F (12, 30, 5, 21, 9, and 17) and the six offspring from example [](#ejemplo-reemplazo-generacional) (25, 3, 18, 9, 14, and 7):
+
+1. Who survives under (μ, λ) with λ = μ = 6? Compare this with pure generational replacement.
+2. Who survives with elitism and *e* = 2?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+1. With λ = μ there is nothing to choose: all six offspring survive, as in pure generational replacement. The tool orders them from best to worst (a c e d f b), but they are the same individuals. The best fitness falls to 25.
+2. The elite consists of B (30) and D (21), which take the places of the two worst offspring, b (3) and f (7). The survivors are **B D a c d e**, with mean 19.5.
+</details>
+::::
+
+::: {.callout-note .en-app title="In the Application · selection-ga, (μ + λ) and (μ, λ)"}
+- In [(μ + λ) selection](https://josemagalan.github.io/selection-ga/#op=mu-plus-lambda&lang=en){target="_blank"}, move the **Number of offspring λ** from 1 to 12. How many parents survive when there are few offspring? And when there are many?
+- In [(μ, λ) selection](https://josemagalan.github.io/selection-ga/#op=mu-comma-lambda&lang=en){target="_blank"}, set λ equal to μ and check that all the offspring survive. Then increase λ: what happens to the survivors' mean fitness?
+- In [Generational with elitism](https://josemagalan.github.io/selection-ga/#op=elitism&lang=en){target="_blank"}, raise the **Elite size e** from 0 to 3 with the same population and watch how the proportion of parents and offspring changes.
+:::
+
+## Further Reading [[Further reading]{.largo}[+]{.corto}]{.nivel .saber-mas} {#sec-reemplazo-ampliaciones}
+
+**Replacing the most similar.** De Jong sought a replacement scheme that would maintain diversity on functions with many optima, where elitism worsened results. He drew inspiration from nature: when similar individuals fill a niche, they compete more with one another. In his **crowding** model [@dejong1975, section 4.7], with a generation gap *G* = 0.1, each offspring replaced the individual most similar to it among a few chosen at random; their number is the crowding factor, *CF*. With *CF* = 2 he obtained near-optimal results on a function with many local optima [@goldberg1989, p. 116]. Other authors later developed the ideas of crowding and niching, which are important in optimizing functions with many optima [@goldberg1989, p. 116]. One of them is Mahfoud's **deterministic crowding**: parents are paired, each pair has two offspring, and each offspring competes with the parent most similar to it; the better of the two stays. The population spreads across several peaks, with subpopulations of similar size even when some peaks are better than others [@eiben2015, p. 94; @lozano2008, p. 4423].
+
+**Useful diversity.** Lozano, Herrera, and Cano combine diversity with the pressure of replacing the worst. Among the individuals worse than the offspring, they look for the one that contributes least diversity, measured by its distance to its nearest neighbor. If the offspring contributes more diversity than that individual, it replaces it; if not, the offspring replaces the worst, provided it is better. In their experiments, this combination worked better than either rule alone and better than several crowding methods [@lozano2008, pp. 4424–4427].
+
+**An elite that also mutates.** Keeping only the best is sometimes called the "golden cage model". If mutation is applied to the elite to avoid premature convergence, the scheme is called **weak elitism**: the elite no longer passes intact [@affenzeller2009, p. 10].
+
+**Sometimes choosing the worst.** If replacement always keeps the best, convergence is faster, but it may be premature. Sometimes it pays to keep bad individuals to avoid sampling errors [@talbi2009, p. 221]. This is the same tension between selection pressure and diversity that we saw with truncation in chapter [](#sec-seleccion-truncamiento){.capitulo}.
+
+**Noisy fitness.** In some problems, an individual's fitness is random: two evaluations of the same individual give different values, for example because they come from a simulation. Keeping the best from one generation to the next, as (μ + λ) does, makes it possible to re-evaluate them and estimate their fitness more and more reliably [@mitchell1998, section 5.4].
+
+**Stopping when the population stagnates.** Stopping criteria specific to population-based algorithms look at the state of the population, above all its diversity: the run stops when diversity falls below a threshold [@talbi2009, p. 199]. To use them, diversity must be measured, for example by the number of distinct individuals or by the mean distance between them.
+
+**Restarting instead of stopping.** If the population has converged without finding a good enough solution, continuing to spend evaluations in the same region does not pay off. The search can be restarted with a new, highly diverse population while keeping the best solution found [@garciamartinez2025, p. 641]. Eshelman's CHC algorithm restarts when diversity falls below a threshold: it creates the new population from the best individual, randomly changing 35% of its bits, and if several consecutive restarts bring no improvement, it creates the population entirely at random. **Micro-genetic algorithms** work with very small populations, of about five individuals, which converge quickly; when they converge, they keep the best and replace the others with random individuals [@garciamartinez2025, pp. 641–642].
+
+**No duplicate individuals.** Another simple way to preserve diversity is not to admit copies: for example, discarding an offspring that is already in the population. Early empirical studies already showed that removing duplicates can improve results considerably [@garciamartinez2025, p. 643].
+
+**Replacement as a parameter.** The type of replacement can also be tuned. @grefenstette1986 [pp. 124, 126] used a genetic algorithm to search for the parameters of another, including the generation gap and whether elitism was used; the best setting for one of his performance measures used *G* = 1 and elitism [@mitchell1998, section 5.6]. But such recommendations depend on the test functions with which they were obtained.
+
+## Chapter References {.unnumbered #referencias}
+
+<!-- Bibliographic entries and their verification status are inherited from the Spanish v1.0 source. No new source verification is claimed by this translation. -->
+
+::: {.referencias-capitulo #refs}
+:::

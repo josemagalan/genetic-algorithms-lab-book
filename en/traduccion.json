@@ -1,0 +1,48 @@
+{
+  "source_tag": "v1.0",
+  "source_commit": "75b82d8",
+  "source_doi": "10.5281/zenodo.23835733",
+  "source_date": "2026-10-31",
+  "translation_date": "2026-10-31",
+  "timezone": "Europe/Madrid",
+  "assistant": "Codex",
+  "model": "GPT-6",
+  "assistants_by_chapter": {
+    "01-evolucion.qmd": "Codex (GPT-6)",
+    "02-ciclo.qmd": "Codex (GPT-6)",
+    "03-representacion.qmd": "Codex (GPT-6)",
+    "04-inicializar-evaluar.qmd": "Codex (GPT-6)",
+    "05-seleccion.qmd": "Codex (GPT-6)",
+    "06-cruce.qmd": "Claude (Cowork; configured model claude-opus-5-5)",
+    "07-mutacion.qmd": "Claude (Cowork; configured model claude-opus-5-5)",
+    "08-reemplazo.qmd": "Claude (Cowork; configured model claude-opus-5-5)"
+  },
+  "language": "en-US",
+  "status": "translation-in-progress",
+  "translated_chapters": [
+    "01-evolucion.qmd",
+    "02-ciclo.qmd",
+    "03-representacion.qmd",
+    "04-inicializar-evaluar.qmd",
+    "05-seleccion.qmd",
+    "06-cruce.qmd",
+    "07-mutacion.qmd",
+    "08-reemplazo.qmd"
+  ],
+  "chapter_titles": {
+    "01-evolucion.qmd": "Evolution and Optimization",
+    "02-ciclo.qmd": "The Cycle and Design Decisions",
+    "03-representacion.qmd": "Representing Solutions",
+    "04-inicializar-evaluar.qmd": "Initialization and Evaluation",
+    "05-seleccion.qmd": "Selecting Parents",
+    "06-cruce.qmd": "Crossover",
+    "07-mutacion.qmd": "Mutation",
+    "08-reemplazo.qmd": "Replacement and Stopping",
+    "09-experimentos.qmd": "Designing Experiments",
+    "10-viajante.qmd": "The Traveling Salesman Problem",
+    "11-recapitulacion.qmd": "Looking Back and Looking Ahead"
+  },
+  "human_review": "Author expressed a favorable general view of chapter 5; no exhaustive human linguistic or technical review is claimed.",
+  "naturalness_pass": "Required after source comparison by D095; performed by the assistant, separately from human review.",
+  "scope": "Chapters 1-8 translated after the approved chapter 5 pilot; chapters 9-11 pending. No translation DOI or publication."
+}

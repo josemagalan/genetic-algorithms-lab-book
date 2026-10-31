@@ -1,0 +1,336 @@
+---
+numeracion-cajas: correlativa
+---
+
+# Evolution and Optimization {#sec-evolucion}
+
+<!-- AI translation and naturalness pass: Codex (GPT-6), 2026-10-31. Source: Spanish v1.0, 75b82d8, DOI 10.5281/zenodo.23835733. Source verification records remain in the original edition; this translation does not claim a new bibliographic review. -->
+
+**Tools:** [selection-ga](https://josemagalan.github.io/selection-ga/#lang=en), available through the [portal](https://josemagalan.github.io/genetic-algorithms-lab/#lang=en). This chapter focuses on ideas: most activities are paper-and-pencil exercises.
+
+::: {.callout-warning .objetivos title="Chapter Objectives"}
+After completing the basic path through this chapter, you will be able to:
+
+- explain the three ingredients of Darwin's natural selection and how it differs from Lamarck's explanation;
+- recognize the three features of an evolutionary system—diversity, selection, and replication—in biological, economic, and cultural systems, and identify the missing feature when a system is not evolutionary;
+- explain why selection can concentrate a population and what happens when a system does not renew its diversity;
+- explain why evolution can be viewed as a search method;
+- define an optimization problem, its search space, and its local and global optima, and estimate the size of a search space;
+- relate exploration and exploitation to the two forces in an evolutionary system;
+- describe what a genetic algorithm borrows from natural evolution.
+:::
+
+## Darwin's Idea [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-evolucion-darwin}
+
+Nature contains organisms that are remarkably well adapted to their surroundings, yet nobody designed them. How can an undirected process produce them?
+
+In 1859, Charles Darwin published *On the Origin of Species* (figure -@fig-origen). His answer fits into a paragraph of the introduction [@darwin1859, p. 5]. The following renders the quotation translated by the authors in the Spanish edition:
+
+> Many more individuals of each species are born than can survive. Consequently, the struggle for existence recurs frequently. Any organism that varies, however slightly, in a way that benefits it under the complex and sometimes changing conditions of life will therefore have a better chance of surviving and will be naturally selected. Through the powerful principle of inheritance, any selected variety will tend to propagate its new and modified form.
+
+![Title page of the first edition of *On the Origin of Species* (London: John Murray, 1859). Public domain; image from Wikimedia Commons. Provenance and license: `figuras/01-imagenes.md` in the book repository.](figuras/01-origen-portada-1859.jpg){#fig-origen width="45%" fig-alt="Printed title page of an old book on yellowed paper. It reads: On the Origin of Species by means of natural selection, or the preservation of favoured races in the struggle for life. By Charles Darwin, M.A. London: John Murray, Albemarle Street. 1859."}
+
+The paragraph contains the mechanism's three ingredients:
+
+- **Variation.** Individuals within a species are not identical: they vary, even if only slightly.
+- **Selection.** More individuals are born than can survive, and their variations affect their chances of surviving and reproducing. Darwin called the preservation of favorable variations and rejection of harmful ones **natural selection** [@darwin1859, p. 81; rendered from the Spanish edition's translation].
+- **Inheritance.** Offspring resemble their parents, so variations that helped survival pass to the next generation.
+
+None of these ingredients pursues a goal. In modern evolutionary theory, genetic variations arise at random, not because they are needed [@mitchell1998, section 3.1]; selection simply causes some individuals to reproduce more than others. Repeated over many generations, however, the process accumulates favorable changes.
+
+Darwin took more than twenty years to publish his theory. In 1837, in the first of his notebooks on the transmutation of species, he drew his first evolutionary tree (figure -@fig-esbozo). It starts from an ancestor marked 1 and branches out: some branches reach the present, while others end. The letters mark living species: according to Darwin's note, there is an enormous distance between A and B, and the finest gradation between B and C. Beside the tree, he wrote that extinction is necessary if each generation is to contain as many living beings as the present one while many species belong to the same genus. All three ingredients appear in the drawing: branches diverge because offspring vary, some end because not every variant survives, and each branch grows from another because traits are inherited.
+
+![Charles Darwin's first evolutionary tree, from notebook B on the transmutation of species (1837), p. 36. “I think” appears at the upper left. Public domain; image from Wikimedia Commons. Provenance and license: `figuras/01-imagenes.md` in the book repository.](figuras/01-darwin-esbozo-1837.jpg){#fig-esbozo width="70%" fig-alt="Pen drawing of a branching tree. A circle labeled 1 at the bottom gives rise to a trunk that divides into branches and then smaller branches; some end in a short cross-stroke. The letters A, B, C, and D appear beside four branches. I think is written at the upper left, and several handwritten lines in English run vertically on the right."}
+
+Darwin was not the first to suggest that species change. Half a century earlier, Jean-Baptiste Lamarck (figure -@fig-lamarck-darwin) had proposed two laws in his *Zoological Philosophy*: frequently used organs grow stronger, while unused ones weaken and eventually disappear; reproduction preserves in offspring what an individual acquires or loses in this way [@lamarck1809, p. 235]. This is the **inheritance of acquired characteristics**. The difference from Darwin lies in where changes come from: for Lamarck, individuals produce changes during their lives and pass them on; for Darwin, variation already exists, and selection determines which variants persist. Biology eventually rejected the inheritance of acquired characteristics [@mitchell1998, section 3.1], although epigenetics has qualified that rejection, as discussed in [Further Reading](#sec-evolucion-ampliaciones).
+
+![Jean-Baptiste Lamarck (left), in a photogravure after a portrait by Charles Thévenin; Wellcome Collection, CC BY 4.0. Charles Darwin (right), in a photograph by Maull and Fox, probably from 1854; public domain. The two Wikimedia Commons images were cropped and reduced to place them together. Provenance and license: `figuras/01-imagenes.md` in the book repository.](figuras/01-lamarck-darwin.jpg){#fig-lamarck-darwin fig-alt="Two black-and-white portraits side by side. On the left, Lamarck faces forward, with white hair and a dark coat embroidered at the collar. On the right, Darwin sits in profile, bald and with sideburns, wearing a dark jacket and a light waistcoat."}
+
+A genetic algorithm borrows Darwin's idea: a population of varying solutions, selection that favors the better ones, and inheritance that passes their traits to the next generation. This is the cycle described in chapter [](#sec-ciclo-ciclo){.capitulo}.
+
+:::: {.callout-note .ejercicio #ejercicio-evolucion-darwin title="Exercise · Giraffes' Necks"}
+Why do giraffes have such long necks? Explain this as Lamarck would and as Darwin would. How do the two explanations differ?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+**Lamarck.** Giraffes' ancestors stretched their necks to reach high leaves. Through use, each individual's neck grew slightly longer during its life, and its offspring inherited that increase. Generation after generation, necks became longer.
+
+**Darwin.** The ancestral population contained slightly longer and slightly shorter necks through variation, not effort. When food was scarce, individuals with longer necks reached more leaves, survived more often, and left more offspring, which inherited long necks. Generation after generation, average neck length increased.
+
+**The difference** concerns where change originates and what is inherited. For Lamarck, use produces a change during an individual's life, and that change is inherited. For Darwin, variation exists before selection and is not caused by need; individuals pass on what they were born with, and selection determines which variants become more common.
+</details>
+::::
+
+## What Makes a System Evolutionary? [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-evolucion-sistema-evolutivo}
+
+We speak of the evolution of species, but also of economies, languages, and technology. Is this merely a figure of speech, or do these processes share something?
+
+Lewontin summarized Darwin's theory in three principles: individuals within a population differ (**variation**); different types survive and reproduce at different rates (**differential fitness**); and offspring resemble their parents in the characteristics that make them more or less fit (**fitness is inherited**) [@lewontin1970]. Neither genes nor DNA appear in this list, so the framework can apply elsewhere. Campbell, for example, argued that blind variation followed by selective retention also explains creative thought and other processes of acquiring knowledge [@campbell1960].
+
+Luis R. Izquierdo summarizes this in three features shared by all evolutionary systems, even when their entities differ greatly: molecules, cells, genes, animals, organizations, ideas, or behaviors [@izquierdo2008, pp. 22–23]:
+
+- **Diversity.** The system's entities are not all alike, and their differences affect their **fitness**. Fitness is a measurable indicator that determines how the population evolves: fitter entities tend to spread relatively more than the others.
+- **Selection.** A discriminating force favors some entities over others according to fitness and changes their frequencies in the population.
+- **Replication, inheritance, or retention.** The entities' properties, or the entities themselves, are retained, replicated, or inherited, at least partly, from one generation to the next. This can occur through genetic transmission in biological systems or through social learning, such as imitation, in many socioeconomic systems.
+
+These are Darwin's three ingredients with nothing exclusive to biology. DNA and organisms that are born and die are not required. All that is needed is a set of differing entities, a criterion that favors some over others, and a mechanism that retains what has been selected. An algorithm, although it is not alive, can therefore be an evolutionary system.
+
+**The economy.** In 1950, Armen Alchian proposed viewing competition among firms as selection. If nobody knows in advance which decision will maximize profit, the market rewards positive profits rather than the ability to maximize them: firms making positive profits survive. Profits go to those that outperform their actual competitors; success accompanies **relative superiority** [@alchian1950, p. 213]. Alchian sought economic counterparts to inheritance, mutation, and natural selection [@alchian1950, p. 220]. @nelson1982 developed this idea into an evolutionary theory of economic change. Firms' **routines**, their habitual ways of doing things, play the role of genes: they are retained and imitated; the market selects firms; and the search for new routines acts as mutation. Today this is discussed as **generalized Darwinism**: explaining an economy's evolution requires specifying how variety is generated and renewed, how habits, customs, norms, and routines are replicated, and why some entities last or multiply more than others [@aldrich2008].
+
+**Culture.** In **cultural evolution**, behaviors, beliefs, techniques, or words change as they pass between people through teaching and imitation. @cavallisforza1981 and @boyd1985 began using mathematical models to study how culture is transmitted and changes. @mesoudi2004 reviewed the evidence in light of *On the Origin of Species* and concluded that culture exhibits variation, competition, inheritance, and the accumulation of successive modifications. This led to their proposal for a unified science of cultural evolution [@mesoudi2006].
+
+:::: {.callout-note .ejercicio #ejercicio-evolucion-sistema-evolutivo title="Exercise · Is the Economy Evolutionary?"}
+Think about the restaurants in a city.
+
+a) What entities make up the system? How do they differ, and where do new differences come from?
+b) What acts as selection? What could fitness be? Is it absolute or relative?
+c) What retains or replicates successful features?
+d) Is this an evolutionary system? What differences do you see from biological evolution?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+a) The entities could be restaurants or, better still, their ways of doing things: menus, prices, premises, and service. **Diversity** is obvious: no two are identical. New differences arise when restaurants open with new ideas (**innovation**), when existing restaurants try changes, and through mistakes: a badly copied recipe may turn out better than the original.
+
+b) Customers and competition provide **selection**. Restaurants with few customers close; successful ones grow or open more locations. Fitness could be measured by profit or market share. It is **relative**: a good restaurant may close if others on its street are better, while a mediocre one may survive without competition.
+
+c) Successful features are **retained** because the restaurant stays open and **replicated** because others imitate them (a fashionable dish spreads across menus), chains and franchises copy an entire business, and cooks take what they have learned to new jobs.
+
+d) Yes: all three features are present, but with important differences. Variation is not blind: entrepreneurs innovate deliberately, trying to anticipate what will work. What a restaurant learns during its life can be copied; this resembles Lamarck's inheritance more than genetic inheritance (section -@sec-evolucion-darwin). Replication occurs through imitation, not genetics, and generations are not clearly defined. Moreover, what selection favors changes with fashions: fitness is not fixed.
+</details>
+::::
+
+:::: {.callout-note .ejercicio #ejercicio-evolucion-sistema-evolutivo-2 title="Exercise · Evolutionary or Not?"}
+For each system, say whether it has all three features of an evolutionary system. If not, which feature is missing?
+
+a) Bacteria in a patient taking an antibiotic.
+b) Pebbles on a beach. Waves wear down and break softer stones first, so mostly hard stones remain over the years.
+c) The words of a language.
+d) A thermostat that switches the heating on when temperature falls below 20 °C.
+e) A population of identical plants that reproduce through cuttings, without mutations.
+f) Jokes circulating in messaging groups.
+
+<details>
+<summary>**Show the Solution**</summary>
+
+a) **Yes.** There is diversity: mutations make some bacteria more resistant to the antibiotic. There is selection: the antibiotic kills susceptible bacteria first. There is replication: resistant bacteria divide, and their descendants inherit resistance.
+
+b) **No.** There is diversity (hard and soft stones) and a kind of selection (waves remove softer stones first), but **no replication**: a hard stone does not copy itself. The beach's composition changes, but nothing new accumulates, and the process stops once only hard stones remain.
+
+c) **Yes.** New words and variants arise (diversity); some are used and copied more than others, and some fall out of use (selection); speakers learn them from other speakers (replication through imitation). This is cultural evolution.
+
+d) **No.** The thermostat responds to its environment, but there is no population of differing entities, no selection, and no replication: it always applies the same rule. It adjusts to its surroundings but does not evolve.
+
+e) **No**, because **diversity** is missing. If every plant is identical, selection has nothing to choose between: more or fewer plants may die, but the population's composition does not change. A mutation introduces diversity.
+
+f) **Yes.** New jokes arise, and versions change as people retell them (diversity); funnier jokes are forwarded more often (selection); each forward is a copy (replication). Richard Dawkins called these cultural units copied between people **memes** [@dawkins2006, chapter “11”] (see [Further Reading](#sec-evolucion-ampliaciones)).
+</details>
+::::
+
+## Two Forces Pulling in Opposite Directions [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-evolucion-dos-fuerzas}
+
+If selection repeatedly favors the same entities, what happens to the system's diversity?
+
+Selection needs differences: if all entities are identical, there is nothing to choose between. For its effects to persist into the next generation, differences affecting fitness must be inherited. Ronald Fisher related this heritable variation to the improvement in fitness due to selection [@fisher1930]; [Further Reading](#sec-evolucion-ampliaciones) clarifies the scope of his theorem.
+
+In the selection models we will use, repeatedly favoring some individuals **tends to concentrate** the population into copies of a few individuals, or just one. If nothing renews diversity and only copies remain, the system can no longer change: it is **locked in**. This does not mean that every diversity measure decreases at every step, or that all natural selection ends this way. The point is that continued change requires processes that **create and maintain** diversity [@izquierdo2008, p. 22]. It is no coincidence that explaining how variety is generated and renewed is the first requirement of generalized Darwinism [@aldrich2008].
+
+In biology, diversity arises through mutation and genetic recombination [@mitchell1998, section 1.2]. In socioeconomic systems it comes from innovation, experimentation, unequal access to information, or simply mistakes [@izquierdo2008, p. 22]; @alchian1950 [pp. 218–219] already viewed imitation and innovation as ways firms adapt. The process through which new entities arise is therefore called **mutation** in biology and **experimentation** or **innovation** in economics.
+
+**Evolution as search.** Repeated over millions of generations, these two forces produce remarkable designs without anyone directing them. It is no coincidence that cheetahs, the fastest land animals, hunt impalas, which are also very fast. Each species forms part of the other's environment. Cheetahs that ran and accelerated slightly faster caught more prey and left more offspring; impalas that escaped more effectively survived more often. Each improvement in one species increased selection pressure on the other: an evolutionary **arms race** [@wilson2018]. Nobody designed either species' speed: variants that helped hunting or escape spread by themselves.
+
+Mitchell presents the general idea: evolution is, in effect, a method for finding “solutions” among an enormous number of possibilities. In biology, the possibilities are genetic sequences, and the solutions are organisms able to survive and reproduce in their environment. The search takes place on changing terrain: an organism's fitness also depends on surrounding organisms, so what is worth searching for changes as species evolve [@mitchell1998, section 1.2]. Cheetahs and impalas illustrate this: each forms part of the terrain on which the other searches.
+
+John Holland used this idea [-@holland1992]. If evolution finds good solutions to survival problems, a program imitating its mechanisms might find good solutions to other problems. Holland and his group set out to transfer mechanisms of natural adaptation to artificial systems [@goldberg1989, p. 1]. This gave rise to **genetic algorithms**. A genetic algorithm maintains a population of possible solutions, measures their fitness, favors fitter ones, and generates new solutions from them, generation after generation. Section -@sec-evolucion-evolucion-artificial introduces their origins; chapter [](#sec-ciclo-ciclo){.capitulo} presents the full cycle.
+
+The same two forces operate in a genetic algorithm. Selection creates no new individuals: it chooses which existing individuals are copied. Repeated on its own generation after generation, it leaves the population without diversity.
+
+::: {.callout-note .en-app title="In the Application · selection-ga, “Compare mechanisms”"}
+[Explore in selection-ga](https://josemagalan.github.io/selection-ga/#cmp=all&lang=en){.explorar target="_blank"}
+
+- Scroll to **Several generations of selection only**. The simulation starts with populations of 50 individuals and runs 40 generations without crossover or mutation: each population consists of the parents selected in the previous generation.
+- Follow the tournament curve in **Distinct individuals**. It starts at 50. How many remain at generation 20? In the simulation shown when the screen opens, the table below gives an average of 4.5 at generation 5 and 1.1 at generation 20.
+- Look at **Mean fitness**. Does it keep rising when almost no distinct individuals remain? Why?
+- Click **Simulate again** several times. Does your conclusion change?
+:::
+
+The population becomes locked in within a few generations: the artificial version of *lock-in*. Section -@sec-seleccion-seleccion-y-diversidad examines this in detail. To avoid it, a genetic algorithm uses operators that generate diversity: **crossover**, which combines genes from two parents in new individuals (chapter -@sec-cruce), and **mutation**, which can introduce values that nobody in the population has (chapter [](#sec-mutacion-para-que-mutar){.capitulo}). How much diversity to generate is a central design question. We return to it in section -@sec-evolucion-explorar-explotar, after defining search more precisely.
+
+## Optimization Is Search [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-evolucion-optimizar}
+
+What exactly does searching for the best solution to a problem mean?
+
+An **optimization problem** has two parts: a set *S* of feasible solutions, the **search space**, and an **objective function** *f* that assigns each solution a numerical value. Solving it means finding a solution with the best possible value, a **global optimum** [@talbi2009, p. 3]. Depending on the problem, “best” means the smallest value (a route's cost) or the largest (the value of items fitting in a knapsack).
+
+In evolutionary search (section -@sec-evolucion-dos-fuerzas), *S* would be the possible genetic sequences, and fitness would play the role of *f*, with one difference: nobody fixes it in nature, and it changes as other organisms change. In a genetic algorithm, the problem determines *S* and *f*.
+
+**Why not try them all?** There are usually too many. A protein is an amino-acid chain, with 20 possibilities at each position. Mitchell proposes searching for a protein with a particular shape among chains of 100 amino acids or fewer [@mitchell1998, section 1.4]. Chains of length 100 alone give $20^{100}$ possibilities, more than $10^{130}$. The power $20^{100}$ means multiplying 20 by itself one hundred times: each of the 100 positions offers 20 choices. For a sense of scale, the observable universe is commonly said to contain about $10^{80}$ atoms; a recent estimate gives roughly $2 \times 10^{80}$ protons and neutrons in all its visible matter [@vopson2021]. There are vastly more possible proteins than atoms in the universe. For many problems, the number of solutions grows exponentially with problem size, or even faster, so checking them all would take centuries or longer [@talbi2009, pp. 10–11]. Goldberg distinguishes three families of classical methods and identifies a weakness in each [@goldberg1989, pp. 2–5]:
+
+- **Calculus-based methods** follow the function's slope. They are local, seeking improvements near their current point, and require derivatives that many problems do not have.
+- **Enumerative methods** examine solutions one by one. They are simple but inefficient in large spaces.
+- **Random searches** try random solutions and keep the best. In the long run, they do no better than enumeration.
+
+A genetic algorithm also uses randomness, but to guide its search rather than search blindly: a search that uses chance need not be aimless [@goldberg1989, p. 5].
+
+**Local optima.** Many methods move from one solution to a similar **neighbor**. A solution is a **local optimum** if none of its neighbors is better [@talbi2009, p. 91]. A method that always moves to the best neighbor stops at the first local optimum it encounters, which may not be global (figure -@fig-optimos-locales). If the function has several peaks, which one should it climb? [@goldberg1989, pp. 3–4]. Section -@sec-inicializar-evaluar-paisaje examines this more closely.
+
+![Two searches that always move to the best neighbor, in a maximization problem with 21 solutions, from x = 0 to x = 20; each solution neighbors the ones beside it. The search starting at x = 1 stops at the local optimum x = 5 because both neighbors have lower values; the search starting at x = 11 reaches the global optimum x = 15. Original figure generated with `figuras/01-evolucion.py` in the book repository.](figuras/01-paisaje.svg){#fig-optimos-locales fig-alt="Points joined by a line, with solution x from 0 to 20 on the horizontal axis and f(x) on the vertical axis. The curve has a lower peak at x = 5, f = 7, labeled local optimum, and a higher peak at x = 15, f = 10, labeled global optimum; a valley lies at x = 10. Orange arrows climb point by point from x = 1 to x = 5 and stop. Blue arrows climb from x = 11 to x = 15."}
+
+[Enlarge figure](figuras/01-paisaje.svg){.ampliar-figura target="_blank" rel="noopener"}
+
+**One solution or a population.** Methods such as local search or simulated annealing transform one solution; evolutionary algorithms evolve a whole population [@talbi2009, p. 25]. A population initially spread across the search space does not depend on a single starting point.
+
+**Improvement before optimality.** Goldberg notes that optimization involves both improvement and approaching an optimum. For complex systems, improvement matters most: reaching a good-enough solution quickly. Attaining the optimum matters much less [@goldberg1989, pp. 6–7]. Seventeen years after his book, Holland himself wrote that he would place more emphasis on improvement and less on optimization [@holland1992, p. x]. With a genetic algorithm, we usually cannot tell whether we have reached the optimum, but we can tell whether we have improved.
+
+:::: {.callout-note .ejercicio #ejercicio-evolucion-optimizar title="Exercise · How Many Routes?"}
+A delivery driver leaves a depot, visits 19 customers, and returns to the depot. With 20 locations including the depot, there are $19!/2$ distinct routes (section -@sec-viajante-problema). The symbol ! denotes the **factorial**: $19! = 19 \times 18 \times \dots \times 1$.
+
+a) Approximately how many routes is that? If a computer calculates one million route lengths per second, how long would it take to check them all?
+b) What about 25 locations?
+c) The observable universe contains roughly $10^{80}$ atoms. From how many locations onward are there more routes than atoms? How many bits does a binary chromosome need to allow more distinct chromosomes than atoms?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+a) $19!/2 = 60\,822\,550\,204\,416\,000$, about $6.1 \times 10^{16}$ routes. At one million per second, this takes $6.1 \times 10^{10}$ seconds. A year has about $3.16 \times 10^{7}$ seconds, so it would take **roughly 1900 years**.
+
+b) With 25 locations, $24!/2 \approx 3.1 \times 10^{23}$ routes: **almost 10 000 million years**. Five extra locations multiply the time by about five million. Except for small problems, checking the entire search space is therefore impractical.
+
+c) With 60 locations, there are $59!/2 \approx 6.9 \times 10^{79}$ routes, still fewer than $10^{80}$; with **61 locations**, $60!/2 \approx 4.2 \times 10^{81}$, already more. In binary, $2^{265} \approx 5.9 \times 10^{79}$ and $2^{266} \approx 1.2 \times 10^{80}$: a **266-bit** chromosome is enough. These are modest sizes, yet checking every possibility is impossible.
+</details>
+::::
+
+:::: {.callout-note .ejercicio #ejercicio-evolucion-optimizar-2 title="Exercise · Climbing Through Neighbors"}
+A problem's solutions are the 3-bit strings, and we want to maximize *f*:
+
+| String | 000 | 001 | 010 | 011 | 100 | 101 | 110 | 111 |
+|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| *f* | 3 | 1 | 2 | 5 | 4 | 0 | 6 | 2 |
+
+Two strings are **neighbors** if they differ in exactly one bit: the neighbors of 000 are 100, 010, and 001.
+
+a) What is the global optimum? Is there another local optimum?
+b) A method starts at a string and always moves to its best neighbor, provided that neighbor is better than the current string. Where does it end if it starts at 001? What if it starts at 010?
+c) What advantage would starting with a population of four random strings offer?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+a) The global optimum is **110**, with *f* = 6. **011**, with *f* = 5, is also a local optimum: its neighbors 111, 001, and 010 have values 2, 1, and 2. Every other string has a better neighbor.
+
+b) From **001** (1), the neighbors are 101 (0), 011 (5), and 000 (3): the method moves to 011, which has no better neighbor. **It ends at 011, with 5**, without reaching the optimum. From **010** (2), the neighbors are 110 (6), 000 (3), and 011 (5): it moves to 110, the global optimum. The result depends on the starting point.
+
+Figure -@fig-cubo-vecinos summarizes this. Following the arrows, a start at 001 leads to 011; starts at 000, 010, 100, 101, and 111 lead to 110.
+
+![The eight 3-bit strings as the vertices of a cube: edges join strings differing in one bit. An arrow leaves each string for its best neighbor, if that neighbor is better. Original figure generated with `figuras/01-evolucion.py` in the book repository.](figuras/01-cubo-vecinos.svg){#fig-cubo-vecinos fig-alt="A cube in perspective with a 3-bit string and its f value at each vertex. Blue arrows run from 000 to 100, 100 to 110, 101 to 100, 111 to 110, and 010 to 110; an orange arrow runs from 001 to 011. No arrows leave 110, with f = 6 and labeled global optimum, or 011, with f = 5 and labeled local optimum. Strings 001 and 011 are orange; the other six are blue."}
+
+[Enlarge figure](figuras/01-cubo-vecinos.svg){.ampliar-figura target="_blank" rel="noopener"}
+
+c) With several strings spread across the space, they are less likely all to start near the same local optimum: at least one is more likely to be near 110. In a genetic algorithm, crossover can also combine parts of strings from different regions.
+</details>
+::::
+
+## Exploring and Exploiting [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-evolucion-explorar-explotar}
+
+If selection uses what already works while variation tries something new, how much of each do we need?
+
+**Exploration** means trying new possibilities; **exploitation** means using what we have learned to improve known solutions. Search needs both: discovering alternatives and developing promising ones.
+
+Holland saw the tension between selection and diversity generation (section -@sec-evolucion-dos-fuerzas) as a problem common to evolution, economics, learning, and control. Each involves improving without knowing every option in advance. Since finding the best option may take a long time or never finish, each step should exploit the best option already tried while also reducing uncertainty quickly by discovering new options [@holland1992, p. 1].
+
+James March brought the same tension into organizational learning. For him, exploration includes search, variation, risk taking, experimentation, and innovation; exploitation includes refinement, choice, production, efficiency, selection, and execution. An organization that explores without exploiting accumulates ideas it never develops and becomes good at nothing; one that exploits without exploring becomes trapped in a stable equilibrium below what it could achieve [@march1991, p. 71].
+
+Every search method faces the same two competing criteria: **exploration** of the search space (diversification) and **exploitation** of the best solutions found (intensification). At one extreme is random search, which only explores; at the other is local search that always moves to the best neighbor (section -@sec-evolucion-optimizar), which only exploits [@talbi2009, pp. 24–25]. Methods that transform one solution tend to exploit, intensifying search in one region; methods that evolve a population tend to explore, spreading it across the space [@talbi2009, p. 25].
+
+In an evolutionary system, selection exploits what already works while diversity generation explores. If selection dominates, the system locks in before finding something good: in a genetic algorithm this is **premature convergence** (section -@sec-experimentos-diversidad). If variation dominates, discoveries are lost before they can be used, and the search resembles random search. Many genetic-algorithm design choices balance these forces, including **selection pressure** in chapter [](#sec-seleccion-quien-se-reproduce){.capitulo}.
+
+:::: {.callout-note .ejercicio #ejercicio-evolucion-explorar-explotar title="Exercise · Explore or Exploit?"}
+a) You moved to a new city a month ago and eat out every Friday. What would exploration and exploitation mean? What happens if you do only one?
+b) In a genetic algorithm, what would you expect if mutation were so strong that every offspring gene was drawn again without regard to its inherited value? What if there were neither crossover nor mutation?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+a) **Exploitation** means returning to the best restaurant you know; **exploration** means trying a new one. If you only exploit, you keep the best of the few you tried initially and never discover whether another is better. If you only explore, every Friday brings an unfamiliar restaurant, sometimes good and sometimes bad, and you never use what you have learned. A reasonable approach explores more at first, when little is known, and exploits more once the options are familiar.
+
+b) If every gene is drawn again, offspring have no relationship to their parents: selection's discoveries are lost each generation, and the algorithm behaves like random search. This is **too much exploration**. It is not the same as changing every gene: flipping every bit in a binary string produces its complement, which depends entirely on the parent. Offspring cease to depend on the parent when each bit changes with probability 0.5 (section -@sec-mutacion-cuanto-mutar). Without crossover or mutation, the algorithm only copies existing individuals, and within a few generations the population consists of copies of one individual, as in the application box in section -@sec-evolucion-dos-fuerzas. This is **too much exploitation**: the population is locked in.
+</details>
+::::
+
+## From Natural to Artificial Evolution [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-evolucion-evolucion-artificial}
+
+What must we borrow from evolution for a computer to solve problems?
+
+To transfer the mechanism to a computer, we must decide what each individual represents and how to evaluate its quality. If we seek a short route, each individual is a possible route, and its length lets us compare it with others. Selection favors better routes while crossover and mutation produce variants. This is the traveling salesman problem, which chapter -@sec-viajante solves from start to finish.
+
+Holland framed this generally through **adaptation**: any process in which a structure gradually changes to function better in its environment, whether a protein, a horse's leg, or a human brain. Biology, psychology, economics, and control all contain adaptive processes, fundamentally processes of optimization [@holland1992, p. xiii]. Each has **structures** that change, **operators** that change them, and a **performance measure**; in genetics these are chromosomes, mutation and recombination, and fitness [@holland1992, pp. 4–5]. For routes, the structures are routes; the operators are crossover and mutation; and the performance measure is length.
+
+Holland presented these ideas in 1975, after developing them during the sixties and seventies, in *Adaptation in Natural and Artificial Systems* [@mitchell1998, section 1.1]. He called his algorithms **genetic plans**; his doctoral students began using **genetic algorithm** [@holland1992, p. x]. Goldberg's definition, rendered from the Spanish edition's quotation, is [@goldberg1989, p. 1]:
+
+> Genetic algorithms are search algorithms based on the mechanics of natural selection and natural genetics.
+
+They were not alone. In the sixties, Rechenberg proposed **evolution strategies** for optimizing real-valued parameters, while Fogel, Owens, and Walsh proposed **evolutionary programming**. Together with genetic algorithms, these form the foundations of **evolutionary computation** [@mitchell1998, section 1.1]; section -@sec-ciclo-ampliaciones returns to them. Half a century later, genetic algorithms are used in almost every field, from engineering to machine learning, and more than 3500 papers with their name in the title appear each year [@garciamartinez2025, pp. 652–653]; section -@sec-recapitulacion-practica examines this.
+
+Biological terms—chromosome, gene, allele, fitness—are used by analogy in genetic algorithms: what they describe is much simpler than in a living organism [@mitchell1998, section 1.3]. There are fundamental differences too. Nobody fixes nature's objective; a genetic algorithm's designer chooses fitness from the problem's objective function (chapter [](#sec-inicializar-evaluar-evaluar){.capitulo}). Goldberg identifies four features distinguishing genetic algorithms from traditional optimization methods [@goldberg1989, p. 7]:
+
+1. They work with an **encoding** of solutions rather than the solutions themselves (chapter [](#sec-representacion-genotipo-fenotipo){.capitulo}).
+2. They search from a **population** of points rather than a single point.
+3. They use only objective-function values, without derivatives or other auxiliary knowledge.
+4. They use **probabilistic**, rather than deterministic, transition rules.
+
+:::: {.callout-note .ejercicio #ejercicio-evolucion-evolucion-artificial title="Exercise · The Genetic Algorithm as an Evolutionary System"}
+Complete the last column. The cycle in section -@sec-ciclo-ciclo may help.
+
+| | Biology | Economics | Genetic algorithm |
+|---|---|---|---|
+| **Entities** | Organisms and their genes | Firms and their ways of doing things | ? |
+| **Fitness** | Survival and number of offspring | Profit or market share | ? |
+| **Diversity** | Genetic mutation and recombination | Innovation, experimentation, and mistakes | ? |
+| **Selection** | Natural selection | Market competition | ? |
+| **Replication** | Genetic inheritance | Imitation, franchises | ? |
+
+<details>
+<summary>**Show the Solution**</summary>
+
+| | Genetic algorithm |
+|---|---|
+| **Entities** | Population members: each is a solution to the problem, written as a chromosome (chapter -@sec-representacion). |
+| **Fitness** | The fitness function, calculated from the problem's objective function (chapter -@sec-inicializar-evaluar). |
+| **Diversity** | The randomly generated initial population; crossover, which creates new gene combinations; and mutation, which creates new values (chapters -@sec-cruce and -@sec-mutacion). |
+| **Selection** | Parent selection, which favors fitter individuals (chapter -@sec-seleccion), and replacement, which determines who enters the next generation (chapter -@sec-reemplazo). |
+| **Replication** | Offspring inherit their parents' genes, copied and recombined through crossover; with elitism, the best individuals enter the next generation unchanged. |
+
+Notice that crossover appears twice: it generates diversity by producing combinations that did not exist, and it also replicates because offspring genes are copies of parental genes.
+</details>
+::::
+
+## Summary {.unnumbered #resumen}
+
+- Darwin's natural selection has three ingredients: variation among individuals, selection of those that survive and reproduce more, and inheritance. Lamarck instead proposed that changes acquired during life are inherited.
+- Any system with **diversity**, **selection**, and **replication** is evolutionary, whether biological, economic, or cultural. Selection depends on relative fitness: being better than others matters.
+- In the book's models, repeated selection tends to concentrate a population; if only copies remain and nothing renews diversity, the system locks in. Diversity generation through mutation or innovation acts in the opposite direction. Together, these forces allow evolution to search for and find remarkable solutions, such as cheetah and impala speed; Holland used this idea in genetic algorithms.
+- Optimization searches a space of solutions usually too large to inspect completely. A method that always moves to the best neighbor can become trapped at a local optimum; a genetic algorithm searches with a population.
+- Balancing selection and diversity generation means balancing exploitation of what works with exploration of new possibilities. Too much exploitation causes premature convergence; too much exploration makes the search random.
+- Holland proposed genetic algorithms to study natural adaptation and transfer its mechanisms to artificial systems. A genetic algorithm is an evolutionary system whose entities are solutions to a problem.
+
+To continue along the basic path, go to [“The Cycle and Design Decisions”](02-ciclo.qmd).
+
+## Further Reading [[Further reading]{.largo}[+]{.corto}]{.nivel .saber-mas} {#sec-evolucion-ampliaciones}
+
+**The scope of Fisher's theorem.** The theorem relates selection's contribution to changes in mean fitness to the **additive genetic variance** in fitness, the part associated with additive allele effects. It does not describe all observed change: the environment and interactions among organisms and genes also change. It therefore does not assert that a natural population's mean fitness always increases [@fisher1930; @price1972, pp. 129–131]. The basic idea is simpler: without heritable variation, selection cannot accumulate adaptive changes.
+
+**Lamarck revisited.** By the end of the twentieth century, almost all biologists rejected the inheritance of acquired characteristics because of overwhelming contrary evidence; it was difficult to imagine a mechanism transferring lifetime acquisitions into genetic code [@mitchell1998, section 3.1]. **Epigenetics** has qualified that conclusion. Epigenetic marks, such as DNA methylation, change gene expression without changing DNA sequence, and some pass to offspring. @jablonka2009 collected over a hundred cases of epigenetic inheritance across generations in bacteria, protists, fungi, plants, and animals, advocating a framework that recognizes Lamarckian aspects of inheritance. @heard2014 conclude that such inheritance is well documented in plants and some animals, such as nematode worms, but is very rare in mammals; environmentally induced changes are almost never inherited, and evidence in humans remains scarce. In mice, @takahashi2023 methylated the regulatory regions of two metabolic genes in the laboratory and showed that the change and its metabolic effects passed to later generations through paternal and maternal lines; researchers, not the environment, induced the change. Some acquired information does reach genes: according to @koonin2009, the CRISPR-Cas system, through which bacteria and archaea incorporate fragments of attacking viruses into their genomes and pass this defense to descendants, operates through a genuinely Lamarckian mechanism. They conclude that both Darwinian and Lamarckian modes matter in evolution. Lamarck's general mechanism—use and disuse as the driver of adaptation—has not been restored, but the rule that nothing acquired is inherited has exceptions: Lamarck was right about something.
+
+**Lamarckian algorithms.** Lamarck is not forbidden in artificial evolution. Many genetic algorithms are combined with local search that improves each individual. If the individual is replaced by the improved solution, which its offspring inherit, the algorithm is **Lamarckian**; if the improved solution is used only to calculate fitness while the chromosome remains unchanged, this is a **Baldwinian** model [@talbi2009, p. 390]. The same question arises when repairing infeasible chromosomes (section -@sec-representacion-ampliaciones) and in memetic algorithms (section -@sec-viajante-ampliaciones). The second name recalls the **Baldwin effect**: even when learning itself is not inherited, the ability to learn can guide evolution because better learners survive more often. Hinton and Nowlan demonstrated this in 1987 using a model based on a genetic algorithm [@mitchell1998, section 3.1].
+
+**The gene's-eye view.** @dawkins2006 proposes viewing evolution from genes, which are copied between generations, rather than from the organisms carrying them. He extends the idea beyond biology, calling units of cultural transmission—such as tunes, ideas, or fashions—that replicate through imitation between brains **memes** [@dawkins2006, chapter “11”]. This fits the ideas and behaviors in Izquierdo's list (section -@sec-evolucion-sistema-evolutivo) and exercise [](#ejercicio-evolucion-sistema-evolutivo-2).
+
+**Evolutionary game theory.** Evolutionary game theory originated in biology. @maynardsmith1973 used it, together with computer simulations, to explain why fights among animals of one species tend to be “limited wars” that rarely cause serious injury, without invoking benefits to the species: fighting without injury also benefits individuals. They defined an **evolutionarily stable strategy**: one that, when adopted by most of a population, cannot be outperformed in fitness by a mutant strategy [@maynardsmith1973, p. 15]. The theory later entered economics and the social sciences to study changing behavior among agents with bounded rationality who learn and imitate [@vegaredondo1996]. Its evolving entities are strategies, which can be viewed as behavioral phenotypes; fitness is each strategy's payoff when played against others [@izquierdo2008, pp. 23–24]. Unlike a genetic algorithm with a fixed objective function, a strategy's fitness depends on the other strategies in the population; in biology, too, an organism's fitness depends on surrounding organisms [@mitchell1998, section 1.4]. One conclusion of Izquierdo's thesis is that the strategies arising and persisting in evolutionary settings depend strongly on assumptions once considered secondary, including player numbers, mutation rates, and population structure [@izquierdo2008, abstract]. This is worth remembering when choosing genetic-algorithm parameters (chapter -@sec-experimentos).
+
+**More to read.** @mitchell1998 [sections 1.1–1.4] describes the history of evolutionary computation and why evolution provides useful inspiration. @goldberg1989 [pp. 1–7] compares genetic algorithms with traditional optimization methods. @holland1992 [chapter “1”] presents adaptation in natural and artificial systems. @izquierdo2008 [section 2.3] introduces evolutionary systems and evolutionary game theory, while @vegaredondo1996 follows the latter from biology into economics and the social sciences. For cultural evolution, @mesoudi2006 offers a good starting point; for economics, @aldrich2008 summarize what applying Darwinian principles to firms and institutions means.
+
+## Chapter References {.unnumbered #referencias}
+
+::: {.referencias-capitulo #refs}
+:::

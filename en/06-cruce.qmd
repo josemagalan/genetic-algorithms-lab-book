@@ -1,0 +1,614 @@
+---
+aliases:
+  - 07-cruce.html
+---
+
+# Crossover {#sec-cruce}
+
+<!-- AI translation and naturalness pass: Claude (Cowork, configured model claude-opus-5-5), 2026-10-31. Source: Spanish v1.0, 75b82d8. Interface labels quoted from crossover-ga (i18n.js, registry.js, content/*.js), which uses British spellings such as "neighbours"; prose follows US spelling. Child 1 / Child 2 follow the tool's naming. The source edition's experimental and bibliographic verification records remain applicable; translating them does not constitute a new experiment or source review. -->
+
+**Tools:** [crossover-ga](https://josemagalan.github.io/crossover-ga/#lang=en), available through the [portal](https://josemagalan.github.io/genetic-algorithms-lab/#lang=en).
+
+::: {.callout-warning .objetivos title="Chapter Objectives"}
+After completing the basic path through this chapter, you will be able to:
+
+- explain what crossover does and the two conditions it must meet: offspring inherit traits from their parents, and offspring are valid;
+- work out by hand the offspring of one-point, two-point, and uniform crossover, with binary or integer genes, from the cut points or the mask;
+- work out the offspring of uniform and arithmetic crossover with real numbers, and predict whether they can leave the parents' interval;
+- use a counterexample to explain why permutations need crossovers of their own;
+- apply OX, PMX, and CX crossover step by step.
+:::
+
+## Why Cross Over? [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-cruce-para-que-cruzar}
+
+Selection has already chosen the parents. How do we obtain new solutions from them?
+
+In the [selection chapter](#sec-seleccion) we saw that selection only copies individuals that already exist. **Crossover** (or recombination) takes two parents from the *pool* and combines parts of their chromosomes to form two offspring. Parents are paired up, and each pair produces two offspring.
+
+A good crossover must meet two conditions [@talbi2009, pp. 213–214]:
+
+- **Heritability.** Offspring should resemble their parents and keep part of their genetic material. If crossover mixes genes at random without preserving anything, whatever made the parents good is lost.
+- **Validity.** Offspring must be solutions to the problem that can be evaluated. How this is achieved depends on the representation: a crossover designed for bit strings can produce invalid solutions if the chromosome is a permutation.
+
+Crossover acts on the genotype, so each representation has its own operators. Hundreds have been proposed, and none is best on every problem: the right one depends on how solutions are represented and on which parental traits matter for fitness [@pavai2016; @cicirello2023]. In this chapter we look at the best-known operators for binary (and integer), real-valued, and permutation representations.
+
+Not every pair is crossed. Each pair is crossed with probability *Pc*, the **crossover probability**; if it is not crossed, its offspring are copies of the parents. So even if crossover breaks a good combination of genes in one pair, other pairs pass intact to the next generation. The most common values of *Pc* lie between 0.45 and 0.95 [@talbi2009, p. 214]. How to choose it through experiments comes later, in the [chapter on parameters](#sec-experimentos-pc-pm).
+
+**Notation.** We follow the tool's notation: Parent 1 and Parent 2, Child 1 and Child 2. Positions are numbered from 1, and "cut after position 3" separates positions 1–3 from the rest.
+
+:::: {.callout-note .ejercicio #ejercicio-cruce-para-que-cruzar title="Exercise · Predict"}
+Two binary parents have the same bit at one position, say a 1 in the second. Can either of their offspring have a 0 at that position if they are crossed by swapping parts of their chromosomes? Write down your prediction: you will check it in example [](#ejemplo-cruce-uno-y-dos-puntos).
+::::
+
+## One-Point and Two-Point Crossover [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-cruce-uno-y-dos-puntos}
+
+What is the simplest way to combine two bit strings?
+
+The crossovers in this section, and uniform crossover in section -@sec-cruce-uniforme, work unchanged for two representations: **binary**, in which each gene is a bit, and **integer**, in which each gene is an integer. They only cut and swap positions, without looking at the value at each one [@eiben2015]. We start with bits and then repeat the process with integers.
+
+In **one-point crossover**, a cut point is chosen at random. Child 1 takes the head of Parent 1 (up to the cut) and the tail of Parent 2 (from the cut onward); Child 2 does the opposite. This is the classic crossover of genetic algorithms.
+
+In **two-point crossover**, two cut points are chosen, and the offspring swap the stretch between them. Child 1 keeps both ends of Parent 1 and takes the middle stretch from Parent 2.
+
+Both can be described with a **crossover mask**, one bit per position [@syswerda1989, p. 2]. With a 0, each child copies the gene from its own parent; with a 1, the children swap it: Child 1 takes the gene from Parent 2, and Child 2 takes the one from Parent 1. In one-point crossover, the mask is a block of zeros followed by a block of ones. In two-point crossover, the block of ones sits in the middle.
+
+::: {.callout-tip .ejemplo #ejemplo-cruce-uno-y-dos-puntos title="Reproducible Example · One Cut and Two Cuts"}
+**Data.** Two 8-bit parents that agree at positions 2 and 6:
+
+| Position | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Parent 1 | 1 | 1 | 0 | 1 | 0 | 0 | 1 | 0 |
+| Parent 2 | 0 | 1 | 1 | 0 | 1 | 0 | 0 | 1 |
+
+One-point crossover with the cut after position 3. Two-point crossover with cuts after positions 2 and 6.
+
+**Predict.** Which mask corresponds to each crossover? What are the offspring? Which bit do the offspring have at positions 2 and 6?
+
+[Open: one-point crossover](https://josemagalan.github.io/crossover-ga/#op=one-point&lang=en&p1=1-1-0-1-0-0-1-0&p2=0-1-1-0-1-0-0-1&c=3){.abrir target="_blank"}
+[Open: two-point crossover](https://josemagalan.github.io/crossover-ga/#op=two-point&lang=en&p1=1-1-0-1-0-0-1-0&p2=0-1-1-0-1-0-0-1&c=2-6){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+| Position | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Mask, one point | 0 | 0 | 0 | 1 | 1 | 1 | 1 | 1 |
+| **Child 1** | 1 | 1 | 0 | 0 | 1 | 0 | 0 | 1 |
+| **Child 2** | 0 | 1 | 1 | 1 | 0 | 0 | 1 | 0 |
+| Mask, two points | 0 | 0 | 1 | 1 | 1 | 1 | 0 | 0 |
+| **Child 1** | 1 | 1 | 1 | 0 | 1 | 0 | 1 | 0 |
+| **Child 2** | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 1 |
+
+In both crossovers, the offspring have a 1 at position 2 and a 0 at position 6, just like both parents. Where the parents agree, swapping changes nothing. This answers exercise [](#ejercicio-cruce-para-que-cruzar): crossover only recombines what the parents already have.
+</details>
+
+<details class="incrustada">
+<summary>Show the tool here (one-point crossover)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/crossover-ga/#op=one-point&lang=en&p1=1-1-0-1-0-0-1-0&p2=0-1-1-0-1-0-0-1&c=3" loading="lazy" title="crossover-ga: one-point crossover"></iframe>
+</details>
+:::
+
+In one-point crossover, genes that lie close together travel together: a cut rarely falls exactly between them. By contrast, the first and last genes of a child always come from different parents, so any cut breaks a good combination of the two ends [@talbi2009, p. 214]. In two-point crossover, the first and last genes can come from the same parent: the chromosome behaves like a ring, and its ends are no longer a special case.
+
+**With integers.** Suppose six tasks must be assigned to four machines. Each gene gives the machine, from 1 to 4, that performs a task. One-point crossover with the cut after position 3 works exactly as it does with bits, with mask 0 0 0 1 1 1:
+
+| Task | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| Parent 1 | 2 | 4 | 1 | 3 | 3 | 1 |
+| Parent 2 | 1 | 4 | 2 | 2 | 3 | 4 |
+| Mask | 0 | 0 | 0 | 1 | 1 | 1 |
+| **Child 1** | 2 | 4 | 1 | 2 | 3 | 4 |
+| **Child 2** | 1 | 4 | 2 | 3 | 3 | 1 |
+
+Both offspring are valid assignments: each task has a machine between 1 and 4. At tasks 2 and 5, where the parents agree, so do the offspring. For these crossovers, crossover-ga accepts only bits, so with integers you work out one-point and two-point crossover by hand. Uniform crossover with integers, however, can be run in the tool, as we will see in example [](#ejemplo-cruce-uniforme).
+
+:::: {.callout-note .ejercicio #ejercicio-cruce-uno-y-dos-puntos title="Exercise · Crossing Integer Vectors"}
+Using the two parents from the task assignment, work out the offspring of two-point crossover with cuts after positions 3 and 5. Can any child produced by any crossover in this section assign task 1 to machine 3?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+Positions 4 and 5 are swapped: Child 1 is (2, 4, 1, **2, 3**, 1) and Child 2 is (1, 4, 2, **3, 3**, 4). At position 5 the swap changes nothing, because both parents have a 3. No child can assign task 1 to machine 3: only a 2 or a 1, the parents' values, can appear there. New values require [mutation](#sec-mutacion).
+</details>
+::::
+
+::: {.callout-note .en-app title="In the Application · crossover-ga, “One-point crossover”"}
+[Explore in crossover-ga](https://josemagalan.github.io/crossover-ga/#op=one-point&lang=en){.explorar target="_blank"}
+
+- Advance step by step and notice how the mask decides which positions are kept and which are swapped.
+- Drag the ◆ marker to move the cut and watch how the mask and the offspring change.
+- Click **Random parents** and, before advancing, use **Practice** to enter your prediction of both children and check it gene by gene.
+- Switch to **Two-point crossover** and move the two cuts until the mask matches a single-cut mask. Where does one of them have to be?
+:::
+
+## Uniform Crossover [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-cruce-uniforme}
+
+What if, instead of cutting into stretches, we decide each position separately?
+
+In **uniform crossover**, a random number $r_i \in [0, 1)$ is drawn for each position. If $r_i \le p$, the offspring swap the gene at that position; otherwise, each child copies the gene from its own parent. With $p = 0.5$, the original version, each gene of Child 1 is equally likely to come from either parent. With a smaller *p*, each child resembles its own parent more closely.
+
+This is the same mask idea from section -@sec-cruce-uno-y-dos-puntos, but now the mask is drawn bit by bit and can take any shape [@syswerda1989, p. 2]. That is why uniform crossover breaks up blocks of adjacent genes more than cut-based crossovers do. This has advantages and drawbacks. Cut-based crossovers tend to pass the same groups of genes together, generation after generation; uniform crossover mixes them more, but it also undoes combinations that already worked more easily [@pavai2016].
+
+::: {.callout-tip .ejemplo #ejemplo-cruce-uniforme title="Reproducible Example · A Random Mask, with Bits and with Integers"}
+**Data.** The same parents as in example [](#ejemplo-cruce-uno-y-dos-puntos), with $p = 0.5$. Random numbers for positions 1 to 8: 0.28, 0.07, 0.58, 0.94, 0.15, 0.01, 0.69, and 0.64.
+
+With integers, the task-assignment parents from section -@sec-cruce-uno-y-dos-puntos, (2, 4, 1, 3, 3, 1) and (1, 4, 2, 2, 3, 4), with the first six numbers: 0.28, 0.07, 0.58, 0.94, 0.15, and 0.01. crossover-ga has no integer section, but uniform crossover in its real-valued representation copies genes without changing them, so with integers it does exactly the same thing.
+
+**Predict.** Which positions are swapped? What are the offspring, with bits and with integers?
+
+[Open: uniform crossover with bits](https://josemagalan.github.io/crossover-ga/#op=uniform-binary&lang=en&r=12&p=0.5&p1=1-1-0-1-0-0-1-0&p2=0-1-1-0-1-0-0-1){.abrir target="_blank"}
+[Open: uniform crossover with integers](https://josemagalan.github.io/crossover-ga/#op=uniform-real&lang=en&r=12&p=0.5&p1=2-4-1-3-3-1&p2=1-4-2-2-3-4){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+The positions with $r_i \le 0.5$ are swapped: 1, 2, 5, and 6.
+
+| Position | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Mask | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 0 |
+| **Child 1** | 0 | 1 | 0 | 1 | 1 | 0 | 1 | 0 |
+| **Child 2** | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 |
+
+Positions 2 and 6 are swapped, but nothing changes, because the parents agree there.
+
+With integers, the mask for the six positions is 1 1 0 0 1 1:
+
+| Task | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Child 1** | 1 | 4 | 1 | 3 | 3 | 4 |
+| **Child 2** | 2 | 4 | 2 | 2 | 3 | 1 |
+
+At tasks 2 and 5 the parents agree, and so do the offspring.
+</details>
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-cruce-uniforme title="Exercise · One Point by Chance?"}
+With the parents from example [](#ejemplo-cruce-uno-y-dos-puntos) and $p = 0.5$, what is the probability that uniform crossover gives exactly the same Child 1 and Child 2 as one-point crossover with the cut after position 3?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+The mask must match 0 0 0 1 1 1 1 1, but only at the positions where the parents differ: 1, 3, 4, 5, 7, and 8. At positions 2 and 6 it does not matter, because the parents agree. Each of those six bits is right with probability 1/2, so the probability is $(1/2)^6 = 1/64 \approx 0.016$.
+</details>
+::::
+
+::: {.callout-note .en-app title="In the Application · crossover-ga, “Uniform crossover”"}
+[Explore in crossover-ga](https://josemagalan.github.io/crossover-ga/#op=uniform-binary&lang=en){.explorar target="_blank"}
+
+- Click **Draw again** several times and count how many positions are swapped each time.
+- Lower the **Swap probability (p)** from 0.5 to 0.1 and see how closely each child resembles its own parent.
+- Open [uniform crossover with integers](https://josemagalan.github.io/crossover-ga/#op=uniform-real&lang=en&p1=2-4-1-3-3-1&p2=1-4-2-2-3-4){target="_blank"} and type your own integer parents in **Enter parents manually**.
+- Click **Compare operators** and look at the “Stretches” column: how many consecutive blocks each child takes from the same parent under each crossover.
+:::
+
+## Crossover with Real Numbers [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-cruce-reales}
+
+If each gene is a real number, is it enough to swap genes, or should we blend them?
+
+With a **real-valued representation**, we can still swap genes. **Uniform crossover** works just as in section -@sec-cruce-uniforme: each gene of a child is exactly the gene of one of the parents. But this way, no new value ever appears at a position.
+
+**Arithmetic crossover** blends the values [@michalewicz1996]. Each gene of the offspring is a weighted average of the parents' genes at that position, with a weight λ between 0 and 1:
+
+$$
+H_1 = \lambda\, P_1 + (1 - \lambda)\, P_2, \qquad H_2 = \lambda\, P_2 + (1 - \lambda)\, P_1.
+$$
+
+In the formula, *H* denotes a child gene and *P* a parent gene. With $\lambda = 0.5$, both children are identical: the average of the parents.
+
+::: {.callout-tip .ejemplo #ejemplo-cruce-reales title="Reproducible Example · Copying or Blending"}
+**Data.** Two parents with five real-valued genes:
+
+| Position | 1 | 2 | 3 | 4 | 5 |
+|---|:---:|:---:|:---:|:---:|:---:|
+| Parent 1 | 2.0 | 8.5 | 4.0 | 1.5 | 6.0 |
+| Parent 2 | 6.0 | 2.5 | 5.0 | 9.5 | 3.0 |
+
+Uniform crossover with $p = 0.5$ and the random numbers 0.28, 0.07, 0.58, 0.94, and 0.15. Arithmetic crossover with $\lambda = 0.25$.
+
+**Predict.** What are the offspring of each crossover? Can any of them have a value greater than 9.5 at position 4?
+
+[Open: uniform crossover](https://josemagalan.github.io/crossover-ga/#op=uniform-real&lang=en&r=12&p=0.5&p1=2-8.5-4-1.5-6&p2=6-2.5-5-9.5-3){.abrir target="_blank"}
+[Open: arithmetic crossover with λ = 0.25](https://josemagalan.github.io/crossover-ga/#op=arithmetic&lang=en&lambda=0.25&p1=2-8.5-4-1.5-6&p2=6-2.5-5-9.5-3){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+| Position | 1 | 2 | 3 | 4 | 5 |
+|---|:---:|:---:|:---:|:---:|:---:|
+| Uniform: **Child 1** | 6.0 | 2.5 | 4.0 | 1.5 | 3.0 |
+| Uniform: **Child 2** | 2.0 | 8.5 | 5.0 | 9.5 | 6.0 |
+| Arithmetic: **Child 1** | 5.0 | 4.0 | 4.75 | 7.5 | 3.75 |
+| Arithmetic: **Child 2** | 3.0 | 7.0 | 4.25 | 3.5 | 5.25 |
+
+In uniform crossover, positions 1, 2, and 5 are swapped, and the offspring contain only parental values. In arithmetic crossover, for example, $0.25 \times 2.0 + 0.75 \times 6.0 = 5.0$. With λ = 0.25, Child 1 ends up closer to Parent 2. No child exceeds 9.5 at position 4: a weighted average always lies between the two values it averages.
+</details>
+
+<details class="incrustada">
+<summary>Show the tool here (arithmetic crossover)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/crossover-ga/#op=arithmetic&lang=en&lambda=0.25&p1=2-8.5-4-1.5-6&p2=6-2.5-5-9.5-3" loading="lazy" title="crossover-ga: arithmetic crossover"></iframe>
+</details>
+:::
+
+Neither uniform nor arithmetic crossover takes the offspring outside the interval the parents span at each position. Without mutation, the interval of each gene never grows. With arithmetic crossover, moreover, each child moves toward the center of its parents, so generation after generation the values concentrate and the population loses diversity. In section -@sec-cruce-otros-cruces we will see real-valued crossovers that can leave that interval.
+
+:::: {.callout-note .ejercicio #ejercicio-cruce-reales title="Exercise · How Far Can the Population Reach?"}
+In a population, the first gene of the individuals takes values between 2 and 6. If only arithmetic crossover is applied, without mutation, can any descendant have a first gene greater than 6 after ten generations? And if λ = 0.5 is always used?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+No. Each child lies between its two parents, so the population's maximum value cannot grow and its minimum cannot shrink: the values never leave [2, 6]. With λ = 0.5, moreover, each child is the average of its parents, and the population's values become more and more alike.
+</details>
+::::
+
+::: {.callout-note .en-app title="In the Application · crossover-ga, “Arithmetic crossover”"}
+[Explore in crossover-ga](https://josemagalan.github.io/crossover-ga/#op=arithmetic&lang=en){.explorar target="_blank"}
+
+- Move the **Weight (λ)** from 0 to 1. For which values are the children copies of the parents? For which value are they identical to each other?
+- Click **Compare operators** and look at the “Inside the interval” column for uniform and arithmetic crossover.
+:::
+
+## Permutations: Why One-Point Crossover Fails [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-cruce-permutaciones}
+
+In the traveling salesman problem, a solution is the order in which the cities are visited. What happens if we cross two routes as if they were bit strings?
+
+In a **permutation representation**, the chromosome is an ordering of *n* elements without repeats. It is used in routing problems, such as the traveling salesman problem, and in sequencing and scheduling problems [@cicirello2023]. Each number is a city (or a task) and must appear exactly once.
+
+::: {.callout-tip .ejemplo #ejemplo-cruce-permutaciones title="Reproducible Example · Cutting Two Routes"}
+**Data.** Two parents that order nine cities:
+
+| Position | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Parent 1 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+| Parent 2 | 9 | 4 | 5 | 2 | 6 | 3 | 8 | 1 | 7 |
+
+One-point crossover, as in section -@sec-cruce-uno-y-dos-puntos, with the cut after position 4.
+
+**Predict.** Are the offspring valid routes?
+
+[Open: one-point crossover with permutations](https://josemagalan.github.io/crossover-ga/#op=one-point-perm&lang=en&p1=1-2-3-4-5-6-7-8-9&p2=9-4-5-2-6-3-8-1-7&c=4){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+| Position | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Child 1** | 1 | 2 | 3 | 4 | 6 | 3 | 8 | 1 | 7 |
+| **Child 2** | 9 | 4 | 5 | 2 | 5 | 6 | 7 | 8 | 9 |
+
+Neither is a permutation. Child 1 visits cities 1 and 3 twice and never visits 5 or 9. Child 2 has the opposite problem: it repeats 5 and 9 and is missing 1 and 3.
+</details>
+:::
+
+Crossovers for the binary representation do not work for permutations: they almost always produce offspring with some genes repeated and others missing [@talbi2009, p. 218]. We need crossovers that respect the validity condition from section -@sec-cruce-para-que-cruzar. The three most widely used are OX, PMX, and CX. All three take something from each parent, but each preserves different things.
+
+:::: {.callout-note .ejercicio #ejercicio-cruce-permutaciones title="Exercise · A Lucky Cut?"}
+With the parents from example [](#ejemplo-cruce-permutaciones), is there any cut point for which one-point crossover gives valid offspring? What condition would have to hold?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+Child 1 is valid if its head (from Parent 1) and its tail (from Parent 2) share no city. That happens when the heads of the two parents contain the same cities, even in a different order. With these parents, it does not happen for any cut. For example, with the cut after position 8, the head of Parent 1 contains cities 1 to 8, whereas the head of Parent 2 includes city 9. If one child is valid, so is the other, because what one has in excess is exactly what the other lacks.
+</details>
+::::
+
+::: {.callout-note .en-app title="In the Application · crossover-ga, “Counterexample: one-point crossover”"}
+[Explore in crossover-ga](https://josemagalan.github.io/crossover-ga/#op=one-point-perm&lang=en){.explorar target="_blank"}
+
+- Click **Show as routes**. Each gene becomes a city, and each chromosome becomes a traveling salesman route. See which cities each child leaves unvisited.
+- Click **Random parents** several times. How often are the children valid?
+:::
+
+## OX Crossover [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-cruce-ox}
+
+How can we copy a piece of one parent and complete the child without repeating any city?
+
+**Order crossover**, OX, comes from a proposal by @davis1985; the two-cut version is described by @goldberg1989. Two cut points are chosen, and the stretch between them is the **segment**. To form Child 1:
+
+1. Child 1 copies the segment from Parent 1, in the same positions.
+2. Parent 2 is read starting after the second cut and wrapping around, and the cities not yet in the child are listed in that order.
+3. Those cities are placed in the child's empty positions, also starting after the second cut and wrapping around to the beginning.
+
+Child 2 is formed in the same way, with the parents' roles reversed. Each child thus keeps a stretch of one parent and the **relative order** in which the other parent visits the remaining cities [@talbi2009, p. 218]. According to @cicirello2023, the filling probably wraps around because OX was designed for the traveling salesman problem: if the route is read as a circuit, the cities from the other parent end up together, in a single stretch. In crossover-ga this is the “Classic (Goldberg, 1989)” variant. The tool opens with a different variant by default, which we discuss in section -@sec-cruce-otros-cruces; the links in this chapter already select the classic one.
+
+::: {.callout-tip .ejemplo #ejemplo-cruce-ox title="Reproducible Example · Segment and Order"}
+**Data.** The parents from example [](#ejemplo-cruce-permutaciones). Cuts after positions 3 and 7: the segment is positions 4–7.
+
+| Position | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Parent 1 | 1 | 2 | 3 | **4** | **5** | **6** | **7** | 8 | 9 |
+| Parent 2 | 9 | 4 | 5 | **2** | **6** | **3** | **8** | 1 | 7 |
+
+**Predict.** After the segment is copied, which cities from Parent 2 are missing from Child 1, and in what order? In which positions are they placed?
+
+[Open: OX crossover](https://josemagalan.github.io/crossover-ga/#op=ox&lang=en&v=classic&p1=1-2-3-4-5-6-7-8-9&p2=9-4-5-2-6-3-8-1-7&c=3-7){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+Child 1 copies 4 5 6 7 into positions 4–7. Parent 2, read from position 8 and wrapping around, is 1 7 9 4 5 2 6 3 8. Skipping the cities in the segment leaves 1, 9, 2, 3, and 8, in that order, and they go into positions 8, 9, 1, 2, and 3.
+
+| Position | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Child 1** | 2 | 3 | 8 | 4 | 5 | 6 | 7 | 1 | 9 |
+| **Child 2** | 4 | 5 | 7 | 2 | 6 | 3 | 8 | 9 | 1 |
+
+Child 2 copies the segment of Parent 2 (2 6 3 8) and places 9, 1, 4, 5, and 7, in the order of Parent 1 read from position 8.
+</details>
+
+<details class="incrustada">
+<summary>Show the tool here (OX crossover)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/crossover-ga/#op=ox&lang=en&v=classic&p1=1-2-3-4-5-6-7-8-9&p2=9-4-5-2-6-3-8-1-7&c=3-7" loading="lazy" title="crossover-ga: OX crossover"></iframe>
+</details>
+:::
+
+::: {.callout-note .en-app title="In the Application · crossover-ga, “OX crossover”"}
+[Explore in crossover-ga](https://josemagalan.github.io/crossover-ga/#op=ox&lang=en&v=classic){.explorar target="_blank"}
+
+- Check that “Classic (Goldberg, 1989)” is selected under **Variant**. If you open the tool from the portal, a different one is selected by default.
+- Advance step by step: the small numbers in the empty positions show the order in which they are filled.
+- Drag the cuts to change the segment, and predict Child 1 before advancing.
+- Use **Practice** with several **Random parents** until you get both children right on the first try.
+:::
+
+## PMX Crossover [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-cruce-pmx}
+
+Can we complete the child while respecting, whenever possible, the position each city had in a parent?
+
+**PMX crossover** (*partially mapped crossover*) was proposed by @goldberg1985 for the traveling salesman problem. It also uses two cuts and a segment, but fills the rest differently. In the tool, Child 1 is formed as follows:
+
+1. Child 1 receives the segment of Parent 2.
+2. The pairs of genes that occupy the same position in the segment form a **directed mapping table**: from the Parent 2 value to the Parent 1 value.
+3. Outside the segment, each position copies the gene of Parent 1 if it is not already in the child.
+4. If it is, that value is looked up in the segment copied from Parent 2, and the value at the same position in Parent 1 is taken. The mappings are always followed in this direction, and the step is repeated until a gene not already in the child is found.
+
+Child 2 is formed in the same way, with the segment of Parent 1, the rest from Parent 2, and the arrows of the table reversed. Some texts give Child 1 the segment of Parent 1; this produces the same two children with their names swapped.
+
+::: {.callout-tip .ejemplo #ejemplo-cruce-pmx title="Reproducible Example · Following the Mappings"}
+**Data.** The same parents and cuts as in example [](#ejemplo-cruce-ox): the segment is positions 4–7. For Child 1, the mappings are 2 → 4, 6 → 5, 3 → 6, and 8 → 7; for Child 2 they are reversed.
+
+**Predict.** Child 1 receives 2 6 3 8 in positions 4–7. Which gene goes in position 3, where Parent 1 has a 3?
+
+[Open: PMX crossover](https://josemagalan.github.io/crossover-ga/#op=pmx&lang=en&p1=1-2-3-4-5-6-7-8-9&p2=9-4-5-2-6-3-8-1-7&c=3-7){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+The 3 is already in the child's segment. It maps to 6, which is also there. The 6 maps to 5, which is not: a **5** goes there (chain 3 → 6 → 5). In the same way, a 4 goes in position 2 (2 → 4) and a 7 in position 8 (8 → 7). Positions 1 and 9 copy the 1 and the 9 from Parent 1.
+
+| Position | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Child 1** | 1 | 4 | 5 | 2 | 6 | 3 | 8 | 7 | 9 |
+| **Child 2** | 9 | 2 | 3 | 4 | 5 | 6 | 7 | 1 | 8 |
+
+In Child 2, the chains are 4 → 2 at position 2, 5 → 6 → 3 at position 3, and 7 → 8 at position 9.
+</details>
+
+<details class="incrustada">
+<summary>Show the tool here (PMX crossover)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/crossover-ga/#op=pmx&lang=en&p1=1-2-3-4-5-6-7-8-9&p2=9-4-5-2-6-3-8-1-7&c=3-7" loading="lazy" title="crossover-ga: PMX crossover"></iframe>
+</details>
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-cruce-pmx title="Exercise · OX Versus PMX"}
+Compare Child 1 from OX (example [](#ejemplo-cruce-ox)) with the one from PMX. Outside the segment, how many cities does each keep in the same position as in the parent that completes it?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+Positions 1, 2, 3, 8, and 9 lie outside the segment. The PMX Child 1 (1 4 5 · · · · 7 9) keeps two cities in the positions they had in Parent 1: the 1 and the 9. The OX child (2 3 8 · · · · 1 9) keeps only one in the position it had in Parent 2, the 1 at position 8, but it keeps the relative order of all five, read circularly from position 8. PMX tends to preserve positions, and OX tends to preserve order. We will measure this in section -@sec-cruce-que-conserva.
+</details>
+::::
+
+::: {.callout-note .en-app title="In the Application · crossover-ga, “PMX crossover”"}
+[Explore in crossover-ga](https://josemagalan.github.io/crossover-ga/#op=pmx&lang=en){.explorar target="_blank"}
+
+- Advance step by step and follow the **Chain** that appears when a gene is already in the child.
+- Drag the cuts to find a segment for which some chain has more than two steps.
+:::
+
+## CX Crossover [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-cruce-cx}
+
+What if we want every city in the child to occupy exactly the position it had in one of its parents?
+
+**Cycle crossover**, CX, was proposed by @oliver1987. It uses no cuts. It resembles uniform crossover, which decides each position separately, but here the decisions are linked. If Child 1 takes the gene at position 1 from Parent 1, that same gene cannot come from Parent 2 at another position. Therefore, the position where Parent 2 has that gene must also be taken from Parent 1, and so on until we return to position 1. Those positions form a **cycle**.
+
+To form the children:
+
+1. Start at the first free position and follow the chain until the cycle closes.
+2. Choose at random which parent Child 1 takes that whole cycle from. Child 2 takes it from the other parent.
+3. Repeat from the next free position until the children are complete.
+
+This is the tool's default variant, “Random cycles”. Both children are always valid permutations, and Child 2 is the complement of Child 1.
+
+::: {.callout-tip .ejemplo #ejemplo-cruce-cx title="Reproducible Example · Three Cycles"}
+**Data.** The parents from example [](#ejemplo-cruce-permutaciones). In the draw, Child 1 takes the first cycle from Parent 1, the second from Parent 2, and the third from Parent 1.
+
+**Predict.** Which positions form each cycle? What are the children?
+
+[Open: CX crossover](https://josemagalan.github.io/crossover-ga/#op=cx&lang=en&v=random&r=8&p1=1-2-3-4-5-6-7-8-9&p2=9-4-5-2-6-3-8-1-7){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+- **Cycle 1**, from Parent 1. It starts at position 1, with city 1. In Parent 2, the 1 is at position 8; there Parent 1 has an 8, which is at position 7 in Parent 2; the 7 is at position 9, and the 9 is at position 1. Positions 1, 8, 7, and 9.
+- **Cycle 2**, from Parent 2. It starts at position 2: positions 2 and 4.
+- **Cycle 3**, from Parent 1. It starts at position 3: positions 3, 6, and 5.
+
+| Position | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Child 1** | 1 | 4 | 3 | 2 | 5 | 6 | 7 | 8 | 9 |
+| **Child 2** | 9 | 2 | 5 | 4 | 6 | 3 | 8 | 1 | 7 |
+
+Every city is in the position it had in one of the parents.
+</details>
+
+<details class="incrustada">
+<summary>Show the tool here (CX crossover)</summary>
+<iframe data-external="1" src="https://josemagalan.github.io/crossover-ga/#op=cx&lang=en&v=random&r=8&p1=1-2-3-4-5-6-7-8-9&p2=9-4-5-2-6-3-8-1-7" loading="lazy" title="crossover-ga: CX crossover"></iframe>
+</details>
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-cruce-cx title="Exercise · How Many Different Children?"}
+With the parents from example [](#ejemplo-cruce-cx), how many different Child 1 outcomes can CX produce with the “Random cycles” variant? What is the probability that Child 1 is an exact copy of one of the parents?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+There are three cycles, and each can come from either parent: $2^3 = 8$ different Child 1 outcomes, all equally likely. Two of them are copies: all cycles from Parent 1, or all from Parent 2. The probability is 2/8 = 0.25. With fewer cycles, copies are more frequent: with two cycles, they occur half the time. A one-position cycle, where the parents have the same city, gives the same result whichever parent it comes from, so it mixes nothing.
+</details>
+::::
+
+::: {.callout-note .en-app title="In the Application · crossover-ga, “CX crossover”"}
+[Explore in crossover-ga](https://josemagalan.github.io/crossover-ga/#op=cx&lang=en){.explorar target="_blank"}
+
+- Advance step by step and follow the arrows between the parents until each cycle closes.
+- Click **Draw again** several times with the same parents. How often do you get a copy of a parent?
+- Click **Show as routes** and compare the lengths of the children's routes with those of the parents.
+:::
+
+## Summary {.unnumbered #resumen}
+
+- Crossover combines two parents into two offspring, which must inherit traits from their parents and be valid solutions.
+- In binary and integer representations, one-point, two-point, and uniform crossover can be described with a mask. Where the parents agree, so do the offspring.
+- In real-valued representations, uniform crossover copies values and arithmetic crossover averages them; neither leaves the parents' interval.
+- Permutations need crossovers of their own: OX preserves relative order, PMX completes the child through mappings and tends to preserve positions, and CX preserves all positions.
+
+To continue along the basic path, go to the [“Mutation” chapter](07-mutacion.qmd).
+
+## Other Crossovers [[Advanced]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-cruce-otros-cruces}
+
+This section extends the basic path. It requires the crossover mask from section -@sec-cruce-uno-y-dos-puntos and the crossovers from sections -@sec-cruce-reales to -@sec-cruce-cx.
+
+**_k_-point crossover.** This generalizes cut-based crossovers: with *k* cuts, the stretches alternate between copying from the child's own parent and taking from the other. Its mask changes value at each cut. With one cut it is one-point crossover, and with two, two-point crossover.
+
+**BLX-α crossover.** @eshelman1993 proposed drawing each gene of the offspring from the parents' interval extended on both sides. If the parents' values at a position are $c_{\min}$ and $c_{\max}$, with $I = c_{\max} - c_{\min}$, each child gene is drawn uniformly from $[c_{\min} - \alpha I,\ c_{\max} + \alpha I]$. With α = 0, the offspring stay inside the parents' interval; with α > 0, they can leave it, which counteracts the concentration described in section -@sec-cruce-reales.
+
+::: {.callout-tip .ejemplo #ejemplo-cruce-otros-cruces title="Reproducible Example · Leaving the Interval"}
+**Data.** The real-valued parents from example [](#ejemplo-cruce-reales), with α = 0.5. At position 2, the parents' values are 8.5 and 2.5, so $I = 6$ and the children are drawn from $[-0.5;\ 11.5]$.
+
+**Predict.** What proportion of the children's genes do you expect to fall outside their parents' interval?
+
+[Open: BLX-α crossover with α = 0.5](https://josemagalan.github.io/crossover-ga/#op=blx&lang=en&r=1&alpha=0.5&p1=2-8.5-4-1.5-6&p2=6-2.5-5-9.5-3){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+| Position | 1 | 2 | 3 | 4 | 5 |
+|---|:---:|:---:|:---:|:---:|:---:|
+| Parents' interval | [2; 6] | [2.5; 8.5] | [4; 5] | [1.5; 9.5] | [3; 6] |
+| **Child 1** | 5.02 | 5.83 | *5.44* | 7.31 | 4.05 |
+| **Child 2** | *0.02* | *11.27* | 4.06 | 9.03 | *7.47* |
+
+Four of the ten genes (in italics) fall outside their parents' interval. With α = 0.5, the extended interval is twice as wide as the parents' interval, so half of the genes are expected to fall outside it.
+</details>
+:::
+
+**SBX crossover.** The *simulated binary crossover* of @deb1995 uses real numbers to imitate the spread produced by binary one-point crossover. The two children lie at the same distance from the parents' mean, and the parameter η controls how far they move away: with a large η, the children stay close to the parents.
+
+**OX variants.** The default variant in crossover-ga, “Order from the start”, reads Parent 2 from the first position, not from the second cut, and fills the empty positions starting after the second cut, as the classic variant does. With the parents from example [](#ejemplo-cruce-ox), it gives the children 3 8 1 4 5 6 7 9 2 and 5 7 9 2 6 3 8 1 4. Each child still keeps its parent's segment and, read circularly, the relative order of the other parent, but the variant is not pure, as we will see in example [](#ejemplo-cruce-ampliaciones). In the “Left to right” variant, Parent 2 is read from the first position, and the empty positions are filled in order. This is NWOX (*non-wrapping order crossover*), proposed by Cicirello in 2006 for problems where it matters which element comes before another [@cicirello2023]; we will use it in exercise [](#ejercicio-cruce-que-conserva).
+
+**CX variants.** In CX, the “First cycle from Parent 1 (Goldberg, 1989)” variant takes the first cycle from Parent 1 and all other positions from Parent 2, and “Alternating cycles” alternates parents from one cycle to the next. Neither needs a random draw. With the parents from example [](#ejemplo-cruce-cx), the first gives Child 1 (1 4 5 2 6 3 7 8 9), and the second matches the child from that example, because there the draw happened to alternate the parents.
+
+**ERX crossover.** The *edge recombination crossover* of @whitley1989 tries to make the child inherit the parents' **edges**: the pairs of cities that are neighbors on the route. It builds an adjacency table with each city's neighbors in both parents and, at each step, chooses as the next city the neighbor with the fewest remaining options. crossover-ga also includes the “Priority to shared edges” variant of @starkweather1991, which, whenever it can, follows the edges shared by both parents first [@cicirello2023].
+
+::: {.callout-note .en-app title="In the Application · crossover-ga"}
+- Open [N-point crossover](https://josemagalan.github.io/crossover-ga/#op=n-point&lang=en){target="_blank"} and raise the **Number of cuts** from 1 to 5. How does the mask change?
+- Open [SBX crossover](https://josemagalan.github.io/crossover-ga/#op=sbx&lang=en){target="_blank"} and move the **Concentration (η)** between 1 and 20 while watching the cloud of other possible children.
+- In [OX crossover](https://josemagalan.github.io/crossover-ga/#op=ox&lang=en&v=from_start&p1=1-2-3-4-5-6-7-8-9&p2=9-4-5-2-6-3-8-1-7&c=3-7){target="_blank"}, with the parents from example [](#ejemplo-cruce-ox), and in [CX crossover](https://josemagalan.github.io/crossover-ga/#op=cx&lang=en){target="_blank"}, change the **Variant** with the same parents and compare the children.
+- Open [ERX crossover](https://josemagalan.github.io/crossover-ga/#op=erx&lang=en){target="_blank"}, follow the adjacency table step by step, and click **Show as routes**. Then change the **Variant** to “Priority to shared edges” and compare the table.
+:::
+
+## What Each Operator Preserves [[Advanced]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-cruce-que-conserva}
+
+This section requires the permutation crossovers from sections -@sec-cruce-ox to -@sec-cruce-otros-cruces.
+
+The heritability condition from section -@sec-cruce-para-que-cruzar can be made more specific: what does the child inherit from its parents? With permutations there are several possible answers, and each crossover favors some over others:
+
+- **Position:** the city occupies the same position as in a parent. CX always preserves it, by construction.
+- **Relative order:** the cities are visited in the same order as in a parent, though in other positions. This is what OX preserves from the second parent [@talbi2009, p. 218].
+- **Adjacencies:** cities that are neighbors in the child were already neighbors in a parent. This is what ERX aims for.
+- **Precedences:** if one city comes before another in both parents, it also comes before it in the child, counting from the start of the chromosome. This matters in scheduling [@cicirello2023].
+
+What is worth preserving depends on the problem. In the traveling salesman problem, with equal distances in both directions, the length of a route depends only on which cities are neighbors, not on the position where the route starts. In other sequencing problems, order or position may matter. @oliver1987 compared PMX, OX, and CX on the traveling salesman problem. When precedences matter, OX is not a good choice: because it fills by wrapping around, it reverses many of them [@cicirello2023]. The tool's “Relative order” column does not reflect this, because it reads the chromosome as a circular route.
+
+::: {.callout-tip .ejemplo #ejemplo-cruce-que-conserva title="Reproducible Example · Comparing Permutation Crossovers"}
+**Data.** The “Compare operators” screen of crossover-ga applies all crossovers for a representation to the same parents. The “What each operator keeps” table can average over many random parents: here, 1000 parent pairs of length 9, with 10 crossovers of each operator per pair. OX is applied in its classic variant.
+
+**Predict.** Which operator preserves the most positions? Which preserves the most adjacencies? Is there one that often mixes nothing at all?
+
+[Open: compare permutation crossovers](https://josemagalan.github.io/crossover-ga/#cmp=permutation&lang=en&from=ox&v=classic&avg=rand&r=8&p1=1-2-3-4-5-6-7-8-9&p2=9-4-5-2-6-3-8-1-7&c=3-7){.abrir target="_blank"}
+
+The average over random parents takes a few seconds to compute.
+
+<details>
+<summary>**Show the Result**</summary>
+
+| Operator | Position | Relative order | Adjacencies | Copy of a parent | Valid children |
+|---|:---:|:---:|:---:|:---:|:---:|
+| Counterexample: one point | 100% | 49% | 86% | 3% | 4% |
+| PMX | 83% | 71% | 72% | 4% | 100% |
+| OX | 62% | 84% | 77% | 4% | 100% |
+| CX | 100% | 91% | 89% | 63% | 100% |
+| ERX | 36% | 50% | 93% | 2% | 100% |
+
+The table must be read in parts. One-point crossover preserves all positions, but only 4% of its children are valid. CX preserves all positions, but 63% of its children are copies of a parent: with nine cities there are usually few cycles (exercise [](#ejercicio-cruce-cx)), one-position cycles, where the parents agree, mix nothing, and a copy scores 100% on everything. Among the others, PMX preserves the most positions, OX the most relative order, and ERX the most adjacencies.
+</details>
+:::
+
+:::: {.callout-note .ejercicio #ejercicio-cruce-que-conserva title="Exercise · Before or After?"}
+In both parents from example [](#ejemplo-cruce-ox), city 4 is visited before city 8. With the same cuts, after positions 3 and 7, which of the two does the OX Child 1 visit first? Then work out Child 1 of NWOX, the “Left to right” variant: it copies the segment of Parent 1 and places the remaining cities in the empty positions from left to right, in the order in which they appear in Parent 2 from the first position. Does it preserve that precedence?
+
+<details>
+<summary>**Show the Solution**</summary>
+
+The OX Child 1 is 2 3 8 4 5 6 7 1 9: city 8 comes before city 4, the reverse of both parents. Because OX reads Parent 2 from position 8 and wraps around, the 8, at position 7, is the last city read; the empty positions are also filled by wrapping around, so it goes into the last one, position 3, ahead of the segment that contains the 4.
+
+With NWOX, Parent 2 without the segment's cities (4, 5, 6, and 7) is 9 2 3 8 1, and these cities fill positions 1, 2, 3, 8, and 9. Child 1 is 9 2 3 4 5 6 7 8 1, and city 4 comes before city 8, as in the parents. NWOX does not guarantee that every precedence shared by the parents is preserved, but it preserves many more than OX. You can check the result in the [“Left to right” variant](https://josemagalan.github.io/crossover-ga/#op=ox&lang=en&v=left_to_right&p1=1-2-3-4-5-6-7-8-9&p2=9-4-5-2-6-3-8-1-7&c=3-7){target="_blank"}.
+</details>
+::::
+
+::: {.callout-note .en-app title="In the Application · crossover-ga, “Compare operators”"}
+[Explore in crossover-ga](https://josemagalan.github.io/crossover-ga/#cmp=permutation&lang=en){.explorar target="_blank"}
+
+- Switch **Average over** between “these parents” and “random parents”. Which columns depend most on the particular parents?
+- Make the same comparison with [the binary crossovers](https://josemagalan.github.io/crossover-ga/#cmp=binary&lang=en){target="_blank"} (columns “From own parent” and “Stretches”) and with [the real-valued ones](https://josemagalan.github.io/crossover-ga/#cmp=real&lang=en){target="_blank"} (columns “Inside the interval” and “Distance”).
+- Read “What each column measures”, below the table, for the exact definition of each measure.
+:::
+
+## Further Reading [[Further reading]{.largo}[+]{.corto}]{.nivel .saber-mas} {#sec-cruce-ampliaciones}
+
+**More properties of a crossover.** @talbi2009 [pp. 213–214] makes heritability more precise. A crossover is **pure** if two identical parents produce offspring identical to them: it only recombines and leaves the task of introducing new values to mutation. It is **respectful** if it preserves what the two parents have in common, as the binary crossovers do at positions 2 and 6 in example [](#ejemplo-cruce-uno-y-dos-puntos).
+
+The details of each variant matter. @talbi2009 [p. 218] notes that OX, as explained in section -@sec-cruce-ox, is pure. It stops being pure if the other parent is read starting at one place and the empty positions are filled starting at another. That is what the “Order from the start” variant in section -@sec-cruce-otros-cruces does: it reads the other parent from the first position and fills after the second cut.
+
+::: {.callout-tip .ejemplo #ejemplo-cruce-ampliaciones title="Reproducible Example · Crossing a Parent with Itself"}
+**Data.** Both parents are the route 1 2 3 4 5 6 7 8 9. OX crossover with the segment at positions 4–7, using the “Order from the start” variant and the “Classic (Goldberg, 1989)” variant.
+
+**Predict.** Are the children identical to the parents in both variants?
+
+[Open: OX, “Order from the start”](https://josemagalan.github.io/crossover-ga/#op=ox&lang=en&v=from_start&p1=1-2-3-4-5-6-7-8-9&p2=1-2-3-4-5-6-7-8-9&c=3-7){.abrir target="_blank"}
+[Open: OX, “Classic”](https://josemagalan.github.io/crossover-ga/#op=ox&lang=en&v=classic&p1=1-2-3-4-5-6-7-8-9&p2=1-2-3-4-5-6-7-8-9&c=3-7){.abrir target="_blank"}
+
+<details>
+<summary>**Show the Result**</summary>
+
+With the classic variant, both children are **1 2 3 4 5 6 7 8 9**, identical to the parents. With “Order from the start”, both children are **3 8 9 4 5 6 7 1 2**. The cities outside the segment (1, 2, 3, 8, and 9) are read from the beginning but placed starting after the second cut, so they shift. It is not even the same route read from a different city: cities 3 and 8 become neighbors.
+</details>
+:::
+
+**Schemata and building blocks.** Holland's schema theory explains why one-point crossover preserves groups of nearby genes more easily than groups of distant ones [@goldberg1989; @whitley1994]. This is the idea behind section -@sec-cruce-uno-y-dos-puntos.
+
+**Chromosomes as routes.** For permutation crossovers, the **Show as routes** button in crossover-ga draws each chromosome as a traveling salesman route on a map of random cities. It shows the length of each route and highlights the child's new legs, which were in neither parent. This shows what the columns in section -@sec-cruce-que-conserva mean in terms of the problem.
+
+**More than two parents.** Not every crossover combines two parents into two offspring: some produce a single child, and some use more than two parents [@pavai2016].
+
+**Crossover bias.** In section -@sec-cruce-reales we saw that uniform and arithmetic crossover do not take offspring outside their parents' interval. A related effect is studied under the name **crossover bias**: with real numbers, many crossovers tend to favor the central region of the search space. If the optimum lies in the favored region, the bias helps; if not, it gets in the way. When the location of the optimum is unknown, an unbiased crossover is preferable [@pavai2016, section 7.2].
+
+## Chapter References {.unnumbered #referencias}
+
+<!-- Bibliographic entries and their verification status are inherited from the Spanish v1.0 source. No new source verification is claimed by this translation. -->
+
+::: {.referencias-capitulo #refs}
+:::

@@ -1,0 +1,43 @@
+# Acknowledgments and Notices {.unnumbered #sec-avisos}
+
+## Translation Notice {#traduccion}
+
+This is an **AI-generated English translation in progress** of *Evolución a la vista. Algoritmos genéticos en un laboratorio interactivo*, Spanish edition **1.0**, published on October 31, 2026 ([DOI 10.5281/zenodo.23835733](https://doi.org/10.5281/zenodo.23835733)). The exact source is the repository tag `v1.0`, commit `75b82d8`.
+
+The Spanish edition is the original reference text prepared and reviewed by the authors. The English text translates that edition. Chapters 1–8 are translated; entries for the remaining chapters are navigation pages pointing to the Spanish original.
+
+Translation: **Codex (GPT-6)**, chapters 1–5, and **Claude (Cowork; configured model claude-opus-5-5)**, chapters 6–8, October 31, 2026. The assistants have compared the text with the source, checked technical invariants, and reviewed the English for naturalness, as described in the accompanying review report. The author gave the chapter 5 pilot a favorable general assessment; **a complete human review of the translation is pending**. The scope of any later review will be recorded explicitly. No independent DOI has been assigned to this translation.
+
+## Citing the Original {#como-citar}
+
+Galán, J. M., Díaz-de la Fuente, S., Ahedo, V., Pereda, M., & Santos, J. I. (2026). *Evolución a la vista. Algoritmos genéticos en un laboratorio interactivo* (Version 1.0). Zenodo. [https://doi.org/10.5281/zenodo.23835733](https://doi.org/10.5281/zenodo.23835733).
+
+That DOI identifies the source edition of this translation. The DOI for all Spanish versions is [10.5281/zenodo.23835732](https://doi.org/10.5281/zenodo.23835732); the [live Spanish website](https://josemagalan.github.io/genetic-algorithms-lab-book/) may contain later changes. The portal has a separate archive: [version 1.0.0, DOI 10.5281/zenodo.23834485](https://doi.org/10.5281/zenodo.23834485).
+
+## About the Book {#sobre-este-libro}
+
+The cover of the Spanish book was designed with the help of Codex. Its illustration is not reproduced on this local translation's title page.
+
+## Acknowledgments {#agradecimientos}
+
+The authors acknowledge the support of Anthropic's Claude Team plan for scientists.
+
+## Use of AI Assistants {#uso-ia}
+
+AI assistants were used in preparing the original Spanish material. The original and source content—tools, videos, teaching materials, and publications—is the work of the authors. The authors review, correct, and verify the Spanish materials and are responsible for that publication. The review status of this English translation is stated separately above.
+
+## License {#licencia}
+
+The text, original figures, and exercises are distributed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/). You may copy, adapt, and redistribute them, including commercially, provided you credit the authors. This translation uses the same license. Repository code, including figure scripts and filters, is licensed under MIT. Third-party images, KaTeX, the citation style, and linked tools retain their own licenses; see [LICENSE-CONTENT.md](https://github.com/josemagalan/genetic-algorithms-lab-book/blob/main/LICENSE-CONTENT.md).
+
+## Comments and Contact {#contacto}
+
+Use **Send a comment about this page** to report a typo, an unexpected result, or a broken link. It opens a GitHub form with the page and version filled in. Without a GitHub account, contact an author through their personal or academic page:
+
+- [José Manuel Galán](https://sites.google.com/site/josemagalan/), corresponding author. ORCID: [0000-0003-3360-7602](https://orcid.org/0000-0003-3360-7602). Universidad de Burgos.
+- [Silvia Díaz-de la Fuente](https://produccioncientifica.usal.es/investigadores/2300823/detalle). ORCID: [0000-0002-5961-3368](https://orcid.org/0000-0002-5961-3368). Universidad de Salamanca.
+- [Virginia Ahedo](https://investigacion.ubu.es/investigadores/34947/detalle). ORCID: [0000-0002-9812-388X](https://orcid.org/0000-0002-9812-388X). Universidad de Burgos.
+- [María Pereda](https://portalcientifico.upm.es/es/ipublic/researcher/331932). ORCID: [0000-0002-6151-1176](https://orcid.org/0000-0002-6151-1176). Universidad Politécnica de Madrid; Grupo Interdisciplinar de Sistemas Complejos.
+- [José Ignacio Santos](https://investigacion.ubu.es/investigadores/35543/detalle). ORCID: [0000-0002-6653-043X](https://orcid.org/0000-0002-6653-043X). Universidad de Burgos.
+
+Institutional names are preserved in their original form on the title page.
