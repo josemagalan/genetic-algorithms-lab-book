@@ -141,6 +141,15 @@ def preparar_ingles(destino, meta):
     config = destino / '_quarto.yml'
     config.write_text(sin_hooks(config.read_text(encoding='utf-8')), encoding='utf-8')
     shutil.copyfile(BOOK / 'en/_quarto-en.yml', destino / '_quarto-en.yml')
+    # El resto de la copia sale de la etiqueta fuente (v1.0). La bibliografía y el
+    # estilo de citas se toman de la copia de trabajo para que sus correcciones
+    # posteriores lleguen también a la edición inglesa.
+    shutil.copyfile(BOOK / 'referencias.bib', destino / 'referencias.bib')
+    shutil.copyfile(BOOK / 'vendor/csl/apa.csl', destino / 'vendor/csl/apa.csl')
+    # Número de artículo (APA): el .bib lo da en español, «Artículo 72».
+    bib = destino / 'referencias.bib'
+    bib.write_text(re.sub(r'(pages\s*=\s*\{)Artículo ', r'\1Article ', bib.read_text(encoding='utf-8')),
+                   encoding='utf-8')
     # Versión inglesa del mismo CSL: se revierten los ajustes españoles
     # documentados en vendor/csl/LEEME.md. Se conserva su licencia CC BY-SA.
     csl = (destino / 'vendor/csl/apa.csl').read_text(encoding='utf-8')

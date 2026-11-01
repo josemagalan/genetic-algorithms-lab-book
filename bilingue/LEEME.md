@@ -34,6 +34,9 @@ la edición española original `v1.0`.
   licencia y conservación del panel de la portada española.
 - Genera índices ingleses solo para las actividades traducidas, localiza las
   plantillas y los comentarios y crea una variante inglesa del CSL compartido.
+- Toma `referencias.bib` y `vendor/csl/apa.csl` de la copia de trabajo, no de la
+  etiqueta fuente, para que sus correcciones lleguen a la edición inglesa. En la
+  copia inglesa, el número de artículo «Artículo 72» del `.bib` pasa a «Article 72».
 - Ensambla `site/` (español) y `site/en/` (traducción), con selector de edición
   estático y conservación del ancla cuando existe el capítulo equivalente.
 - Guarda fuentes de partida, registros de Quarto, versiones, hashes y ZIP HTML.
