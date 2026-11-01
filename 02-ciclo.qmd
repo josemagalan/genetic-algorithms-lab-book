@@ -368,7 +368,7 @@ g) «Los padres se elegirán por torneo entre 4 individuos.»
 <details>
 <summary>**Ver la solución**</summary>
 
-a) Representación (1). b) Aptitud (4). c) Genotipo y fenotipo (3): la permutación es el cromosoma y la ruta completa, la solución. d) Reemplazo (8): es elitismo. e) Parada (9). f) Mutación (5). g) Selección (7).
+a\) Representación (1). b) Aptitud (4). c) Genotipo y fenotipo (3): la permutación es el cromosoma y la ruta completa, la solución. d) Reemplazo (8): es elitismo. e) Parada (9). f) Mutación (5). g) Selección (7).
 </details>
 ::::
 
@@ -401,7 +401,7 @@ b) Con los [valores de referencia](09-experimentos.qmd#configuracion-evotravelle
 <details>
 <summary>**Ver la solución**</summary>
 
-a)
+a) La tabla completa:
 
 | Decisión | En EvoTraveller | Control |
 |---|---|---|

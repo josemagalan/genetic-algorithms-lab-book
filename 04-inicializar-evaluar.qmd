@@ -305,7 +305,7 @@ La misma expansión por torneo se aplica a cualquier mejor individuo, sembrado o
 Sembrar no está prohibido, pero tiene que ser una decisión consciente. Si se hace, conviene «aleatorizar» la heurística para obtener soluciones distintas, porque el principal inconveniente es que la población pierde diversidad y se estanca [@talbi2009, p. 198]. En un primer diseño, lo recomendable es una población aleatoria uniforme.
 
 :::: {.callout-note .ejercicio #ejercicio-inicializar-evaluar-sembrar title="Ejercicio · La invasión, a mano"}
-(a) Con *N* = 10 y una copia, aplica la aproximación determinista para comprobar los valores de las generaciones 1, 2 y 3 del ejemplo [](#ejemplo-inicializar-evaluar-sembrar). (b) ¿Cuántas copias esperadas hay tras una generación si se siembran 5 copias? (c) En la población del ejemplo, ¿qué objeto habría que cambiar en la solución voraz para llegar al óptimo?
+\(a) Con *N* = 10 y una copia, aplica la aproximación determinista para comprobar los valores de las generaciones 1, 2 y 3 del ejemplo [](#ejemplo-inicializar-evaluar-sembrar). (b) ¿Cuántas copias esperadas hay tras una generación si se siembran 5 copias? (c) En la población del ejemplo, ¿qué objeto habría que cambiar en la solución voraz para llegar al óptimo?
 
 <details>
 <summary>**Ver la solución**</summary>
@@ -604,7 +604,7 @@ El presupuesto es $8 \times (6 + 1) = 56$ evaluaciones. Con la caché, la mochil
 La caché tiene condiciones. Solo vale si la aptitud es **determinista**, es decir, si evaluar dos veces el mismo individuo da lo mismo; lo veremos en la sección -@sec-inicializar-evaluar-ruido. Ocupa memoria, una entrada por cada individuo distinto. Y la clave importa: en el viajante, los $2n$ cromosomas de un mismo circuito tienen la misma longitud, y una caché por circuito ahorraría más que una por cromosoma. Otras formas de ahorrar son evaluar en paralelo o sustituir parte de las evaluaciones por un modelo aproximado, que verás en las [ampliaciones](#sec-inicializar-evaluar-ampliaciones).
 
 :::: {.callout-note .ejercicio #ejercicio-inicializar-evaluar-coste title="Ejercicio · Presupuestos"}
-(a) Un algoritmo con *N* = 50 individuos se ejecuta durante 100 generaciones. ¿Cuántas evaluaciones hace? Si cada una es una simulación de un minuto, ¿cuánto tarda? (b) Con mutación de probabilidad $1/L$ por gen, ¿qué probabilidad tiene un hijo de salir sin ningún cambio si *L* = 6? ¿Y si *L* = 100?
+\(a) Un algoritmo con *N* = 50 individuos se ejecuta durante 100 generaciones. ¿Cuántas evaluaciones hace? Si cada una es una simulación de un minuto, ¿cuánto tarda? (b) Con mutación de probabilidad $1/L$ por gen, ¿qué probabilidad tiene un hijo de salir sin ningún cambio si *L* = 6? ¿Y si *L* = 100?
 
 <details>
 <summary>**Ver la solución**</summary>
@@ -756,7 +756,7 @@ Entran los cuatro primeros: el más cercano a cada uno de los ya aceptados está
 La inhibición secuencial no mira la calidad de los individuos ni reparte la población de forma pareja por todo el espacio: solo impide que dos individuos estén demasiado cerca.
 
 :::: {.callout-note .ejercicio #ejercicio-inicializar-evaluar-inhibicion title="Ejercicio · ¿Entra o no entra?"}
-(a) Calcula la distancia del quinto candidato del ejemplo [](#ejemplo-inicializar-evaluar-inhibicion), (1, 2, 2, 1, 2), a cada uno de los cuatro individuos aceptados. (b) ¿Habría entrado con δ = 0,4? (c) ¿Con qué valores de δ la población sería exactamente la uniforme del ejemplo [](#ejemplo-inicializar-evaluar-uniforme)?
+\(a) Calcula la distancia del quinto candidato del ejemplo [](#ejemplo-inicializar-evaluar-inhibicion), (1, 2, 2, 1, 2), a cada uno de los cuatro individuos aceptados. (b) ¿Habría entrado con δ = 0,4? (c) ¿Con qué valores de δ la población sería exactamente la uniforme del ejemplo [](#ejemplo-inicializar-evaluar-uniforme)?
 
 <details>
 <summary>**Ver la solución**</summary>

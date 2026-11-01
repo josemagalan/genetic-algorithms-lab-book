@@ -296,7 +296,7 @@ Tournament expansion applies to any best individual, seeded or not. With the sam
 Seeding is allowed, but should be deliberate. If used, randomize the heuristic to produce different solutions: its main drawback is lost diversity and stagnation [@talbi2009, p. 198]. A uniform random population is the recommended starting point for a first design.
 
 :::: {.callout-note .ejercicio #ejercicio-inicializar-evaluar-sembrar title="Exercise · Takeover by Hand"}
-(a) For *N* = 10 and one copy, apply the deterministic approximation to check generations 1, 2, and 3 of example [](#ejemplo-inicializar-evaluar-sembrar). (b) What is the expected count after one generation with 5 seeded copies? (c) Which item must change in the greedy solution to reach the optimum?
+\(a) For *N* = 10 and one copy, apply the deterministic approximation to check generations 1, 2, and 3 of example [](#ejemplo-inicializar-evaluar-sembrar). (b) What is the expected count after one generation with 5 seeded copies? (c) Which item must change in the greedy solution to reach the optimum?
 
 <details>
 <summary>**Show the Solution**</summary>
@@ -591,7 +591,7 @@ The budget is $8 \times (6 + 1) = 56$ evaluations. With caching, the 6-item knap
 Caching has conditions. It requires **deterministic** fitness: evaluating the same individual twice must give the same result. We examine this in Section -@sec-inicializar-evaluar-ruido. It uses memory, one entry per distinct individual. The cache key also matters: in the traveling salesman problem, the $2n$ chromosomes representing the same tour have equal length, so caching by tour would save more than caching by chromosome. Other ways to save evaluations include parallel evaluation and replacing some evaluations with an approximate model, discussed in [Further Reading](#sec-inicializar-evaluar-ampliaciones).
 
 :::: {.callout-note .ejercicio #ejercicio-inicializar-evaluar-coste title="Exercise · Budgets"}
-(a) An algorithm with *N* = 50 individuals runs for 100 generations. How many evaluations does it perform? If each is a one-minute simulation, how long does it take? (b) With mutation probability $1/L$ per gene, what is the probability that an offspring has no changes if *L* = 6? What if *L* = 100?
+\(a) An algorithm with *N* = 50 individuals runs for 100 generations. How many evaluations does it perform? If each is a one-minute simulation, how long does it take? (b) With mutation probability $1/L$ per gene, what is the probability that an offspring has no changes if *L* = 6? What if *L* = 100?
 
 <details>
 <summary>**Show the Solution**</summary>
@@ -737,7 +737,7 @@ The first four enter: their distances to the nearest previously accepted individ
 Sequential inhibition neither considers quality nor spreads the population evenly over the entire space: it only prevents individuals from being too close.
 
 :::: {.callout-note .ejercicio #ejercicio-inicializar-evaluar-inhibicion title="Exercise · Accepted or Rejected?"}
-(a) Calculate the distance from the fifth candidate in Example [](#ejemplo-inicializar-evaluar-inhibicion), (1, 2, 2, 1, 2), to each of the four accepted individuals. (b) Would it have been accepted with δ = 0.4? (c) For which δ values would the population be exactly the uniform population from Example [](#ejemplo-inicializar-evaluar-uniforme)?
+\(a) Calculate the distance from the fifth candidate in Example [](#ejemplo-inicializar-evaluar-inhibicion), (1, 2, 2, 1, 2), to each of the four accepted individuals. (b) Would it have been accepted with δ = 0.4? (c) For which δ values would the population be exactly the uniform population from Example [](#ejemplo-inicializar-evaluar-uniforme)?
 
 <details>
 <summary>**Show the Solution**</summary>

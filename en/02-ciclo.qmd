@@ -360,7 +360,7 @@ g) “Choose parents by tournament among 4 individuals.”
 <details>
 <summary>**Show the Solution**</summary>
 
-a) Representation (1). b) Fitness (4). c) Genotype and phenotype (3): the permutation is the chromosome, and the complete route is the solution. d) Replacement (8): elitism. e) Stopping (9). f) Mutation (5). g) Selection (7).
+a\) Representation (1). b) Fitness (4). c) Genotype and phenotype (3): the permutation is the chromosome, and the complete route is the solution. d) Replacement (8): elitism. e) Stopping (9). f) Mutation (5). g) Selection (7).
 </details>
 ::::
 
@@ -393,7 +393,7 @@ b) With the [reference settings](09-experimentos.qmd#configuracion-evotraveller)
 <details>
 <summary>**Show the Solution**</summary>
 
-a)
+a) The completed table:
 
 | Decision | In EvoTraveller | Control |
 |---|---|---|

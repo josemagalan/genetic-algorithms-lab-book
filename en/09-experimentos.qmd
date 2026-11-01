@@ -278,7 +278,7 @@ Classify each case as strategic, tactical, or operational and say whether qualit
 <details>
 <summary>**Show the Solution**</summary>
 
-(a) It is strategic: it is solved once, there is time, and a mistake weighs heavily for years. Quality comes first, and many replicates and a large population can be afforded. (b) It is tactical: it is repeated every week, and computing time must be balanced against the quality of the routes. Because there may be time for only one run each week, a configuration with a good mean and little spread is preferable. (c) It is operational: the decision must be made in real time, so time comes first and a very fast heuristic is needed; a genetic algorithm with many generations is not suitable here.
+\(a) It is strategic: it is solved once, there is time, and a mistake weighs heavily for years. Quality comes first, and many replicates and a large population can be afforded. (b) It is tactical: it is repeated every week, and computing time must be balanced against the quality of the routes. Because there may be time for only one run each week, a configuration with a good mean and little spread is preferable. (c) It is operational: the decision must be made in real time, so time comes first and a very fast heuristic is needed; a genetic algorithm with many generations is not suitable here.
 </details>
 ::::
 

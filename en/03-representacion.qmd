@@ -288,7 +288,7 @@ That 327.4 is far from the optimum, 239.6, given by tour 1 3 5 6 4 2. Swapping t
 :::
 
 :::: {.callout-note .ejercicio #ejercicio-representacion-permutaciones title="Exercise · Is It a Permutation?"}
-(a) With 6 cities, is chromosome 1 3 5 3 6 4 valid? If not, what is wrong? (b) A simple repair scans the chromosome and replaces each repeated city by the smallest missing city. What chromosome results? (c) With *n* = 10 cities, how many permutations and distinct tours exist?
+\(a) With 6 cities, is chromosome 1 3 5 3 6 4 valid? If not, what is wrong? (b) A simple repair scans the chromosome and replaces each repeated city by the smallest missing city. What chromosome results? (c) With *n* = 10 cities, how many permutations and distinct tours exist?
 
 <details>
 <summary>**Show the Solution**</summary>
@@ -346,7 +346,7 @@ Which representation would you choose for each problem, and what would a gene me
 <details>
 <summary>**Show the Solution**</summary>
 
-(a) A 20-gene bit vector: gene *i* is 1 if product *i* enters the order (a yes-or-no decision). (b) A 12-gene integer vector with values 1 to 4: gene *i* gives delivery *i*'s driver (an unordered category). (c) An 8-gene permutation: gene *j* is the job processed at position *j*. (d) A 3-gene real-valued vector: one coefficient per gene. This is natural, although binary encoding is possible with precision determined by its bit count.
+\(a) A 20-gene bit vector: gene *i* is 1 if product *i* enters the order (a yes-or-no decision). (b) A 12-gene integer vector with values 1 to 4: gene *i* gives delivery *i*'s driver (an unordered category). (c) An 8-gene permutation: gene *j* is the job processed at position *j*. (d) A 3-gene real-valued vector: one coefficient per gene. This is natural, although binary encoding is possible with precision determined by its bit count.
 </details>
 ::::
 
@@ -488,7 +488,7 @@ Gray does not solve everything: of eight chromosomes one bit away, only four (50
 Gray guarantees that a grid neighbor is one bit away, not that every one-bit change reaches a grid neighbor. Over 1 000 random points with *k* = 4, the tool finds that reaching a grid neighbor requires, in the worst case, an average of 2.9 gene changes in standard binary but always 1 in Gray (this differs from the average 1.73 bits changed between *z* and *z* + 1). Meanwhile, the proportion of one-bit neighbors that are grid neighbors rises from 25 % to 48 %, not to 100 %. Gray removes Hamming cliffs between consecutive values but does not make every one-bit change local. Talbi identifies poor handling of dynamic ranges as its main drawback [@talbi2009, p. 43]. Mitchell lists it among extensions of binary encoding [@mitchell1998, section 5.2].
 
 :::: {.callout-note .ejercicio #ejercicio-representacion-gray title="Exercise · Convert to Gray and Back"}
-(a) Write integer *z* = 5 in 4-bit Gray code. (b) What integer does Gray code 1 1 0 0 represent? (c) Write 15 and 16 in 5-bit standard binary and Gray, and count changed bits in each.
+\(a) Write integer *z* = 5 in 4-bit Gray code. (b) What integer does Gray code 1 1 0 0 represent? (c) Write 15 and 16 in 5-bit standard binary and Gray, and count changed bits in each.
 
 <details>
 <summary>**Show the Solution**</summary>

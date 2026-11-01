@@ -292,7 +292,7 @@ Clasifica cada caso como estratégico, táctico u operativo y di si primaría la
 <details>
 <summary>**Ver la solución**</summary>
 
-(a) Es estratégico: se resuelve una vez, hay tiempo y un error pesa mucho durante años. Prima la calidad y se pueden permitir muchas réplicas y mucha población. (b) Es táctico: se repite cada semana y hay que equilibrar el tiempo de cálculo con la calidad de las rutas. Como quizá solo haya tiempo para una ejecución cada semana, conviene una configuración con buena media y poca dispersión. (c) Es operativo: hay que decidir en tiempo real, así que prima el tiempo y se necesita una heurística muy rápida; un algoritmo genético con muchas generaciones no es adecuado aquí.
+\(a) Es estratégico: se resuelve una vez, hay tiempo y un error pesa mucho durante años. Prima la calidad y se pueden permitir muchas réplicas y mucha población. (b) Es táctico: se repite cada semana y hay que equilibrar el tiempo de cálculo con la calidad de las rutas. Como quizá solo haya tiempo para una ejecución cada semana, conviene una configuración con buena media y poca dispersión. (c) Es operativo: hay que decidir en tiempo real, así que prima el tiempo y se necesita una heurística muy rápida; un algoritmo genético con muchas generaciones no es adecuado aquí.
 </details>
 ::::
 

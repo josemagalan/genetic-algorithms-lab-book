@@ -296,7 +296,7 @@ Ese 327,4 está lejos del óptimo, 239,6, que es el circuito 1 3 5 6 4 2. Cambia
 :::
 
 :::: {.callout-note .ejercicio #ejercicio-representacion-permutaciones title="Ejercicio · ¿Es una permutación?"}
-(a) Con 6 ciudades, ¿es válido el cromosoma 1 3 5 3 6 4? Si no lo es, ¿qué le pasa? (b) Un procedimiento simple de reparación recorre el cromosoma y cambia cada ciudad que aparece por segunda vez por la menor de las que faltan. ¿Qué cromosoma sale? (c) Con *n* = 10 ciudades, ¿cuántas permutaciones hay y cuántos circuitos distintos?
+\(a) Con 6 ciudades, ¿es válido el cromosoma 1 3 5 3 6 4? Si no lo es, ¿qué le pasa? (b) Un procedimiento simple de reparación recorre el cromosoma y cambia cada ciudad que aparece por segunda vez por la menor de las que faltan. ¿Qué cromosoma sale? (c) Con *n* = 10 ciudades, ¿cuántas permutaciones hay y cuántos circuitos distintos?
 
 <details>
 <summary>**Ver la solución**</summary>
@@ -356,7 +356,7 @@ El vector de reales tiene un problema que la binaria no tenía: un gen puede val
 <details>
 <summary>**Ver la solución**</summary>
 
-(a) Vector de bits, de 20 genes: el gen *i* vale 1 si el producto *i* entra en el pedido (decisión de sí o no). (b) Vector de enteros, de 12 genes que valen de 1 a 4: el gen *i* es el repartidor de la entrega *i* (una categoría sin orden). (c) Permutación de 8 genes: el gen *j* es el trabajo que se procesa en el lugar *j*. (d) Vector de reales, de 3 genes: cada gen es un coeficiente. Es la representación natural, aunque también podría escribirse en binario, con la precisión que dé el número de bits.
+\(a) Vector de bits, de 20 genes: el gen *i* vale 1 si el producto *i* entra en el pedido (decisión de sí o no). (b) Vector de enteros, de 12 genes que valen de 1 a 4: el gen *i* es el repartidor de la entrega *i* (una categoría sin orden). (c) Permutación de 8 genes: el gen *j* es el trabajo que se procesa en el lugar *j*. (d) Vector de reales, de 3 genes: cada gen es un coeficiente. Es la representación natural, aunque también podría escribirse en binario, con la precisión que dé el número de bits.
 </details>
 ::::
 
@@ -502,7 +502,7 @@ Pero Gray no lo arregla todo: de los ocho cromosomas a un bit de distancia, solo
 El código Gray garantiza que el vecino de la rejilla está siempre a un bit, pero no que un bit lleve siempre a un vecino. Midiendo con 1 000 puntos al azar, la herramienta cuenta, con *k* = 4, que en el peor caso hay que cambiar de media 2,9 genes para llegar a un vecino de la rejilla en estándar, y siempre 1 en Gray (no confundir con los 1,73 bits de media que cambian de *z* a *z* + 1); en cambio, la proporción de cromosomas a un bit que son vecinos de la rejilla sube de un 25 % a un 48 %, no a un 100 %. Gray elimina los saltos de Hamming entre valores consecutivos, pero no garantiza que cualquier cambio de un bit dé un valor cercano. Talbi señala que su principal inconveniente es que maneja mal los rangos dinámicos [@talbi2009, p. 43]. Mitchell lo menciona como una de las extensiones de la codificación binaria [@mitchell1998, apartado 5.2].
 
 :::: {.callout-note .ejercicio #ejercicio-representacion-gray title="Ejercicio · Pasar a Gray y volver"}
-(a) Escribe el entero *z* = 5 en 4 bits en código Gray. (b) ¿Qué entero representa el código Gray 1 1 0 0? (c) Escribe 15 y 16 en 5 bits, en binario estándar y en Gray, y cuenta cuántos bits cambian en cada código.
+\(a) Escribe el entero *z* = 5 en 4 bits en código Gray. (b) ¿Qué entero representa el código Gray 1 1 0 0? (c) Escribe 15 y 16 en 5 bits, en binario estándar y en Gray, y cuenta cuántos bits cambian en cada código.
 
 <details>
 <summary>**Ver la solución**</summary>
