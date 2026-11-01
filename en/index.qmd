@@ -16,6 +16,8 @@ The book is intended for undergraduate students who are new to genetic algorithm
 
 Examples open the tool with fixed data. “In the Application” boxes invite you to explore. Exercises can be worked out on paper; their solutions remain folded until you choose to open them.
 
+The text uses American spelling. Names of tabs, controls, and buttons are quoted exactly as they appear in each application's English interface, so some keep British spelling, such as “Travelling salesman problem” or **Penalise**.
+
 ## Translation and Review {.unnumbered}
 
 The translation was prepared on October 31, 2026, by **Codex (GPT-6)** (chapters 1–5) and **Claude (Cowork; configured model claude-opus-5-5)** (chapters 6–11). Each translated chapter is compared with the Spanish source for terminology, numbers, formulas, citations, links, and activity settings, then given a separate pass for natural English. The author gave the chapter 5 pilot a favorable general assessment. **A complete human review of the English translation is pending.** Checks and editorial review by an AI assistant do not constitute an independent human review.
