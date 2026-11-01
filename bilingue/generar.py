@@ -145,6 +145,10 @@ def preparar_ingles(destino, meta):
     # documentados en vendor/csl/LEEME.md. Se conserva su licencia CC BY-SA.
     csl = (destino / 'vendor/csl/apa.csl').read_text(encoding='utf-8')
     csl = csl.replace('default-locale="es-ES"', 'default-locale="en-US"').replace('and="text"', 'and="symbol"')
+    # Con pandoc, el CSL omitía la etiqueta de los capítulos: [@clave, chapter 5]
+    # salía «(Autor, año, 5)». Así sale «(Autor, año, Chapter 5)», como «Section».
+    assert 'locator="chapter line verse"' in csl
+    csl = csl.replace('locator="chapter line verse"', 'locator="line verse"')
     (destino / 'vendor/csl/apa-en.csl').write_text(csl, encoding='utf-8')
     for archivo, cambios in {
         'plantillas/title-metadata.html': {

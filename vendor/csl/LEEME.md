@@ -8,4 +8,5 @@
   1. `default-locale="es-ES"`: en un libro de Quarto, citeproc no toma el `lang: es` del proyecto y saldría en inglés («In», «2nd ed.»).
   2. `and="text"` en lugar de `and="symbol"` (40 casos): «y» entre autores, como en las adaptaciones de APA al castellano, en lugar de «&».
   3. En el bloque de locale `es`, `page-range-delimiter` = «–» (raya corta), como en APA; el castellano de pandoc usa «-».
+- La variante inglesa `apa-en.csl` la crea `bilingue/generar.py`: revierte los cambios 1 y 2 y, además, quita `chapter` de la condición `locator="chapter line verse"`. Con pandoc, esa condición omitía la etiqueta y `[@clave, chapter 5]` salía «(Autor, año, 5)»; ahora sale «(Autor, año, Chapter 5)». El español no cambia.
 - La conjunción «e» ante i-/hi- («Galán e Izquierdo») la pone `filtros/e-ante-i.py` después de generar el HTML.
