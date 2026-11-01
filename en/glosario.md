@@ -143,5 +143,8 @@ se traduce como «Open and configure» (la hoja de estilos añade ⚙). Del port
 `lang=en` (`js/content.js`): **Five modules. One shared process.**, **How they fit into
 the algorithm** y **Experiment across generations**. De crossover-ga: **Variant**, “Order
 from the start”, “Classic (Goldberg, 1989)” y “Compare operators”; de
-initialization-and-evaluation-ga, “Several objectives”. Las cifras con miles separados
-por espacio («40 000 million», «85 900») se conservan así para que el cotejo no cambie.
+initialization-and-evaluation-ga, “Several objectives”. Los miles se separan con espacio
+(«85 900»). Revisión manual (2026-11-02): «40 000 millones» se traduce con la escala corta,
+«40 billion», y las coordenadas e intervalos llevan coma, como en inglés: (1.6667, −3),
+[2, 6]; en español van con punto y coma porque la coma es decimal. El cotejo equipara
+ambas formas.

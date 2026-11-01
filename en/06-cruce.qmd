@@ -486,7 +486,7 @@ This section extends the basic path. It requires the crossover mask from section
 **BLX-α crossover.** @eshelman1993 proposed drawing each gene of the offspring from the parents' interval extended on both sides. If the parents' values at a position are $c_{\min}$ and $c_{\max}$, with $I = c_{\max} - c_{\min}$, each child gene is drawn uniformly from $[c_{\min} - \alpha I,\ c_{\max} + \alpha I]$. With α = 0, the offspring stay inside the parents' interval; with α > 0, they can leave it, which counteracts the concentration described in section -@sec-cruce-reales.
 
 ::: {.callout-tip .ejemplo #ejemplo-cruce-otros-cruces title="Reproducible Example · Leaving the Interval"}
-**Data.** The real-valued parents from example [](#ejemplo-cruce-reales), with α = 0.5. At position 2, the parents' values are 8.5 and 2.5, so $I = 6$ and the children are drawn from $[-0.5;\ 11.5]$.
+**Data.** The real-valued parents from example [](#ejemplo-cruce-reales), with α = 0.5. At position 2, the parents' values are 8.5 and 2.5, so $I = 6$ and the children are drawn from $[-0.5, 11.5]$.
 
 **Predict.** What proportion of the children's genes do you expect to fall outside their parents' interval?
 
@@ -497,7 +497,7 @@ This section extends the basic path. It requires the crossover mask from section
 
 | Position | 1 | 2 | 3 | 4 | 5 |
 |---|:---:|:---:|:---:|:---:|:---:|
-| Parents' interval | [2; 6] | [2.5; 8.5] | [4; 5] | [1.5; 9.5] | [3; 6] |
+| Parents' interval | [2, 6] | [2.5, 8.5] | [4, 5] | [1.5, 9.5] | [3, 6] |
 | **Child 1** | 5.02 | 5.83 | *5.44* | 7.31 | 4.05 |
 | **Child 2** | *0.02* | *11.27* | 4.06 | 9.03 | *7.47* |
 

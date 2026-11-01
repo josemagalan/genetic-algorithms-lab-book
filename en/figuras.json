@@ -49,7 +49,7 @@
   },
   "03-genotipo-fenotipo.svg": {
     "Genotipo, fenotipo y aptitud de un individuo": "An individual's genotype, phenotype, and fitness",
-    "Un cromosoma de 8 bits, 1010 0011, se decodifica en el punto (x₁, x₂) = (1,67; −3,00), y la función de aptitud lo evalúa: f = 139,38. El cruce y la mutación actúan sobre el cromosoma; la función de aptitud actúa sobre el punto decodificado.": "An 8-bit chromosome, 1010 0011, decodes to point (x₁, x₂) = (1.67; −3.00), evaluated by the fitness function: f = 139.38. Crossover and mutation act on the chromosome; the fitness function acts on the decoded point.",
+    "Un cromosoma de 8 bits, 1010 0011, se decodifica en el punto (x₁, x₂) = (1,67; −3,00), y la función de aptitud lo evalúa: f = 139,38. El cruce y la mutación actúan sobre el cromosoma; la función de aptitud actúa sobre el punto decodificado.": "An 8-bit chromosome, 1010 0011, decodes to point (x₁, x₂) = (1.67, −3.00), evaluated by the fitness function: f = 139.38. Crossover and mutation act on the chromosome; the fitness function acts on the decoded point.",
     "Genotipo (cromosoma)": "Genotype (chromosome)",
     "Fenotipo (solución)": "Phenotype (solution)",
     "Aptitud": "Fitness",
@@ -67,7 +67,7 @@
   },
   "03-himmelblau.svg": {
     "La función de Himmelblau en la caja de −5 a 5": "The Himmelblau function in the box from −5 to 5",
-    "A la izquierda, la superficie de f en tres dimensiones; a la derecha, sus curvas de nivel. La función tiene cuatro mínimos globales, con f = 0, marcados con rombos, cada uno en su valle; en el centro hay un máximo local, cerca de (−0,27; −0,92), con f ≈ 181,6, y la función crece hacia las esquinas, hasta 890 en (5; 5).": "Left: the surface of f in three dimensions. Right: its contours. Four global minima, f = 0, are marked by diamonds, each in its own valley. Near the center is a local maximum around (−0.27; −0.92), f ≈ 181.6. The function rises toward the corners, reaching 890 at (5; 5).",
+    "A la izquierda, la superficie de f en tres dimensiones; a la derecha, sus curvas de nivel. La función tiene cuatro mínimos globales, con f = 0, marcados con rombos, cada uno en su valle; en el centro hay un máximo local, cerca de (−0,27; −0,92), con f ≈ 181,6, y la función crece hacia las esquinas, hasta 890 en (5; 5).": "Left: the surface of f in three dimensions. Right: its contours. Four global minima, f = 0, are marked by diamonds, each in its own valley. Near the center is a local maximum around (−0.27, −0.92), f ≈ 181.6. The function rises toward the corners, reaching 890 at (5, 5).",
     "Superficie": "Surface",
     "Curvas de nivel": "Contours"
   },
@@ -270,7 +270,7 @@
   },
   "11-tipos-de-representacion.svg": {
     "Las cuatro representaciones del libro, del cromosoma a la solución": "The book's four representations, from chromosome to solution",
-    "Cuatro paneles. Binaria: el cromosoma 1 0 1 1 0 1 mete en la mochila los objetos 1, 3, 4 y 6, que pesan 10 de 10 y valen 14. Entera: el cromosoma 2 1 3 2 1 reparte cinco tareas entre tres máquinas, con cargas 7, 10 y 5 y makespan 10. Real: el cromosoma (3,00; 2,00) es el punto (3; 2) de la función de Himmelblau, uno de sus mínimos, con f = 0. Permutación: el cromosoma 1 3 5 2 6 4 es un circuito por seis ciudades que mide 327,4.": "Four panels. Binary: chromosome 1 0 1 1 0 1 puts items 1, 3, 4, and 6 into the knapsack; they weigh 10 of 10 and are worth 14. Integer: chromosome 2 1 3 2 1 distributes five tasks among three machines, with loads 7, 10, and 5 and makespan 10. Real: chromosome (3.00; 2.00) is the point (3; 2) of the Himmelblau function, one of its minima, with f = 0. Permutation: chromosome 1 3 5 2 6 4 is a tour through six cities of length 327.4.",
+    "Cuatro paneles. Binaria: el cromosoma 1 0 1 1 0 1 mete en la mochila los objetos 1, 3, 4 y 6, que pesan 10 de 10 y valen 14. Entera: el cromosoma 2 1 3 2 1 reparte cinco tareas entre tres máquinas, con cargas 7, 10 y 5 y makespan 10. Real: el cromosoma (3,00; 2,00) es el punto (3; 2) de la función de Himmelblau, uno de sus mínimos, con f = 0. Permutación: el cromosoma 1 3 5 2 6 4 es un circuito por seis ciudades que mide 327,4.": "Four panels. Binary: chromosome 1 0 1 1 0 1 puts items 1, 3, 4, and 6 into the knapsack; they weigh 10 of 10 and are worth 14. Integer: chromosome 2 1 3 2 1 distributes five tasks among three machines, with loads 7, 10, and 5 and makespan 10. Real: chromosome (3.00, 2.00) is the point (3, 2) of the Himmelblau function, one of its minima, with f = 0. Permutation: chromosome 1 3 5 2 6 4 is a tour through six cities of length 327.4.",
     "Mochila (W = 10)": "Knapsack (W = 10)",
     "Fuera": "Out",
     "Peso 10 de 10 · valor 14": "Weight 10 of 10 · value 14",
@@ -287,6 +287,7 @@
     "Permutación": "Permutation",
     "Ordenación · el viajante": "Ordering · the traveling salesman",
     "3,00": "3.00",
-    "2,00": "2.00"
+    "2,00": "2.00",
+    "(3; 2), f = 0": "(3, 2), f = 0"
   }
 }

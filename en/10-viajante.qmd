@@ -96,7 +96,7 @@ The **traveling salesman problem** is probably the most popular combinatorial op
 | 10 | 362 880 | 181 440 |
 | 15 | 87 178 291 200 | 43 589 145 600 |
 
-Each additional place multiplies the number of routes by the number of places there already were: going from 10 to 11, by 10. With 15 places there are more than 40 000 million, which is why they cannot all be checked except on small maps.
+Each additional place multiplies the number of routes by the number of places there already were: going from 10 to 11, by 10. With 15 places there are more than 40 billion, which is why they cannot all be checked except on small maps.
 
 To work by hand, we will use a small EvoTraveller map with the usual seed: **Number of places** 6 and **Seed** 1111. That is the origin and five places (figure -@fig-mapa).
 
@@ -233,7 +233,7 @@ The mean length falls from 30.06 to 26.54, and the best route from 27.81 to 24.2
 
 [Enlarge figure](figuras/10-generacion.svg){.ampliar-figura target="_blank" rel="noopener"}
 
-With five destinations and the origin, there are only 60 routes, and it is easy to hit on the best one. On a map of 15 places, with more than 40 000 million routes, one generation does not go nearly as far: improvement is slow and depends on many generations.
+With five destinations and the origin, there are only 60 routes, and it is easy to hit on the best one. On a map of 15 places, with more than 40 billion routes, one generation does not go nearly as far: improvement is slow and depends on many generations.
 
 :::: {.callout-note .ejercicio #ejercicio-viajante-a-mano title="Exercise · With the Classic OX"}
 Repeat step 4 with the classic OX from section -@sec-cruce-ox, which reads the other parent starting after the second cut. With the same parents, the same segment, and the same mutation of Child 2 at positions 4 and 5, which children come out, and what is the best route in the next generation?

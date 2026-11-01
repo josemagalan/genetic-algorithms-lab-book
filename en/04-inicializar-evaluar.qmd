@@ -85,7 +85,7 @@ Use the numbers from example [](#ejemplo-inicializar-evaluar-uniforme). (a) Trun
 
 (a) The first four values are below 0.5, but the last is not: **1 1 1 1 0**.
 
-(b) $x_1 = -5 + 0.087 \times 10 = -4.13$ and $x_2 = -5 + 0.277 \times 10 = -2.23$. The point is $(-4.13;\ -2.23)$.
+(b) $x_1 = -5 + 0.087 \times 10 = -4.13$ and $x_2 = -5 + 0.277 \times 10 = -2.23$. The point is $(-4.13, -2.23)$.
 
 (c) $1 + \lfloor 0.980 \times 4 \rfloor = 1 + \lfloor 3.92 \rfloor = 4$: machine 4.
 
@@ -643,10 +643,10 @@ Two families of methods spread the population more evenly [@kazimipour2014; @tal
 
 | *i* | Base 2 | $u_1$ | Base 3 | $u_2$ | Point |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| 1 | 1 | 0.1₂ = 0.5 | 1 | 0.1₃ = 1/3 | (0.00; −1.67) |
-| 2 | 10 | 0.01₂ = 0.25 | 2 | 0.2₃ = 2/3 | (−2.50; 1.67) |
-| 3 | 11 | 0.11₂ = 0.75 | 10 | 0.01₃ = 1/9 | (2.50; −3.89) |
-| 4 | 100 | 0.001₂ = 0.125 | 11 | 0.11₃ = 4/9 | (−3.75; −0.56) |
+| 1 | 1 | 0.1₂ = 0.5 | 1 | 0.1₃ = 1/3 | (0.00, −1.67) |
+| 2 | 10 | 0.01₂ = 0.25 | 2 | 0.2₃ = 2/3 | (−2.50, 1.67) |
+| 3 | 11 | 0.11₂ = 0.75 | 10 | 0.01₃ = 1/9 | (2.50, −3.89) |
+| 4 | 100 | 0.001₂ = 0.125 | 11 | 0.11₃ = 4/9 | (−3.75, −0.56) |
 
 Halton's 8 points occupy **all 8 strips** on each axis. The uniform population occupies only 4 on $x_1$ and 6 on $x_2$. The largest gap—the distance from the location in the box farthest from every individual to its nearest individual—is 0.31 diagonals with Halton and 0.43 with uniform sampling. The minimum distance between individuals rises from 0.05 to 0.12, but the mean barely changes (0.38 versus 0.43). Coverage improves, rather than typical separation.
 </details>
@@ -669,14 +669,14 @@ Figure -@fig-cobertura compares the three populations of eight individuals.
 
 | Individual | Uniform | Halton | Latin hypercube |
 |:---:|:---:|:---:|:---:|
-| 1 | (−4.13; −2.23) | (0.00; −1.67) | (3.85; 0.50) |
-| 2 | (−0.46; −2.74) | (−2.50; 1.67) | (1.40; −1.17) |
-| 3 | (4.80; 1.37) | (2.50; −3.89) | (1.16; 1.67) |
-| 4 | (4.68; −4.79) | (−3.75; −0.56) | (−1.07; 2.97) |
-| 5 | (−3.00; −0.89) | (1.25; 2.78) | (3.09; 4.15) |
-| 6 | (−4.74; −1.39) | (−1.25; −2.78) | (−1.70; −1.29) |
-| 7 | (3.83; 3.14) | (3.75; 0.56) | (−3.57; −3.48) |
-| 8 | (−4.18; −0.98) | (−4.37; 3.89) | (−4.11; −4.74) |
+| 1 | (−4.13, −2.23) | (0.00, −1.67) | (3.85, 0.50) |
+| 2 | (−0.46, −2.74) | (−2.50, 1.67) | (1.40, −1.17) |
+| 3 | (4.80, 1.37) | (2.50, −3.89) | (1.16, 1.67) |
+| 4 | (4.68, −4.79) | (−3.75, −0.56) | (−1.07, 2.97) |
+| 5 | (−3.00, −0.89) | (1.25, 2.78) | (3.09, 4.15) |
+| 6 | (−4.74, −1.39) | (−1.25, −2.78) | (−1.70, −1.29) |
+| 7 | (3.83, 3.14) | (3.75, 0.56) | (−3.57, −3.48) |
+| 8 | (−4.18, −0.98) | (−4.37, 3.89) | (−4.11, −4.74) |
 </details>
 
 In a genetic algorithm, the advantage is modest and is most noticeable with small populations and continuous problems with few variables. Experimental comparisons appear in @maaranen2004 and in the review by @kazimipour2014. Latin hypercube sampling does not guarantee good coverage of the plane: all eight points could lie on a diagonal while still occupying every strip. Halton and Sobol, as defined here, always give the same population, so independent runs (Section -@sec-experimentos-replicas) require randomizing them.
@@ -689,9 +689,9 @@ Calculate $u_1$ and $u_2$ in the Halton sequence for $i = 5$, 6, and 7, and thei
 
 | *i* | Base 2 | $u_1$ | Base 3 | $u_2$ | Point |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| 5 | 101 | 0.101₂ = 5/8 = 0.625 | 12 | 0.21₃ = 2/3 + 1/9 = 7/9 | (1.25; 2.78) |
-| 6 | 110 | 0.011₂ = 3/8 = 0.375 | 20 | 0.02₃ = 2/9 | (−1.25; −2.78) |
-| 7 | 111 | 0.111₂ = 7/8 = 0.875 | 21 | 0.12₃ = 1/3 + 2/9 = 5/9 | (3.75; 0.56) |
+| 5 | 101 | 0.101₂ = 5/8 = 0.625 | 12 | 0.21₃ = 2/3 + 1/9 = 7/9 | (1.25, 2.78) |
+| 6 | 110 | 0.011₂ = 3/8 = 0.375 | 20 | 0.02₃ = 2/9 | (−1.25, −2.78) |
+| 7 | 111 | 0.111₂ = 7/8 = 0.875 | 21 | 0.12₃ = 1/3 + 2/9 = 5/9 | (3.75, 0.56) |
 
 For example, for $i = 5$: $x_1 = -5 + 0.625 \times 10 = 1.25$ and $x_2 = -5 + 0.778 \times 10 \approx 2.78$. These are the points in the data table for Figure -@fig-cobertura.
 </details>
@@ -939,7 +939,7 @@ Without the capacity constraint, each individual in Example [](#ejemplo-iniciali
 <details>
 <summary>**Show the Solution**</summary>
 
-The pairs (value; weight) are I1 (24; 14), I2 (26; 22), I3 (5; 4), I4 (11; 7), I5 (20; 11), I6 (9; 12), I7 (29; 24), and I8 (20; 19). I6 is dominated by I4 (higher value and lower weight) and by I5. I8 is dominated by I5 (equal value and lower weight) and by I1. The other six form the first front.
+The pairs (value; weight) are I1 (24, 14), I2 (26, 22), I3 (5, 4), I4 (11, 7), I5 (20, 11), I6 (9, 12), I7 (29, 24), and I8 (20, 19). I6 is dominated by I4 (higher value and lower weight) and by I5. I8 is dominated by I5 (equal value and lower weight) and by I1. The other six form the first front.
 </details>
 ::::
 

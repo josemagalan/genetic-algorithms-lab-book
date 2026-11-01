@@ -21,7 +21,9 @@ def clean(text):
 
 
 def normalizar_math(text):
-    text = text.replace('{,}', '.')
+    # En español, «;» separa coordenadas e intervalos porque la coma es decimal;
+    # en inglés se usa la coma: (1{,}6667;\ -3) equivale a (1.6667, -3).
+    text = text.replace('{,}', '.').replace('\\ ', ' ').replace(';', ',')
     for a, b in [('coste', 'cost'), ('peso', 'weight'), ('valor', 'value'),
                  ('maximizar', 'maximize'), ('minimizar', 'minimize'),
                  ('\\mathrm{EE}', '\\mathrm{SE}')]:
@@ -31,6 +33,11 @@ def normalizar_math(text):
 
 def formulas(text):
     return [normalizar_math(a or b) for a, b in re.findall(r'\$\$(.*?)\$\$|\$([^$\n]+)\$', text, re.S)]
+
+
+def escala_corta(text):
+    # «40 000 millones» se traduce «40 billion»; las dos cuentan como «40».
+    return re.sub(r'(\d+) 000 millones', r'\1 billion', text)
 
 
 def url_neutra(text):
@@ -65,7 +72,7 @@ def main():
         table_numbers = lambda t: [[x.replace(',', '.') for x in re.findall(r'\d+(?:[.,]\d+)?', line.replace('{,}', '.'))] for line in t.splitlines() if line.startswith('|')]
         checks['table_values'] = table_numbers(es) == table_numbers(en)
         numbers = lambda t: Counter(re.findall(r'(?<![\w])\d+(?:\.\d+)?', t.replace('{,}', '.').replace(',', '.')))
-        a, b = numbers(es), numbers(en)
+        a, b = numbers(escala_corta(es)), numbers(en)
         checks['numeric_tokens'] = a == b
         result['chapters'][name] = {'checks': checks, 'identifiers': len(re.findall(r'\{[^}\n]*#([\w-]+)', es)),
                                     'formulas': len(formulas(es)), 'folded_blocks': es.count('<details'),

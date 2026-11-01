@@ -42,9 +42,9 @@ inside the square $[-5, 5]^2$. Here *f* is the **objective function being minimi
 
 Each variable is written using *k* = 4 bits. These are read as an integer *z* from 0 to 15, then spaced equally between −5 and 5. Section -@sec-representacion-binaria develops the formula.
 
-Figure -@fig-himmelblau shows the function. It has four minima, all with *f* = 0, each in its own valley. Between them, near $(-0.27;\ -0.92)$, lies a local maximum with $f \approx 181.6$. The function rises toward the corners, reaching 890 at $(5;\ 5)$.
+Figure -@fig-himmelblau shows the function. It has four minima, all with *f* = 0, each in its own valley. Between them, near $(-0.27, -0.92)$, lies a local maximum with $f \approx 181.6$. The function rises toward the corners, reaching 890 at $(5, 5)$.
 
-![Himmelblau's function on $[-5, 5]^2$: surface (left) and contours (right). Diamonds mark the four global minima, where f = 0. Both panels use the same approximately logarithmic color scale to distinguish the valleys. Original figure generated with `figuras/03-himmelblau.py` in the book repository.](figuras/03-himmelblau.svg){#fig-himmelblau fig-alt="Two panels. On the left, a three-dimensional surface over the square from −5 to 5, with height f from 0 to 900: four deep-blue depressions marked by orange diamonds are separated by higher, lighter areas; the surface rises sharply toward the corners. On the right, the same square from above, with white contours on a background ranging from dark blue for low f to pale gray for high f. The four diamonds lie near (3; 2), (−2.8; 3.1), (−3.8; −3.3), and (3.6; −1.8), each in a valley. A color bar has marks at 0, 1, 10, 100, and 900."}
+![Himmelblau's function on $[-5, 5]^2$: surface (left) and contours (right). Diamonds mark the four global minima, where f = 0. Both panels use the same approximately logarithmic color scale to distinguish the valleys. Original figure generated with `figuras/03-himmelblau.py` in the book repository.](figuras/03-himmelblau.svg){#fig-himmelblau fig-alt="Two panels. On the left, a three-dimensional surface over the square from −5 to 5, with height f from 0 to 900: four deep-blue depressions marked by orange diamonds are separated by higher, lighter areas; the surface rises sharply toward the corners. On the right, the same square from above, with white contours on a background ranging from dark blue for low f to pale gray for high f. The four diamonds lie near (3, 2), (−2.8, 3.1), (−3.8, −3.3), and (3.6, −1.8), each in a valley. A color bar has marks at 0, 1, 10, 100, and 900."}
 
 [Enlarge figure](figuras/03-himmelblau.svg){.ampliar-figura target="_blank" rel="noopener"}
 
@@ -64,7 +64,7 @@ $$
 x_1 = -5 + 10 \times 0.6667 \approx 1.6667, \qquad x_2 = -5 + 3 \times 0.6667 = -3.
 $$
 
-The chromosome represents $(1.6667;\ -3)$, where $f \approx 139.38$. The function's minimum is 0, so this individual is far from it. Between two individuals, the one with lower *f* is better.
+The chromosome represents $(1.6667, -3)$, where $f \approx 139.38$. The function's minimum is 0, so this individual is far from it. Between two individuals, the one with lower *f* is better.
 </details>
 
 <details class="incrustada">
@@ -76,16 +76,16 @@ The chromosome represents $(1.6667;\ -3)$, where $f \approx 139.38$. The functio
 Mutating just one bit, for example the first, gives 0 0 1 0 0 0 1 1: $z_1$ changes from 10 to 2 and $x_1$ from 1.6667 to −3.6667. One bit moves the point by $8\,\Delta \approx 5.33$, more than half the box's side length. This is a consequence of the representation, not a malfunction; section -@sec-representacion-gray returns to it.
 
 :::: {.callout-note .ejercicio #ejercicio-representacion-genotipo-fenotipo title="Exercise · Decode and Encode"}
-Using the same representation (Himmelblau, $[-5, 5]^2$, *k* = 4), decode 0 0 0 0 1 1 1 1 and calculate *f*. Can any chromosome represent (0; 0) exactly? What about (1; −1)? If so, write it.
+Using the same representation (Himmelblau, $[-5, 5]^2$, *k* = 4), decode 0 0 0 0 1 1 1 1 and calculate *f*. Can any chromosome represent (0, 0) exactly? What about (1, −1)? If so, write it.
 
 <details>
 <summary>**Show the Solution**</summary>
 
-The first four bits give $z_1 = 0$, so $x_1 = -5$; the last four give $z_2 = 15$, so $x_2 = -5 + 15 \times 10/15 = 5$. The point is $(-5;\ 5)$, a corner of the box, and $f = (25 + 5 - 11)^2 + (-5 + 25 - 7)^2 = 19^2 + 13^2 = 530$.
+The first four bits give $z_1 = 0$, so $x_1 = -5$; the last four give $z_2 = 15$, so $x_2 = -5 + 15 \times 10/15 = 5$. The point is $(-5, 5)$, a corner of the box, and $f = (25 + 5 - 11)^2 + (-5 + 25 - 7)^2 = 19^2 + 13^2 = 530$.
 
-Representing $x = 0$ would require $z = 5/\Delta = 7.5$, which is not an integer. No chromosome of this type represents (0; 0); the nearest values use $z = 7$ or $z = 8$, giving $x = \mp 0.3333$.
+Representing $x = 0$ would require $z = 5/\Delta = 7.5$, which is not an integer. No chromosome of this type represents (0, 0); the nearest values use $z = 7$ or $z = 8$, giving $x = \mp 0.3333$.
 
-Encoding reverses the process: point to *z*, then *z* to bits. For $x_1 = 1$, we need $z_1 = 6/\Delta = 9$; for $x_2 = -1$, $z_2 = 4/\Delta = 6$. Both are integers, so (1; −1) lies on the grid: $9 = 1001$ and $6 = 0110$, giving chromosome **1 0 0 1 0 1 1 0**.
+Encoding reverses the process: point to *z*, then *z* to bits. For $x_1 = 1$, we need $z_1 = 6/\Delta = 9$; for $x_2 = -1$, $z_2 = 4/\Delta = 6$. Both are integers, so (1, −1) lies on the grid: $9 = 1001$ and $6 = 0110$, giving chromosome **1 0 0 1 0 1 1 0**.
 </details>
 ::::
 
@@ -144,9 +144,9 @@ Every value between consecutive representable values is lost. The desired soluti
 
 | Bits per variable *k* | Points | Δ | Best representable point | *f* at that point |
 |:---:|:---:|:---:|:---:|:---:|
-| 3 | 64 | 1.4286 | (3.5714; −2.1429) | 1.504 |
-| 4 | 256 | 0.6667 | (3.6667; −1.6667) | 0.9136 |
-| 5 | 1 024 | 0.3226 | (−2.7419; 3.0645) | 0.2971 |
+| 3 | 64 | 1.4286 | (3.5714, −2.1429) | 1.504 |
+| 4 | 256 | 0.6667 | (3.6667, −1.6667) | 0.9136 |
+| 5 | 1 024 | 0.3226 | (−2.7419, 3.0645) | 0.2971 |
 </details>
 
 Adding one bit per variable roughly halves point spacing. But with two variables, it also multiplies the chromosome count by four: $2^{2k}$. Greater precision comes at the cost of a larger search space.
@@ -184,7 +184,7 @@ We need $10/(2^k - 1) \le 0.01$, or $2^k - 1 \ge 1\,000$. With $k = 9$, $2^9 - 1
 
 - Advance to **Validity**, change **Bits per variable (k)** from 2 to 12, and inspect Δ and “Best on the grid.” From which *k* onward is that value below 0.1?
 - At **Validity**, check that every string lies inside the box: binary encoding cannot leave it.
-- Switch to **Rastrigin**, whose optimum is at the origin. Does any *k* give a grid containing (0; 0)? Reason it out, then check several values of *k*. Exercise [](#ejercicio-representacion-genotipo-fenotipo) may help.
+- Switch to **Rastrigin**, whose optimum is at the origin. Does any *k* give a grid containing (0, 0)? Reason it out, then check several values of *k*. Exercise [](#ejercicio-representacion-genotipo-fenotipo) may help.
 :::
 
 ## Integer: One Number per Decision [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-representacion-entera}
@@ -318,11 +318,11 @@ No. In **real-valued representation**, the chromosome is a vector of real number
 This has advantages. There is no *k* to choose, intermediate values are not lost to a binary grid, and operators act directly on problem values, as do arithmetic crossover and Gaussian mutation in chapters [](#sec-cruce-reales){.capitulo} and [](#sec-mutacion-gaussiana){.capitulo}. It is also the most natural representation in many applications. There are no rigorous rules saying which of binary and real-valued encoding works better, however; that depends on the problem and algorithm details [@mitchell1998, section 5.2].
 
 ::: {.callout-tip .ejemplo #ejemplo-representacion-real title="Reproducible Example · A Point Binary Cannot Represent"}
-**Data.** Himmelblau's function on $[-5, 5]^2$ and real-valued chromosome $(3;\ 2)$.
+**Data.** Himmelblau's function on $[-5, 5]^2$ and real-valued chromosome $(3, 2)$.
 
 **Predict.** What is *f* at this point? Can binary encoding with *k* = 4 bits per variable represent it?
 
-[Open: point (3; 2)](https://josemagalan.github.io/representation-ga/#enc=function-real&lang=en&fn=himmelblau&v=clamp&k=4&x=3_2&step=9){.abrir target="_blank"}
+[Open: point (3, 2)](https://josemagalan.github.io/representation-ga/#enc=function-real&lang=en&fn=himmelblau&v=clamp&k=4&x=3_2&step=9){.abrir target="_blank"}
 
 <details>
 <summary>**Show the Result**</summary>
@@ -333,7 +333,7 @@ With *k* = 4 bits, $x_1 = 3$ is representable ($z_1 = 12$), but $x_2 = 2$ requir
 </details>
 
 <details class="incrustada">
-<summary>Show the tool here (point (3; 2))</summary>
+<summary>Show the tool here (point (3, 2))</summary>
 <iframe data-external="1" src="https://josemagalan.github.io/representation-ga/#enc=function-real&lang=en&fn=himmelblau&v=clamp&k=4&x=3_2&step=9" loading="lazy" title="representation-ga: continuous function, real-valued vector"></iframe>
 </details>
 :::
@@ -464,7 +464,7 @@ Across the 15 transitions, standard binary changes 26 bits (1.73 on average), an
 </details>
 
 ::: {.callout-tip .ejemplo #ejemplo-representacion-gray title="Reproducible Example · The Same Point, Two Codes"}
-**Data.** Himmelblau's function with *k* = 4 and point $(-0.3333;\ -0.3333)$, corresponding to $z_1 = z_2 = 7$. Standard binary encodes it as 0 1 1 1 0 1 1 1; Gray uses 0 1 0 0 0 1 0 0. Its grid neighbor along $x_1$ has $z_1 = 8$.
+**Data.** Himmelblau's function with *k* = 4 and point $(-0.3333, -0.3333)$, corresponding to $z_1 = z_2 = 7$. Standard binary encodes it as 0 1 1 1 0 1 1 1; Gray uses 0 1 0 0 0 1 0 0. Its grid neighbor along $x_1$ has $z_1 = 8$.
 
 **Predict.** How many bits change in each code when moving from $z_1 = 7$ to $z_1 = 8$?
 
@@ -653,7 +653,7 @@ Nothing in real-valued representation prevents a gene leaving $[a, b]$. Gaussian
 - **Penalize.** Leave the point unchanged, evaluate it, and add a penalty proportional to its distance *d* from the box. This requires *f* to be evaluable outside the box, which may be meaningless in a real problem: a negative length or impossible dose may have no value to evaluate.
 
 ::: {.callout-tip .ejemplo #ejemplo-representacion-fuera-caja title="Reproducible Example · Three Ways to Handle One Point"}
-**Data.** Himmelblau's function on $[-5, 5]^2$ and chromosome $(6.3;\ -1.2)$. Gene $x_1$ lies outside the box by $d = 1.3$. Penalization uses λ = 10 and adds $\lambda\, d$ to *f*.
+**Data.** Himmelblau's function on $[-5, 5]^2$ and chromosome $(6.3, -1.2)$. Gene $x_1$ lies outside the box by $d = 1.3$. Penalization uses λ = 10 and adds $\lambda\, d$ to *f*.
 
 **Predict.** Which point does each treatment evaluate, and what fitness results?
 
@@ -666,11 +666,11 @@ Nothing in real-valued representation prevents a gene leaving $[a, b]$. Gaussian
 
 | Treatment | Evaluated point | Fitness (minimized) |
 |:---|:---:|:---:|
-| Clamp | (5; −1.2) | 164.15 |
-| Reflect | (3.7; −1.2) | 5.68 |
-| Penalize | (6.3; −1.2) | $756.25 + 10 \times 1.3 = 769.25$ |
+| Clamp | (5, −1.2) | 164.15 |
+| Reflect | (3.7, −1.2) | 5.68 |
+| Penalize | (6.3, −1.2) | $756.25 + 10 \times 1.3 = 769.25$ |
 
-Clamping moves $x_1$ from 6.3 to 5. Reflection moves it to $5 - 1.3 = 3.7$. Penalization leaves it in place: $f(6.3;\ -1.2) = 756.25$, plus 13.
+Clamping moves $x_1$ from 6.3 to 5. Reflection moves it to $5 - 1.3 = 3.7$. Penalization leaves it in place: $f(6.3, -1.2) = 756.25$, plus 13.
 </details>
 
 <details class="incrustada">
@@ -682,16 +682,16 @@ Clamping moves $x_1$ from 6.3 to 5. Reflection moves it to $5 - 1.3 = 3.7$. Pena
 Each treatment has consequences. Clamping gives all genes crossing the same bound the same boundary value; the population accumulates at the edge [@helwig2013, p. 263] and may lose diversity, although this can work very well when the optimum lies on the boundary [@padhye2015]. Reflection returns points by differing distances, spreading them through the interior with little bias [@helwig2013, p. 263]. Penalization allows exploration outside the box but needs λ and an evaluable *f* there. Reflection's value 5.68, much better than clamping here, is specific to this point, not a general advantage. Boundary handling matters: in particle swarms, differential evolution, and genetic algorithms it can substantially change results and bias search [@helwig2013; @padhye2015].
 
 :::: {.callout-note .ejercicio #ejercicio-representacion-fuera-caja title="Exercise · Outside on the Left"}
-Real-valued chromosome $(-7.2;\ 2)$ lies outside $[-5, 5]^2$. Which point is evaluated under clamping? Under reflection? What is *d*? What fitness results with penalty λ = 10? Use $f(x_1, x_2) = (x_1^2 + x_2 - 11)^2 + (x_1 + x_2^2 - 7)^2$.
+Real-valued chromosome $(-7.2, 2)$ lies outside $[-5, 5]^2$. Which point is evaluated under clamping? Under reflection? What is *d*? What fitness results with penalty λ = 10? Use $f(x_1, x_2) = (x_1^2 + x_2 - 11)^2 + (x_1 + x_2^2 - 7)^2$.
 
 <details>
 <summary>**Show the Solution**</summary>
 
-Clamping gives $x_1 = -5$ and evaluates $(-5;\ 2)$: $f = (25 + 2 - 11)^2 + (-5 + 4 - 7)^2 = 256 + 64 = 320$.
+Clamping gives $x_1 = -5$ and evaluates $(-5, 2)$: $f = (25 + 2 - 11)^2 + (-5 + 4 - 7)^2 = 256 + 64 = 320$.
 
-Reflection gives $x_1 = -5 + 2.2 = -2.8$ and evaluates $(-2.8;\ 2)$: $f = (7.84 + 2 - 11)^2 + (-2.8 + 4 - 7)^2 = 1.3456 + 33.64 \approx 34.99$.
+Reflection gives $x_1 = -5 + 2.2 = -2.8$ and evaluates $(-2.8, 2)$: $f = (7.84 + 2 - 11)^2 + (-2.8 + 4 - 7)^2 = 1.3456 + 33.64 \approx 34.99$.
 
-Distance to the box is $d = 2.2$. For penalization, $f(-7.2;\ 2) = 42.84^2 + (-10.2)^2 \approx 1\,835.27 + 104.04 = 1\,939.31$, giving fitness $1\,939.31 + 10 \times 2.2 \approx 1\,961.31$.
+Distance to the box is $d = 2.2$. For penalization, $f(-7.2, 2) = 42.84^2 + (-10.2)^2 \approx 1\,835.27 + 104.04 = 1\,939.31$, giving fitness $1\,939.31 + 10 \times 2.2 \approx 1\,961.31$.
 </details>
 ::::
 
@@ -754,9 +754,9 @@ For each case, say whether the solution-to-chromosome mapping is one-to-one or o
 
 **Why knapsack is difficult.** Among his 21 NP-complete problems, @karp1972 [p. 95] included a decision version of knapsack asking whether some selection's weights sum exactly to a given amount, rather than which selection is best. Informally, no known method always finds exact solutions to these problems with effort growing polynomially with input size.
 
-**Representation reduces the space.** The 8-queens problem places eight queens on an 8 × 8 board with no attacks. Encoding each queen's position gives over 4 000 million cases. Requiring different rows leaves $8^8 = 16\,777\,216$; also requiring different columns makes the chromosome a permutation, leaving $8! = 40\,320$ [@talbi2009, p. 37]. Representation determines the size of the space searched.
+**Representation reduces the space.** The 8-queens problem places eight queens on an 8 × 8 board with no attacks. Encoding each queen's position gives over 4 billion cases. Requiring different rows leaves $8^8 = 16\,777\,216$; also requiring different columns makes the chromosome a permutation, leaving $8! = 40\,320$ [@talbi2009, p. 37]. Representation determines the size of the space searched.
 
-**Random keys.** To use real-valued operators on permutation problems, assign each element a random number in [0, 1), then sort by key. Keys $(0.72;\ 0.15;\ 0.48;\ 0.91;\ 0.33)$ sort as 0.15 (element 2), 0.33 (5), 0.48 (3), 0.72 (1), and 0.91 (4), decoding to permutation 2 5 3 1 4. Every real-valued vector yields a valid permutation, so classical operators cannot create invalid chromosomes [@talbi2009, p. 38].
+**Random keys.** To use real-valued operators on permutation problems, assign each element a random number in [0, 1), then sort by key. Keys $(0.72, 0.15, 0.48, 0.91, 0.33)$ sort as 0.15 (element 2), 0.33 (5), 0.48 (3), 0.72 (1), and 0.91 (4), decoding to permutation 2 5 3 1 4. Every real-valued vector yields a valid permutation, so classical operators cannot create invalid chromosomes [@talbi2009, p. 38].
 
 **How many symbols?** Goldberg proposes two encoding principles [@goldberg1989, pp. 80–82]. **Meaningful building blocks** require short, low-order schemata to matter to the problem and depend little on distant positions. The **minimal alphabet** principle asks for the smallest alphabet naturally expressing the problem, since binary offers the greatest number of schemata per information bit. Holland had already given this theoretical argument for binary encoding: a **schema** is a template with fixed positions and wildcards, such as 1 \* \* 0. A 100-bit binary string stores nearly the same information as a 30-digit decimal string ($2^{100} \approx 10^{30}$), but belongs to many more schemata, $2^{100}$ rather than $2^{30}$. Mitchell notes that this argument holds only insofar as schema analysis holds, which has been debated. Several empirical comparisons favored real-valued over binary encoding, but outcomes depend on the problem, and no rigorous rules predict which will work better [@mitchell1998, section 5.2]. Drawing on extensive applications experience, Davis recommends the most natural encoding for the problem and designing the algorithm around it [@mitchell1998, section 5.2].
 
