@@ -229,6 +229,10 @@
         <else-if locator="paragraph">
           <label form="short" variable="locator"/>
         </else-if>
+        <!-- Cambio del libro: con pandoc, las condiciones siguientes omitían la etiqueta y [@clave, capítulo 5] salía «(Autor, año, 5)» -->
+        <else-if locator="chapter">
+          <label variable="locator"/>
+        </else-if>
         <else-if is-numeric="locator">
           <label text-case="capitalize-first" variable="locator"/>
         </else-if>
