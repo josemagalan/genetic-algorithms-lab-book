@@ -27,7 +27,7 @@ After the population has been evaluated, **selection** decides which individuals
 
 Selection must balance two forces:
 
-- **Exploitation.** Better individuals should have a greater chance of reproducing because their genetic material is, in principle, more promising. If only they reproduce, the population soon fills with copies of a few individuals and loses diversity.
+- **Exploitation.** Better individuals should have a greater chance of reproducing because their genetic material is, in principle, more promising. If they are the only ones that reproduce, the population soon fills with copies of a few individuals and loses diversity.
 - **Exploration.** Less fit individuals should also have some chance because they may contain useful parts whose value is not yet reflected in their fitness. But if we choose parents at random without considering fitness, the search stops making progress.
 
 We call the extent to which reproduction favors the best individuals **selection pressure**. Too much pressure leads to excessive exploitation; too little leads to aimless exploration. Each mechanism in this chapter regulates this pressure in a different way.
@@ -156,7 +156,7 @@ c) Yes, with both. In a tournament with replacement, C wins only if it competes 
 - Advance step by step and follow each pointer on the wheel and its unrolled version.
 - Click **Copies in 1000 repetitions** to see how often each individual receives 0, 1, 2… copies. This is the sampling noise of roulette-wheel selection.
 - Click **Goldberg’s example (x²)** to see the classic example of four 5-bit strings with fitness $f(x) = x^2$ [@goldberg1989].
-- In **Practice** mode, the tool gives you the random numbers and checks your parents one slot at a time.
+- In **Practice** mode, the tool gives you the random numbers and checks the parents you choose, one slot at a time.
 :::
 
 ## When Roulette Stops Distinguishing Individuals [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-seleccion-ruleta-deja-de-distinguir}
@@ -248,7 +248,7 @@ The simulation takes a few seconds. Its result appears at the bottom of the page
 |---|:---:|:---:|---|:---:|
 | Truncation (τ = 0.5) | 2.2 | 1.1 | generation 6 (in 76% of repetitions) | 24% |
 | Tournament (*k* = 2) | 4.5 | 1.1 | generation 8 (in 92%) | 8% |
-| Roulette | 10.7 | 3.2 | not in most (only in 16%) | 48% |
+| Roulette | 10.7 | 3.2 | rarely reached (only in 16%) | 48% |
 
 If you add truncation to the charts (which show roulette, linear ranking, and tournament by default), you will also see that already in the first generation it leaves about 21 distinct individuals out of 50, compared with about 28 for tournament and roulette-wheel selection.
 </details>
@@ -299,7 +299,7 @@ To continue along the basic path, go to the [“Crossover” chapter](06-cruce.q
 
 This section extends the basic path. It requires familiarity with cumulative probabilities and the idea of expected copies from sections -@sec-seleccion-torneo and -@sec-seleccion-ruleta.
 
-**Stochastic universal sampling (SUS).** The method proposed by @baker1987 uses the roulette-wheel idea with a single random starting point. Each individual occupies a stretch equal to its expected copies, $e_i = N \cdot f_i / \sum f$. On a wheel of length $N$, we place $N$ pointers exactly 1 apart, starting from a single random number. Each individual receives its expected copies rounded down or up. The expected copies are the same as with roulette-wheel selection, but sampling variability is much lower. It does not disappear: the first pointer falls at random, so an individual with 0.4 expected copies may receive 0 copies or 1. With roulette-wheel selection, it could receive any number from 0 to *N*.
+**Stochastic universal sampling (SUS).** Proposed by @baker1987, it is the roulette wheel spun only once. Each individual occupies a stretch equal to its expected copies, $e_i = N \cdot f_i / \sum f$. On a wheel of length $N$, we place $N$ pointers exactly 1 apart, starting from a single random number. Each individual receives its expected copies rounded down or up. The expected copies are the same as with roulette-wheel selection, but sampling variability is much lower. It does not disappear: the first pointer falls at random, so an individual with 0.4 expected copies may receive 0 copies or 1. With roulette-wheel selection, it could receive any number from 0 to *N*.
 
 ::: {.callout-tip .ejemplo #ejemplo-seleccion-otros-mecanismos title="Reproducible Example · SUS versus Roulette"}
 **Data.** Fitness values 1, 2, 3, and 4, as in example [](#ejemplo-seleccion-ruleta). Expected copies: 0.4, 0.8, 1.2, and 1.6.
@@ -333,7 +333,7 @@ D can receive only 1 or 2 copies, and A can receive 0 or 1. In this draw the par
 
 **Measuring selection.** @blickle1996 compare mechanisms by their **selection intensity**—how much mean fitness rises in standard deviations—and by their **loss of diversity**. @baker1987 studies bias and sampling spread. @goldberg1991 analyze takeover time. selection-ga calculates these measures in “Compare mechanisms.”
 
-**Dynamics over many generations.** [SelectionMechanisms](https://josemagalan.shinyapps.io/SelectionMechanisms/) allows comparisons of mechanisms over many generations and simulations, including their effects on convergence, fitness, and diversity. It is the application that inspired the simulation in selection-ga. It is described in a paper accepted at CIO 2026; the final reference will be added when published.
+**Dynamics over many generations.** [SelectionMechanisms](https://josemagalan.shinyapps.io/SelectionMechanisms/) allows comparisons of mechanisms over many generations and simulations, including their effects on convergence, fitness, and diversity. It inspired the simulation in selection-ga and is described in a paper accepted at CIO 2026; the final reference will be added when published.
 
 **Completing selection by mean fitness.** As stated in section -@sec-seleccion-truncamiento, the rule does not preserve population size because exactly half the population need not lie above the mean. Replacing the mean with the **median** is not enough either: with fitness values 1, 2, 3, 4, and 5, only two individuals exceed the median, producing four copies, not five; with 1, 1, 1, and 1, none exceeds it. To preserve size, use positions to set the cutoff: sort the population, keep the best half, and specify how to handle ties at the cutoff (for example, break them at random) and an odd *N* (for example, round up). The *N* parents are selected from those that pass. Defined this way, the rule is truncation with τ = 0.5. If *N* is even and there are no ties at the cutoff, each individual in the best half receives two copies **on average**. Copying each individual exactly twice, without sampling, is another way to complete the rule; it does not give the same results run by run.
 
