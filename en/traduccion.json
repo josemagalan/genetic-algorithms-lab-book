@@ -48,7 +48,7 @@
     "10-viajante.qmd": "The Traveling Salesman from Start to Finish",
     "11-recapitulacion.qmd": "Recap"
   },
-  "human_review": "Author expressed a favorable general view of chapter 5; no exhaustive human linguistic or technical review is claimed.",
+  "human_review": "The authors reviewed the English text manually, chapter by chapter, in November 2026, and corrected it where needed; later revisions are possible.",
   "naturalness_pass": "Required after source comparison by D095; performed by the assistant, separately from human review.",
-  "scope": "Chapters 1-11 translated (1-5 by Codex, 6-11 by Claude) after the approved chapter 5 pilot. HTML publication with an explicit AI translation notice; complete human review remains pending. No independent translation DOI."
+  "scope": "Chapters 1-11 translated (1-5 by Codex, 6-11 by Claude) after the approved chapter 5 pilot. HTML publication with an explicit AI translation notice and a note on the authors' manual review (November 2026). No independent translation DOI."
 }

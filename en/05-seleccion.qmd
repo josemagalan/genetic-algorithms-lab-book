@@ -5,7 +5,7 @@ aliases:
 
 # Selecting Parents {#sec-seleccion}
 
-<!-- AI translation by Codex (GPT-6), 2026-10-31. Source: Spanish v1.0, commit 75b82d8, DOI 10.5281/zenodo.23835733. Translation and consistency checks by the assistant; author review pending. The source edition's experimental and bibliographic verification records remain applicable; translating them does not constitute a new experiment or source review. -->
+<!-- AI translation by Codex (GPT-6), 2026-10-31. Source: Spanish v1.0, commit 75b82d8, DOI 10.5281/zenodo.23835733. Translation and consistency checks by the assistant; manual review by the authors in November 2026. The source edition's experimental and bibliographic verification records remain applicable; translating them does not constitute a new experiment or source review. -->
 
 **Tools:** [selection-ga](https://josemagalan.github.io/selection-ga/#lang=en) and [SelectionMechanisms](https://josemagalan.shinyapps.io/SelectionMechanisms/), available through the [portal](https://josemagalan.github.io/genetic-algorithms-lab/#lang=en).
 

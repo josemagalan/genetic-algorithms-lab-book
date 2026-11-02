@@ -55,7 +55,8 @@ naturalidad por capítulo. Después del pulido, ejecutar el cotejo:
 python bilingue/verificar.py --informe RUTA_AL_INFORME_JSON
 ```
 
-La revisión del asistente no sustituye una revisión humana independiente. La
-traducción conserva sus avisos de IA y de revisión pendiente al publicarse en HTML.
+La revisión del asistente no sustituye una revisión humana. Los autores revisaron
+manualmente el texto inglés en noviembre de 2026; la traducción conserva sus avisos
+de IA y de esa revisión al publicarse en HTML.
 Los enlaces del portal ofrecen ambas ediciones. No se asigna un DOI propio
 ni se usa el DOI español como si identificara la traducción.

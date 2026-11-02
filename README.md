@@ -8,7 +8,7 @@ Libro para aprender algoritmos genéticos de forma práctica, con actividades so
 
 **Ediciones para leer:** [Español · original](https://josemagalan.github.io/genetic-algorithms-lab-book/) · [English · AI translation](https://josemagalan.github.io/genetic-algorithms-lab-book/en/).
 
-La edición inglesa se titula *Evolution Made Visible: Genetic Algorithms in an Interactive Laboratory* y traduce los once capítulos de la edición española 1.0. Identifica el original y los asistentes utilizados en su entrada y en sus avisos; la revisión humana completa está pendiente. Su publicación HTML no asigna un DOI a la traducción ni modifica el archivo español de Zenodo.
+La edición inglesa se titula *Evolution Made Visible: Genetic Algorithms in an Interactive Laboratory* y traduce los once capítulos de la edición española 1.0. Identifica el original y los asistentes utilizados en su entrada y en sus avisos; los autores la revisaron manualmente en noviembre de 2026, aunque puede haber revisiones posteriores. Su publicación HTML no asigna un DOI a la traducción ni modifica el archivo español de Zenodo.
 
 ## Cómo citar
 

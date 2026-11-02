@@ -1,7 +1,7 @@
 # How to Read This Book {.unnumbered}
 
 ::: {.version-beta}
-**English translation · Chapters 1–11 · October 31, 2026.** This is an AI-generated translation of the Spanish edition **1.0**, published on October 31, 2026: [DOI 10.5281/zenodo.23835733](https://doi.org/10.5281/zenodo.23835733). The Spanish edition is the original reference text prepared and reviewed by the authors; a complete human review of the translation is pending ([details below](#traduccion)). [How to cite the original](avisos.qmd#como-citar). If you spot an error or awkward phrasing, please [let us know](avisos.qmd#contacto): every page ends with a link to the comment form.
+**English translation · Chapters 1–11 · October 31, 2026.** This is an AI-generated translation of the Spanish edition **1.0**, published on October 31, 2026: [DOI 10.5281/zenodo.23835733](https://doi.org/10.5281/zenodo.23835733). The Spanish edition is the original reference text prepared and reviewed by the authors; the authors have since reviewed the translation manually, although later revisions are possible ([details below](#traduccion)). [How to cite the original](avisos.qmd#como-citar). If you spot an error or awkward phrasing, please [let us know](avisos.qmd#contacto): every page ends with a link to the comment form.
 :::
 
 This book is intended for undergraduate students who are new to genetic algorithms. The activities on the basic path can be done with paper, a calculator, and the lab's tools.
@@ -76,6 +76,6 @@ The [activity index](actividades.qmd) sorts the examples, “In the Application�
 
 All eleven chapters are translated in full, including their examples, exercises, solutions, figures, and further reading.
 
-The translation was produced on October 31, 2026, by two AI assistants: **Codex (GPT-6)** translated chapters 1–5, and **Claude** (Cowork, configured model claude-opus-5-5) translated chapters 6–11. Each chapter was checked against the Spanish source for terminology, numbers, formulas, citations, links, and activity settings, and then revised separately for natural English. **A complete human review of the English translation is pending.** The author has begun reviewing it chapter by chapter; the automated checks and the assistants' editing passes are no substitute for that review.
+The translation was produced on October 31, 2026, by two AI assistants: **Codex (GPT-6)** translated chapters 1–5, and **Claude** (Cowork, configured model claude-opus-5-5) translated chapters 6–11. Each chapter was checked against the Spanish source for terminology, numbers, formulas, citations, links, and activity settings, and then revised separately for natural English. **The authors then reviewed the English text manually, chapter by chapter, in November 2026**, and corrected it where needed. Later revisions are possible.
 
 See the [translation notice, credits, license, and contact information](avisos.qmd), the [contents](indice.qmd), or the [activity index](actividades.qmd).

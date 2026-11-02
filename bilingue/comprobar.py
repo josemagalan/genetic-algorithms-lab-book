@@ -89,7 +89,7 @@ def comprobar(site, meta):
         text = ' '.join(' '.join(page.text).split()) if page else ''
         if phrase not in text or meta['source_doi'] not in text:
             errors.append(f'en/{name}: aviso de traducción u original no identificado')
-        if not re.search(r'human review.*pending', text, re.IGNORECASE):
+        if not re.search(r'reviewed the English text manually', text, re.IGNORECASE):
             errors.append(f'en/{name}: estado de revisión humana no identificado')
     return {'pages': len(pages), 'links': links, 'resources': resources,
             'edition_pages': len(names), 'errors': errors}
