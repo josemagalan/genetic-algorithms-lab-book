@@ -301,7 +301,7 @@ Generation 1 is **a b c d**: all four offspring enter, and no parent remains.
 | Mean fitness | 292.5 | 438.5 |
 | Best fitness | 576 (*x* = 24) | 729 (*x* = 27) |
 
-In one generation, the mean has risen by 50 %, and the best solution has moved from *x* = 24 to *x* = 27 [@goldberg1989, p. 17, table 1.2]. The optimum, 11111, has not yet appeared.
+In one generation, the mean has risen by 50%, and the best solution has moved from *x* = 24 to *x* = 27 [@goldberg1989, p. 17, table 1.2]. The optimum, 11111, has not yet appeared.
 </details>
 
 <details class="incrustada">

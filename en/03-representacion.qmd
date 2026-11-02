@@ -476,7 +476,7 @@ Across the 15 transitions, standard binary changes 26 bits (1.73 on average), an
 
 In standard binary, 0 1 1 1 becomes 1 0 0 0: **4 bits** change. In Gray, 0 1 0 0 becomes 1 1 0 0: only **1 bit**, the first, changes. Both chromosomes represent the same point, with $f \approx 178.1$.
 
-Gray does not solve everything: of eight chromosomes one bit away, only four (50 %) are grid neighbors (standard binary has two, 25 %); the others jump farther. For example, changing the second bit in 0 1 0 0 gives 0 0 0 0, or $z = 0$, at the box's edge.
+Gray does not solve everything: of eight chromosomes one bit away, only four (50%) are grid neighbors (standard binary has two, 25%); the others jump farther. For example, changing the second bit in 0 1 0 0 gives 0 0 0 0, or $z = 0$, at the box's edge.
 </details>
 
 <details class="incrustada">
@@ -485,7 +485,7 @@ Gray does not solve everything: of eight chromosomes one bit away, only four (50
 </details>
 :::
 
-Gray guarantees that a grid neighbor is one bit away, not that every one-bit change reaches a grid neighbor. Over 1 000 random points with *k* = 4, the tool finds that reaching a grid neighbor requires, in the worst case, an average of 2.9 gene changes in standard binary but always 1 in Gray (this differs from the average 1.73 bits changed between *z* and *z* + 1). Meanwhile, the proportion of one-bit neighbors that are grid neighbors rises from 25 % to 48 %, not to 100 %. Gray removes Hamming cliffs between consecutive values but does not make every one-bit change local. Talbi identifies poor handling of dynamic ranges as its main drawback [@talbi2009, p. 43]. Mitchell lists it among extensions of binary encoding [@mitchell1998, section 5.2].
+Gray guarantees that a grid neighbor is one bit away, not that every one-bit change reaches a grid neighbor. Over 1 000 random points with *k* = 4, the tool finds that reaching a grid neighbor requires, in the worst case, an average of 2.9 gene changes in standard binary but always 1 in Gray (this differs from the average 1.73 bits changed between *z* and *z* + 1). Meanwhile, the proportion of one-bit neighbors that are grid neighbors rises from 25% to 48%, not to 100%. Gray removes Hamming cliffs between consecutive values but does not make every one-bit change local. Talbi identifies poor handling of dynamic ranges as its main drawback [@talbi2009, p. 43]. Mitchell lists it among extensions of binary encoding [@mitchell1998, section 5.2].
 
 :::: {.callout-note .ejercicio #ejercicio-representacion-gray title="Exercise · Convert to Gray and Back"}
 \(a) Write integer *z* = 5 in 4-bit Gray code. (b) What integer does Gray code 1 1 0 0 represent? (c) Write 15 and 16 in 5-bit standard binary and Gray, and count changed bits in each.
@@ -515,7 +515,7 @@ The same assignment problem can use bits. What changes if each task–machine pa
 
 In a **binary matrix**, chromosome bit $y_{ij}$ corresponds to task *i* and machine *j*, with $y_{ij} = 1$ when task *i* runs on machine *j*. For 5 tasks and 3 machines, there are 15 bits. Binary operators apply, but the one-machine-per-task constraint is no longer absorbed: a task can have no 1 (not processed) or several (processed on several machines). It must be checked, as in the knapsack.
 
-This resembles section -@sec-representacion-validez, but more strongly. Of $2^{15} = 32\,768$ chromosomes, only $3^5 = 243$ are feasible assignments: 0.74 %. The rest describe no schedule.
+This resembles section -@sec-representacion-validez, but more strongly. Of $2^{15} = 32\,768$ chromosomes, only $3^5 = 243$ are feasible assignments: 0.74%. The rest describe no schedule.
 
 ::: {.callout-tip .ejemplo #ejemplo-representacion-matriz title="Reproducible Example · A Matrix That Is Not a Schedule"}
 **Data.** Processing times from example [](#ejemplo-representacion-entera), and the binary matrix grouped into three bits per task: 0 0 0 | 1 1 0 | 0 0 1 | 0 1 0 | 1 0 0. Each group lists that task's bits for machines 1, 2, and 3. Repair processes tasks in order: with no 1, assign the fastest machine; with several, keep the fastest among those selected. Break equal-time ties in favor of the lower machine number.
@@ -546,11 +546,11 @@ The “Compare encodings” page contrasts both representations using the same p
 |:---|:---:|:---:|
 | Chromosome | 5 integers | 15 bits |
 | Search space | $3^5 = 243$ | $2^{15} = 32\,768$ |
-| Feasible chromosomes | 100 % | 0.74 % |
+| Feasible chromosomes | 100% | 0.74% |
 | Chromosomes giving the same assignment | 1 | 20 (mean over all assignments: 134.8) |
 | One-gene neighbors | 10 | 15 |
-| Neighbors that are assignments | 100 % | 0 % |
-| Neighbors repeating the assignment after repair | 0 % | 33 % |
+| Neighbors that are assignments | 100% | 0% |
+| Neighbors repeating the assignment after repair | 0% | 33% |
 
 With the vector, any one-gene change gives another assignment. With the matrix, changing one bit never leaves a feasible assignment; one third of repairs return the same assignment, so the algorithm makes no move. Every matrix operator therefore needs a way to handle infeasible chromosomes. Section -@sec-representacion-infactibles lists the strategies.
 
@@ -580,7 +580,7 @@ What should we do with a chromosome representing a solution that violates constr
 
 Classic reviews group constraint-handling strategies somewhat differently [@coello2002]. Michalewicz and Schoenauer, for example, use four categories and include repair within methods distinguishing feasible from infeasible solutions [@michalewicz1996b, section 3]. We follow Talbi's five categories [@talbi2009, p. 48], applying them to the overweight knapsack chromosome 1 1 0 1 1 0 from section -@sec-representacion-validez.
 
-- **Reject.** Discard infeasible chromosomes, the **death penalty** approach [@talbi2009, p. 49; @coello2002, section 2.7]. This is reasonable only when they are rare, and loses the information they provide [@talbi2009, p. 49], which @richardson1989 already advised against simply discarding. Half the example knapsack chromosomes are infeasible; the binary matrix in section -@sec-representacion-matriz has 99 % infeasible chromosomes.
+- **Reject.** Discard infeasible chromosomes, the **death penalty** approach [@talbi2009, p. 49; @coello2002, section 2.7]. This is reasonable only when they are rare, and loses the information they provide [@talbi2009, p. 49], which @richardson1989 already advised against simply discarding. Half the example knapsack chromosomes are infeasible; the binary matrix in section -@sec-representacion-matriz has 99% infeasible chromosomes.
 - **Penalize.** Accept the chromosome but reduce fitness according to its constraint violation [@talbi2009, pp. 49–50]. This is the most common strategy [@talbi2009, p. 49; @coello2002, section 2]. For the knapsack, let excess weight be $e = \max(0, \text{weight} - W)$. A linear penalty gives fitness = value $- \lambda\, e$; a quadratic penalty gives value $- (\lambda\, e)^2$. If λ is too small, the algorithm ends with infeasible solutions; if too large, it remains with feasible but suboptimal solutions [@talbi2009, p. 50]. Section -@sec-inicializar-evaluar-penalizacion covers λ and penalty variants.
 - **Repair.** A procedure, usually a greedy heuristic, turns an infeasible chromosome into a feasible one [@talbi2009, pp. 52–53; @coello2002, section 4]. Apply it only to infeasible chromosomes; leave feasible ones untouched. For the knapsack, remove items until the selection fits. **Greedy** repair removes the worst value-to-weight ratio first; **random** repair removes any item. @michalewicz1994 [p. 138] compared both. @chu1998 [p. 74] used two phases: after removals, insert any items that still fit, in descending ratio order. Repair procedures are problem-specific [@talbi2009, p. 53].
 - **Decode.** The chromosome is not the solution but instructions used by a decoder that always constructs a feasible solution [@coello2002, section 3.6; @talbi2009, p. 53]. For the knapsack, scan genes in order; each 1 means “try to include this item,” adding it only if it fits.
@@ -725,10 +725,10 @@ The table summarizes this chapter's cases using the checked values:
 |:---|:---:|:---:|:---:|
 | Standard binary or Gray (Himmelblau, *k* = 4) | $2^8 = 256$ | All inside the box | 1 (only 256 points represented) |
 | Real-valued vector (Himmelblau) | Continuous | May leave the box | 1 |
-| Integer vector (assignment, 5 × 3) | $3^5 = 243$ | 243 (100 %) | 1 |
-| Binary matrix (assignment, 5 × 3) | $2^{15} = 32\,768$ | 243 (0.74 %) | Mean 134.8 after repair |
-| Permutation (traveling salesman, *n* = 6) | $6! = 720$ | 720 (100 %) | 12 |
-| Bit vector (knapsack, *n* = 6) | $2^6 = 64$ | 32 (50 %) | 1 directly; from 1 to 8 with decoding |
+| Integer vector (assignment, 5 × 3) | $3^5 = 243$ | 243 (100%) | 1 |
+| Binary matrix (assignment, 5 × 3) | $2^{15} = 32\,768$ | 243 (0.74%) | Mean 134.8 after repair |
+| Permutation (traveling salesman, *n* = 6) | $6! = 720$ | 720 (100%) | 12 |
+| Bit vector (knapsack, *n* = 6) | $2^6 = 64$ | 32 (50%) | 1 directly; from 1 to 8 with decoding |
 
 Decoders have five additional conditions, proposed by @palmer1994 [p. 380] for tree representation and discussed by @koziel1999 and @talbi2009 [p. 53]: every chromosome should yield a feasible solution; every feasible solution should have a chromosome; decoding should be cheap; every feasible solution should have the same number of chromosomes; and locality should hold, meaning small chromosome distances correspond to small solution distances. The knapsack decoder meets the first two but not equal chromosome counts: some solutions have one chromosome, others eight. Randomly sampling chromosomes therefore favors some solutions simply because more chromosomes encode them. The favored solution is not optimal: 1 0 1 1 0 1 has 2 chromosomes, while the solution with 8 is 1 1 1 0 0 0, worth 13.
 
@@ -762,7 +762,7 @@ For each case, say whether the solution-to-chromosome mapping is one-to-one or o
 
 **Other representations.** Not all chromosomes are strings. **Trees**, used in genetic programming, represent expressions or programs [@talbi2009, pp. 39–40]. Linear variants include *messy* encodings, where gene meaning does not depend on position, encodings with regions having no effect, and diploid encodings [@talbi2009, pp. 38–39].
 
-**Repair and return.** After repair, decide whether the repaired chromosome replaces the original in the population or is used only for fitness evaluation. Talbi calls the first **Lamarckian** and the second **Baldwinian**, for local search within hybrids [@talbi2009, p. 390]; the same distinction applies to repair [@salcedosanz2009, section 2.2]. In combinatorial problems, @orvosh1993 observed better performance when returning only a small fraction, around 5 % [@michalewicz1996b, section 3.3.3; @coello2002, section 4]. For knapsack, however, @michalewicz1994 [p. 140] found no effect from that proportion. In function optimization, @whitley1994b [pp. 6, 15] found some functions where the Baldwinian model reached the global optimum more slowly while the Lamarckian model became trapped locally; on easy problems, Lamarckian learning was very effective.
+**Repair and return.** After repair, decide whether the repaired chromosome replaces the original in the population or is used only for fitness evaluation. Talbi calls the first **Lamarckian** and the second **Baldwinian**, for local search within hybrids [@talbi2009, p. 390]; the same distinction applies to repair [@salcedosanz2009, section 2.2]. In combinatorial problems, @orvosh1993 observed better performance when returning only a small fraction, around 5% [@michalewicz1996b, section 3.3.3; @coello2002, section 4]. For knapsack, however, @michalewicz1994 [p. 140] found no effect from that proportion. In function optimization, @whitley1994b [pp. 6, 15] found some functions where the Baldwinian model reached the global optimum more slowly while the Lamarckian model became trapped locally; on easy problems, Lamarckian learning was very effective.
 
 **Adapting the encoding.** For a difficult problem, the best encoding is unknown in advance: finding it is almost as difficult as solving the problem. One proposal is to adapt encoding during search, for example using Holland's inversion operator to reorder genes so related ones become neighbors [@mitchell1998, section 5.3].
 

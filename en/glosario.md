@@ -147,4 +147,5 @@ initialization-and-evaluation-ga, “Several objectives”. Los miles se separan
 («85 900»). Revisión manual (2026-11-02): «40 000 millones» se traduce con la escala corta,
 «40 billion», y las coordenadas e intervalos llevan coma, como en inglés: (1.6667, −3),
 [2, 6]; en español van con punto y coma porque la coma es decimal. El cotejo equipara
-ambas formas.
+ambas formas. El porcentaje va pegado a la cifra («50%»), como en las figuras; en
+español lleva espacio («50 %»).

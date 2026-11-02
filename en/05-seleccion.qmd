@@ -246,9 +246,9 @@ The simulation takes a few seconds. Its result appears at the bottom of the page
 
 | Mechanism | Distinct at generation 5 | Distinct at generation 20 | Takeover | The best is lost |
 |---|:---:|:---:|---|:---:|
-| Truncation (τ = 0.5) | 2.2 | 1.1 | generation 6 (in 76 % of repetitions) | 24 % |
-| Tournament (*k* = 2) | 4.5 | 1.1 | generation 8 (in 92 %) | 8 % |
-| Roulette | 10.7 | 3.2 | not in most (only in 16 %) | 48 % |
+| Truncation (τ = 0.5) | 2.2 | 1.1 | generation 6 (in 76% of repetitions) | 24% |
+| Tournament (*k* = 2) | 4.5 | 1.1 | generation 8 (in 92%) | 8% |
+| Roulette | 10.7 | 3.2 | not in most (only in 16%) | 48% |
 
 If you add truncation to the charts (which show roulette, linear ranking, and tournament by default), you will also see that already in the first generation it leaves about 21 distinct individuals out of 50, compared with about 28 for tournament and roulette-wheel selection.
 </details>
@@ -264,13 +264,13 @@ Selection changes the frequencies of existing individuals but creates no new one
 
 Two causes drive this loss of diversity. One is selection pressure: better individuals receive more copies on average. The other is the randomness of the draw: in a finite population, the number of copies each individual receives varies around its expected value. This randomness alone is enough to change the population. Even if everyone had the same fitness, some would receive more copies by chance and, after a number of generations, the population would consist of copies of a single individual [@asoh1994]. This change due to chance, rather than fitness differences, is called **genetic drift**. When fitness differences do exist, drift acts alongside selection, which is why the initial best individual can be lost through bad luck.
 
-In example [](#ejemplo-seleccion-truncamiento), the initial best was lost in almost half the repetitions with roulette-wheel selection (48 %), in one in four with truncation (24 %), and in 8 % with tournament selection. **Takeover time** is the number of generations until all individuals are copies of the initial best [@goldberg1991].
+In example [](#ejemplo-seleccion-truncamiento), the initial best was lost in almost half the repetitions with roulette-wheel selection (48%), in one in four with truncation (24%), and in 8% with tournament selection. **Takeover time** is the number of generations until all individuals are copies of the initial best [@goldberg1991].
 
 ::: {.callout-note .en-app title="In the Application · selection-ga, “Compare mechanisms”"}
 [Explore in selection-ga](https://josemagalan.github.io/selection-ga/#cmp=all&lang=en){.explorar target="_blank"}
 
 - In the **Mean fitness** chart, notice when each mechanism stops improving.
-- Click **Simulate again** to repeat with other populations. In the next four simulations, the best is lost with roulette-wheel selection in 52, 66, 58, and 56 % of repetitions, and with tournament selection in 14, 12, 14, and 14 %.
+- Click **Simulate again** to repeat with other populations. In the next four simulations, the best is lost with roulette-wheel selection in 52, 66, 58, and 56% of repetitions, and with tournament selection in 14, 12, 14, and 14%.
 - Choose which mechanisms appear in the charts (up to four). Roulette, linear ranking, and tournament appear by default: add **Truncation** or **SUS**.
 :::
 
@@ -282,7 +282,7 @@ A classmate runs the roulette simulation once, and the best individual is not lo
 <details>
 <summary>**Show the Solution**</summary>
 
-One run is not enough to make a claim about frequencies. In the 50 repetitions of each simulation, the best is lost with roulette-wheel selection in about half the cases, and the proportion varies between simulations (from 48 to 66 % in the first five). Its survival in a particular run is perfectly consistent with that frequency. To check this, look at the “The best is lost” column and click “Simulate again” several times.
+One run is not enough to make a claim about frequencies. In the 50 repetitions of each simulation, the best is lost with roulette-wheel selection in about half the cases, and the proportion varies between simulations (from 48 to 66% in the first five). Its survival in a particular run is perfectly consistent with that frequency. To check this, look at the “The best is lost” column and click “Simulate again” several times.
 </details>
 ::::
 

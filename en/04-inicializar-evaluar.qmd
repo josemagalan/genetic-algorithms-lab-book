@@ -184,7 +184,7 @@ More importantly, a population **uniform over chromosomes is not uniform over fe
 | Weight $w_i$ | 4 | 3 | 5 | 8 | 4 | 2 |
 | Value $v_i$ | 5 | 4 | 9 | 4 | 7 | 4 |
 
-Of $2^6 = 64$ chromosomes, 34 fit (53.1 %). The optimum is **1 0 1 0 1 0**: items 1, 3, and 5, with weight exactly 13 and value 21.
+Of $2^6 = 64$ chromosomes, 34 fit (53.1%). The optimum is **1 0 1 0 1 0**: items 1, 3, and 5, with weight exactly 13 and value 21.
 
 ::: {.callout-tip .ejemplo #ejemplo-inicializar-evaluar-diversidad title="Reproducible Example · Eight Random Knapsacks"}
 **Data.** The table's knapsack and a uniform population of *N* = 8 individuals:
@@ -212,7 +212,7 @@ Of $2^6 = 64$ chromosomes, 34 fit (53.1 %). The optimum is **1 0 1 0 1 0**: item
 | I7 | 1, 2, 3, 4, 5 | 24 | 29 | No |
 | I8 | 1, 2, 4, 5 | 19 | 20 | No |
 
-**4 of 8** fit (50 %), close to the space's 53.1 %. I5 is the best fitting individual, worth 20; the optimum 21 is absent. Mean pairwise distance is **0.55**, near the expected 0.5, and minimum distance is **0.17**: I1 and I5 differ only in item 2, one bit out of six. All 8 are distinct.
+**4 of 8** fit (50%), close to the space's 53.1%. I5 is the best fitting individual, worth 20; the optimum 21 is absent. Mean pairwise distance is **0.55**, near the expected 0.5, and minimum distance is **0.17**: I1 and I5 differ only in item 2, one bit out of six. All 8 are distinct.
 </details>
 
 <details class="incrustada">
@@ -280,7 +280,7 @@ To draw the expansion, the tool repeatedly applies this formula to the preceding
 |:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | Approximate copies | 1 | 1.9 | 3.4 | 5.7 | 8.1 | 9.7 | 10.0 |
 
-The approximation reaches **9.7 copies at generation 5**: almost the entire population would be the greedy solution, value 20 rather than the optimum. This is not the exact mean of many runs. The sole initial copy may, for example, appear in none of ten tournaments, with probability $0.81^{10} \approx 0.122$: about 12 % of runs lose it immediately.
+The approximation reaches **9.7 copies at generation 5**: almost the entire population would be the greedy solution, value 20 rather than the optimum. This is not the exact mean of many runs. The sole initial copy may, for example, appear in none of ten tournaments, with probability $0.81^{10} \approx 0.122$: about 12% of runs lose it immediately.
 
 One seeded copy barely changes initial diversity (mean distance is 0.49 in both populations). The curve warns how selection may later concentrate the population around one solution; it does not guarantee that seed's survival or measure crossover and mutation effects.
 </details>
@@ -414,12 +414,12 @@ With $C = 21$, fitness values $C - f$ are 0, 12, 13, 7, 7, and 7, totaling 46. W
 
 | Individual | *f* | $C - f$ | *p* | $1/(1+f)$ | *p* | Rank | *p* |
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| I1 | 21 | 0 | 0 % | 0.045 | 10.0 % | 1 | 4.8 % |
-| I2 | 9 | 12 | 26.1 % | 0.100 | 21.9 % | 5 | 23.8 % |
-| I3 | 8 | 13 | **28.3 %** | 0.111 | **24.3 %** | 6 | **28.6 %** |
-| I4, I5, I6 | 14 | 7 | 15.2 % | 0.067 | 14.6 % | 3 | 14.3 % |
+| I1 | 21 | 0 | 0% | 0.045 | 10.0% | 1 | 4.8% |
+| I2 | 9 | 12 | 26.1% | 0.100 | 21.9% | 5 | 23.8% |
+| I3 | 8 | 13 | **28.3%** | 0.111 | **24.3%** | 6 | **28.6%** |
+| I4, I5, I6 | 14 | 7 | 15.2% | 0.067 | 14.6% | 3 | 14.3% |
 
-The three transformations give the same ordering but divide the wheel differently. With $C - f$, the worst individual is never selected, even though it may carry useful genes. With ranks, the best receives $2/(N + 1) = 2/7 \approx 28.6$ % regardless of its advantage over the runner-up. In *N* = 6 spins, the best would be selected an average of 1.70 times with $C - f$, 1.46 with $1/(1 + f)$, and 1.71 with ranks.
+The three transformations give the same ordering but divide the wheel differently. With $C - f$, the worst individual is never selected, even though it may carry useful genes. With ranks, the best receives $2/(N + 1) = 2/7 \approx 28.6$% regardless of its advantage over the runner-up. In *N* = 6 spins, the best would be selected an average of 1.70 times with $C - f$, 1.46 with $1/(1 + f)$, and 1.71 with ranks.
 </details>
 
 <details class="incrustada">
@@ -578,7 +578,7 @@ Many evaluations are repeated. Selection copies good individuals, and mutation l
 <details>
 <summary>**Show the Result**</summary>
 
-The budget is $8 \times (6 + 1) = 56$ evaluations. With caching, the 6-item knapsack needs only **25**, saving 31 (55 %). The same budget of 56 would reach generation 55. In a space of only 64 chromosomes, without crossover, the population soon fills with previously evaluated chromosomes; after generation 24, hardly any new ones appear. This is an extreme case. With 12 items ($2^{12} = 4\,096$ chromosomes), caching requires 40 evaluations, saves 16 (29 %), and reaches generation 9.
+The budget is $8 \times (6 + 1) = 56$ evaluations. With caching, the 6-item knapsack needs only **25**, saving 31 (55%). The same budget of 56 would reach generation 55. In a space of only 64 chromosomes, without crossover, the population soon fills with previously evaluated chromosomes; after generation 24, hardly any new ones appear. This is an extreme case. With 12 items ($2^{12} = 4\,096$ chromosomes), caching requires 40 evaluations, saves 16 (29%), and reaches generation 9.
 </details>
 
 <details class="incrustada">
@@ -788,7 +788,7 @@ The individual is **0 1 0 1 0 1**: weight 13, exactly the capacity, and value 12
 
 :::
 
-The tool's “Compare strategies” view repeats each strategy over 1 000 populations of this knapsack, with *N* = 8. On average, feasible initialization gives 100 % feasible individuals (versus 53 % under uniform initialization) and a best initial value of 20.4 (versus 17.3), but only 68 % distinct individuals (versus 95 %). Seeding half the population with the greedy solution gives 61 % distinct individuals and a minimum distance of 0. Sequential inhibition with δ = 0.30 is the only method that increases diversity, at the cost of generating 1.6 times as many candidates.
+The tool's “Compare strategies” view repeats each strategy over 1 000 populations of this knapsack, with *N* = 8. On average, feasible initialization gives 100% feasible individuals (versus 53% under uniform initialization) and a best initial value of 20.4 (versus 17.3), but only 68% distinct individuals (versus 95%). Seeding half the population with the greedy solution gives 61% distinct individuals and a minimum distance of 0. Sequential inhibition with δ = 0.30 is the only method that increases diversity, at the cost of generating 1.6 times as many candidates.
 
 :::: {.callout-note .ejercicio #ejercicio-inicializar-evaluar-factible title="Exercise · Order Decides"}
 For the same knapsack: (a) which individual results from shuffled order 3, 5, 1, 2, 6, 4? (b) Can this initialization produce 1 0 0 0 0 0? (c) What about the greedy solution, 0 0 1 0 1 1?
@@ -898,7 +898,7 @@ where Φ is the standard normal cumulative distribution function. Reevaluation c
 <details>
 <summary>**Show the Result**</summary>
 
-With one evaluation, $\Delta/(\sigma\sqrt 2) = 38.56/42.43 \approx 0.91$ and $\Phi(-0.91) \approx$ **18.2 %**. With the mean of 5, multiply the argument by $\sqrt 5$: $\Phi(-2.03) \approx$ **2.1 %**. The price is 40 evaluations rather than 8. To get below 5 %, 4 evaluations per individual suffice. In this population, incorrectly ordered pairs fall from 5 to 2 out of 28.
+With one evaluation, $\Delta/(\sigma\sqrt 2) = 38.56/42.43 \approx 0.91$ and $\Phi(-0.91) \approx$ **18.2%**. With the mean of 5, multiply the argument by $\sqrt 5$: $\Phi(-2.03) \approx$ **2.1%**. The price is 40 evaluations rather than 8. To get below 5%, 4 evaluations per individual suffice. In this population, incorrectly ordered pairs fall from 5 to 2 out of 28.
 </details>
 
 <details class="incrustada">
@@ -911,7 +911,7 @@ With one evaluation, $\Delta/(\sigma\sqrt 2) = 38.56/42.43 \approx 0.91$ and $\P
 Noise changes other decisions too. The cache from Section -@sec-inicializar-evaluar-coste no longer works as described: it would preserve a lucky evaluation forever. Elitism (Section -@sec-reemplazo-elitismo) can retain an individual that merely appeared good. The final solution should be evaluated several times before accepting it. Cheaper alternatives to reevaluating everyone include increasing population size, which implicitly averages noise, or reevaluating only individuals involved in close comparisons. @jin2005 review these techniques.
 
 :::: {.callout-note .ejercicio #ejercicio-inicializar-evaluar-ruido title="Exercise · How Many Evaluations?"}
-With the data from Example [](#ejemplo-inicializar-evaluar-ruido) (Δ = 38.56, σ = 30), how many evaluations per individual make the probability of ordering I1 and I7 incorrectly less than 5 %? Use $\Phi(-1.645) = 0.05$.
+With the data from Example [](#ejemplo-inicializar-evaluar-ruido) (Δ = 38.56, σ = 30), how many evaluations per individual make the probability of ordering I1 and I7 incorrectly less than 5%? Use $\Phi(-1.645) = 0.05$.
 
 <details>
 <summary>**Show the Solution**</summary>
