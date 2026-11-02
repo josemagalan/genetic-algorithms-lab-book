@@ -25,7 +25,7 @@ Many optimization methods improve one solution at a time: they start with a solu
 
 A genetic algorithm maintains a set of solutions, the **population**, and changes it step by step. Each step creates new solutions from existing ones and decides which remain. The process repeats until a stopping condition is met [@talbi2009, p. 191]. This idea comes from natural evolution: better-adapted individuals leave more offspring, which inherit their parents' traits, mixed and with small changes [@goldberg1989, pp. 1, 10–11].
 
-We will use genetic vocabulary to make the analogy clearer [@talbi2009, pp. 200, 205; @mitchell1998, section 1.6]:
+From here on, we will use genetic terminology to make the biological metaphor even clearer [@talbi2009, pp. 200, 205; @mitchell1998, section 1.6]:
 
 | Term | In the algorithm |
 |---|---|
@@ -191,7 +191,7 @@ and its expected copies among the *N* parents are $N\,p_i$. The same individual 
 | Probability *p* | 0.144 | 0.492 | 0.055 | 0.309 |
 | Expected copies, 4 *p* | 0.58 | 1.97 | 0.22 | 1.23 |
 
-To spin the wheel, the tool draws a random number *r* between 0 and 1 and places it against the **cumulative probabilities**: 0.144 for A, 0.637 for A and B together, 0.691 through C, and 1 through D. The first individual whose cumulative probability exceeds *r* is selected.
+To spin the wheel, the tool draws a random number *r* between 0 and 1 and places it against the **cumulative probabilities**: 0.144 for A, 0.637 for A and B together, 0.691 for A through C, and 1 for all four. The first individual whose cumulative probability exceeds *r* is selected.
 
 ::: {.callout-tip .ejemplo #ejemplo-ciclo-seleccionar title="Reproducible Example · Four Spins of the Wheel"}
 **Data.** The population from exercise [](#ejercicio-ciclo-a-mano), provided in selection-ga as **Goldberg’s example (x²)**, and the four random numbers from draw 19: *r* = 0.05, 0.32, 0.45, and 0.75.
@@ -227,7 +227,7 @@ We have four parents. How do they produce four different offspring?
 
 **Form pairs.** Goldberg pairs the parents at random; in his simulation, the draw paired the first with the second and the third with the fourth [@goldberg1989, p. 16]. With parents A B B D, the pairs are **A with B** (01101 and 11000) and **B with D** (11000 and 10011). All pairs cross over: crossover probability is 1.
 
-**Cross over.** Goldberg uses **one-point crossover**: a cut point is chosen randomly between two genes, and the parents exchange everything to its right [@goldberg1989, p. 12]. The first offspring takes the first parent's head and the second parent's tail; the other does the reverse. In the simulation, the first pair's cut fell after the fourth gene, and the second pair's after the second [@goldberg1989, pp. 16–17, table 1.2]. Chapter [](#sec-cruce-uno-y-dos-puntos){.capitulo} covers this and other crossover operators.
+**Cross over.** Goldberg uses **one-point crossover**: a cut point is chosen randomly between two genes, and the parents exchange everything to its right [@goldberg1989, p. 12]. The first offspring takes the first parent's head and the second parent's tail; the other does the reverse. In the simulation, for the first pair the cut fell after the fourth gene; for the second pair, after the second [@goldberg1989, pp. 16–17, table 1.2]. Chapter [](#sec-cruce-uno-y-dos-puntos){.capitulo} covers this and other crossover operators.
 
 ::: {.callout-tip .ejemplo #ejemplo-ciclo-variar title="Reproducible Example · Two One-Point Crossovers"}
 **Data.** First pair: **Parent 1** 0 1 1 0 1 (A) and **Parent 2** 1 1 0 0 0 (B), cut after gene 4. Second pair: **Parent 1** 1 1 0 0 0 (B) and **Parent 2** 1 0 0 1 1 (D), cut after gene 2.
@@ -377,7 +377,7 @@ EvoTraveller shows a complete run. It solves the traveling salesman problem from
 ::: {.callout-note .en-app title="In the Application · EvoTraveller"}
 [Explore in EvoTraveller](https://evotraveller.streamlit.app/){.explorar target="_blank"}
 
-- If **Zzzz** appears, click **Yes, get this app back up!** and wait for the controls.
+- If **Zzzz** appears, click **Yes, get this app back up!** and wait for the controls to appear.
 - Enter the sidebar [reference settings](09-experimentos.qmd#configuracion-evotraveller) and click **Run**. **Fitness** shows each generation's best fitness, from 0 to 50; **Best solution** shows the final best route.
 - Under **Solutions**, move **Generation** from 0 onward and watch the population's routes change. Are they more alike at the beginning or at the end?
 - Under **GA parameters** in the sidebar, identify the controls for selection, crossover, mutation, replacement, and stopping. Which design decisions cannot be changed?
