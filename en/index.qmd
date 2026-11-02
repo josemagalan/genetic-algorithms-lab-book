@@ -1,24 +1,80 @@
-# About This English Translation {.unnumbered}
+# How to Read This Book {.unnumbered}
 
 ::: {.version-beta}
-**English translation · Chapters 1–11 · October 31, 2026.** This is an AI-generated translation of the Spanish edition **1.0**, published on October 31, 2026: [DOI 10.5281/zenodo.23835733](https://doi.org/10.5281/zenodo.23835733). The Spanish edition is the original reference text prepared and reviewed by the authors.
+**English translation · Chapters 1–11 · October 31, 2026.** This is an AI-generated translation of the Spanish edition **1.0**, published on October 31, 2026: [DOI 10.5281/zenodo.23835733](https://doi.org/10.5281/zenodo.23835733). The Spanish edition is the original reference text prepared and reviewed by the authors; a complete human review of the translation is pending ([details below](#traduccion)). [How to cite the original](avisos.qmd#como-citar). If you spot an error or awkward phrasing, please [let us know](avisos.qmd#contacto): every page ends with a link to the comment form.
 :::
 
-**Start with [“Evolution and Optimization”](01-evolucion.qmd), or open the [contents](indice.qmd).** All eleven chapters are translated in full, including their examples, exercises, solutions, figures, and further reading.
+This book is intended for undergraduate students who are new to genetic algorithms. The activities on the basic path can be done with paper, a calculator, and the lab's tools.
 
-The book is intended for undergraduate students who are new to genetic algorithms. You can follow the basic path using paper, a calculator, and the interactive tools of the [Genetic Algorithms Lab](https://josemagalan.github.io/genetic-algorithms-lab/#lang=en).
+**Start with the chapter [“Evolution and Optimization”](01-evolucion.qmd).** Follow the blue sections: at the end of each chapter's basic path you will find its summary and a link to the next chapter.
 
-## Levels {.unnumbered}
+You should be comfortable with basic arithmetic, fractions, and percentages. Powers and factorials are reviewed when we [count solutions](01-evolucion.qmd#sec-evolucion-optimizar); [probability](02-ciclo.qmd#sec-ciclo-seleccionar) is worked through with concrete draws, and the [mean and standard deviation](09-experimentos.qmd#sec-experimentos-replicas) with the results of several runs. The normal distribution is introduced intuitively with [Gaussian mutation](07-mutacion.qmd#sec-mutacion-gaussiana). The advanced sections add concepts such as the standard error and can be left for a second reading.
 
-- **Basic:** the main path, shown in blue. Follow the explanation, predict each example's result, and check it in the application.
-- **Advanced:** optional sections that extend the basic path and may require additional knowledge.
-- **Further reading:** optional discussions and references for exploring a topic beyond the basic path.
+## The Lab {.unnumbered #laboratorio}
 
-Examples open the tool with fixed data. “In the Application” boxes invite you to explore. Exercises can be worked out on paper; their solutions remain folded until you choose to open them.
+The book's activities use the [Genetic Algorithms Lab](https://josemagalan.github.io/genetic-algorithms-lab/#lang=en) (*genetic-algorithms-lab*), a free portal that brings all the tools together. They run in the browser, with nothing to install and no account to create. They are available in English and Spanish, except the two simulators, which are English-only.
+
+[Version 1.0.0 of the portal is archived on Zenodo](https://doi.org/10.5281/zenodo.23834485){target="_blank"}. That archive preserves the portal and its inventory; the linked tools are maintained in their own repositories.
+
+- **Five modules**, one for each step of the algorithm: representation, initialization and evaluation, selection, crossover, and mutation. They show step by step what each operator does on a concrete example, let you compare alternatives, and have a **Practice** mode: it sets an exercise with its data, checks your answer, and links to the step-by-step solution.
+- **Two simulators.** EvoTraveller runs a complete genetic algorithm on the traveling salesman problem, and SelectionMechanisms repeats many generations to compare selection mechanisms, convergence, and diversity.
+
+You don't need to go through the portal: every activity in the book links to the tool it needs, and the examples open it in the exact state of the example.
 
 The text uses American spelling. Names of tabs, controls, and buttons are quoted exactly as they appear in each application's English interface, so some keep British spelling, such as “Travelling salesman problem” or **Penalise**.
 
-## Translation and Review {.unnumbered}
+## Explanations and Activities {.unnumbered #explicaciones-actividades}
+
+The book lets you tell at a glance what you read from what you do. Theory is set as ordinary text; anything that asks you to work is placed inside a box.
+
+**Explanations.** The text and figures that present the concepts. You read them as you would any book, and they need no tools.
+
+::: {.callout-tip .ejemplo title="Reproducible Example"}
+Sets up a concrete situation, with its data and its random numbers fixed. Try to predict the result before opening it; then run the tool and explain what matched your prediction and what changed your mind. There are two kinds of green button:
+
+- **Open**, filled, takes you to the application in exactly the state of the example, so the result matches the one in the book. Often the tool can also be expanded within the page.
+- **⚙ Open and configure**, outlined, is used with the two simulators, EvoTraveller and SelectionMechanisms, which do not store their state in the URL. It opens the application with its default values: before running it, enter by hand the values listed under **Data** in the example.
+:::
+
+::: {.callout-note .en-app title="In the Application"}
+Gives instructions for exploring on your own: which control to move, which button to click, and what to look for. Here the results are no longer fixed in advance. The **Explore** button opens the relevant screen so you can try things out yourself.
+:::
+
+::: {.callout-note .ejercicio title="Exercise"}
+Worked out with pencil and paper: predict, calculate, or argue. When there is a solution, it is folded at the end of the box; try to solve the exercise before opening it.
+:::
+
+Each chapter begins with its **objectives**, in a box like this one:
+
+::: {.callout-warning .objetivos title="Chapter Objectives"}
+What you will be able to do after completing the chapter's basic path.
+:::
+
+## Levels and Paths {.unnumbered #niveles}
+
+Each section has a level label: [[Basic]{.largo}[B]{.corto}]{.nivel .basico}, [[Advanced]{.largo}[A]{.corto}]{.nivel .avanzado}, or [[Further reading]{.largo}[+]{.corto}]{.nivel .saber-mas}. In the “On this page” sidebar they are abbreviated as [[B]{.corto}]{.nivel .basico .solo-corto}, [[A]{.corto}]{.nivel .avanzado .solo-corto}, and [[+]{.corto}]{.nivel .saber-mas .solo-corto}. The basic path can be read straight through without the extensions, and it includes each chapter's objectives and summary.
+
+Depending on the sections you follow, the book covers three levels of depth:
+
+- **The basic path only.** Enough to understand how a genetic algorithm works, design one decision by decision, and tune it with simple experiments: for each representation, the most widely used operators and the appropriate replacement strategies. This is the content of a first undergraduate course on genetic algorithms or metaheuristics.
+- **Basic and advanced.** The advanced sections ask for more background and go deeper: constraints and infeasibility, alternative codes and representations, more elaborate initialization, noisy fitness, more operators and replacement variants, and the statistical design of experiments. They suit a more complete course, or readers who plan to apply the algorithm to a problem of their own.
+- **Further reading.** Each chapter ends with extensions: history, connections with other methods, and readings to pursue on your own.
+
+The [contents](indice.qmd) list every section with its level, and the [activity index](actividades.qmd) lists the examples, “In the Application” boxes, and exercises, with the section, level, and tool of each.
+
+## For Instructors {.unnumbered #profesorado}
+
+If you use the book as a textbook, the lab offers resources for class and for assessment, in addition to the activities in the text:
+
+- **In class**, the modules' step-by-step animations can be projected to explain each operator, and the simulators to discuss their effects on the population.
+- **For independent study**, the **Practice** mode of the five modules works as self-assessment: students solve an exercise, the tool checks it and shows them the step-by-step solution.
+- **For assessment**, each module generates question banks for Moodle (Moodle XML format) at three levels of difficulty. Depending on the module, students calculate a result, identify the operator, or find the error. The questions are organized into categories, so a quiz can draw random questions from them. The feedback for each question gives the solution and links to the step-by-step solution of that same exercise in the tool, so students can see, visually and interactively, why the answer is correct.
+
+The [activity index](actividades.qmd) shows the tool used by each example, “In the Application” box, and exercise, which helps when preparing a session around a particular application. Suggestions from instructors help us improve the book: [let us know](avisos.qmd#contacto).
+
+## About This English Translation {.unnumbered #traduccion}
+
+All eleven chapters are translated in full, including their examples, exercises, solutions, figures, and further reading.
 
 The translation was prepared on October 31, 2026, by **Codex (GPT-6)** (chapters 1–5) and **Claude (Cowork; configured model claude-opus-5-5)** (chapters 6–11). Each translated chapter is compared with the Spanish source for terminology, numbers, formulas, citations, links, and activity settings, then given a separate pass for natural English. The author gave the chapter 5 pilot a favorable general assessment. **A complete human review of the English translation is pending.** Checks and editorial review by an AI assistant do not constitute an independent human review.
 
