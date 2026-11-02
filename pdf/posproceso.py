@@ -22,6 +22,9 @@ src = WORK / f"pasada-{data['pass']}.pdf"
 reader = PdfReader(src)
 n = len(reader.pages)
 pmap = data['map']; structure = data['structure']; config = data['config']; full = data['full']
+# Textos de la edición (marcadores y metadatos); por defecto, la española.
+edition = json.loads(Path(config.get('edicion') or HERE / 'edicion.json').read_text(encoding='utf-8'))
+T = edition['posproceso']
 
 # Fuente de folios y cabeceras: la misma Noto Sans (OFL), convertida de woff2 a TTF.
 for weight in ('400', '600'):
@@ -90,8 +93,9 @@ def dest(id_):
     return reader.get_destination_page_number(d), Fit.xyz(left=left, top=top)
 outline = []
 if full:
-    writer.add_outline_item('Portada', 0, fit=Fit.fit()); writer.add_outline_item('Créditos', 1, fit=Fit.fit()); outline += ['Portada', 'Créditos']
-    if dest('pdf-indice'): p, fit = dest('pdf-indice'); writer.add_outline_item('Índice', p, fit=fit); outline.append('Índice')
+    writer.add_outline_item(T['marcador_portada'], 0, fit=Fit.fit()); writer.add_outline_item(T['marcador_creditos'], 1, fit=Fit.fit())
+    outline += [T['marcador_portada'], T['marcador_creditos']]
+    if dest('pdf-indice'): p, fit = dest('pdf-indice'); writer.add_outline_item(T['marcador_indice'], p, fit=fit); outline.append(T['marcador_indice'])
 for part in structure:
     d = dest(part['key'])
     p, fit = d if d else (pmap[part['key']], Fit.fit())
@@ -106,16 +110,20 @@ for part in structure:
 writer.page_mode = '/UseOutlines'
 
 authors = '; '.join(a['name'] for a in config['authors'])
-writer.add_metadata({
-    '/Title': f"{config['title']}. {config['subtitle']}",
+metadata = {
+    '/Title': f"{config['title']}{T.get('separador_titulo', '. ')}{config['subtitle']}",
     '/Author': authors,
-    '/Subject': f"Edición PDF de la versión {config['version']} (base {config['commit'][:7]}{' con cambios locales' if config.get('cambios_locales') else ''}). Texto CC BY 4.0. DOI {config.get('doi', '')}",
-    '/DOI': config.get('doi', ''),
-    '/Keywords': 'algoritmos genéticos, computación evolutiva, metaheurísticas, laboratorio interactivo, educación',
+    '/Subject': T['asunto'].format(version=config['version'], short=config['commit'][:7], doi=config.get('doi') or '',
+                                   cambios=T['con_cambios'] if config.get('cambios_locales') else '',
+                                   fuente_version=config.get('source_version') or '', doi_fuente=config.get('source_doi') or ''),
+    '/Keywords': T['palabras_clave'],
     '/Creator': 'Quarto 1.10.19 y Chromium (Playwright); generador de la edición PDF de Libro-GA',
-})
+}
+if config.get('doi'):   # una traducción sin DOI propio no declara el del original como suyo
+    metadata['/DOI'] = config['doi']
+writer.add_metadata(metadata)
 from pypdf.generic import NameObject, TextStringObject
-writer._root_object[NameObject('/Lang')] = TextStringObject('es-ES')
+writer._root_object[NameObject('/Lang')] = TextStringObject(edition['lang_pdf'])
 OUT.parent.mkdir(parents=True, exist_ok=True)
 with OUT.open('wb') as fh: writer.write(fh)
 (WORK / 'posproceso.json').write_text(json.dumps({'paginas': n, 'inicio_cuerpo': body, 'marcadores': len(outline),

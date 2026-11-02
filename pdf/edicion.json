@@ -1,0 +1,52 @@
+{
+  "_nota": "Textos y ajustes de idioma de la edición PDF española (original). La edición inglesa usa pdf/en/edicion.json con las mismas claves. Los textos que describen la interfaz web están en textos-impresion.json (D087).",
+  "idioma": "es",
+  "locale": "es-ES",
+  "lang_pdf": "es-ES",
+  "perfil": null,
+  "textos_impresion": "textos-impresion.json",
+  "ajustes": "ajustes.json",
+  "silabeo": {"pyphen": "es", "nota": "es; mínimo tres letras a cada lado"},
+  "libro": {
+    "portada": "Portada",
+    "portada_alt": "Portada de {title}. {subtitle}.",
+    "indice": "Índice",
+    "capitulo": "Capítulo {n}",
+    "abrir_aplicacion": "Abrir la aplicación en la web"
+  },
+  "creditos": {
+    "base_con_cambios": "base {short}, con cambios locales",
+    "aviso_borrador": "Generada el {fecha} a partir de las fuentes del libro (commit {short}). Las aplicaciones y la versión web no forman parte del archivo.",
+    "version": "<strong>Versión {version}</strong>, revisada el {revision}. Primera publicación en la web: {primera}. Edición en PDF generada el {fecha} a partir de las mismas fuentes que la web ({commit}).",
+    "doi": "DOI de esta edición: {doi}.",
+    "portal": "Archivo del portal 1.0.0: {portal}.",
+    "laboratorio": "Este libro se lee junto con el Laboratorio de algoritmos genéticos: los ejemplos y las actividades se hacen con aplicaciones web que el PDF no contiene. Sus enlaces necesitan conexión. Versión interactiva: {site}. Fuentes: {repo}.",
+    "licencia": "Texto, figuras propias y ejercicios: licencia <a href=\"https://creativecommons.org/licenses/by/4.0/deed.es\">Creative Commons Atribución 4.0 Internacional (CC BY 4.0)</a>. Código del repositorio: MIT. Las imágenes de terceros, la biblioteca KaTeX, el estilo de citas y las herramientas enlazadas conservan su propia licencia; véase <a href=\"#avisos--licencia\">«Agradecimientos y avisos»</a>. Tipografía: Noto Sans (SIL Open Font License 1.1).",
+    "correspondencia": "* Autor de correspondencia. Comentarios y contacto: <a href=\"#avisos--contacto\">«Comentarios y contacto»</a>."
+  },
+  "adaptar": {
+    "desplegables": {"Ver el resultado": "Resultado", "Ver la solución": "Solución", "Ver los datos de la figura": "Datos de la figura"},
+    "prefijo_desplegable": "^Ver (el |la |los |las )?",
+    "ver_solucion": "Ver la solución",
+    "ejercicio_titulo": "Ejercicio\\s+(\\d+\\.\\d+)",
+    "soluciones_titulo": "Soluciones de los ejercicios",
+    "soluciones_intro": "Intenta resolver cada ejercicio antes de consultar su solución. Los enlaces permiten volver al enunciado.",
+    "solucion_de": "Solución del ejercicio {n}",
+    "volver": "Volver al ejercicio {n}",
+    "consultar": "Consultar la solución del ejercicio {n} al final del capítulo",
+    "referencias": "Referencias del capítulo",
+    "tablas": {
+      "identificadores": "^(Cromosoma|Contendientes)$",
+      "numericas_extra": ["^\\d+ de \\d+$", "^\\d+ \\(valor inicial\\)$"],
+      "cruce": "Cruce", "mutacion": "Mutación", "configuracion": "Configuración", "configuracion_d": "Configuración D"
+    }
+  },
+  "posproceso": {
+    "marcador_portada": "Portada",
+    "marcador_creditos": "Créditos",
+    "marcador_indice": "Índice",
+    "asunto": "Edición PDF de la versión {version} (base {short}{cambios}). Texto CC BY 4.0. DOI {doi}",
+    "con_cambios": " con cambios locales",
+    "palabras_clave": "algoritmos genéticos, computación evolutiva, metaheurísticas, laboratorio interactivo, educación"
+  }
+}

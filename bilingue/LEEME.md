@@ -58,5 +58,6 @@ python bilingue/verificar.py --informe RUTA_AL_INFORME_JSON
 La revisión del asistente no sustituye una revisión humana. Los autores revisaron
 manualmente el texto inglés en noviembre de 2026; la traducción conserva sus avisos
 de IA y de esa revisión al publicarse en HTML.
-Los enlaces del portal ofrecen ambas ediciones. No se asigna un DOI propio
-ni se usa el DOI español como si identificara la traducción.
+Los enlaces del portal ofrecen ambas ediciones. La traducción tiene DOI propio,
+10.5281/zenodo.23890034, en un registro de Zenodo distinto del original (P028);
+el DOI español solo identifica la edición de la que procede.

@@ -7,6 +7,9 @@ from pypdf import PdfReader
 BOOK, WORK, PDF = Path(sys.argv[1]), Path(sys.argv[2]), Path(sys.argv[3])
 est = json.loads((WORK / 'estructura.json').read_text(encoding='utf-8'))
 render = json.loads((WORK / 'render.json').read_text(encoding='utf-8'))
+config = est['config']
+edition = json.loads(Path(config.get('edicion') or Path(__file__).resolve().parent / 'edicion.json').read_text(encoding='utf-8'))
+SOURCE = Path(config.get('fuente') or BOOK)   # repositorio con el commit (la edición inglesa se imprime desde una copia)
 r = PdfReader(PDF)
 n = len(r.pages); names = r.named_destinations
 fails = []
@@ -101,17 +104,16 @@ if shutil.which('pdffonts'):
     not_emb |= {'pdffonts: ' + l.split()[0] for l in rows if l.split()[-5] != 'yes'}
 check(not not_emb, f'fuentes sin incrustar: {sorted(not_emb)}')
 meta = r.metadata
-check('Evolución a la vista' in (meta.title or ''), 'título de metadatos')
+check(config['title'] in (meta.title or ''), 'título de metadatos')
 check(all(a['name'] in (meta.author or '') for a in est['config']['authors']), 'autoría de metadatos')
 
 # La web no cambia: soluciones plegadas en su caja y sin apéndice de impresión.
 web = {'soluciones_plegadas': 0, 'apendice_impresion': 0}
 for f in glob.glob(str(BOOK / '_book' / '[01][0-9]-*.html')):
     h = Path(f).read_text(encoding='utf-8')
-    web['soluciones_plegadas'] += len(re.findall(r'<summary>\s*(?:<strong>)?\s*Ver la solución\s*(?:</strong>)?\s*</summary>', h))
-    web['apendice_impresion'] += h.count('pdf-solution') + h.count('Soluciones de los ejercicios')
+    web['soluciones_plegadas'] += len(re.findall(r'<summary>\s*(?:<strong>)?\s*' + re.escape(edition['adaptar']['ver_solucion']) + r'\s*(?:</strong>)?\s*</summary>', h))
+    web['apendice_impresion'] += h.count('pdf-solution') + h.count(edition['adaptar']['soluciones_titulo'])
 check(web['soluciones_plegadas'] == render['geometry']['counts']['solutions'] and web['apendice_impresion'] == 0, f'web: {web}')
-config = est['config']
 if config.get('procedencia'):
     provenance = json.loads(Path(config['procedencia']).read_text(encoding='utf-8'))
     cambios = config['cambios_locales']
@@ -119,7 +121,7 @@ if config.get('procedencia'):
         check(hashlib.sha256((BOOK / name).read_bytes()).hexdigest() == expected, 'fuente alterada: ' + name)
     source_commit = provenance['base']
 else:
-    git = lambda *a: subprocess.check_output(['git', '-C', str(BOOK), *a], text=True).strip()
+    git = lambda *a: subprocess.check_output(['git', '-C', str(SOURCE), *a], text=True).strip()
     cambios = [l for l in git('status', '--porcelain', '--untracked-files=no').splitlines() if l]
     source_commit = git('rev-parse', 'HEAD')
 # Cambios locales declarados (p. ej. «M index.qmd») se admiten con PERMITIR_CAMBIOS y se registran.
@@ -133,7 +135,7 @@ else:  # el Poppler del runtime de Windows no trae pdftotext; pdfplumber es much
     import pdfplumber
     with pdfplumber.open(PDF) as document:
         text = '\n'.join(page.extract_text(layout=True) or '' for page in document.pages)
-for doi in (config.get('doi'), config.get('portal_doi')):
+for doi in (config.get('doi'), config.get('source_doi'), config.get('portal_doi')):
     if doi: check('https://doi.org/' + doi in uris, 'DOI sin enlace en PDF: ' + doi)
 hyphen_lines = len(re.findall(r'[a-záéíóúñ]\u00ad?-[ \t]*\n', text))
 unresolved = re.findall(r'\?\?|@\w+\d{4}', text)

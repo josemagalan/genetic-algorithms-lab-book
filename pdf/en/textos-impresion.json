@@ -1,0 +1,42 @@
+{
+  "_nota": "Sustituciones exclusivas de la edición PDF inglesa: traducción de las de ../textos-impresion.json (D087), pendiente de aprobación del autor. Cada «buscar» debe aparecer exactamente una vez en el HTML inglés del archivo indicado; si la fuente cambia, el generador se detiene. No modifican los .qmd.",
+  "index.html": [
+    {
+      "buscar": "Try to predict the result before opening it; then run the tool and explain what matched your prediction and what changed your mind. There are two kinds of green button:",
+      "poner": "Try to predict the result before reading it: in this edition it appears right after the example, labeled “Result”. Then run the tool and explain what matched your prediction and what changed your mind. There are two kinds of link:"
+    },
+    {
+      "buscar": "<strong>Open</strong>, filled, takes you to the application in exactly the state of the example, so the result matches the one in the book. Often the tool can also be expanded within the page.",
+      "poner": "<strong>Open</strong> takes you to the application in exactly the state of the example, so the result matches the one in the book."
+    },
+    {
+      "buscar": "<strong>⚙ Open and configure</strong>, outlined, is used",
+      "poner": "<strong>Open and configure</strong> is used"
+    },
+    {
+      "buscar": "The <strong>Explore</strong> button opens the relevant screen so you can try things out yourself.",
+      "poner": "The <strong>Explore</strong> link opens the relevant screen so you can try things out yourself."
+    },
+    {
+      "buscar": "When there is a solution, it is folded at the end of the box; try to solve the exercise before opening it.",
+      "poner": "When there is a solution, it is at the end of the chapter, under “Solutions to the Exercises”; try to solve the exercise before looking at it. Each exercise links to its solution, and each solution back to its exercise."
+    },
+    {
+      "buscar": "In the “On this page” sidebar they are abbreviated as",
+      "poner": "In the book's contents they are abbreviated as"
+    }
+  ],
+  "avisos.html": [
+    {
+      "buscar": "Use <strong>Send a comment about this page</strong> to report a typo, an unexpected result, or a broken link. It opens a GitHub form with the page and version filled in.",
+      "poner": "In the web version, the link <strong>Send a comment about this page</strong>, at the end of each page and in the sidebar, lets you report a typo, an unexpected result, or a broken link. It opens a GitHub form with the page and version filled in. If you write from this PDF, mention the section or activity number."
+    }
+  ],
+  "pdf_leer_final": "<section id=\"leer--edicion-pdf\" class=\"level2 unnumbered pdf-edicion\"><h2 class=\"unnumbered\">This PDF Edition</h2><p>This PDF reproduces, in page form, the text of the web version of the book and is generated from the same sources. It keeps the numbering of chapters, sections, figures, and activities, so it can be used alongside the web version.</p><p><strong>The online version is free</strong> and available at <a href=\"{site}\">{site_text}</a>. It is worth keeping it at hand while you read: from it the tools open with one click, some can be expanded within the page itself, and it always includes the latest revision of the text.</p><p>The applications do not run inside the PDF. The <strong>Open</strong>, <strong>Open and configure</strong>, and <strong>Explore</strong> links take you to each tool on the web and require a connection; when a tool does not store its state in the URL, the example gives in writing the values to enter. The results of the examples appear right after each example, and the solutions to the exercises at the end of their chapter.</p><p>Cross-references to other parts of the book are internal links in the PDF.</p></section>",
+  "actividades.html": [
+    {
+      "buscar": "the <strong>⚙ Open and configure</strong> button opens",
+      "poner": "the <strong>Open and configure</strong> link opens"
+    }
+  ]
+}

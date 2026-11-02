@@ -5,7 +5,7 @@
 
 // Se ejecuta dentro de la página de cada archivo HTML del libro ya cargado (KaTeX renderizado).
 function adaptarArchivo(args) {
-  const {key, file, fileMap, replaced, origin, substitutions, isChapter} = args;
+  const {key, file, fileMap, replaced, origin, substitutions, isChapter, strings: T} = args;   // T: textos de la edición (edicion.json → adaptar)
   const main = document.querySelector('main');
   const stats = {key, file};
 
@@ -26,7 +26,7 @@ function adaptarArchivo(args) {
     if (p && p.tagName === 'P' && !p.textContent.trim() && !p.querySelector('img,svg')) p.remove();
   });
   main.querySelectorAll('a[href*="issues/new"]').forEach(a => { const p = a.closest('p'); if (p) p.remove(); else a.remove(); });
-  main.querySelectorAll('iframe').forEach(f => { const a = document.createElement('a'); a.href = f.src; a.textContent = 'Abrir la aplicación en la web'; f.replaceWith(a); });
+  main.querySelectorAll('iframe').forEach(f => { const a = document.createElement('a'); a.href = f.src; a.textContent = T.abrir_aplicacion; f.replaceWith(a); });
 
   // 3. Título: se sustituye el bloque de Quarto por una cabecera propia de capítulo.
   const header = main.querySelector('#title-block-header');
@@ -43,14 +43,15 @@ function adaptarArchivo(args) {
   header?.remove();
 
   // 4. Desplegables: se abren y se rotulan como en el piloto.
-  const rename = {'Ver el resultado': 'Resultado', 'Ver la solución': 'Solución', 'Ver los datos de la figura': 'Datos de la figura'};
+  const rename = T.desplegables;
+  const prefix = new RegExp(T.prefijo_desplegable);
   main.querySelectorAll('details').forEach(d => {
     d.open = true;
     const s = d.querySelector(':scope > summary');
     if (s) {
       const t = s.textContent.replace(/\s+/g, ' ').trim(); s.dataset.original = t;
       // «Ver el resultado» → «Resultado»; en general se quita el verbo de la interfaz web.
-      const label = rename[t] || (/^Ver /.test(t) ? t.replace(/^Ver (el |la |los |las )?/, '') : null);
+      const label = rename[t] || (prefix.test(t) ? t.replace(prefix, '') : null);
       if (label) s.textContent = label.charAt(0).toUpperCase() + label.slice(1);
     }
   });
@@ -69,32 +70,34 @@ function adaptarArchivo(args) {
   if (isChapter) {
     const appendix = document.createElement('section');
     appendix.id = 'soluciones-ejercicios'; appendix.className = 'level2 unnumbered pdf-solutions';
-    appendix.innerHTML = '<h2 class="unnumbered">Soluciones de los ejercicios</h2><p>Intenta resolver cada ejercicio antes de consultar su solución. Los enlaces permiten volver al enunciado.</p>';
+    appendix.innerHTML = '<h2 class="unnumbered"></h2><p></p>';
+    appendix.querySelector('h2').textContent = T.soluciones_titulo; appendix.querySelector('p').textContent = T.soluciones_intro;
+    const exerciseNumber = new RegExp(T.ejercicio_titulo);
     let auto = 0;
     main.querySelectorAll('.ejercicio').forEach(box => {
       if (!box.id) box.id = 'ejercicio-auto-' + (++auto);
       const titleText = box.querySelector('.pdf-box-title')?.textContent || '';
-      const number = titleText.match(/Ejercicio\s+(\d+\.\d+)/)?.[1];
+      const number = titleText.match(exerciseNumber)?.[1];
       if (!number) throw Error(`${file}: ejercicio sin número (${box.id})`);
-      const details = [...box.querySelectorAll('details')].find(d => d.querySelector(':scope > summary')?.dataset.original === 'Ver la solución');
+      const details = [...box.querySelectorAll('details')].find(d => d.querySelector(':scope > summary')?.dataset.original === T.ver_solucion);
       if (!details) { stats.exercisesWithoutSolution.push(number); return; }
       const id = 'pdf-solucion-' + box.id;
       const solved = document.createElement('div');
       solved.className = 'callout callout-note pdf-solution'; solved.id = id;
-      const t = document.createElement('h3'); t.className = 'pdf-box-title'; t.textContent = 'Solución del ejercicio ' + number;
+      const t = document.createElement('h3'); t.className = 'pdf-box-title'; t.textContent = T.solucion_de.replace('{n}', number);
       solved.append(t);
       details.querySelector(':scope > summary')?.remove();
       solved.append(...details.childNodes);
       const back = document.createElement('p'); back.className = 'pdf-return';
-      const a = document.createElement('a'); a.href = '#' + box.id; a.textContent = 'Volver al ejercicio ' + number;
+      const a = document.createElement('a'); a.href = '#' + box.id; a.textContent = T.volver.replace('{n}', number);
       back.append(a); solved.append(back); appendix.append(solved);
       const fwd = document.createElement('p'); fwd.className = 'pdf-solution-link';
-      const l = document.createElement('a'); l.href = '#' + id; l.textContent = 'Consultar la solución del ejercicio ' + number + ' al final del capítulo';
+      const l = document.createElement('a'); l.href = '#' + id; l.textContent = T.consultar.replace('{n}', number);
       fwd.append(l); details.replaceWith(fwd); stats.solutionsMoved++;
     });
     if (stats.solutionsMoved) {
       const refs = main.querySelector('#refs')?.closest('section') ||
-        [...main.querySelectorAll(':scope > section')].find(s => /Referencias del capítulo/.test(s.querySelector('h2')?.textContent || ''));
+        [...main.querySelectorAll(':scope > section')].find(s => (s.querySelector('h2')?.textContent || '').includes(T.referencias));
       if (refs && refs !== main) refs.before(appendix); else main.append(appendix);
     }
   }
@@ -135,6 +138,7 @@ function adaptarArchivo(args) {
 
   // 10. Tablas: magnitudes a la derecha; identificadores centrados; anchos probados en el capítulo 10.
   stats.tables = [];
+  const TT = T.tablas, idHeader = new RegExp(TT.identificadores), extraNumeric = TT.numericas_extra.map(r => new RegExp(r));
   main.querySelectorAll('table').forEach(table => {
     if (table.closest('.pdf-toc')) return;
     const headers = [...table.querySelectorAll('thead th')].map(th => th.textContent.trim());
@@ -145,13 +149,13 @@ function adaptarArchivo(args) {
       const values = cells.map(c => c.textContent.trim()).filter(v => v && v !== '—');
       const mark = cls => { cells.forEach(c => c.classList.add(cls)); table.querySelectorAll('thead tr').forEach(r => r.children[i]?.classList.add(cls)); };
       // Cadenas de bits (0101, 1 0 1 1…) son identificadores, no magnitudes: no se alinean a la derecha.
-      if (/^(Cromosoma|Contendientes)$/.test(h) || (values.length && values.every(v => /^[01](\s?[01]){2,}$/.test(v)))) { identifiers.push(i); mark('pdf-id'); }
-      else if (values.length && values.every(v => /^[+−\-\d\s.,()%/]+$/.test(v) || /^\d+ de \d+$/.test(v) || /^\d+ \(valor inicial\)$/.test(v))) { numeric.push(i); mark('pdf-num'); }
+      if (idHeader.test(h) || (values.length && values.every(v => /^[01](\s?[01]){2,}$/.test(v)))) { identifiers.push(i); mark('pdf-id'); }
+      else if (values.length && values.every(v => /^[+−\-\d\s.,()%/]+$/.test(v) || extraNumeric.some(r => r.test(v)))) { numeric.push(i); mark('pdf-num'); }
     });
     let widths;
-    if (headers[0] === 'Cruce' && headers[1] === 'Mutación') widths = [29, 17, 22, 14, 18];
-    else if (headers[0] === 'Configuración' && headers.length === 4) widths = [38, 24, 18, 20];
-    else if (headers[0] === 'Configuración D') widths = [35, 25, 20, 20];
+    if (headers[0] === TT.cruce && headers[1] === TT.mutacion) widths = [29, 17, 22, 14, 18];
+    else if (headers[0] === TT.configuracion && headers.length === 4) widths = [38, 24, 18, 20];
+    else if (headers[0] === TT.configuracion_d) widths = [35, 25, 20, 20];
     // Los anchos de Quarto salen de los guiones de las tablas Markdown y no de su contenido
     // (p. ej., 35 % para la columna «Dónde» en 11.1): en papel se deja el reparto automático.
     if (!widths) { if (table.querySelector('colgroup')) stats.colgroupsRemoved = (stats.colgroupsRemoved || 0) + 1; table.querySelectorAll('colgroup').forEach(c => c.remove()); }

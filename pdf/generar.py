@@ -1,7 +1,7 @@
 """Genera la edición PDF de «Evolución a la vista» desde una copia limpia del repositorio.
 
 Uso (desde cualquier carpeta):
-    python pdf/generar.py TRABAJO SALIDA.pdf [--quarto RUTA] [--chrome RUTA] [--sin-render] [--contactos]
+    python pdf/generar.py TRABAJO SALIDA.pdf [--quarto RUTA] [--chrome RUTA] [--sin-render] [--contactos] [--edicion en]
 
   TRABAJO      carpeta temporal (se crea): configuración, pasadas, informes y hojas de contacto
   SALIDA.pdf   PDF final
@@ -9,6 +9,9 @@ Uso (desde cualquier carpeta):
   --chrome     navegador Chrome/Chromium que usará Playwright (por defecto, el de Playwright)
   --sin-render no vuelve a ejecutar «quarto render»: usa el _book/ existente
   --contactos  genera también hojas de contacto (12 páginas por hoja) para revisar la paginación
+  --edicion en edición inglesa: genera antes el sitio bilingüe con bilingue/generar.py en
+               TRABAJO/bilingue (con --sin-render, reutiliza el existente) e imprime su copia inglesa,
+               con los textos y ajustes de pdf/en/. Commit y cambios locales se leen de este repositorio.
 
 El libro que se imprime es el repositorio que contiene este guion. Debe estar limpio: verificar.py
 falla si hay cambios en archivos con seguimiento. Los pasos y requisitos están en pdf/LEEME.md.
@@ -40,6 +43,9 @@ quarto = option('--quarto', 'quarto')
 chrome = option('--chrome')
 no_render = flag('--sin-render')
 sheets = flag('--contactos')
+edition = option('--edicion', 'es')
+if edition not in ('es', 'en'):
+    raise SystemExit('Ediciones disponibles: es, en')
 if len(args) != 2:
     raise SystemExit(__doc__)
 work, output = Path(args[0]).resolve(), Path(args[1]).resolve()
@@ -69,11 +75,24 @@ def step(name, command):
         raise SystemExit(f'{name}: salida {result.returncode}')
 
 python = [sys.executable, '-X', 'utf8']
-step('preparar', [*python, HERE / 'preparar.py', BOOK, work, quarto, *(['--sin-render'] if no_render else [])])
-step('imprimir', ['node', HERE / 'libro.cjs', '--libro', BOOK / '_book', '--trabajo', work, '--python', sys.executable,
+if edition == 'en':
+    # La edición inglesa se imprime desde la copia que genera bilingue/generar.py (v1.0 con las fuentes de en/
+    # superpuestas y el perfil inglés), la misma que se publica en /en/. Las fuentes no se modifican.
+    bilingual = work / 'bilingue'
+    if not (no_render and (bilingual / 'trabajo/en/_book/index.html').exists()):
+        if bilingual.exists():
+            raise SystemExit(f'{bilingual} ya existe: bórrala o usa --sin-render para reutilizarla')
+        step('sitio bilingüe', [*python, BOOK / 'bilingue/generar.py', '--quarto', quarto, '--salida', bilingual])
+    printed = bilingual / 'trabajo/en'
+    step('preparar', [*python, HERE / 'preparar.py', printed, work, quarto, '--sin-render',
+                      '--edicion', HERE / 'en/edicion.json', '--fuente', BOOK])
+else:
+    printed = BOOK
+    step('preparar', [*python, HERE / 'preparar.py', BOOK, work, quarto, *(['--sin-render'] if no_render else [])])
+step('imprimir', ['node', HERE / 'libro.cjs', '--libro', printed / '_book', '--trabajo', work, '--python', sys.executable,
                   *(['--chrome', chrome] if chrome else [])])
 step('posproceso', [*python, HERE / 'posproceso.py', work, output])
-step('verificar', [*python, HERE / 'verificar.py', BOOK, work, output])
+step('verificar', [*python, HERE / 'verificar.py', printed, work, output])
 if sheets:
     step('contactos', [*python, HERE / 'contactos.py', output, work / 'contactos', '45', '12'])
 print(f'PDF: {output}')

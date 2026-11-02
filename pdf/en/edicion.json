@@ -1,0 +1,67 @@
+{
+  "_nota": "Textos y ajustes de idioma de la edición PDF inglesa (traducción). Mismas claves que pdf/edicion.json. La traducción tiene DOI propio (registro de Zenodo distinto del original, P028); el DOI del original se cita como fuente.",
+  "idioma": "en",
+  "locale": "en-US",
+  "lang_pdf": "en-US",
+  "perfil": "en",
+  "textos_impresion": "en/textos-impresion.json",
+  "ajustes": "en/ajustes.json",
+  "silabeo": {
+    "pyphen": "en_US",
+    "nota": "en_US; mínimo tres letras a cada lado"
+  },
+  "libro": {
+    "portada": "Cover",
+    "portada_alt": "Cover of {title}: {subtitle}.",
+    "indice": "Contents",
+    "capitulo": "Chapter {n}",
+    "abrir_aplicacion": "Open the application on the web"
+  },
+  "creditos": {
+    "base_con_cambios": "base {short}, with local changes",
+    "aviso_borrador": "Generated on {fecha} from the book's sources (commit {short}). The applications and the web version are not part of this file.",
+    "version": "<strong>Version {version}</strong>, revised {revision}. English translation of the Spanish edition {fuente_version} ({fuente_fecha}), produced with AI assistants and reviewed manually by the authors in November 2026. First published on the web: {primera}. PDF edition generated on {fecha} from the same sources as the web version ({commit}).",
+    "doi": "DOI of this edition: {doi}.",
+    "doi_fuente": "DOI of the Spanish original, edition {fuente_version}: {doi_fuente}.",
+    "portal": "Portal archive 1.0.0: {portal}.",
+    "laboratorio": "This book is meant to be read together with the Genetic Algorithms Lab: the examples and activities are done with web applications that the PDF does not contain. Their links require a connection. Interactive version: {site}. Sources: {repo}.",
+    "licencia": "Text, original figures, and exercises: <a href=\"https://creativecommons.org/licenses/by/4.0/\">Creative Commons Attribution 4.0 International (CC BY 4.0)</a> license. Repository code: MIT. Third-party images, the KaTeX library, the citation style, and the linked tools retain their own licenses; see <a href=\"#avisos--licencia\">“License”</a>. Typeface: Noto Sans (SIL Open Font License 1.1).",
+    "correspondencia": "* Corresponding author. Comments and contact: <a href=\"#avisos--contacto\">“Comments and Contact”</a>."
+  },
+  "adaptar": {
+    "desplegables": {
+      "Show the result": "Result",
+      "Show the solution": "Solution",
+      "Show the figure data": "Figure data"
+    },
+    "prefijo_desplegable": "^Show (the )?",
+    "ver_solucion": "Show the solution",
+    "ejercicio_titulo": "Exercise\\s+(\\d+\\.\\d+)",
+    "soluciones_titulo": "Solutions to the Exercises",
+    "soluciones_intro": "Try to solve each exercise before looking at its solution. The links take you back to the exercise.",
+    "solucion_de": "Solution to Exercise {n}",
+    "volver": "Back to exercise {n}",
+    "consultar": "See the solution to exercise {n} at the end of the chapter",
+    "referencias": "Chapter References",
+    "tablas": {
+      "identificadores": "^(Chromosome|Contestants)$",
+      "numericas_extra": [
+        "^\\d+ of \\d+$",
+        "^\\d+ \\(initial value\\)$"
+      ],
+      "cruce": "Crossover",
+      "mutacion": "Mutation",
+      "configuracion": "Configuration",
+      "configuracion_d": "Configuration D"
+    }
+  },
+  "posproceso": {
+    "marcador_portada": "Cover",
+    "marcador_creditos": "Credits",
+    "marcador_indice": "Contents",
+    "asunto": "PDF edition of version {version} of the English translation of the Spanish edition {fuente_version} (base {short}{cambios}). Text CC BY 4.0. DOI {doi}; DOI of the Spanish original {doi_fuente}",
+    "con_cambios": " with local changes",
+    "palabras_clave": "genetic algorithms, evolutionary computation, metaheuristics, interactive laboratory, education",
+    "separador_titulo": ": "
+  }
+}

@@ -50,6 +50,18 @@ El guion crea en `TRABAJO/bin` un `python3` que apunta al Python con el que se e
 
 Los créditos del PDF indican la versión, la fecha de revisión, el commit de origen y la fecha de generación. Una copia con cambios sin confirmar no supera `verificar.py`.
 
+## Edición inglesa
+
+La traducción inglesa se imprime con el mismo generador:
+
+```bash
+python pdf/generar.py ../trabajo-pdf-en ../evolution-made-visible.pdf --edicion en --contactos
+```
+
+`--edicion en` ejecuta antes `bilingue/generar.py` en `TRABAJO/bilingue` (la misma copia que se publica en `/en/`: la etiqueta `v1.0` con las fuentes de `en/` superpuestas y el perfil `_quarto-en.yml`) e imprime su HTML inglés. Con `--sin-render` reutiliza esa copia si ya existe. El commit y los cambios locales se comprueban en este repositorio, no en la copia.
+
+Los textos de cada edición están en `edicion.json` (español) y `en/edicion.json` (inglés): rótulos del índice, créditos, desplegables, soluciones, marcadores, metadatos, idioma del PDF y diccionario de Pyphen (`en_US` en inglés). Las sustituciones que describen la interfaz web están en `en/textos-impresion.json`, traducción de las aprobadas en D087, y la paginación en `en/ajustes.json`. El DOI de la traducción es el `libro-doi` de `en/_quarto-en.yml` (registro propio en Zenodo); el del original español aparece en los créditos y los metadatos como fuente, nunca como identificador de esta edición. Si el perfil no declarase un DOI propio, el PDF no tendría ninguno.
+
 ## Edición 1.0
 
 El PDF de la edición 1.0 se generó con este código desde la etiqueta `v1.0`, en Windows, con Chrome 156 y Quarto 1.10.19. El registro de la generación, el entorno y los SHA-256 de los archivos depositados acompañan al depósito en Zenodo.

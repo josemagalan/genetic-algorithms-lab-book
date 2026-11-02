@@ -4,7 +4,8 @@
 //       → documento único con portada, créditos, índice y capítulos → PDF de Chromium (dos pasadas
 //       para numerar el índice) → folios, cabeceras, marcadores y metadatos (posproceso.py).
 //
-// Uso: node libro.cjs --libro RUTA/_book --trabajo RUTA [--solo c10] [--cuerpo 10.5pt] [--chrome RUTA]
+// Uso: node libro.cjs --libro RUTA/_book --trabajo RUTA [--solo c10] [--cuerpo 10.5pt] [--chrome RUTA] [--edicion RUTA.json]
+// La edición (idioma, textos, ajustes) se lee de --edicion o de la que registró preparar.py en config.json.
 const fs = require('node:fs'), path = require('node:path'), http = require('node:http');
 const {execFileSync} = require('node:child_process');
 let playwright;
@@ -20,8 +21,11 @@ const PYTHON = arg('python', process.platform === 'win32' ? 'python' : 'python3'
 const HERE = __dirname;
 const config = JSON.parse(fs.readFileSync(path.join(WORK, 'config.json'), 'utf8'));
 const dictionary = JSON.parse(fs.readFileSync(path.join(WORK, 'silabeo.json'), 'utf8'));
-const textos = JSON.parse(fs.readFileSync(path.join(HERE, 'textos-impresion.json'), 'utf8'));
-const ajustes = JSON.parse(fs.readFileSync(path.join(HERE, 'ajustes.json'), 'utf8'));
+const edicion = JSON.parse(fs.readFileSync(path.resolve(arg('edicion', config.edicion || path.join(HERE, 'edicion.json'))), 'utf8'));
+const textos = JSON.parse(fs.readFileSync(path.join(HERE, edicion.textos_impresion), 'utf8'));
+const ajustes = JSON.parse(fs.readFileSync(path.join(HERE, edicion.ajustes), 'utf8'));
+// Plantillas de texto de la edición: «{clave}» se sustituye por su valor.
+const fill = (t, vars) => t.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? vars[k] : m));
 let printCss = fs.readFileSync(path.join(HERE, 'impresion.css'), 'utf8') + '\n' + (ajustes.css || []).join('\n');
 
 const mime = {'.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.woff2': 'font/woff2', '.woff': 'font/woff', '.ttf': 'font/ttf'};
@@ -42,7 +46,8 @@ const fileMap = Object.fromEntries(config.files.map(f => [f.file, f.key]));
 // Sin el libro completo, las remisiones a archivos ausentes van a la web.
 if (ONLY) for (const f of config.files) if (!ONLY.includes(f.key)) delete fileMap[f.file];
 const replaced = ONLY ? {} : config.replaced;
-const fecha = new Intl.DateTimeFormat('es-ES', {day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Madrid'}).format(new Date());
+const fecha = new Intl.DateTimeFormat(edicion.locale, {day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Madrid'}).format(new Date());
+const fechaDe = iso => new Intl.DateTimeFormat(edicion.locale, {day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC'}).format(new Date(iso));
 
 function esc(s) { return String(s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c])); }
 
@@ -53,19 +58,30 @@ function creditos() {
     return `<li>${esc(a.name)}<sup>${marks.join(',')}${a.corresponding ? ',*' : ''}</sup></li>`;
   }).join('');
   const short = config.commit.slice(0, 7);
-  const sourceLabel = config.cambios_locales?.length ? `base ${short}, con cambios locales` : short;
-  const notice = ajustes.borrador ? `<div class="pdf-notice"><p><strong>${esc(ajustes.borrador)}</strong></p><p>Generada el ${fecha} a partir de las fuentes del libro (commit ${short}). Las aplicaciones y la versión web no forman parte del archivo.</p></div>` : '';
+  const t = edicion.creditos;
+  const link = (href, text) => `<a href="${esc(href)}">${esc(text)}</a>`;
+  const vars = {short, fecha, version: esc(config.version), revision: esc(config.revision), primera: fechaDe(config.first_published),
+    commit: link(`${config.repo}/commit/${config.commit}`, config.cambios_locales?.length ? fill(t.base_con_cambios, {short}) : short),
+    doi: config.doi ? link(`https://doi.org/${config.doi}`, config.doi) : '',
+    doi_fuente: config.source_doi ? link(`https://doi.org/${config.source_doi}`, config.source_doi) : '',
+    fuente_version: esc(config.source_version || ''), fuente_fecha: config.source_date ? fechaDe(config.source_date) : '',
+    portal: config.portal_doi ? link(`https://doi.org/${config.portal_doi}`, config.portal_doi) : '',
+    site: link(config.site, config.site.replace(/^https:\/\//, '').replace(/\/$/, '')), repo: link(config.repo, config.repo.replace(/^https:\/\//, ''))};
+  const notice = ajustes.borrador ? `<div class="pdf-notice"><p><strong>${esc(ajustes.borrador)}</strong></p><p>${fill(t.aviso_borrador, vars)}</p></div>` : '';
+  // DOI: el de esta edición o, en una traducción, el del original del que procede.
+  const doi = [config.doi && t.doi ? fill(t.doi, vars) : '', config.source_doi && t.doi_fuente ? fill(t.doi_fuente, vars) : '',
+    config.portal_doi ? fill(t.portal, vars) : ''].filter(Boolean).join(' ');
   return `<section class="pdf-creditos" id="pdf-creditos">
   <h1>${esc(config.title)}</h1><p class="pdf-subtitulo">${esc(config.subtitle)}</p>
   <ul class="pdf-autores">${authors}</ul>
   <ol class="pdf-filiaciones">${affs.map((x, i) => `<li><sup>${i + 1}</sup> ${esc(x)}</li>`).join('')}</ol>
   ${notice}
   <div class="pdf-legal">
-   <p><strong>Versión ${esc(config.version)}</strong>, revisada el ${esc(config.revision)}. Primera publicación en la web: ${new Intl.DateTimeFormat('es-ES', {day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC'}).format(new Date(config.first_published))}. Edición en PDF generada el ${fecha} a partir de las mismas fuentes que la web (<a href="${esc(config.repo)}/commit/${config.commit}">${esc(sourceLabel)}</a>).</p>
-   ${config.doi ? `<p>DOI de esta edición: <a href="https://doi.org/${esc(config.doi)}">${esc(config.doi)}</a>. ${config.portal_doi ? `Archivo del portal 1.0.0: <a href="https://doi.org/${esc(config.portal_doi)}">${esc(config.portal_doi)}</a>.` : ''}</p>` : ''}
-   <p>Este libro se lee junto con el Laboratorio de algoritmos genéticos: los ejemplos y las actividades se hacen con aplicaciones web que el PDF no contiene. Sus enlaces necesitan conexión. Versión interactiva: <a href="${esc(config.site)}">${esc(config.site.replace(/^https:\/\//, '').replace(/\/$/, ''))}</a>. Fuentes: <a href="${esc(config.repo)}">${esc(config.repo.replace(/^https:\/\//, ''))}</a>.</p>
-   <p>Texto, figuras propias y ejercicios: licencia <a href="https://creativecommons.org/licenses/by/4.0/deed.es">Creative Commons Atribución 4.0 Internacional (CC BY 4.0)</a>. Código del repositorio: MIT. Las imágenes de terceros, la biblioteca KaTeX, el estilo de citas y las herramientas enlazadas conservan su propia licencia; véase <a href="#avisos--licencia">«Agradecimientos y avisos»</a>. Tipografía: Noto Sans (SIL Open Font License 1.1).</p>
-   <p>* Autor de correspondencia. Comentarios y contacto: <a href="#avisos--contacto">«Comentarios y contacto»</a>.</p>
+   <p>${fill(t.version, vars)}</p>
+   ${doi ? `<p>${doi}</p>` : ''}
+   <p>${fill(t.laboratorio, vars)}</p>
+   <p>${t.licencia}</p>
+   <p>${t.correspondencia}</p>
   </div></section>`;
 }
 
@@ -80,27 +96,27 @@ function creditos() {
     // 1. Adaptación de cada archivo en su propia página (KaTeX y scripts de Quarto ya ejecutados).
     const parts = [];
     for (const f of files) {
-      const page = await browser.newPage({viewport: {width: 1280, height: 900}, locale: 'es-ES'});
+      const page = await browser.newPage({viewport: {width: 1280, height: 900}, locale: edicion.locale});
       page.on('pageerror', e => errors.push(`${f.file}: ${e}`));
       await page.goto(base + f.file, {waitUntil: 'networkidle'});
       await page.evaluate(() => document.fonts.ready);
       await page.waitForFunction(() => [...document.querySelectorAll('main .math')].every(m => m.querySelector('.katex')), null, {timeout: 20000});
       const part = await page.evaluate(adaptarArchivo, {key: f.key, file: f.file, fileMap, replaced, origin: config.site,
-        substitutions: textos[f.file] || [], isChapter: /^c\d\d$/.test(f.key)});
+        substitutions: textos[f.file] || [], isChapter: /^c\d\d$/.test(f.key), strings: {...edicion.adaptar, abrir_aplicacion: edicion.libro.abrir_aplicacion}});
       parts.push({...f, ...part});
       await page.close();
       console.log(`${f.file}: ${part.stats.solutionsMoved} soluciones, ${part.stats.resultsFlattened} desplegables, ${part.stats.paragraphsWrapped} párrafos normalizados`);
     }
 
     // 2. Documento único.
-    const page = await browser.newPage({viewport: {width: 1280, height: 900}, locale: 'es-ES'});
+    const page = await browser.newPage({viewport: {width: 1280, height: 900}, locale: edicion.locale});
     page.on('pageerror', e => errors.push(`libro: ${e}`));
     page.on('console', m => { if (m.type() === 'error') errors.push(`consola: ${m.text()}`); });
     await page.goto(base + 'index.html', {waitUntil: 'networkidle'});
     const leerFinal = textos.pdf_leer_final.replaceAll('{site}', config.site).replaceAll('{site_text}', config.site.replace(/^https:\/\//, '').replace(/\/$/, ''));
-    const assembly = await page.evaluate(({parts, creditosHtml, leerFinal, full, dictionary, ajustes}) => {
-      document.documentElement.lang = 'es';
-      document.title = 'Evolución a la vista';
+    const assembly = await page.evaluate(({parts, creditosHtml, leerFinal, full, dictionary, ajustes, lang, title, rotulos}) => {
+      document.documentElement.lang = lang;
+      document.title = title;
       document.body.className = 'pdf-body';
       // Quarto fija por guion márgenes y rellenos del cuerpo para su barra de navegación.
       document.body.removeAttribute('style'); document.documentElement.removeAttribute('style');
@@ -111,11 +127,11 @@ function creditos() {
       }
       const main = document.querySelector('main');
       let html = '';
-      if (full) html += `<section class="pdf-portada" id="pdf-portada" aria-label="Portada"></section>` + creditosHtml +
-        '<section class="pdf-indice pdf-front" id="pdf-indice"><h1>Índice</h1><ul class="pdf-toc"></ul></section>';
+      if (full) html += `<section class="pdf-portada" id="pdf-portada" aria-label="${rotulos.portada}"></section>` + creditosHtml +
+        `<section class="pdf-indice pdf-front" id="pdf-indice"><h1>${rotulos.indice}</h1><ul class="pdf-toc"></ul></section>`;
       for (const p of parts) {
         const anchors = p.headerIds.map(id => `<span id="${id}"></span>`).join('');
-        const label = p.number ? `<p class="pdf-chapter-label">Capítulo ${p.number}</p>` : '';
+        const label = p.number ? `<p class="pdf-chapter-label">${rotulos.capitulo.replace('{n}', p.number)}</p>` : '';
         const extra = p.key === 'leer' ? leerFinal : '';
         html += `<section class="pdf-part${p.number ? ' pdf-chapter' : ''}" id="${p.key}" data-key="${p.key}" data-number="${p.number || ''}"><div class="pdf-chapter-head">${anchors}${label}<h1 class="pdf-h1">${p.title}</h1></div>${p.html}${extra}</section>`;
       }
@@ -152,13 +168,14 @@ function creditos() {
         for (const s of sections) add('toc-l2', s.id, s.number, s.title, s.badge);
       }
 
-      // Silabeo con los puntos de Pyphen (piloto), excluyendo nombres, enlaces, fórmulas, tablas, títulos y referencias.
+      // Silabeo con los puntos de Pyphen (piloto), excluyendo nombres, enlaces, fórmulas, tablas, títulos, referencias
+      // y el texto marcado en otro idioma (p. ej. el título español en los avisos ingleses, [..]{lang="es"}).
       const walker = document.createTreeWalker(main, NodeFilter.SHOW_TEXT);
       const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
       let words = 0, hints = 0;
       nodes.forEach(node => {
         const parent = node.parentElement;
-        if (!parent || !parent.closest('p,li') || parent.closest('a,code,pre,.katex,math,table,h1,h2,h3,h4,strong,summary,.pdf-notice,.csl-entry,.pdf-box-title,figcaption,.pdf-toc,.pdf-creditos,.pdf-chapter-head,.pdf-result-title')) return;
+        if (!parent || !parent.closest('p,li') || parent.closest('a,code,pre,.katex,math,table,h1,h2,h3,h4,strong,summary,.pdf-notice,.csl-entry,.pdf-box-title,figcaption,.pdf-toc,.pdf-creditos,.pdf-chapter-head,.pdf-result-title,main [lang]')) return;
         node.textContent = node.textContent.replace(/\b[a-záéíóúüñ]{7,}\b/gu, w => {
           if (!dictionary[w]) return w; words++; hints += dictionary[w].split('­').length - 1; return dictionary[w];
         });
@@ -175,7 +192,7 @@ function creditos() {
       const missing = [...main.querySelectorAll('a[href^="#"]')].map(a => decodeURIComponent(a.getAttribute('href').slice(1))).filter(h => !ids.has(h));
       const dup = [...main.querySelectorAll('[id]')].map(e => e.id).filter((id, i, all) => all.indexOf(id) !== i);
       return {entries, structure, hyphenation: {words, hints}, missing: [...new Set(missing)], duplicateIds: [...new Set(dup)]};
-    }, {parts, creditosHtml: creditos(), leerFinal, full: !ONLY, dictionary, ajustes});
+    }, {parts, creditosHtml: creditos(), leerFinal, full: !ONLY, dictionary, ajustes, lang: edicion.idioma, title: config.title, rotulos: edicion.libro});
     if (assembly.missing.length) throw Error('Remisiones internas sin destino: ' + assembly.missing.slice(0, 20).join(', '));
     if (assembly.duplicateIds.length) throw Error('Identificadores duplicados: ' + assembly.duplicateIds.slice(0, 20).join(', '));
 
@@ -285,7 +302,7 @@ function creditos() {
       const cover = await browser.newPage();
       await cover.setContent(`<!doctype html><html><head><style>@page{size:A4;margin:0}html,body{margin:0;background:#f6f5ef}
         body{width:210mm;height:297mm;overflow:hidden}img{display:block;height:297mm;width:auto}</style></head>
-        <body><img src="${base}figuras/portada.svg" alt="Portada de Evolución a la vista. Algoritmos genéticos en un laboratorio interactivo."></body></html>`);
+        <body><img src="${base}figuras/portada.svg" alt="${esc(fill(edicion.libro.portada_alt, {title: config.title, subtitle: config.subtitle}))}"></body></html>`);
       await cover.waitForFunction(() => document.images[0].complete && document.images[0].naturalWidth > 0);
       await cover.pdf({path: path.join(WORK, 'portada.pdf'), format: 'A4', printBackground: true, preferCSSPageSize: true, tagged: true});
       await cover.close();
