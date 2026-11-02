@@ -4,7 +4,7 @@ numeracion-cajas: correlativa
 
 # Evolution and Optimization {#sec-evolucion}
 
-<!-- AI translation and naturalness pass: Codex (GPT-6), 2026-10-31. Source: Spanish v1.0, 75b82d8, DOI 10.5281/zenodo.23835733. Source verification records remain in the original edition; this translation does not claim a new bibliographic review. -->
+<!-- AI translation and naturalness pass: Codex (GPT-6), 2026-10-31. Source: Spanish v1.0, 75b82d8, DOI 10.5281/zenodo.23835733. Source verification records remain in the original edition; this translation does not claim a new bibliographic review. Quotations from Darwin (1859, pp. 5 and 81) and Goldberg (1989, p. 1) use the original English wording (manual review, 2026-11-02): Darwin checked against the first-edition transcriptions on Darwin Online and Wikisource; Goldberg against the scanned p. 1 in Recursos. -->
 
 **Tools:** [selection-ga](https://josemagalan.github.io/selection-ga/#lang=en), available through the [portal](https://josemagalan.github.io/genetic-algorithms-lab/#lang=en). This chapter focuses on ideas: most activities are paper-and-pencil exercises.
 
@@ -24,16 +24,16 @@ After completing the basic path through this chapter, you will be able to:
 
 Nature contains organisms that are remarkably well adapted to their surroundings, yet nobody designed them. How can an undirected process produce them?
 
-In 1859, Charles Darwin published *On the Origin of Species* (figure -@fig-origen). His answer fits into a paragraph of the introduction [@darwin1859, p. 5]. The following renders the quotation translated by the authors in the Spanish edition:
+In 1859, Charles Darwin published *On the Origin of Species* (figure -@fig-origen). His answer fits into a paragraph of the introduction [@darwin1859, p. 5]:
 
-> Many more individuals of each species are born than can survive. Consequently, the struggle for existence recurs frequently. Any organism that varies, however slightly, in a way that benefits it under the complex and sometimes changing conditions of life will therefore have a better chance of surviving and will be naturally selected. Through the powerful principle of inheritance, any selected variety will tend to propagate its new and modified form.
+> As many more individuals of each species are born than can possibly survive; and as, consequently, there is a frequently recurring struggle for existence, it follows that any being, if it vary however slightly in any manner profitable to itself, under the complex and sometimes varying conditions of life, will have a better chance of surviving, and thus be *naturally selected*. From the strong principle of inheritance, any selected variety will tend to propagate its new and modified form.
 
 ![Title page of the first edition of *On the Origin of Species* (London: John Murray, 1859). Public domain; image from Wikimedia Commons. Provenance and license: `figuras/01-imagenes.md` in the book repository.](figuras/01-origen-portada-1859.jpg){#fig-origen width="45%" fig-alt="Printed title page of an old book on yellowed paper. It reads: On the Origin of Species by means of natural selection, or the preservation of favoured races in the struggle for life. By Charles Darwin, M.A. London: John Murray, Albemarle Street. 1859."}
 
 The paragraph contains the mechanism's three ingredients:
 
 - **Variation.** Individuals within a species are not identical: they vary, even if only slightly.
-- **Selection.** More individuals are born than can survive, and their variations affect their chances of surviving and reproducing. Darwin called the preservation of favorable variations and rejection of harmful ones **natural selection** [@darwin1859, p. 81; rendered from the Spanish edition's translation].
+- **Selection.** More individuals are born than can survive, and their variations affect their chances of surviving and reproducing. Darwin called “this preservation of favourable variations and the rejection of injurious variations” **natural selection** [@darwin1859, p. 81].
 - **Inheritance.** Offspring resemble their parents, so variations that helped survival pass to the next generation.
 
 None of these ingredients pursues a goal. In modern evolutionary theory, genetic variations arise at random, not because they are needed [@mitchell1998, section 3.1]; selection simply causes some individuals to reproduce more than others. Repeated over many generations, however, the process accumulates favorable changes.
@@ -266,7 +266,7 @@ To transfer the mechanism to a computer, we must decide what each individual rep
 
 Holland framed this generally through **adaptation**: any process in which a structure gradually changes to function better in its environment, whether a protein, a horse's leg, or a human brain. Biology, psychology, economics, and control all contain adaptive processes, fundamentally processes of optimization [@holland1992, p. xiii]. Each has **structures** that change, **operators** that change them, and a **performance measure**; in genetics these are chromosomes, mutation and recombination, and fitness [@holland1992, pp. 4–5]. For routes, the structures are routes; the operators are crossover and mutation; and the performance measure is length.
 
-Holland presented these ideas in 1975, after developing them during the sixties and seventies, in *Adaptation in Natural and Artificial Systems* [@mitchell1998, section 1.1]. He called his algorithms **genetic plans**; his doctoral students began using **genetic algorithm** [@holland1992, p. x]. Goldberg's definition, rendered from the Spanish edition's quotation, is [@goldberg1989, p. 1]:
+Holland presented these ideas in 1975, after developing them during the sixties and seventies, in *Adaptation in Natural and Artificial Systems* [@mitchell1998, section 1.1]. He called his algorithms **genetic plans**; his doctoral students began using **genetic algorithm** [@holland1992, p. x]. Goldberg defines them as follows [@goldberg1989, p. 1]:
 
 > Genetic algorithms are search algorithms based on the mechanics of natural selection and natural genetics.
 
