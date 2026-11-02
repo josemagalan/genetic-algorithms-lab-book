@@ -170,7 +170,7 @@ To find out, we programmed a genetic algorithm with the operators from the previ
 
 ![Best fitness in the population at each generation, with and without an elite. OneMax with 40 bits, population of 20, seed 3. The vertical lines and dots mark where some criteria would stop in the run with an elite (section -@sec-reemplazo-cuando-parar). Original figure, generated with `figuras/08-elitismo-parada.py` in the book repository.](figuras/08-elitismo-parada.svg){#fig-elitismo-parada fig-alt="Line chart of best fitness against generation, from 0 to 100. With an elite, the line rises in steps, never falls, and reaches the optimum, 40, at generation 42. Without an elite, the line rises and falls between 34 and 38 from generation 15 onward and ends at 36 without reaching the optimum."}
 
-[Enlarge Figure](figuras/08-elitismo-parada.svg){.ampliar-figura target="_blank" rel="noopener"}
+[Enlarge figure](figuras/08-elitismo-parada.svg){.ampliar-figura target="_blank" rel="noopener"}
 
 <details>
 <summary>Show the Figure Data</summary>

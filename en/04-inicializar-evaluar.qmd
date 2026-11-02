@@ -212,7 +212,7 @@ Of $2^6 = 64$ chromosomes, 34 fit (53.1%). The optimum is **1 0 1 0 1 0**: items
 | I7 | 1, 2, 3, 4, 5 | 24 | 29 | No |
 | I8 | 1, 2, 4, 5 | 19 | 20 | No |
 
-**4 of 8** fit (50%), close to the space's 53.1%. I5 is the best fitting individual, worth 20; the optimum 21 is absent. Mean pairwise distance is **0.55**, near the expected 0.5, and minimum distance is **0.17**: I1 and I5 differ only in item 2, one bit out of six. All 8 are distinct.
+**4 of 8** fit (50%), close to the space's 53.1%. I5 is the best feasible individual, worth 20; the optimum 21 is absent. Mean pairwise distance is **0.55**, near the expected 0.5, and minimum distance is **0.17**: I1 and I5 differ only in item 2, one bit out of six. All 8 are distinct.
 </details>
 
 <details class="incrustada">
@@ -331,7 +331,7 @@ Evaluation has four steps:
 4. Combine these into **fitness**. For a feasible individual, fitness equals the objective. Otherwise, we must decide how to handle it. Here we use a simple penalty, the tool's default: $F = \text{value} - e$. Section -@sec-inicializar-evaluar-penalizacion explains how to choose it.
 
 ::: {.callout-tip .ejemplo #ejemplo-inicializar-evaluar-evaluar title="Reproducible Example · Evaluating an Overweight Knapsack"}
-**Data.** The knapsack from Section -@sec-inicializar-evaluar-diversidad (*W* = 13) and individual I1 = 011011 from Example [](#ejemplo-inicializar-evaluar-diversidad). An infeasible individual's fitness is $F = \text{value} - e$.
+**Data.** The knapsack from section -@sec-inicializar-evaluar-diversidad (*W* = 13) and individual I1 = 011011 from example [](#ejemplo-inicializar-evaluar-diversidad). An infeasible individual's fitness is $F = \text{value} - e$.
 
 **Predict.** Which items does it contain? What are their total value and weight? What is its fitness? Will it have the highest fitness in the population?
 
@@ -350,7 +350,7 @@ This makes **I1 the best individual in the population**, ahead of I5, which fits
 </details>
 
 <details class="incrustada">
-<summary>Show the Tool Here (fitness of I1)</summary>
+<summary>Show the tool here (fitness of I1)</summary>
 <iframe data-external="1" src="https://josemagalan.github.io/initialization-and-evaluation-ga/#item=pipeline&lang=en&enc=knapsack-bits&n=6&N=8&s=21&ps=5&step=4" loading="lazy" title="initialization-and-evaluation-ga: from genotype to fitness, knapsack"></iframe>
 </details>
 
@@ -378,28 +378,28 @@ Both rank below I5 (20). With this penalty, I1 is the problem: it exceeds capaci
 [Explore in initialization-and-evaluation-ga](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=pipeline&lang=en&enc=knapsack-bits){.explorar target="_blank"}
 
 - Move through **Decode**, **Objective and constraints**, and **Fitness**, writing each step for the first individual before revealing it.
-- Switch to **2D function · bit string**. What does decoding do now? Compare it with Example [](#ejemplo-representacion-genotipo-fenotipo).
+- Switch to **2D function · bit string**. What does decoding do now? Compare it with example [](#ejemplo-representacion-genotipo-fenotipo).
 - Switch to **Assignment · binary matrix**. How is violation measured there?
 :::
 
 ## Minimizing a Cost: From Objective to Fitness [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-inicializar-evaluar-objetivo-aptitud}
 
-Return to the assignment problem in Section -@sec-inicializar-evaluar-uniforme: assign 5 tasks to 3 machines that work simultaneously. A machine's load is the sum of its tasks' processing times. The **makespan** is the largest load, the time when the last machine finishes; we want it to be as small as possible. Section -@sec-representacion-entera explains the problem in detail. Can we use makespan directly as fitness?
+Return to the assignment problem in section -@sec-inicializar-evaluar-uniforme: assign 5 tasks to 3 machines that work simultaneously. A machine's load is the sum of its tasks' processing times. The **makespan** is the largest load, the time when the last machine finishes; we want it to be as small as possible. Section -@sec-representacion-entera explains the problem in detail. Can we use makespan directly as fitness?
 
 That depends on how parents are selected. One widely used method is **roulette-wheel selection**, which gives each individual a selection probability proportional to its fitness,
 $$
 p_i = \frac{F_i}{\sum_j F_j},
 $$
-as you will see in Section -@sec-seleccion-ruleta. It requires fitness to satisfy two conditions: larger must be better, and values must never be negative. A cost to be minimized fails the first condition. In operations research, changing the sign, $F = -f$, turns minimization into maximization. But that produces negative fitness values, which cannot define a roulette wheel [@goldberg1989, pp. 75–76]. Several transformations preserve the ordering while giving nonnegative fitness:
+as you will see in section -@sec-seleccion-ruleta. It requires fitness to satisfy two conditions: larger must be better, and values must never be negative. A cost to be minimized fails the first condition. In operations research, changing the sign, $F = -f$, turns minimization into maximization. But that produces negative fitness values, which cannot define a roulette wheel [@goldberg1989, pp. 75–76]. Several transformations preserve the ordering while giving nonnegative fitness:
 
-- $F = C - f$, where *C* is the largest cost in the current population (or in recent generations, or a fixed value; do not confuse it with $C_{\max}$ in Chapter [](#sec-representacion-entera){.capitulo}, the makespan of one individual). @goldberg1989 [p. 76] proposes this transformation. The worst individual receives $F = 0$ and is never selected by the roulette wheel.
+- $F = C - f$, where *C* is the largest cost in the current population (or in recent generations, or a fixed value; do not confuse it with $C_{\max}$ in chapter [](#sec-representacion-entera){.capitulo}, the makespan of one individual). @goldberg1989 [p. 76] proposes this transformation. The worst individual receives $F = 0$ and is never selected by the roulette wheel.
 - $F = 1/(1 + f)$, always positive if $f \ge 0$.
-- **Rank** fitness: order individuals from worst (rank 1) to best (rank *N*), and use rank as *F*. Ties receive the average of the tied ranks. Only the ordering matters, not the values [@talbi2009, p. 206]. This is the idea behind Baker's rank selection [-@baker1985]: it prevents an exceptional individual from taking almost the entire wheel and maintains pressure when fitness values are similar [@mitchell1998, Section 5.4]. Section -@sec-seleccion-otros-mecanismos introduces its variants.
+- **Rank** fitness: order individuals from worst (rank 1) to best (rank *N*), and use rank as *F*. Ties receive the average of the tied ranks. Only the ordering matters, not the values [@talbi2009, p. 206]. This is the idea behind Baker's rank selection [-@baker1985]: it prevents an exceptional individual from taking almost the entire wheel and maintains pressure when fitness values are similar [@mitchell1998, section 5.4]. Section -@sec-seleccion-otros-mecanismos introduces its variants.
 
 For a maximization problem whose objective can be negative, such as knapsack value after subtracting a penalty, Goldberg proposes adding a constant, $F = \text{value} + C$, where *C* is the absolute value of the worst objective [@goldberg1989, p. 76].
 
 ::: {.callout-tip .ejemplo #ejemplo-inicializar-evaluar-objetivo-aptitud title="Reproducible Example · Six Assignments on the Roulette Wheel"}
-**Data.** The population from Example [](#ejemplo-inicializar-evaluar-uniforme), with makespans $f$ = 21, 9, 8, 14, 14, and 14 (individuals I1 through I6).
+**Data.** The population from example [](#ejemplo-inicializar-evaluar-uniforme), with makespans $f$ = 21, 9, 8, 14, 14, and 14 (individuals I1 through I6).
 
 **Predict.** With $F = C - f$, what is the probability of selecting the best, I3, in one spin? What about rank fitness? What happens to the worst, I1?
 
@@ -423,16 +423,16 @@ The three transformations give the same ordering but divide the wheel differentl
 </details>
 
 <details class="incrustada">
-<summary>Show the Tool Here (F = C − f)</summary>
+<summary>Show the tool here (F = C − f)</summary>
 <iframe data-external="1" src="https://josemagalan.github.io/initialization-and-evaluation-ga/#item=objective&lang=en&enc=assignment-int&n=5&m=3&N=6&s=1&ps=1&tr=cmax&step=5" loading="lazy" title="initialization-and-evaluation-ga: objective versus fitness, assignment"></iframe>
 </details>
 
 :::
 
-All four transformations, including $F = -f$, preserve the ordering. A tournament configured to prefer lower cost can compare costs directly, without transforming them. Selection that only compares individuals, such as a tournament, would make exactly the same choices with any of these transformations. With roulette-wheel selection, choosing fitness also chooses **selection pressure**: how strongly selection favors better individuals. Too much leads to premature convergence; too little makes search nearly random. We return to this in Chapters [](#sec-seleccion-ruleta-deja-de-distinguir){.capitulo} and [](#sec-experimentos-diversidad){.capitulo}.
+All four transformations, including $F = -f$, preserve the ordering. A tournament configured to prefer lower cost can compare costs directly, without transforming them. Selection that only compares individuals, such as a tournament, would make exactly the same choices with any of these transformations. With roulette-wheel selection, choosing fitness also chooses **selection pressure**: how strongly selection favors better individuals. Too much leads to premature convergence; too little makes search nearly random. We return to this in chapters [](#sec-seleccion-ruleta-deja-de-distinguir){.capitulo} and [](#sec-experimentos-diversidad){.capitulo}.
 
 :::: {.callout-note .ejercicio #ejercicio-inicializar-evaluar-objetivo-aptitud title="Exercise · Adding a Constant"}
-Suppose every makespan in Example [](#ejemplo-inicializar-evaluar-objetivo-aptitud) includes an extra 100 time units of setup, the same for every solution: 121, 109, 108, 114, 114, and 114. The problem is unchanged. (a) With $F = 1/(1 + f)$, how many times more likely is the best individual than the worst? Compare this with the original problem, where the best is about 2.4 times more likely than the worst. (b) Do probabilities change with $C - f$? What about ranks?
+Suppose every makespan in example [](#ejemplo-inicializar-evaluar-objetivo-aptitud) includes an extra 100 time units of setup, the same for every solution: 121, 109, 108, 114, 114, and 114. The problem is unchanged. (a) With $F = 1/(1 + f)$, how many times more likely is the best individual than the worst? Compare this with the original problem, where the best is about 2.4 times more likely than the worst. (b) Do probabilities change with $C - f$? What about ranks?
 
 <details>
 <summary>**Show the Solution**</summary>
@@ -453,9 +453,9 @@ Suppose every makespan in Example [](#ejemplo-inicializar-evaluar-objetivo-aptit
 
 ## Handling Constraints with Penalties [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-inicializar-evaluar-penalizacion}
 
-In Example [](#ejemplo-inicializar-evaluar-evaluar), an individual that did not fit in the knapsack beat every individual that did. How much should we penalize an infeasible solution?
+In example [](#ejemplo-inicializar-evaluar-evaluar), an individual that did not fit in the knapsack beat every individual that did. How much should we penalize an infeasible solution?
 
-When an encoding produces solutions that violate constraints, we have several options: reject them, repair them, use a decoder, or preserve feasibility through the operators, as introduced in Section -@sec-representacion-validez and compared in Advanced Section -@sec-representacion-infactibles. We can also keep them in the population with lower fitness. This last approach, **penalization**, is the most widely used [@coello2002; @talbi2009, p. 49]. We add a term that increases with violation:
+When an encoding produces solutions that violate constraints, we have several options: reject them, repair them, use a decoder, or preserve feasibility through the operators, as introduced in section -@sec-representacion-validez and compared in Advanced section -@sec-representacion-infactibles. We can also keep them in the population with lower fitness. This last approach, **penalization**, is the most widely used [@coello2002; @talbi2009, p. 49]. We add a term that increases with violation:
 $$
 F = \text{value} - P \quad \text{(maximize)}, \qquad F = f + P \quad \text{(minimize)}.
 $$
@@ -465,13 +465,13 @@ There are two decisions. First, how should we measure violation? Counting violat
 - **Linear**, $P = \lambda\, e$: each unit of excess costs λ units of value.
 - **Quadratic**, $P = (\lambda\, e)^2$: the penalty grows with squared excess. While $\lambda e < 1$, it penalizes less than the linear form; beyond that, increasingly more.
 
-The **weight λ** is the difficult choice. If it is too small, search may end with infeasible solutions. If it is too large, search may converge to feasible but suboptimal solutions [@michalewicz1996b, Section 3.2.6; @talbi2009, p. 50], because all infeasible solutions fall to the bottom, including those close to the boundary. Yet the optimum often lies on the feasible region's boundary when a constraint is active. @schoenauer1996 even proposed searching only along that boundary. For a particular population containing feasible individuals, we can calculate a **critical weight** λ\*: the threshold above which infeasible individuals cannot outperform the best feasible one. They may tie at the threshold; to put all of them strictly below it, choose $\lambda > \lambda^*$. If *B* is the best feasible value, each infeasible individual with value $z_i > B$ and excess $e_i$ falls below it when $z_i - \lambda e_i < B$. Thus, for a linear penalty,
+The **weight λ** is the difficult choice. If it is too small, search may end with infeasible solutions. If it is too large, search may converge to feasible but suboptimal solutions [@michalewicz1996b, section 3.2.6; @talbi2009, p. 50], because all infeasible solutions fall to the bottom, including those close to the boundary. Yet the optimum often lies on the feasible region's boundary when a constraint is active. @schoenauer1996 even proposed searching only along that boundary. For a particular population containing feasible individuals, we can calculate a **critical weight** λ\*: the threshold above which infeasible individuals cannot outperform the best feasible one. They may tie at the threshold; to put all of them strictly below it, choose $\lambda > \lambda^*$. If *B* is the best feasible value, each infeasible individual with value $z_i > B$ and excess $e_i$ falls below it when $z_i - \lambda e_i < B$. Thus, for a linear penalty,
 $$
 \lambda^* = \max_i \frac{z_i - B}{e_i}.
 $$
 
 ::: {.callout-tip .ejemplo #ejemplo-inicializar-evaluar-penalizacion title="Reproducible Example · What Should Excess Weight Cost?"}
-**Data.** The population from Example [](#ejemplo-inicializar-evaluar-diversidad). Its four infeasible individuals are:
+**Data.** The population from example [](#ejemplo-inicializar-evaluar-diversidad). Its four infeasible individuals are:
 
 | Individual | Value $z_i$ | Weight | Excess $e_i$ |
 |:---:|:---:|:---:|:---:|
@@ -502,7 +502,7 @@ The critical weight is **λ\* = 4**, set by I1, which has the smallest excess. W
 </details>
 
 <details class="incrustada">
-<summary>Show the Tool Here (critical weight)</summary>
+<summary>Show the tool here (critical weight)</summary>
 <iframe data-external="1" src="https://josemagalan.github.io/initialization-and-evaluation-ga/#item=penalty&lang=en&enc=knapsack-bits&n=6&N=8&s=21&ps=5&pt=linear&l=1&step=6" loading="lazy" title="initialization-and-evaluation-ga: handling constraints with penalties, knapsack"></iframe>
 </details>
 
@@ -510,9 +510,9 @@ The critical weight is **λ\* = 4**, set by I1, which has the smallest excess. W
 
 Figure -@fig-penalizacion plots the fitness of all eight individuals against λ. Feasible individuals give horizontal lines. Infeasible individuals give descending lines, steeper for larger excesses.
 
-![Fitness of the eight individuals in Example [](#ejemplo-inicializar-evaluar-penalizacion) as a function of weight λ, with the linear penalty. Between λ = 0.5 and λ\* = 4, I1 is best, although it does not fit (at still smaller λ, I7 wins and does not fit either). Above λ\*, I5, which fits, is best. Original figure, generated with `figuras/04-inicializar-evaluar.py` in the book repository.](figuras/04-penalizacion.svg){#fig-penalizacion fig-alt="Line chart. The horizontal axis shows weight lambda from 0 to 5; the vertical axis shows fitness. Four horizontal lines represent individuals that fit: I5 at 20, I4 at 11, I6 at 9, and I3 at 5. Four descending lines represent individuals that do not fit: I1 starts at 24 and falls with slope 1, I2 starts at 26 with slope 9, I7 at 29 with slope 11, and I8 at 20 with slope 6. I2, I7, and I8 fall below I5 before lambda equals 1. I1 crosses I5 at lambda equal to 4, marked by a dashed vertical line."}
+![Fitness of the eight individuals in example [](#ejemplo-inicializar-evaluar-penalizacion) as a function of weight λ, with the linear penalty. Between λ = 0.5 and λ\* = 4, I1 is best, although it does not fit (at still smaller λ, I7 wins and does not fit either). Above λ\*, I5, which fits, is best. Original figure, generated with `figuras/04-inicializar-evaluar.py` in the book repository.](figuras/04-penalizacion.svg){#fig-penalizacion fig-alt="Line chart. The horizontal axis shows weight lambda from 0 to 5; the vertical axis shows fitness. Four horizontal lines represent individuals that fit: I5 at 20, I4 at 11, I6 at 9, and I3 at 5. Four descending lines represent individuals that do not fit: I1 starts at 24 and falls with slope 1, I2 starts at 26 with slope 9, I7 at 29 with slope 11, and I8 at 20 with slope 6. I2, I7, and I8 fall below I5 before lambda equals 1. I1 crosses I5 at lambda equal to 4, marked by a dashed vertical line."}
 
-[Enlarge Figure](figuras/04-penalizacion.svg){.ampliar-figura target="_blank" rel="noopener"}
+[Enlarge figure](figuras/04-penalizacion.svg){.ampliar-figura target="_blank" rel="noopener"}
 
 <details>
 <summary>Show the Figure Data</summary>
@@ -529,7 +529,7 @@ Figure -@fig-penalizacion plots the fitness of all eight individuals against λ.
 | I8 | No | $20 - 6\lambda$ | 20 | 14 | −4 | −10 |
 </details>
 
-λ\* depends on the population, which changes each generation. Hence **dynamic** penalties, whose weight increases with generations [@joines1994], and **adaptive** penalties, which adjust it to search progress. For example, raise it if the best individual has been infeasible throughout recent generations and lower it if the best has always been feasible [@hadjalouane1997; @michalewicz1996b, Section 3.2.4; @talbi2009, pp. 50–51]. Other methods avoid choosing λ. In Deb's tournament [-@deb2000], a feasible individual always beats an infeasible one. Between feasible individuals, the better objective wins; between infeasible individuals, the smaller violation wins. Also, with λ = 5, I2, I7, and I8 have negative fitness: roulette-wheel selection would require adding a constant, as in Section -@sec-inicializar-evaluar-objetivo-aptitud.
+λ\* depends on the population, which changes each generation. Hence **dynamic** penalties, whose weight increases with generations [@joines1994], and **adaptive** penalties, which adjust it to search progress. For example, raise it if the best individual has been infeasible throughout recent generations and lower it if the best has always been feasible [@hadjalouane1997; @michalewicz1996b, section 3.2.4; @talbi2009, pp. 50–51]. Other methods avoid choosing λ. In Deb's tournament [-@deb2000], a feasible individual always beats an infeasible one. Between feasible individuals, the better objective wins; between infeasible individuals, the smaller violation wins. Also, with λ = 5, I2, I7, and I8 have negative fitness: roulette-wheel selection would require adding a constant, as in section -@sec-inicializar-evaluar-objetivo-aptitud.
 
 :::: {.callout-note .ejercicio #ejercicio-inicializar-evaluar-penalizacion title="Exercise · The Quadratic Penalty"}
 Using the same population and the quadratic penalty, $F = \text{value} - (\lambda\, e)^2$: (a) what is the critical weight? (b) With λ = 3, what is I1's fitness, and who is best? (c) With the linear penalty and λ = 2, who is best?
@@ -568,7 +568,7 @@ evaluations. This number is the algorithm's **budget**. A fair comparison betwee
 Many evaluations are repeated. Selection copies good individuals, and mutation leaves many offspring identical to their parent. With mutation probability $1/L$ per gene, the probability of no change is $(1 - 1/L)^L$, approaching $1/e \approx 0.37$ as *L* grows. A **cache**, a table storing chromosomes and their fitness values, avoids evaluating a previously seen individual again: look it up before evaluating [@kratica1999].
 
 ::: {.callout-tip .ejemplo #ejemplo-inicializar-evaluar-coste title="Reproducible Example · What a Cache Saves"}
-**Data.** The population from Example [](#ejemplo-inicializar-evaluar-diversidad) (*N* = 8) evolves for *G* = 6 generations with a minimal algorithm: binary tournament and mutation of each gene with probability $1/L$ (1/6 with 6 items), without crossover. Evaluations are counted with and without caching.
+**Data.** The population from example [](#ejemplo-inicializar-evaluar-diversidad) (*N* = 8) evolves for *G* = 6 generations with a minimal algorithm: binary tournament and mutation of each gene with probability $1/L$ (1/6 with 6 items), without crossover. Evaluations are counted with and without caching.
 
 **Predict.** What is the budget? How many evaluations do you think caching saves? With that same budget, how many generations could caching allow? Would it save as much with a 12-item knapsack?
 
@@ -582,13 +582,13 @@ The budget is $8 \times (6 + 1) = 56$ evaluations. With caching, the 6-item knap
 </details>
 
 <details class="incrustada">
-<summary>Show the Tool Here (6 items)</summary>
+<summary>Show the tool here (6 items)</summary>
 <iframe data-external="1" src="https://josemagalan.github.io/initialization-and-evaluation-ga/#item=cost&lang=en&enc=knapsack-bits&n=6&N=8&s=21&ps=5&G=6&step=8" loading="lazy" title="initialization-and-evaluation-ga: evaluation cost, knapsack"></iframe>
 </details>
 
 :::
 
-Caching has conditions. It requires **deterministic** fitness: evaluating the same individual twice must give the same result. We examine this in Section -@sec-inicializar-evaluar-ruido. It uses memory, one entry per distinct individual. The cache key also matters: in the traveling salesman problem, the $2n$ chromosomes representing the same tour have equal length, so caching by tour would save more than caching by chromosome. Other ways to save evaluations include parallel evaluation and replacing some evaluations with an approximate model, discussed in [Further Reading](#sec-inicializar-evaluar-ampliaciones).
+Caching has conditions. It requires **deterministic** fitness: evaluating the same individual twice must give the same result. We examine this in section -@sec-inicializar-evaluar-ruido. It uses memory, one entry per distinct individual. The cache key also matters: in the traveling salesman problem, the $2n$ chromosomes representing the same tour have equal length, so caching by tour would save more than caching by chromosome. Other ways to save evaluations include parallel evaluation and replacing some evaluations with an approximate model, discussed in [Further Reading](#sec-inicializar-evaluar-ampliaciones).
 
 :::: {.callout-note .ejercicio #ejercicio-inicializar-evaluar-coste title="Exercise · Budgets"}
 \(a) An algorithm with *N* = 50 individuals runs for 100 generations. How many evaluations does it perform? If each is a one-minute simulation, how long does it take? (b) With mutation probability $1/L$ per gene, what is the probability that an offspring has no changes if *L* = 6? What if *L* = 100?
@@ -652,7 +652,7 @@ Halton's 8 points occupy **all 8 strips** on each axis. The uniform population o
 </details>
 
 <details class="incrustada">
-<summary>Show the Tool Here (occupied strips)</summary>
+<summary>Show the tool here (occupied strips)</summary>
 <iframe data-external="1" src="https://josemagalan.github.io/initialization-and-evaluation-ga/#item=quasi&lang=en&enc=function-real&fn=himmelblau&N=8&s=1&ps=1&m=halton&step=14" loading="lazy" title="initialization-and-evaluation-ga: quasi-random sequences and Latin hypercube sampling, function"></iframe>
 </details>
 
@@ -662,7 +662,7 @@ Figure -@fig-cobertura compares the three populations of eight individuals.
 
 ![Three populations of 8 individuals in the box $[-5, 5]^2$, with each axis divided into 8 strips: uniform (a), Halton sequence (b), and Latin hypercube (c). The uniform population leaves 4 vertical and 2 horizontal strips empty; Halton and Latin hypercube occupy them all. Original figure, generated with `figuras/04-inicializar-evaluar.py` in the book repository, using the points produced by initialization-and-evaluation-ga with population seed 1.](figuras/04-cobertura.svg){#fig-cobertura fig-alt="Three equal squares, each with an 8 by 8 grid and 8 points. In the first, the uniform population clusters near the left and right edges, leaving four columns, mostly in the middle, and two rows empty. In the second, the Halton sequence spreads points regularly, one in each column and row. In the third, Latin hypercube also places one point in each column and row, but less regularly, with several points following the diagonal from the bottom left."}
 
-[Enlarge Figure](figuras/04-cobertura.svg){.ampliar-figura target="_blank" rel="noopener"}
+[Enlarge figure](figuras/04-cobertura.svg){.ampliar-figura target="_blank" rel="noopener"}
 
 <details>
 <summary>Show the Figure Data</summary>
@@ -693,7 +693,7 @@ Calculate $u_1$ and $u_2$ in the Halton sequence for $i = 5$, 6, and 7, and thei
 | 6 | 110 | 0.011₂ = 3/8 = 0.375 | 20 | 0.02₃ = 2/9 | (−1.25, −2.78) |
 | 7 | 111 | 0.111₂ = 7/8 = 0.875 | 21 | 0.12₃ = 1/3 + 2/9 = 5/9 | (3.75, 0.56) |
 
-For example, for $i = 5$: $x_1 = -5 + 0.625 \times 10 = 1.25$ and $x_2 = -5 + 0.778 \times 10 \approx 2.78$. These are the points in the data table for Figure -@fig-cobertura.
+For example, for $i = 5$: $x_1 = -5 + 0.625 \times 10 = 1.25$ and $x_2 = -5 + 0.778 \times 10 \approx 2.78$. These are the points in the data table for figure -@fig-cobertura.
 </details>
 ::::
 
@@ -707,14 +707,14 @@ For example, for $i = 5$: $x_1 = -5 + 0.625 \times 10 = 1.25$ and $x_2 = -5 + 0.
 
 ## Sequential Diversification [[Advanced]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-inicializar-evaluar-inhibicion}
 
-In the population from Example [](#ejemplo-inicializar-evaluar-uniforme), I4 = (2, 1, 1, 3, 1) and I6 = (3, 1, 1, 3, 1) differ at only one gene. Can we prevent such similar individuals from entering the population?
+In the population from example [](#ejemplo-inicializar-evaluar-uniforme), I4 = (2, 1, 1, 3, 1) and I6 = (3, 1, 1, 3, 1) differ at only one gene. Can we prevent such similar individuals from entering the population?
 
 In **sequential diversification**, solutions are generated one after another to optimize diversity [@talbi2009, p. 195]. The simplest method is **simple sequential inhibition** (SSI). It comes from spatial statistics, where it generates point patterns whose points cannot be too close together [@diggle1983]. In a genetic algorithm, it works as follows: draw a candidate uniformly at random; accept it only if its distance from every individual already accepted is at least δ. Otherwise, discard it and draw another. Repeat until the population is complete [@talbi2009, p. 195].
 
 By construction, the final population has a minimum distance of at least δ between individuals. The drawback is its relatively high cost and the unknown number of candidates needed [@talbi2009, p. 195]. If δ is too large for the space and population size, *N* sufficiently separated individuals may not fit, and the process may never finish. After 50*N* candidates, the tool accepts subsequent candidates without checking distance. In practice, choose δ somewhat below a uniform population's mean distance. Unlike quasi-random sequences and Latin hypercube sampling, SSI needs only a distance measure, so it works with any representation.
 
 ::: {.callout-tip .ejemplo #ejemplo-inicializar-evaluar-inhibicion title="Reproducible Example · Six Separated Assignments"}
-**Data.** The assignment problem from Section -@sec-inicializar-evaluar-uniforme, *N* = 6, and δ = 0.6: two individuals must differ at least at 3 of their 5 genes. Candidates appear in the same order as the population from Example [](#ejemplo-inicializar-evaluar-uniforme): (1, 1, 2, 1, 3), (2, 3, 1, 1, 2), (1, 2, 3, 3, 1), (2, 1, 1, 3, 1), (1, 2, 2, 1, 2), (3, 1, 1, 3, 1)…
+**Data.** The assignment problem from section -@sec-inicializar-evaluar-uniforme, *N* = 6, and δ = 0.6: two individuals must differ at least at 3 of their 5 genes. Candidates appear in the same order as the population from example [](#ejemplo-inicializar-evaluar-uniforme): (1, 1, 2, 1, 3), (2, 3, 1, 1, 2), (1, 2, 3, 3, 1), (2, 1, 1, 3, 1), (1, 2, 2, 1, 2), (3, 1, 1, 3, 1)…
 
 **Predict.** Which of these six candidates enter the population? How many candidates do you think will be needed in total?
 
@@ -728,7 +728,7 @@ The first four enter: their distances to the nearest previously accepted individ
 </details>
 
 <details class="incrustada">
-<summary>Show the Tool Here (the cost)</summary>
+<summary>Show the tool here (the cost)</summary>
 <iframe data-external="1" src="https://josemagalan.github.io/initialization-and-evaluation-ga/#item=ssi&lang=en&enc=assignment-int&n=5&m=3&N=6&s=1&ps=1&d=0.6&step=11" loading="lazy" title="initialization-and-evaluation-ga: sequential diversification, assignment"></iframe>
 </details>
 
@@ -737,7 +737,7 @@ The first four enter: their distances to the nearest previously accepted individ
 Sequential inhibition neither considers quality nor spreads the population evenly over the entire space: it only prevents individuals from being too close.
 
 :::: {.callout-note .ejercicio #ejercicio-inicializar-evaluar-inhibicion title="Exercise · Accepted or Rejected?"}
-\(a) Calculate the distance from the fifth candidate in Example [](#ejemplo-inicializar-evaluar-inhibicion), (1, 2, 2, 1, 2), to each of the four accepted individuals. (b) Would it have been accepted with δ = 0.4? (c) For which δ values would the population be exactly the uniform population from Example [](#ejemplo-inicializar-evaluar-uniforme)?
+\(a) Calculate the distance from the fifth candidate in example [](#ejemplo-inicializar-evaluar-inhibicion), (1, 2, 2, 1, 2), to each of the four accepted individuals. (b) Would it have been accepted with δ = 0.4? (c) For which δ values would the population be exactly the uniform population from example [](#ejemplo-inicializar-evaluar-uniforme)?
 
 <details>
 <summary>**Show the Solution**</summary>
@@ -759,7 +759,7 @@ Yes, by changing what we sample. For the **knapsack**, shuffle the items using F
 Feasible initialization has a price. Filling knapsacks biases the population: solutions with few items never appear, even though they are feasible and may carry valuable genes, and individuals are more similar. With complex constraints, finding even one feasible solution may be as hard as solving the problem. It is then more practical to handle constraints during evaluation with penalties (Section -@sec-inicializar-evaluar-penalizacion), or with repairs and decoders (Section -@sec-representacion-infactibles). Rejecting infeasible solutions is reasonable only when they occupy a very small part of the search space [@talbi2009, p. 49].
 
 ::: {.callout-tip .ejemplo #ejemplo-inicializar-evaluar-factible title="Reproducible Example · Full Knapsacks"}
-**Data.** The knapsack from Section -@sec-inicializar-evaluar-diversidad (*W* = 13). For the first individual, the shuffled item order is 2, 4, 3, 5, 1, 6.
+**Data.** The knapsack from section -@sec-inicializar-evaluar-diversidad (*W* = 13). For the first individual, the shuffled item order is 2, 4, 3, 5, 1, 6.
 
 **Predict.** Which items enter? What are the knapsack's weight and value? Is it full?
 
@@ -782,7 +782,7 @@ The individual is **0 1 0 1 0 1**: weight 13, exactly the capacity, and value 12
 </details>
 
 <details class="incrustada">
-<summary>Show the Tool Here (the first individual)</summary>
+<summary>Show the tool here (the first individual)</summary>
 <iframe data-external="1" src="https://josemagalan.github.io/initialization-and-evaluation-ga/#item=feasible&lang=en&enc=knapsack-bits&n=6&N=8&s=21&ps=5&step=9" loading="lazy" title="initialization-and-evaluation-ga: feasible initialization, knapsack"></iframe>
 </details>
 
@@ -822,7 +822,7 @@ A **local optimum** is a chromosome with no better neighbor. A local search that
 To summarize landscape structure without plotting it, @jones1995 proposed **fitness–distance correlation** (FDC): the correlation between many chromosomes' fitness and their distance to the nearest global optimum [@talbi2009, pp. 114–115]. For minimization, a strong positive correlation indicates a relatively easy problem (fitness improves toward the optimum); a strong negative correlation indicates deception; a value near zero means fitness provides little guidance. Its major limitation is the need to know the optimum, which is unrealistic for many problems [@talbi2009, p. 115]. @malan2013 review other landscape measures, such as fitness autocorrelation along a random walk, that do not require it.
 
 ::: {.callout-tip .ejemplo #ejemplo-inicializar-evaluar-paisaje title="Reproducible Example · Moving Through Neighbors"}
-**Data.** The assignment problem from Section -@sec-inicializar-evaluar-uniforme and its one-gene neighborhood: two assignments are neighbors if moving one task to another machine turns one into the other. Local search starts at I1 = (1, 1, 2, 1, 3), with makespan 21, and moves to the best neighbor at each step. Ties are broken by task order, then machine order within each task.
+**Data.** The assignment problem from section -@sec-inicializar-evaluar-uniforme and its one-gene neighborhood: two assignments are neighbors if moving one task to another machine turns one into the other. Local search starts at I1 = (1, 1, 2, 1, 3), with makespan 21, and moves to the best neighbor at each step. Ties are broken by task order, then machine order within each task.
 
 **Predict.** How many neighbors does each assignment have? How many improve on I1? Will local search reach the optimum, 5?
 
@@ -845,14 +845,14 @@ It stops at a **local optimum**, makespan 7, without reaching the optimum, 5. Ti
 </details>
 
 <details class="incrustada">
-<summary>Show the Tool Here (local search)</summary>
+<summary>Show the tool here (local search)</summary>
 <iframe data-external="1" src="https://josemagalan.github.io/initialization-and-evaluation-ga/#item=landscape&lang=en&enc=assignment-int&n=5&m=3&N=6&s=1&ps=1&step=2" loading="lazy" title="initialization-and-evaluation-ga: fitness landscape, assignment"></iframe>
 </details>
 
 :::
 
 :::: {.callout-note .ejercicio #ejercicio-inicializar-evaluar-paisaje title="Exercise · Is It a Local Optimum?"}
-Check that assignment (1, 2, 1, 3, 3), where the search in Example [](#ejemplo-inicializar-evaluar-paisaje) ends, is a local optimum. (a) Calculate its loads. (b) Which task would need to move to reduce makespan below 7? Is moving one enough? (c) How many neighbors also have makespan 7?
+Check that assignment (1, 2, 1, 3, 3), where the search in example [](#ejemplo-inicializar-evaluar-paisaje) ends, is a local optimum. (a) Calculate its loads. (b) Which task would need to move to reduce makespan below 7? Is moving one enough? (c) How many neighbors also have makespan 7?
 
 <details>
 <summary>**Show the Solution**</summary>
@@ -869,7 +869,7 @@ Check that assignment (1, 2, 1, 3, 3), where the search in Example [](#ejemplo-i
 [Explore in initialization-and-evaluation-ga](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=landscape&lang=en&enc=function-real&fn=himmelblau){.explorar target="_blank"}
 
 - With Himmelblau, see how many local searches reach a minimum. Change **Function** to Rastrigin and repeat. Which landscape is rugged?
-- Switch to **2D function · bit string**. With the same function, how many local optima appear now? Recall the jumps in Section -@sec-representacion-gray.
+- Switch to **2D function · bit string**. With the same function, how many local optima appear now? Recall the jumps in section -@sec-representacion-gray.
 :::
 
 ## Noisy Fitness [[Advanced]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-inicializar-evaluar-ruido}
@@ -886,7 +886,7 @@ With noise, selection compares values that differ from true fitness. If the true
 $$
 \Phi\!\left(-\frac{\Delta\sqrt{R}}{\sigma\sqrt{2}}\right),
 $$
-where Φ is the standard normal cumulative distribution function. Reevaluation costs: *N* individuals evaluated *R* times require $N \times R$ evaluations per generation, and halving the error requires four times as many.
+where Φ is the standard normal cumulative distribution function. Reevaluation has a cost: *N* individuals evaluated *R* times require $N \times R$ evaluations per generation, and halving the error requires four times as many.
 
 ::: {.callout-tip .ejemplo #ejemplo-inicializar-evaluar-ruido title="Reproducible Example · Two Individuals Mistaken for Each Other"}
 **Data.** A uniform population of 8 points on the Himmelblau function, to be minimized. The two best are I1, with true fitness 52.555, and I7, with 91.112: a difference Δ ≈ 38.56. Each evaluation adds normal noise with σ = 30. Compare one evaluation per individual with the mean of *R* = 5.
@@ -902,16 +902,16 @@ With one evaluation, $\Delta/(\sigma\sqrt 2) = 38.56/42.43 \approx 0.91$ and $\P
 </details>
 
 <details class="incrustada">
-<summary>Show the Tool Here (the cost)</summary>
+<summary>Show the tool here (the cost)</summary>
 <iframe data-external="1" src="https://josemagalan.github.io/initialization-and-evaluation-ga/#item=noise&lang=en&enc=function-real&fn=himmelblau&N=8&s=1&ps=1&sg=30&R=5&step=5" loading="lazy" title="initialization-and-evaluation-ga: noisy fitness, function"></iframe>
 </details>
 
 :::
 
-Noise changes other decisions too. The cache from Section -@sec-inicializar-evaluar-coste no longer works as described: it would preserve a lucky evaluation forever. Elitism (Section -@sec-reemplazo-elitismo) can retain an individual that merely appeared good. The final solution should be evaluated several times before accepting it. Cheaper alternatives to reevaluating everyone include increasing population size, which implicitly averages noise, or reevaluating only individuals involved in close comparisons. @jin2005 review these techniques.
+Noise changes other decisions too. The cache from section -@sec-inicializar-evaluar-coste no longer works as described: it would preserve a lucky evaluation forever. Elitism (Section -@sec-reemplazo-elitismo) can retain an individual that merely appeared good. The final solution should be evaluated several times before accepting it. Cheaper alternatives to reevaluating everyone include increasing population size, which implicitly averages noise, or reevaluating only individuals involved in close comparisons. @jin2005 review these techniques.
 
 :::: {.callout-note .ejercicio #ejercicio-inicializar-evaluar-ruido title="Exercise · How Many Evaluations?"}
-With the data from Example [](#ejemplo-inicializar-evaluar-ruido) (Δ = 38.56, σ = 30), how many evaluations per individual make the probability of ordering I1 and I7 incorrectly less than 5%? Use $\Phi(-1.645) = 0.05$.
+With the data from example [](#ejemplo-inicializar-evaluar-ruido) (Δ = 38.56, σ = 30), how many evaluations per individual make the probability of ordering I1 and I7 incorrectly less than 5%? Use $\Phi(-1.645) = 0.05$.
 
 <details>
 <summary>**Show the Solution**</summary>
@@ -931,10 +931,10 @@ We need $\Delta\sqrt{R}/(\sigma\sqrt 2) \ge 1.645$, or $0.909\,\sqrt R \ge 1.645
 
 **Approximate fitness.** When an evaluation takes hours, some evaluations can be replaced with a **meta-model**: a cheap function approximating the objective from a sample of previously evaluated solutions. This is also called a surrogate model or approximate fitness. Neural networks, response surfaces, kriging, and Gaussian processes are common meta-models [@jin2005fitness; @jin2011; @talbi2009, pp. 47–48]. The tradeoff is familiar: exact, expensive evaluation versus cheap evaluation with error; the two can be alternated [@talbi2009, p. 48]. A typical use is **preselection**: the meta-model identifies promising candidates from a larger set, and only those are evaluated exactly. In the tool's “[Approximate fitness](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=surrogate&lang=en&enc=function-real&fn=himmelblau&N=8&s=1&ps=1&sm=idw&step=4){target="_blank"}” view, an inverse-distance-weighting meta-model built from the initial population's 8 individuals ranks 8 new candidates rather poorly (rank correlation 0.26). Yet evaluating only its estimated best 4 saves 4 evaluations and includes the true best candidate.
 
-**Multiple objectives.** Many real problems have conflicting objectives: a more valuable knapsack weighs more. There is then no single solution better than all others, but a set of tradeoffs. One solution **dominates** another if it is no worse in any objective and better in at least one. Solutions dominated by no other solution in the search space are **Pareto optima** [@deb2001; @talbi2009, p. 311]. Within a population, “nondominated” means only that no other member of that population dominates it. There are two ways to evaluate. A **weighted sum** normalizes and combines objectives using weights, turning the problem into a single-objective problem. Its drawback is that it finds only **supported** solutions: no choice of weights selects solutions in a nonconvex part of the front [@talbi2009, pp. 324–325]. Alternatively, fitness can be assigned by dominance. Nondominated individuals form the first front; remove them, and the remaining nondominated individuals form the second, and so on. In “[Several objectives](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=multi&lang=en&enc=knapsack-bits&n=6&N=8&s=21&ps=5&w=0.5&step=3){target="_blank"}”, using the population from Example [](#ejemplo-inicializar-evaluar-diversidad) without the knapsack's capacity constraint (maximize value and minimize weight), the first front has 6 individuals, and no choice of weights selects 2 of them.
+**Multiple objectives.** Many real problems have conflicting objectives: a more valuable knapsack weighs more. There is then no single solution better than all others, but a set of tradeoffs. One solution **dominates** another if it is no worse in any objective and better in at least one. Solutions dominated by no other solution in the search space are **Pareto optima** [@deb2001; @talbi2009, p. 311]. Within a population, “nondominated” means only that no other member of that population dominates it. There are two ways to evaluate. A **weighted sum** normalizes and combines objectives using weights, turning the problem into a single-objective problem. Its drawback is that it finds only **supported** solutions: no choice of weights selects solutions in a nonconvex part of the front [@talbi2009, pp. 324–325]. Alternatively, fitness can be assigned by dominance. Nondominated individuals form the first front; remove them, and the remaining nondominated individuals form the second, and so on. In “[Several objectives](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=multi&lang=en&enc=knapsack-bits&n=6&N=8&s=21&ps=5&w=0.5&step=3){target="_blank"}”, using the population from example [](#ejemplo-inicializar-evaluar-diversidad) without the knapsack's capacity constraint (maximize value and minimize weight), the first front has 6 individuals, and no choice of weights selects 2 of them.
 
 :::: {.callout-note .ejercicio #ejercicio-inicializar-evaluar-ampliaciones title="Exercise · Who Dominates Whom?"}
-Without the capacity constraint, each individual in Example [](#ejemplo-inicializar-evaluar-diversidad) has two objectives: value, to be maximized, and weight, to be minimized. Which individuals are dominated, and by whom?
+Without the capacity constraint, each individual in example [](#ejemplo-inicializar-evaluar-diversidad) has two objectives: value, to be maximized, and weight, to be minimized. Which individuals are dominated, and by whom?
 
 <details>
 <summary>**Show the Solution**</summary>
@@ -943,7 +943,7 @@ The pairs (value; weight) are I1 (24, 14), I2 (26, 22), I3 (5, 4), I4 (11, 7), I
 </details>
 ::::
 
-For the history of multiobjective genetic algorithms, from early methods to more recent ones, and further reading, see “[Multiple Objectives](#fuera-objetivos)” in Section -@sec-recapitulacion-fuera.
+For the history of multiobjective genetic algorithms, from early methods to more recent ones, and further reading, see “[Multiple Objectives](#fuera-objetivos)” in section -@sec-recapitulacion-fuera.
 
 **A population diverse by construction.** Generating the initial population can itself be an optimization problem: choose *N* solutions that maximize a diversity measure, such as the smallest distance between any pair. This can be as difficult as the original problem, so approximate methods are used. For example, generate part of the population at random, then add solutions one at a time, choosing those farthest from the individuals already present [@talbi2009, pp. 194, 197–198].
 
