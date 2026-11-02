@@ -28,7 +28,7 @@ In each generation, a genetic algorithm selects parents (chapter -@sec-seleccion
 There are two basic strategies [@talbi2009, p. 221; @mitchell1998, section 5.4]:
 
 - **Generational replacement.** The offspring replace the entire population of parents. This is the replacement used in Holland's canonical genetic algorithm and the most widespread one.
-- **Steady-state replacement.** At each step, only one or a few offspring come in, replacing the same number of population members. The rest stays the same.
+- **Steady-state replacement.** At each step, only one or a few offspring come in, replacing the same number of population members; the rest remain unchanged.
 
 After replacement, the cycle starts again (section -@sec-ciclo-ciclo) until a **stopping criterion** is met. We discuss stopping in section -@sec-reemplazo-cuando-parar.
 
@@ -135,7 +135,7 @@ What determines the behavior is who gets replaced. The most common choice is to 
 Most genetic algorithms described in the literature are generational [@mitchell1998, section 5.4]. Steady-state replacement has been used mainly in systems that learn incrementally and in which remembering what has already been learned matters, such as classifier systems [@mitchell1998, section 5.4].
 
 ::: {.callout-tip .ejemplo #ejemplo-reemplazo-estacionario title="Reproducible Example · Two Offspring Enter the Population"}
-**Data.** The parents from the previous examples (A–F: 12, 30, 5, 21, 9, and 17) and two new offspring, a (25) and b (14). Variant **Replace the worst**.
+**Data.** The parents from the previous examples (A–F: 12, 30, 5, 21, 9, and 17) and two new offspring, a (25) and b (14), with the **Replace the worst** variant.
 
 **Predict.** Whom does offspring a replace? And offspring b? Is the best lost?
 
@@ -297,12 +297,12 @@ The name "steady state" can be misleading: these algorithms vary more than gener
 | Replace the oldest | **A a b D E F** | 25 | 16.3 |
 | Replace a random one | **a b C D E F** | 25 | 15.2 |
 
-When the oldest is replaced, offspring a takes B's place (age 5), and the best is lost because of its age. Then everyone ages one step: C and F are now age 4, and b replaces C, the first of them. With the draw in the second URL, the slots chosen at random are those of A and B, and the best is lost here too. Only replacing the worst keeps B.
+When the oldest is replaced, offspring a takes B's place (age 5), and the best is lost simply because it is the oldest. Then everyone ages one step: C and F are now age 4, and b replaces C, the first of them. With the draw in the second URL, the slots chosen at random are those of A and B, and the best is lost here too. Only replacing the worst keeps B.
 </details>
 :::
 
 :::: {.callout-note .ejercicio #ejercicio-reemplazo-variantes-estacionario title="Exercise · An Offspring Worse Than Everyone"}
-With the same parents, the **Replace the worst** variant, and two offspring, a (25) and b (3). Does b enter the population, even though it is worse than all the parents? Whom does it replace?
+Take the same parents, the **Replace the worst** variant, and two offspring, a (25) and b (3). Does b enter the population, even though it is worse than all the parents? Whom does it replace?
 
 <details>
 <summary>**Show the solution**</summary>
