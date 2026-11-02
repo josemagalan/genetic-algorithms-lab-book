@@ -23,7 +23,7 @@ After completing the basic path through this chapter, you will be able to:
 
 If we already know which solutions are better, why not let only those solutions reproduce?
 
-After the population has been evaluated, **selection** decides which individuals will become parents. It selects as many parents as there are individuals in the population and collects them in the *parent pool*. The same individual may appear several times, while another may not appear at all. The parents are not new solutions: they are copies of individuals that already exist.
+After the population has been evaluated, **selection** decides which individuals will become parents. It selects as many parents as there are individuals in the population and collects them in the *parent pool* (also called the *mating pool*). The same individual may appear several times, while another may not appear at all. The parents are not new solutions: they are copies of individuals that already exist.
 
 Selection must balance two forces:
 

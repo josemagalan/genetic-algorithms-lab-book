@@ -26,7 +26,9 @@ def normalizar_math(text):
     text = text.replace('{,}', '.').replace('\\ ', ' ').replace(';', ',')
     for a, b in [('coste', 'cost'), ('peso', 'weight'), ('valor', 'value'),
                  ('maximizar', 'maximize'), ('minimizar', 'minimize'),
-                 ('\\mathrm{EE}', '\\mathrm{SE}')]:
+                 ('\\mathrm{EE}', '\\mathrm{SE}'),
+                 # Hijo 1 / Child 1: crossover-ga escribe H1 en español y C1 en inglés.
+                 ('H_1', 'C_1'), ('H_2', 'C_2')]:
         text = text.replace(a, b)
     return re.sub(r'\s+', '', text)
 

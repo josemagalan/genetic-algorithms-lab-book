@@ -6,7 +6,7 @@ Traducción desde el español 1.0 (`75b82d8`), iniciada con el piloto del capít
 |---|---|---|
 | aptitud | fitness | No «aptitude». |
 | selección de padres | parent selection | Distinguirla del reemplazo. |
-| conjunto o pool de padres | parent pool | Copias de individuos existentes. |
+| conjunto o pool de padres | parent pool | Copias de individuos existentes. En la primera mención (5.1) se añade *mating pool*, el término habitual en la bibliografía inglesa. |
 | presión selectiva / de selección | selection pressure | Misma traducción en todo el capítulo. |
 | explotación / exploración | exploitation / exploration | Conservar la distinción. |
 | selección por torneo | tournament selection | Binary tournament cuando k = 2. |
@@ -41,7 +41,7 @@ Traducción desde el español 1.0 (`75b82d8`), iniciada con el piloto del capít
 | En la aplicación | In the Application | Conserva `.en-app`. |
 | ejercicio / solución | Exercise / solution | Soluciones plegadas en HTML. |
 | Básico / Avanzado / Para saber más | Basic / Advanced / Further reading | Conserva colores y clases. |
-| Padre 1 / Hijo 1 | Parent 1 / Child 1 | Nombres de la herramienta; offspring en prosa general. |
+| Padre 1 / Hijo 1 | Parent 1 / Child 1 | Nombres de la herramienta; offspring en prosa general. En las fórmulas, $C_1$ y $C_2$, como crossover-ga en inglés (en español, $H_1$ y $H_2$). |
 | cruce (recombinación) | crossover (recombination) | Título del capítulo 6: «Crossover». |
 | heredabilidad / validez | heritability / validity | Condiciones del cruce (Talbi). |
 | máscara de cruce | crossover mask | Un bit por posición. |

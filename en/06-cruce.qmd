@@ -23,7 +23,7 @@ After completing the basic path through this chapter, you will be able to:
 
 Selection has already chosen the parents. How do we obtain new solutions from them?
 
-In the [selection chapter](#sec-seleccion) we saw that selection only copies individuals that already exist. **Crossover** (or recombination) takes two parents from the *pool* and combines parts of their chromosomes to form two offspring. Parents are paired up, and each pair produces two offspring.
+In the [selection chapter](#sec-seleccion) we saw that selection only copies individuals that already exist. **Crossover** (or recombination) takes two parents from the parent pool and combines parts of their chromosomes to form two offspring. Parents are paired up, and each pair produces two offspring.
 
 A good crossover must meet two conditions [@talbi2009, pp. 213–214]:
 
@@ -100,7 +100,7 @@ In one-point crossover, genes that lie close together travel together: a cut rar
 | **Child 1** | 2 | 4 | 1 | 2 | 3 | 4 |
 | **Child 2** | 1 | 4 | 2 | 3 | 3 | 1 |
 
-Both offspring are valid assignments: each task has a machine between 1 and 4. At tasks 2 and 5, where the parents agree, so do the offspring. For these crossovers, crossover-ga accepts only bits, so with integers you work out one-point and two-point crossover by hand. Uniform crossover with integers, however, can be run in the tool, as we will see in example [](#ejemplo-cruce-uniforme).
+Both offspring are valid assignments: each task has a machine between 1 and 4. For tasks 2 and 5, where the parents agree, so do the offspring. For these crossovers, crossover-ga accepts only bits, so with integers you work out one-point and two-point crossover by hand. Uniform crossover with integers, however, can be run in the tool, as we will see in example [](#ejemplo-cruce-uniforme).
 
 :::: {.callout-note .ejercicio #ejercicio-cruce-uno-y-dos-puntos title="Exercise · Crossing Integer Vectors"}
 Using the two parents from the task assignment, work out the offspring of two-point crossover with cuts after positions 3 and 5. Can any child produced by any crossover in this section assign task 1 to machine 3?
@@ -159,7 +159,7 @@ With integers, the mask for the six positions is 1 1 0 0 1 1:
 | **Child 1** | 1 | 4 | 1 | 3 | 3 | 4 |
 | **Child 2** | 2 | 4 | 2 | 2 | 3 | 1 |
 
-At tasks 2 and 5 the parents agree, and so do the offspring.
+For tasks 2 and 5, the parents agree, and so do the offspring.
 </details>
 :::
 
@@ -191,10 +191,10 @@ With a **real-valued representation**, we can still swap genes. **Uniform crosso
 **Arithmetic crossover** blends the values [@michalewicz1996]. Each gene of the offspring is a weighted average of the parents' genes at that position, with a weight λ between 0 and 1:
 
 $$
-H_1 = \lambda\, P_1 + (1 - \lambda)\, P_2, \qquad H_2 = \lambda\, P_2 + (1 - \lambda)\, P_1.
+C_1 = \lambda\, P_1 + (1 - \lambda)\, P_2, \qquad C_2 = \lambda\, P_2 + (1 - \lambda)\, P_1.
 $$
 
-In the formula, *H* denotes a child gene and *P* a parent gene. With $\lambda = 0.5$, both children are identical: the average of the parents.
+In the formula, *C* denotes a child gene and *P* a parent gene, as in crossover-ga. With $\lambda = 0.5$, both children are identical: the average of the parents.
 
 ::: {.callout-tip .ejemplo #ejemplo-cruce-reales title="Reproducible Example · Copying or Blending"}
 **Data.** Two parents with five real-valued genes:
