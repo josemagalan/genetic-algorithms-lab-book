@@ -155,7 +155,7 @@ c) Because a vector of integers can repeat places and leave others unvisited, fo
 
 What happens to a population of routes in one generation?
 
-We will carry out by hand a generation like those in EvoTraveller, with a population of only four routes on the map in figure -@fig-mapa. Each EvoTraveller generation has three parts: the **elite**, which passes unchanged; **copies** of selected individuals, which may mutate; and **offspring** of pairs of selected individuals, which are crossed over and may mutate. With four individuals, we will take one elite individual (EvoTraveller would round it up to 2; here we use 1 to keep things simple), one copy, and one pair, which gives two children. Selection is a tournament of two; crossover is EvoTraveller's OX; and mutation is a swap of two places, with *pm* = 0.2 per individual, the highest value the tool allows.
+We will carry out by hand a generation like those in EvoTraveller, with a population of only four routes on the map in figure -@fig-mapa. Each EvoTraveller generation has three parts: the **elite**, which is carried over unchanged; **copies** of selected individuals, which may mutate; and **offspring** of pairs of selected individuals, which are crossed over and may mutate. With four individuals, we will take one elite individual (EvoTraveller would round it up to 2; here we use 1 to keep things simple), one copy, and one pair, which gives two children. Selection is a tournament of two; crossover is EvoTraveller's OX; and mutation is a swap of two places, with *pm* = 0.2 per individual, the highest value the tool allows.
 
 The draws are fixed in advance. We chose them so that all the cases we want to see appear in a single generation.
 
@@ -229,11 +229,11 @@ Child 1 improves on both its parents. Of its six legs, four come from them: 1–
 
 The mean length falls from 30.06 to 26.54, and the best route from 27.81 to 24.29. C has disappeared, and all that remains of A is what has passed to the children.
 
-![The generation by hand from section -@sec-viajante-a-mano. Top, the initial population; bottom, the next one. In orange, the shortest route in each population. Original figure, generated with `figuras/10-viajante.py` in the book's repository.](figuras/10-generacion.svg){#fig-generacion fig-alt="Two rows of four small maps. Top: routes A, of length 30.62; B, 27.81, in orange; C, 32.53; and D, 29.26. All four cross themselves. Bottom: B, which passes as the elite; D, copied; H1, 24.80; and H2, in orange, 24.29, which is the best possible route and does not cross itself."}
+![The generation by hand from section -@sec-viajante-a-mano. Top, the initial population; bottom, the next one. In orange, the shortest route in each population. Original figure, generated with `figuras/10-viajante.py` in the book's repository.](figuras/10-generacion.svg){#fig-generacion fig-alt="Two rows of four small maps. Top: routes A, of length 30.62; B, 27.81, in orange; C, 32.53; and D, 29.26. All four cross themselves. Bottom: B, carried over as the elite; D, copied; H1, 24.80; and H2, in orange, 24.29, which is the best possible route and does not cross itself."}
 
 [Enlarge figure](figuras/10-generacion.svg){.ampliar-figura target="_blank" rel="noopener"}
 
-With five destinations and the origin, there are only 60 routes, and it is easy to hit on the best one. On a map of 15 places, with more than 40 billion routes, one generation does not go nearly as far: improvement is slow and depends on many generations.
+With five destinations and the origin, there are only 60 routes, and it is easy to hit on the best one. On a map of 15 places, with more than 40 billion routes, a single generation achieves much less: improvement is slow and depends on many generations.
 
 :::: {.callout-note .ejercicio #ejercicio-viajante-a-mano title="Exercise · With the Classic OX"}
 Repeat step 4 with the classic OX from section -@sec-cruce-ox, which reads the other parent starting after the second cut. With the same parents, the same segment, and the same mutation of Child 2 at positions 4 and 5, which children come out, and what is the best route in the next generation?
@@ -360,7 +360,7 @@ With the 30 maps of 10 places from section -@sec-viajante-interpretar, one run p
 
 There is no clear order: with little mutation the small elite wins, and with more mutation the intermediate one. The differences change direction when another parameter changes. This is what we would expect if the elite almost always keeps the same route, the best one, whatever its size.
 
-What does matter is that there **is** an elite. EvoTraveller does not allow it to be removed, but we can do it by changing one line of its code, and repeat the experiment with 30 maps of 15 places (seeds 1111 to 1140) and *pm* = 0.2:
+What does matter is that there **is** an elite. EvoTraveller does not let you disable it, but we can do so by changing one line of its code, and repeat the experiment with 30 maps of 15 places (seeds 1111 to 1140) and *pm* = 0.2:
 
 | Replacement | Mean gap above the best route | The best-route curve gets worse at some point | The final route is worse than the best found |
 |---|:---:|:---:|:---:|
@@ -370,14 +370,14 @@ What does matter is that there **is** an elite. EvoTraveller does not allow it t
 Without an elite, the best route in a generation can be lost: if it mutates or is crossed over, its offspring may be worse. In 13 of the 30 runs, the route the algorithm delivers at the end is worse than another it had found earlier. With *pm* = 0.05 the difference is much smaller (13.7% with an elite and 13.5% without one), because the copies of the best route almost never mutate. The elite makes heavy mutation cheap, as seen in section -@sec-experimentos-interaccion.
 
 :::: {.callout-note .ejercicio #ejercicio-viajante-elite title="Exercise · Without an Elite, by Hand"}
-Repeat the replacement from section -@sec-viajante-a-mano without an elite. Instead of B, a second copy passes, that of the winner of a fourth tournament between B and D, and it does not mutate. a) What is the next generation, and what is its best route? b) Now imagine that the fourth tournament is played by C and D, Child 2 does not mutate, and Child 1 turns out worse than B. What happens to the best route?
+Repeat the replacement from section -@sec-viajante-a-mano without an elite. Instead of B, a second copy enters the next generation: that of the winner of a fourth tournament between B and D, which does not mutate. a) What is the next generation, and what is its best route? b) Now imagine that the fourth tournament is played by C and D, Child 2 does not mutate, and Child 1 turns out worse than B. What happens to the best route?
 
 <details>
 <summary>**Show the solution**</summary>
 
-a) B wins the tournament against D, so the next generation would be the same: B (as a copy), D, H1, and H2. Its best route is H2, of 24.29. Here the elite changes nothing, because the tournament has already chosen B.
+a) B wins the tournament against D, so the next generation would be the same: B (as a copy), D, and the two children, H1 and H2. Its best route is that of H2, with length 24.29. Here the elite changes nothing, because the tournament has already chosen B.
 
-b) D wins the fourth tournament against C. D passes twice, along with Child 1 and Child 2 unmutated (5 2 1 3 4, of 30.62). No route reaches 27.81: the best route in the next generation is worse than B, and the best-fitness curve goes down. The elite guarantees that this does not happen.
+b) D wins the fourth tournament against C. D enters twice, along with Child 1 and the unmutated Child 2 (5 2 1 3 4, with length 30.62). No route reaches 27.81: the best route in the next generation is worse than B, and the best-fitness curve goes down. The elite guarantees that this does not happen.
 </details>
 ::::
 
@@ -471,7 +471,7 @@ For the company, the reasonable decision is still B or D, not the [reference val
 ## Summary {.unnumbered #resumen}
 
 - In the traveling salesman problem, a route is represented by a permutation of the places, and the origin is added at the beginning and at the end; EvoTraveller's fitness is the inverse of the length. With *n* places there are $(n-1)!/2$ distinct routes, too many to check except on small maps.
-- An EvoTraveller generation has three parts: the elite, which passes unchanged; copies of the individuals selected by tournament; and offspring of pairs crossed over with OX. The copies and the offspring may undergo swap mutation.
+- An EvoTraveller generation has three parts: the elite, which is carried over unchanged; copies of the individuals selected by tournament; and offspring of pairs crossed over with OX. The copies and the offspring may undergo swap mutation.
 - During a run, the best fitness does not go down thanks to the elite, and the population fills up with copies of the best route. The larger the tournament, the sooner diversity is lost and the more often the algorithm gets stuck.
 - What matters is that there is an elite, not so much its size, because the elite positions are usually occupied by copies of the same route.
 - Parameters are chosen with maps similar to the real case: some for tuning, others for validation to choose, and others for testing, which are used only at the end with the chosen configuration. A small advantage on some maps can disappear on others, and the winner's figure on the maps used to choose it is optimistic.
