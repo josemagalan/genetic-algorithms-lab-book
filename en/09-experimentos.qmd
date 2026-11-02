@@ -114,7 +114,7 @@ Selection only copies routes that already exist. When the population fills up wi
 
 ## One Run Is Not Enough [[Basic]{.largo}[B]{.corto}]{.nivel .basico} {#sec-experimentos-replicas}
 
-If the result depends on chance, how do we know what a genetic algorithm gives in general?
+If the result depends on chance, how do we know what a genetic algorithm achieves in general?
 
 By repeating the run. Each repetition with a different seed is a **replicate**, and what interests us is how the results of many replicates are distributed. EvoTraveller does not allow repeated runs on the same map, because the seed also changes the map. That is why we have programmed an algorithm with the same design: permutations, a tournament of 3, OX crossover with *Pc* = 0.6, swap mutation with *pm* = 0.05 per individual, and generational replacement with one elite individual. In our program we use the **classic** OX from section -@sec-cruce-ox; EvoTraveller uses “Order from the start”. They share the general components, but they do not reproduce the same implementation or the same draws. We applied it to a map with 20 destinations and the origin, where the route starts and ends: 21 cities in total. In EvoTraveller, **Number of places** also counts the origin, so this map would be 21 places, more than the 15 it allows. We used a population of 30 and 100 generations. One map, 30 different seeds (1 to 30).
 
@@ -346,7 +346,7 @@ To continue along the basic path, go to [“The Traveling Salesman from Start to
 
 How much can we trust a mean of 30 replicates? And a mean of 10?
 
-The mean of the replicates also depends on chance: with another 30 replicates, a somewhat different value would come out. This variation is measured with the **standard error** of the mean, which is the standard deviation of the replicates divided by the square root of the number of replicates:
+The mean of the replicates also depends on chance: with another 30 replicates, we would get a somewhat different value. This variation is measured with the **standard error** of the mean, which is the standard deviation of the replicates divided by the square root of the number of replicates:
 
 $$\mathrm{SE} = \frac{s}{\sqrt{n}}$$
 
@@ -358,7 +358,7 @@ In figure -@fig-replicas, with *pm* = 0.05, $\bar{x} = 62.6$, $s = 5.2$, and $n 
 
 To compare two configurations, we do the same with their difference, and how it is calculated depends on the design of the experiment. In section -@sec-experimentos-comparar, *pm* = 0.05 and *pm* = 0.2 use the same 30 seeds, so the design is **paired**: for each seed we calculate the difference $d_i$ between the final length with 0.05 and with 0.2, and we apply the previous formulas to those 30 differences. Their mean is 7.2, the difference between the means (62.6 − 55.4); their standard deviation is 7.6, and the standard error is $7.6/\sqrt{30} \approx 1.39$. The 95% interval runs from 4.5 to 9.9. It does not include 0, so it is hard to explain the difference by the chance of the 30 replicates alone: *pm* = 0.2 is better on this map.
 
-If each configuration had been run with its own seeds, there would be no pairs: the two samples would be **independent**, and the standard error of the difference would be calculated from those of the two means, $\sqrt{0.95^2 + 1.03^2} \approx 1.40$. Here the two calculations give almost the same result, because sharing the initial population has little influence on the final result: what comes out with a seed and 0.05 says almost nothing about what comes out with that seed and 0.2. When the seed influences both configurations in the same way, the paired design gives a narrower interval, and treating the data as independent wastes that advantage.
+If each configuration had been run with its own seeds, there would be no pairs: the two samples would be **independent**, and the standard error of the difference would be calculated from those of the two means, $\sqrt{0.95^2 + 1.03^2} \approx 1.40$. Here the two calculations give almost the same result, because sharing the initial population has little influence on the final result: the result with a seed and 0.05 says almost nothing about the result with that seed and 0.2. When the seed influences both configurations in the same way, the paired design gives a narrower interval, and treating the data as independent wastes that advantage.
 
 Because *n* is inside a square root, much more work is needed to improve precision a little: **to halve the error, the number of replicates must be multiplied by four**. Talbi recommends at least 10 runs and, if possible, more than 100 [@talbi2009, p. 64]. This effect can be seen with SelectionMechanisms: both the number of simulations and the seed are parameters.
 
@@ -399,7 +399,7 @@ We need $1.96 \cdot 5.2/\sqrt{n} \leq 1$, that is, $n \geq (1.96 \cdot 5.2)^2 \a
 
 - Set **Simulations** to 10 and look at the bands in the **Diversity** charts. Raise it to 100 and notice how the mean and the p05–p95 band change. The band does not narrow: it shows the variation of a single simulation, not the uncertainty of the mean.
 - Click **Run** several times with **Seed (optional)** empty: each time is a different seed, and the results change.
-- If you repeat with seeds, space them well apart (for example, in steps of 1000, starting at 1000): with consecutive seeds, the simulations overlap, and the results come out almost the same without really being independent.
+- If you repeat with seeds, space them well apart (for example, in steps of 1000, starting at 1000): with consecutive seeds, the simulations overlap, and the results are almost identical without really being independent.
 :::
 
 ## Interacting Parameters [[Advanced]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-experimentos-interaccion}
