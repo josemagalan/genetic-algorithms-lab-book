@@ -32,8 +32,12 @@ la edición española original `v1.0`.
 - Superpone las portadas inglesas de `en/figuras/` únicamente en la copia inglesa.
   Se regeneran con `python en/figuras/portada.py`; su ficha documenta procedencia,
   licencia y conservación del panel de la portada española.
-- Genera índices ingleses solo para las actividades traducidas, localiza las
-  plantillas y los comentarios y crea una variante inglesa del CSL compartido.
+- Genera índices ingleses solo para las actividades traducidas, con la misma
+  estructura que `filtros/indices.py`: «The Book at a Glance», insignias de nivel
+  y actividades por herramienta y por capítulo, con los mismos identificadores.
+  Si cambian las herramientas o los niveles de `filtros/indices.py`, hay que
+  actualizar `HERRAMIENTAS_EN` y `NIVELES_EN`; un `assert` lo avisa. Localiza
+  las plantillas y los comentarios y crea una variante inglesa del CSL compartido.
 - Toma `referencias.bib` y `vendor/csl/apa.csl` de la copia de trabajo, no de la
   etiqueta fuente, para que sus correcciones lleguen a la edición inglesa. En la
   copia inglesa, el número de artículo «Artículo 72» del `.bib` pasa a «Article 72».

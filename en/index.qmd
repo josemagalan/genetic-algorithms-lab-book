@@ -60,7 +60,7 @@ Depending on the sections you follow, the book covers three levels of depth:
 - **Basic and advanced.** The advanced sections ask for more background and go deeper: constraints and infeasibility, alternative codes and representations, more elaborate initialization, noisy fitness, more operators and replacement variants, and the statistical design of experiments. They suit a more complete course, or readers who plan to apply the algorithm to a problem of their own.
 - **Further reading.** Each chapter ends with extensions: history, connections with other methods, and readings to pursue on your own.
 
-The [contents](indice.qmd) list every section with its level, and the [activity index](actividades.qmd) lists the examples, “In the Application” boxes, and exercises, with the section, level, and tool of each.
+The [contents](indice.qmd) list every section with its level, and the [activity index](actividades.qmd) gathers the examples, “In the Application” boxes, and exercises, by tool and by chapter.
 
 ## For Instructors {.unnumbered #profesorado}
 
@@ -70,7 +70,7 @@ If you use the book as a textbook, the lab offers resources for class and for as
 - **For independent study**, the **Practice** mode of the five modules works as self-assessment: students solve an exercise, the tool checks it and shows them the step-by-step solution.
 - **For assessment**, each module generates question banks for Moodle (Moodle XML format) at three levels of difficulty. Depending on the module, students calculate a result, identify the operator, or find the error. The questions are organized into categories, so a quiz can draw random questions from them. The feedback for each question gives the solution and links to the step-by-step solution of that same exercise in the tool, so students can see, visually and interactively, why the answer is correct.
 
-The [activity index](actividades.qmd) shows the tool used by each example, “In the Application” box, and exercise, which helps when preparing a session around a particular application. Suggestions from instructors help us improve the book: [let us know](avisos.qmd#contacto).
+The [activity index](actividades.qmd) sorts the examples, “In the Application” boxes, and exercises by tool, to help you prepare a session around a particular application. Suggestions from instructors help us improve the book: [let us know](avisos.qmd#contacto).
 
 ## About This English Translation {.unnumbered #traduccion}
 

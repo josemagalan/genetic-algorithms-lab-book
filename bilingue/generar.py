@@ -64,25 +64,122 @@ def sin_hooks(texto):
     return '\n'.join(resultado) + '\n'
 
 
+NIVELES_EN = {'basico': ('Basic', 'B'), 'avanzado': ('Advanced', 'A'), 'saber-mas': ('Further reading', '+')}
+HERRAMIENTAS_EN = {
+    'portal': 'Genetic Algorithms Lab portal',
+    'representation-ga': 'representation-ga · Representation',
+    'initialization-and-evaluation-ga': 'initialization-and-evaluation-ga · Initialization and Evaluation',
+    'selection-ga': 'selection-ga · Selection',
+    'crossover-ga': 'crossover-ga · Crossover',
+    'mutation-ga': 'mutation-ga · Mutation',
+    'evotraveller': 'EvoTraveller',
+    'selectionmechanisms': 'SelectionMechanisms',
+}
+
+
+def insignia_en(nivel, larga=False):
+    largo, corto = NIVELES_EN[nivel]
+    if larga:
+        return f'[[{largo}]{{.largo}}[{corto}]{{.corto}}]{{.nivel .{nivel}}}'
+    return f'[[{corto}]{{.corto}}]{{.nivel .{nivel} .solo-corto}}'
+
+
+def enumerar_en(partes):
+    if len(partes) < 3:
+        return ' and '.join(partes)
+    return ', '.join(partes[:-1]) + ', and ' + partes[-1]
+
+
 def indices_ingles(module, caps, destino):
-    niveles = {'basico': 'Basic', 'avanzado': 'Advanced', 'saber-mas': 'Further reading'}
-    tipos = {'ejemplo': 'Example', 'ejercicio': 'Exercise', 'en-app': 'In the Application'}
+    """Índice general y de actividades en inglés, con la estructura de filtros/indices.py."""
+    assert list(HERRAMIENTAS_EN) == list(module.HERRAMIENTAS), 'Herramientas distintas de filtros/indices.py'
+    assert list(NIVELES_EN) == list(module.NIVELES), 'Niveles distintos de filtros/indices.py'
+    tipos = ('ejemplo', 'en-app', 'ejercicio')
+    total = {k: sum(1 for c in caps for s in c['secciones'] if s['nivel'] == k) for k in NIVELES_EN}
+    cajas = {k: sum(1 for c in caps for b in c['cajas'] if b['tipo'] == k) for k in tipos}
+
+    def enlace_caja(c, b):
+        ancla = b['ancla'] or (b['seccion']['ancla'] if b['seccion'] else None)
+        if b['tipo'] == 'en-app':
+            texto = 'In the Application'
+        else:
+            texto = f"{'Example' if b['tipo'] == 'ejemplo' else 'Exercise'} {b['numero']}"
+        return f"[{texto}]({c['archivo']}#{ancla})" if ancla else texto
+
+    def nombre_caja(b):
+        nombre = b['nombre']
+        if b['tipo'] == 'en-app':
+            # «selection-ga, “Steady state”» → «“Steady state”»; sin subtítulo, la caja explora la sección
+            m = re.match(r'^[^,“]+(?:,\s*(.*))?$', nombre)
+            nombre = (m.group(1) or '').strip() if m else nombre
+            nombre = nombre or 'Free exploration'
+        return module.celda(nombre)
+
+    def nivel(b):
+        return insignia_en(b['seccion']['nivel']) if b['seccion'] else ''
+
+    herramientas = lambda claves: ', '.join(module.NOMBRE_CORTO.get(k, k) for k in claves) or '—'
+
     indice = ['# Contents {.unnumbered #sec-indice}', '',
-              'Contents of the English translation.', '']
-    actividades = ['# Activity Index {.unnumbered #sec-actividades}', '',
-                   'Activities in the translated chapters. Reproducible examples use fixed data; application boxes invite exploration. Exercise solutions remain folded.', '',
-                   '| Activity | Title | Section | Level | Tool |', '|---|---|:---:|---|---|']
+              f"The book has {len(caps)} chapters and {sum(total.values())} sections: "
+              f"{total['basico']} at the {insignia_en('basico', True)} level, {total['avanzado']} at the "
+              f"{insignia_en('avanzado', True)} level, and {total['saber-mas']} at the {insignia_en('saber-mas', True)} level. "
+              'The **basic path** consists of the blue sections: they can be read in order, chapter by chapter, '
+              'without the others. The advanced sections extend the basic path and usually build on it; '
+              '“Further reading” closes each chapter with readings and topics the book does not develop.', '',
+              f"The activities—{cajas['ejemplo']} reproducible examples, {cajas['en-app']} “In the Application” "
+              f"boxes, and {cajas['ejercicio']} exercises—are listed in the "
+              '[activity index](actividades.qmd), by tool and by chapter.', '',
+              '## The Book at a Glance {.unnumbered #vistazo}', '',
+              '| Chapter | B | A | + | Examples | In the Application | Exercises |',
+              '|---|:-:|:-:|:-:|:-:|:-:|:-:|']
     for c in caps:
-        indice += [f"## {c['numero']}. {c['titulo']} {{.unnumbered}}", '']
-        for s in c['secciones']:
-            indice += [f"- [{s['num']} {s['titulo']}]({c['archivo']}#{s['ancla']}) · {niveles[s['nivel']]}"]
+        n = {k: sum(1 for s in c['secciones'] if s['nivel'] == k) for k in NIVELES_EN}
+        b = {k: sum(1 for x in c['cajas'] if x['tipo'] == k) for k in tipos}
+        indice.append(f"| [{c['numero']}. {module.celda(c['titulo'])}]({c['archivo']}) | {n['basico']} | "
+                      f"{n['avanzado']} | {n['saber-mas']} | {b['ejemplo']} | {b['en-app']} | {b['ejercicio']} |")
+    indice += [f"| **Total** | **{total['basico']}** | **{total['avanzado']}** | **{total['saber-mas']}** | "
+               f"**{cajas['ejemplo']}** | **{cajas['en-app']}** | **{cajas['ejercicio']}** |", '']
+    for c in caps:
+        indice += [f"## {c['numero']}. {c['titulo']} {{.unnumbered #cap-{c['numero']}}}", '']
+        indice += [f"- [{s['num']} {s['titulo']}]({c['archivo']}#{s['ancla']}) {insignia_en(s['nivel'])}"
+                   for s in c['secciones']]
         indice += ['']
-        for b in c['cajas']:
-            sec = b['seccion']
-            ancla = b['ancla'] or sec['ancla']
-            nombre = tipos[b['tipo']] + (' ' + b['numero'] if b['numero'] else '')
-            titulo = b['nombre'] or 'Explore the application'
-            actividades.append(f"| [{nombre}]({c['archivo']}#{ancla}) | {module.celda(titulo)} | {sec['num']} | {niveles[sec['nivel']]} | {', '.join(b['herramientas'])} |")
+
+    actividades = ['# Activity Index {.unnumbered #sec-actividades}', '',
+                   'This page lists every activity box in the book. **Reproducible examples** open the tool '
+                   'in a fixed state, so the result matches the one in the book (with EvoTraveller and '
+                   'SelectionMechanisms, the **⚙ Open and configure** button opens the application, and the '
+                   'example gives the values to enter). **In the Application** boxes invite you to explore '
+                   'without fixed results, and **exercises** are worked out with pencil and paper. The first '
+                   'part sorts the boxes by tool, to help you prepare a session around a particular application; '
+                   'the second sorts them by chapter. The level column gives the level of the section that '
+                   'contains each box.', '',
+                   '## By Tool {.unnumbered #por-herramienta}', '']
+    for clave, nombre in HERRAMIENTAS_EN.items():
+        filas = [(c, b) for c in caps for b in c['cajas'] if clave in b['herramientas']]
+        if not filas:
+            continue
+        cuenta = {k: sum(1 for _, b in filas if b['tipo'] == k) for k in tipos}
+        partes = [f'{n} {uno if n == 1 else varios}' for n, uno, varios in (
+            (cuenta['ejemplo'], 'reproducible example', 'reproducible examples'),
+            (cuenta['en-app'], '“In the Application” box', '“In the Application” boxes'),
+            (cuenta['ejercicio'], 'exercise', 'exercises')) if n]
+        frase = enumerar_en(partes)
+        actividades += [f"### {nombre} {{.unnumbered #h-{clave}}}", '', frase[0].upper() + frase[1:] + '.', '',
+                        '| Activity | Title | Section | Level |', '|---|---|:-:|:-:|']
+        actividades += [f"| {enlace_caja(c, b)} | {nombre_caja(b)} | {module.enlace_seccion(c, b['seccion'])} | {nivel(b)} |"
+                        for c, b in filas]
+        actividades += ['']
+    actividades += ['## By Chapter {.unnumbered #por-capitulo}', '']
+    for c in caps:
+        if not c['cajas']:
+            continue
+        actividades += [f"### {c['numero']}. {c['titulo']} {{.unnumbered #a-cap-{c['numero']}}}", '',
+                        '| Activity | Title | Section | Tool | Level |', '|---|---|:-:|---|:-:|']
+        actividades += [f"| {enlace_caja(c, b)} | {nombre_caja(b)} | {module.enlace_seccion(c, b['seccion'])} | "
+                        f"{herramientas(b['herramientas'])} | {nivel(b)} |" for b in c['cajas']]
+        actividades += ['']
     (destino / 'indice.qmd').write_text('\n'.join(indice) + '\n', encoding='utf-8')
     (destino / 'actividades.qmd').write_text('\n'.join(actividades) + '\n', encoding='utf-8')
 
