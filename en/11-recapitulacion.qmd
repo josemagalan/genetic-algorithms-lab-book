@@ -47,7 +47,7 @@ The order of the table is the order of design. Representation comes first, becau
 A paper says: "We used a genetic algorithm with a population of 100 individuals, a crossover probability of 0.8, and a mutation probability of 0.01, for 200 generations." With this information, could you repeat the experiment? Which decisions are missing?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 It could not be repeated. Only the parameters and one of the nine decisions are known: stopping (200 generations). What is missing:
 
@@ -95,7 +95,7 @@ c) The order in which 10 jobs are processed on a single machine has to be decide
 d) The diameter, between 10 and 50 mm, and the wall thickness, between 1 and 5 mm, of a pipe have to be chosen.
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 | | Representation | Crossover | Mutation | Constraint |
 |---|---|---|---|---|
@@ -144,7 +144,7 @@ A team designs a genetic algorithm for a traveling salesman problem with 30 citi
 Which decisions are wrong? How would you correct them?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 - **2.** This is seeding with a heuristic: the 50 routes are almost the same, and the population starts with no diversity (section -@sec-inicializar-evaluar-sembrar). Better: random permutations with Fisher–Yates.
 - **3.** Length is minimized, but the roulette wheel gives more probability to higher fitness: it would favor the longest routes (section -@sec-inicializar-evaluar-objetivo-aptitud). It must be transformed, for example with the inverse of the length, as EvoTraveller does, or the tournament must be used.
@@ -194,7 +194,7 @@ c) Tuning six real parameters of a simulation of a factory. Each evaluation take
 d) Finding a very short route for a traveling salesman problem with 1 000 cities and straight-line distances.
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 a) **No.** With 15 projects there are $2^{15} = 32\,768$ combinations, which can all be checked in a few hundredths of a second, and this finds the best one with certainty.
 
@@ -215,7 +215,7 @@ c) How would you check that the design works before using it on the real timetab
 d) Go over your design with the table of mistakes in section -@sec-recapitulacion-errores, as step 6 of the procedure asks. Which mistakes does it avoid, and which would you have to watch out for?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 a) With 12 exams and 4 slots there are $4^{12} = 16\,777\,216$ timetables: at a million per second, they can all be checked in about 17 seconds. **A genetic algorithm is not needed.** With 40 exams and 8 slots there are $8^{40} = 2^{120} \approx 1.3 \times 10^{36}$, and checking them all would take about $4 \times 10^{22}$ years. Here it **does make sense**.
 
@@ -262,7 +262,7 @@ d) How many evaluations fit into one night of computing, of 8 hours?
 e) Is it enough that the data used to compare subsets have not been used to fit the model's coefficients? How would you measure the final error of the choice?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 a) **Binary**, with one bit per variable: 1 if it enters the model and 0 if not. It is like the knapsack: each item is a variable (section -@sec-representacion-binaria). One-point, two-point, or uniform crossover and bit-flip mutation all work.
 

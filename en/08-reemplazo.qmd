@@ -62,7 +62,7 @@ The screen is called “Generational with elitism”; with an **Elite size e** o
 [Open: generational replacement, e = 0](https://josemagalan.github.io/selection-ga/#op=elitism&lang=en&elite=0&f=12-30-5-21-9-17&g=25-3-18-9-14-7){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 The next generation is **a b c d e f**: all 6 offspring survive and no parent does. The best fitness falls from 30 to 25, because B has no equally good replacement, and the mean falls from 15.7 to 12.7. This answers exercise [](#ejercicio-reemplazo-quien-sobrevive): with pure generational replacement, both the best fitness and the mean can get worse from one generation to the next.
 </details>
@@ -93,7 +93,7 @@ With at least one elite individual, the population's best fitness never falls. M
 [Open: generational with elite e = 1](https://josemagalan.github.io/selection-ga/#op=elitism&lang=en&elite=1&f=12-30-5-21-9-17&g=25-3-18-9-14-7){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 The elite is B (30), the best parent. It takes the place of the worst offspring, b (3). The next generation is **B a c d e f**: one parent and five offspring. The best fitness stays at 30, and the mean rises from 15.7 to 17.2.
 
@@ -110,7 +110,7 @@ With *e* = 0, the mean fell to 12.7. With the elite, we exchange the worst offsp
 Four parents A–D with fitness values 8, 15, 4, and 11, and four offspring a–d with fitness values 10, 2, 13, and 6. Form the next generation with generational replacement and an elite of 1, as in selection-ga. What is the best fitness before and after? And if there were no elite?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 The elite is B (15), which takes the place of the worst offspring, b (2). The next generation is **B a c d**, with fitness values 15, 10, 13, and 6: the best is still 15. Without an elite, the next generation would be a b c d, and the best fitness would fall to 13. You can check this with the [exercise link](https://josemagalan.github.io/selection-ga/#op=elitism&lang=en&elite=1&f=8-15-4-11&g=10-2-13-6){target="_blank"}.
 </details>
@@ -142,7 +142,7 @@ Most genetic algorithms described in the literature are generational [@mitchell1
 [Open: steady state, replace the worst](https://josemagalan.github.io/selection-ga/#op=steady-state&lang=en&v=worst&lambda=2&f=12-30-5-21-9-17&g=25-14&s=31){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 Offspring a replaces the worst in the population, C (5). After that, the worst is E (9), and b replaces it. The next generation is **A B a D b F**: four parents and two offspring. The best fitness stays at 30, and the mean rises from 15.7 to 19.8.
 
@@ -173,7 +173,7 @@ To find out, we programmed a genetic algorithm with the operators from the previ
 [Enlarge figure](figuras/08-elitismo-parada.svg){.ampliar-figura target="_blank" rel="noopener"}
 
 <details>
-<summary>Show the Figure Data</summary>
+<summary>Show the figure data</summary>
 
 Best fitness in the population at selected generations:
 
@@ -193,7 +193,7 @@ Does it always help this much? No. OneMax has a single peak, and on problems lik
 In figure -@fig-elitismo-parada, without an elite, the best fitness at generation 80 is 38 and at generation 100 it is 36. If the algorithm stopped at generation 100 and returned the best individual in the last population, what would its fitness be? What should the algorithm do so as not to lose the 38?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 It would return an individual with fitness 36, even though it had found one with 38. Without an elite, the algorithm must store the **best solution found** so far separately and update it every generation; when it stops, it returns that solution, not the best in the last population. With an elite, the two coincide, because the best individual found is always in the population.
 </details>
@@ -233,7 +233,7 @@ A genetic algorithm with an elite is maximizing a problem whose optimum is 50. T
 At which generation does it stop under each criterion: (a) 3 generations without improvement; (b) 5 generations without improvement; (c) reaching the optimum; (d) a maximum of 8 generations? What fitness does it return in each case? If a criterion is not met before generation 10, assume the algorithm continues and no longer improves. (e) Combine (b) and (c): stop when the optimum is reached or after 5 generations without improvement, whichever comes first. (f) Now you do not know the optimum, and each generation takes one hour. Which two criteria would you combine, and why?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 We count generations since the last improvement: there were improvements at generations 1, 3, 6, and 10.
 
@@ -289,7 +289,7 @@ The name "steady state" can be misleading: these algorithms vary more than gener
 [Open: replace a random one](https://josemagalan.github.io/selection-ga/#op=steady-state&lang=en&v=random&r=19&lambda=2&f=12-30-5-21-9-17&g=25-14&s=31){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 | Variant | Next generation | Best fitness | Mean fitness |
 |---|:---:|:---:|:---:|
@@ -305,7 +305,7 @@ When the oldest is replaced, offspring a takes B's place (age 5), and the best i
 With the same parents, the **Replace the worst** variant, and two offspring, a (25) and b (3). Does b enter the population, even though it is worse than all the parents? Whom does it replace?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 With **Replace the worst**, each offspring enters unconditionally. Offspring a replaces C (5), the worst. After that, the worst is E (9), and b replaces it even though b is worse: the next generation is **A B a D b F**, with mean 18. You can check this with the [exercise link](https://josemagalan.github.io/selection-ga/#op=steady-state&lang=en&v=worst&lambda=2&f=12-30-5-21-9-17&g=25-3&s=31){target="_blank"}. With **Replace the worst if better**, b does not improve on E and is discarded: the next generation is **A B a D E F**, with mean 19 ([link](https://josemagalan.github.io/selection-ga/#op=steady-state&lang=en&v=worst-better&lambda=2&f=12-30-5-21-9-17&g=25-3&s=31){target="_blank"}).
 </details>
@@ -346,7 +346,7 @@ Elitism with *e* individuals lies between the two schemes, although it matches n
 [Open: (μ, λ)](https://josemagalan.github.io/selection-ga/#op=mu-comma-lambda&lang=en&lambda=9&f=12-30-5-21-9-17&g=25-3-18-9-14-7-28-11-20){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 | Scheme | Survivors, from best to worst | Parents | Best fitness | Mean fitness |
 |---|:---:|:---:|:---:|:---:|
@@ -368,7 +368,7 @@ With parents A–F (12, 30, 5, 21, 9, and 17) and the six offspring from example
 2. Who survives with elitism and *e* = 2?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 1. With λ = μ there is nothing to choose: all six offspring survive, as in pure generational replacement. The tool orders them from best to worst (a c e d f b), but they are the same individuals. The best fitness falls to 25.
 2. The elite consists of B (30) and D (21), which take the places of the two worst offspring, b (3) and f (7). The survivors are **B D a c d e**, with mean 19.5.

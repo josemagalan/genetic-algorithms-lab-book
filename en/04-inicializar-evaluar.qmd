@@ -54,7 +54,7 @@ The chromosome is an integer vector: gene *i* gives the machine processing task 
 [Open: the first individual](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=uniform&lang=en&enc=assignment-int&n=5&m=3&N=6&s=1&ps=1&step=7){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 With $m = 3$, each gene is $1 + \lfloor 3u \rfloor$:
 
@@ -81,7 +81,7 @@ The other five individuals are generated the same way with new numbers: their ma
 Use the numbers from example [](#ejemplo-inicializar-evaluar-uniforme). (a) Truncate the first five to two decimal places (0.08, 0.27, 0.45, 0.22, 0.98) and generate a 5-bit string. (b) Use the first two, 0.087 and 0.277, to generate a real point in $[-5, 5]^2$. (c) With 4 machines instead of 3, which machine would receive task 5?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 (a) The first four values are below 0.5, but the last is not: **1 1 1 1 0**.
 
@@ -122,7 +122,7 @@ Using $n - 1$ random numbers, each of the $n!$ permutations has the same probabi
 [Open: shuffle 1 2 3 4 5](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=uniform&lang=en&enc=tsp-perm&n=5&N=6&s=1&ps=1&step=6){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 | *k* | *u* | $j = 1 + \lfloor u\,k \rfloor$ | Swap | Permutation |
 |:---:|:---:|:---:|:---:|:---:|
@@ -149,7 +149,7 @@ Some shuffles look equivalent but are not. A tempting alternative swaps position
 With *n* = 3, the procedure “for $k = 1, 2, 3$, swap position *k* with position *j* drawn from 1 to 3” uses three draws with 3 possible values each. (a) How many equally likely draw sequences exist? How many permutations of 3 elements? (b) Can every permutation have the same probability? (c) How many draws does Fisher–Yates use for *n* = 3, and how many sequences exist?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 (a) There are $3^3 = 27$ sequences and $3! = 6$ permutations.
 
@@ -199,7 +199,7 @@ Of $2^6 = 64$ chromosomes, 34 fit (53.1%). The optimum is **1 0 1 0 1 0**: items
 [Open: diversity](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=uniform&lang=en&enc=knapsack-bits&n=6&N=8&s=21&ps=5&step=18){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 | Individual | Items | Weight | Value | Fits? |
 |:---:|:---:|:---:|:---:|:---:|
@@ -227,7 +227,7 @@ Other representations differ much more. In binary-matrix assignment (section -@s
 Calculate normalized distances among the first three individuals in example [](#ejemplo-inicializar-evaluar-diversidad): I1 = 011011, I2 = 111101, and I3 = 100000. What are the mean and minimum distances of this three-individual population?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 - I1 and I2 differ at bits 1, 4, and 5: $3/6 = 0.5$.
 - I1 and I3 differ at bits 1, 2, 3, 5, and 6: $5/6 \approx 0.83$.
@@ -274,7 +274,7 @@ To draw the expansion, the tool repeatedly applies this formula to the preceding
 [Open: one seeded copy](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=seeded&lang=en&enc=knapsack-bits&n=6&N=10&s=21&ps=2&K=1&step=12){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 | Generation | 0 | 1 | 2 | 3 | 4 | 5 | 6 |
 |:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
@@ -299,7 +299,7 @@ Seeding is allowed, but should be deliberate. If used, randomize the heuristic t
 \(a) For *N* = 10 and one copy, apply the deterministic approximation to check generations 1, 2, and 3 of example [](#ejemplo-inicializar-evaluar-sembrar). (b) What is the expected count after one generation with 5 seeded copies? (c) Which item must change in the greedy solution to reach the optimum?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 (a) These are approximation values, not exact finite-population means. Generation 1: $10\,[1 - (0.9)^2] = 10 \times 0.19 = 1.9$. Generation 2: $1 - 1.9/10 = 0.81$ and $10\,[1 - 0.81^2] = 10 \times 0.3439 \approx 3.44$. Generation 3: $1 - 0.3439 = 0.6561$ and $10\,[1 - 0.6561^2] \approx 10 \times 0.5695 \approx 5.7$.
 
@@ -339,7 +339,7 @@ Evaluation has four steps:
 [Open: evaluated population](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=pipeline&lang=en&enc=knapsack-bits&n=6&N=8&s=21&ps=5&step=12){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 1. Decode: the ones are at positions 2, 3, 5, and 6, so it contains items 2, 3, 5, and 6.
 2. Objective: value $= 4 + 9 + 7 + 4 = 24$.
@@ -364,7 +364,7 @@ Fitness need not come from a formula, either. It may come from a simulation, an 
 Using the same knapsack and fitness, $F = \text{value} - e$, evaluate I7 = 111110 and I8 = 110110. Do they rank above or below I5 = 001011, whose value is 20?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 I7 contains items 1–5: value $5 + 4 + 9 + 4 + 7 = 29$, weight $4 + 3 + 5 + 8 + 4 = 24$, excess $e = 11$, and $F = 29 - 11 = 18$.
 
@@ -408,7 +408,7 @@ For a maximization problem whose objective can be negative, such as knapsack val
 [Open: rank](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=objective&lang=en&enc=assignment-int&n=5&m=3&N=6&s=1&ps=1&tr=rank&step=5){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 With $C = 21$, fitness values $C - f$ are 0, 12, 13, 7, 7, and 7, totaling 46. With ranks, the three individuals tied at 14 occupy ranks 2, 3, and 4 and receive their average, 3; the sum is 21.
 
@@ -435,7 +435,7 @@ All four transformations, including $F = -f$, preserve the ordering. A tournamen
 Suppose every makespan in example [](#ejemplo-inicializar-evaluar-objetivo-aptitud) includes an extra 100 time units of setup, the same for every solution: 121, 109, 108, 114, 114, and 114. The problem is unchanged. (a) With $F = 1/(1 + f)$, how many times more likely is the best individual than the worst? Compare this with the original problem, where the best is about 2.4 times more likely than the worst. (b) Do probabilities change with $C - f$? What about ranks?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 (a) The ratio of best to worst fitness is $(1 + 121)/(1 + 108) = 122/109 \approx 1.12$, compared with $22/9 \approx 2.4$ before. Adding a constant, which does not change the problem, almost eliminates selection pressure. Section -@sec-seleccion-ruleta-deja-de-distinguir shows the same effect with roulette-wheel selection.
 
@@ -489,7 +489,7 @@ The best feasible individual is I5 = 001011, with *B* = 20.
 [Open: critical weight](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=penalty&lang=en&enc=knapsack-bits&n=6&N=8&s=21&ps=5&pt=linear&l=1&step=6){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 | Individual | $(z_i - B)/e_i$ |
 |:---:|:---:|
@@ -515,7 +515,7 @@ Figure -@fig-penalizacion plots the fitness of all eight individuals against λ.
 [Enlarge figure](figuras/04-penalizacion.svg){.ampliar-figura target="_blank" rel="noopener"}
 
 <details>
-<summary>Show the Figure Data</summary>
+<summary>Show the figure data</summary>
 
 | Individual | Fits? | Fitness with λ | λ = 0 | λ = 1 | λ = 4 | λ = 5 |
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|
@@ -535,7 +535,7 @@ Figure -@fig-penalizacion plots the fitness of all eight individuals against λ.
 Using the same population and the quadratic penalty, $F = \text{value} - (\lambda\, e)^2$: (a) what is the critical weight? (b) With λ = 3, what is I1's fitness, and who is best? (c) With the linear penalty and λ = 2, who is best?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 (a) I1 falls below I5 if $24 - (\lambda \times 1)^2 < 20$, that is, if $\lambda^2 > 4$: $\lambda^* = \sqrt{4}/1 = 2$. For the other infeasible individuals, $\sqrt{z_i - B}/e_i$ is $\sqrt{6}/9 \approx 0.27$, $\sqrt{9}/11 \approx 0.27$, and 0. The critical weight is **2**: I1 ties with I5 there, and λ > 2 is required to put it strictly below.
 
@@ -576,7 +576,7 @@ Many evaluations are repeated. Selection copies good individuals, and mutation l
 [Open: 12 items](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=cost&lang=en&enc=knapsack-bits&n=12&N=8&s=21&ps=5&G=6&step=8){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 The budget is $8 \times (6 + 1) = 56$ evaluations. With caching, the 6-item knapsack needs only **25**, saving 31 (55%). The same budget of 56 would reach generation 55. In a space of only 64 chromosomes, without crossover, the population soon fills with previously evaluated chromosomes; after generation 24, hardly any new ones appear. This is an extreme case. With 12 items ($2^{12} = 4\,096$ chromosomes), caching requires 40 evaluations, saves 16 (29%), and reaches generation 9.
 </details>
@@ -594,7 +594,7 @@ Caching has conditions. It requires **deterministic** fitness: evaluating the sa
 \(a) An algorithm with *N* = 50 individuals runs for 100 generations. How many evaluations does it perform? If each is a one-minute simulation, how long does it take? (b) With mutation probability $1/L$ per gene, what is the probability that an offspring has no changes if *L* = 6? What if *L* = 100?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 (a) $50 \times 101 = 5\,050$ evaluations, about 5 050 minutes: more than 84 hours, or three and a half days without stopping.
 
@@ -639,7 +639,7 @@ Two families of methods spread the population more evenly [@kazimipour2014; @tal
 [Open: occupied strips](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=quasi&lang=en&enc=function-real&fn=himmelblau&N=8&s=1&ps=1&m=halton&step=14){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 | *i* | Base 2 | $u_1$ | Base 3 | $u_2$ | Point |
 |:---:|:---:|:---:|:---:|:---:|:---:|
@@ -665,7 +665,7 @@ Figure -@fig-cobertura compares the three populations of eight individuals.
 [Enlarge figure](figuras/04-cobertura.svg){.ampliar-figura target="_blank" rel="noopener"}
 
 <details>
-<summary>Show the Figure Data</summary>
+<summary>Show the figure data</summary>
 
 | Individual | Uniform | Halton | Latin hypercube |
 |:---:|:---:|:---:|:---:|
@@ -685,7 +685,7 @@ In a genetic algorithm, the advantage is modest and is most noticeable with smal
 Calculate $u_1$ and $u_2$ in the Halton sequence for $i = 5$, 6, and 7, and their corresponding points in $[-5, 5]^2$.
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 | *i* | Base 2 | $u_1$ | Base 3 | $u_2$ | Point |
 |:---:|:---:|:---:|:---:|:---:|:---:|
@@ -722,7 +722,7 @@ By construction, the final population has a minimum distance of at least δ betw
 [Open: the cost](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=ssi&lang=en&enc=assignment-int&n=5&m=3&N=6&s=1&ps=1&d=0.6&step=11){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 The first four enter: their distances to the nearest previously accepted individual are 0.80, 0.80, and 0.60. The fifth, (1, 2, 2, 1, 2), is **0.40** from I1 (they differ at tasks 2 and 5) and is rejected. The sixth, (3, 1, 1, 3, 1), is **0.20** from the fourth and is also rejected. It takes **11 candidates** to obtain 6 individuals: 5 are rejected. The population's minimum distance increases from 0.20 under uniform initialization to 0.60, and its mean from 0.71 to 0.76.
 </details>
@@ -740,7 +740,7 @@ Sequential inhibition neither considers quality nor spreads the population evenl
 \(a) Calculate the distance from the fifth candidate in example [](#ejemplo-inicializar-evaluar-inhibicion), (1, 2, 2, 1, 2), to each of the four accepted individuals. (b) Would it have been accepted with δ = 0.4? (c) For which δ values would the population be exactly the uniform population from example [](#ejemplo-inicializar-evaluar-uniforme)?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 (a) Compared with I1 = (1, 1, 2, 1, 3), tasks 2 and 5 change: $2/5 = 0.4$. Compared with I2 = (2, 3, 1, 1, 2), tasks 1, 2, and 3 change: 0.6. Compared with I3 = (1, 2, 3, 3, 1), tasks 3, 4, and 5 change: 0.6. Compared with I4 = (2, 1, 1, 3, 1), all five change: 1. The nearest distance is 0.4.
 
@@ -767,7 +767,7 @@ Feasible initialization has a price. Filling knapsacks biases the population: so
 [Open: population quality](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=feasible&lang=en&enc=knapsack-bits&n=6&N=8&s=21&ps=5&step=20){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 | Item | Weight | Cumulative weight if included | Fits? |
 |:---:|:---:|:---:|:---:|
@@ -794,7 +794,7 @@ The tool's “Compare strategies” view repeats each strategy over 1 000 popula
 For the same knapsack: (a) which individual results from shuffled order 3, 5, 1, 2, 6, 4? (b) Can this initialization produce 1 0 0 0 0 0? (c) What about the greedy solution, 0 0 1 0 1 1?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 (a) Include item 3 (weight 5), item 5 (9), and item 1 (13); items 2, 6, and 4 no longer fit. The result is **1 0 1 0 1 0**, the optimum.
 
@@ -830,7 +830,7 @@ To summarize landscape structure without plotting it, @jones1995 proposed **fitn
 [Open: local search](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=landscape&lang=en&enc=assignment-int&n=5&m=3&N=6&s=1&ps=1&step=2){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 Each task can move to two other machines: $5 \times 2 = 10$ neighbors. Of I1's neighbors, **6 are better**; the best moves task 2 to machine 2, reducing makespan to 12. Local search proceeds as follows:
 
@@ -855,7 +855,7 @@ It stops at a **local optimum**, makespan 7, without reaching the optimum, 5. Ti
 Check that assignment (1, 2, 1, 3, 3), where the search in example [](#ejemplo-inicializar-evaluar-paisaje) ends, is a local optimum. (a) Calculate its loads. (b) Which task would need to move to reduce makespan below 7? Is moving one enough? (c) How many neighbors also have makespan 7?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 (a) Machine 1 handles tasks 1 and 3: $5 + 2 = 7$. Machine 2 handles task 2: 2. Machine 3 handles tasks 4 and 5: $1 + 5 = 6$. Makespan is 7.
 
@@ -896,7 +896,7 @@ where Φ is the standard normal cumulative distribution function. Reevaluation h
 [Open: the cost](https://josemagalan.github.io/initialization-and-evaluation-ga/#item=noise&lang=en&enc=function-real&fn=himmelblau&N=8&s=1&ps=1&sg=30&R=5&step=5){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 With one evaluation, $\Delta/(\sigma\sqrt 2) = 38.56/42.43 \approx 0.91$ and $\Phi(-0.91) \approx$ **18.2%**. With the mean of 5, multiply the argument by $\sqrt 5$: $\Phi(-2.03) \approx$ **2.1%**. The price is 40 evaluations rather than 8. To get below 5%, 4 evaluations per individual suffice. In this population, incorrectly ordered pairs fall from 5 to 2 out of 28.
 </details>
@@ -914,7 +914,7 @@ Noise changes other decisions too. The cache from section -@sec-inicializar-eval
 With the data from example [](#ejemplo-inicializar-evaluar-ruido) (Δ = 38.56, σ = 30), how many evaluations per individual make the probability of ordering I1 and I7 incorrectly less than 5%? Use $\Phi(-1.645) = 0.05$.
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 We need $\Delta\sqrt{R}/(\sigma\sqrt 2) \ge 1.645$, or $0.909\,\sqrt R \ge 1.645$, $\sqrt R \ge 1.81$, and $R \ge 3.27$. Since *R* is an integer, **R = 4**. With *N* = 8, that means 32 evaluations per generation instead of 8.
 </details>
@@ -937,7 +937,7 @@ We need $\Delta\sqrt{R}/(\sigma\sqrt 2) \ge 1.645$, or $0.909\,\sqrt R \ge 1.645
 Without the capacity constraint, each individual in example [](#ejemplo-inicializar-evaluar-diversidad) has two objectives: value, to be maximized, and weight, to be minimized. Which individuals are dominated, and by whom?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 The pairs (value; weight) are I1 (24, 14), I2 (26, 22), I3 (5, 4), I4 (11, 7), I5 (20, 11), I6 (9, 12), I7 (29, 24), and I8 (20, 19). I6 is dominated by I4 (higher value and lower weight) and by I5. I8 is dominated by I5 (equal value and lower weight) and by I1. The other six form the first front.
 </details>

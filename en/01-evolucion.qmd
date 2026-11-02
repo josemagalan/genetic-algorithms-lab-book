@@ -52,7 +52,7 @@ A genetic algorithm borrows Darwin's idea: a population of varying solutions, se
 Why do giraffes have such long necks? Explain this as Lamarck would and as Darwin would. How do the two explanations differ?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 **Lamarck.** Giraffes' ancestors stretched their necks to reach high leaves. Through use, each individual's neck grew slightly longer during its life, and its offspring inherited that increase. Generation after generation, necks became longer.
 
@@ -89,7 +89,7 @@ c) What retains or replicates successful features?
 d) Is this an evolutionary system? What differences do you see from biological evolution?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 a) The entities could be restaurants or, better still, their ways of doing things: menus, prices, premises, and service. **Diversity** is obvious: no two are identical. New differences arise when restaurants open with new ideas (**innovation**), when existing restaurants try changes, and through mistakes: a badly copied recipe may turn out better than the original.
 
@@ -112,7 +112,7 @@ e) A population of identical plants that reproduce through cuttings, without mut
 f) Jokes circulating in messaging groups.
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 a) **Yes.** There is diversity: mutations make some bacteria more resistant to the antibiotic. There is selection: the antibiotic kills susceptible bacteria first. There is replication: resistant bacteria divide, and their descendants inherit resistance.
 
@@ -191,7 +191,7 @@ b) What about 25 locations?
 c) The observable universe contains roughly $10^{80}$ atoms. From how many locations onward are there more routes than atoms? How many bits does a binary chromosome need to allow more distinct chromosomes than atoms?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 a) $19!/2 = 60\,822\,550\,204\,416\,000$, about $6.1 \times 10^{16}$ routes. At one million per second, this takes $6.1 \times 10^{10}$ seconds. A year has about $3.16 \times 10^{7}$ seconds, so it would take **roughly 1900 years**.
 
@@ -215,7 +215,7 @@ b) A method starts at a string and always moves to its best neighbor, provided t
 c) What advantage would starting with a population of four random strings offer?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 a) The global optimum is **110**, with *f* = 6. **011**, with *f* = 5, is also a local optimum: its neighbors 111, 001, and 010 have values 2, 1, and 2. Every other string has a better neighbor.
 
@@ -250,7 +250,7 @@ a) You moved to a new city a month ago and eat out every Friday. What would expl
 b) In a genetic algorithm, what would you expect if mutation were so strong that every offspring gene was drawn again without regard to its inherited value? What if there were neither crossover nor mutation?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 a) **Exploitation** means returning to the best restaurant you know; **exploration** means trying a new one. If you only exploit, you keep the best of the few you tried initially and never discover whether another is better. If you only explore, every Friday brings an unfamiliar restaurant, sometimes good and sometimes bad, and you never use what you have learned. A reasonable approach explores more at first, when little is known, and exploits more once the options are familiar.
 
@@ -291,7 +291,7 @@ Complete the last column. The cycle in section -@sec-ciclo-ciclo may help.
 | **Replication** | Genetic inheritance | Imitation, franchises | ? |
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 | | Genetic algorithm |
 |---|---|

@@ -68,7 +68,7 @@ In the variant without replacement, the worst individual never wins. With replac
 [Open: tournament with fitness values 101–104](https://josemagalan.github.io/selection-ga/#op=tournament&lang=en&r=68&f=101-102-103-104){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 The winners are **B, D, C, and D** in both cases. The first tournament pits B against itself, so B wins. A enters two tournaments and loses both. D wins both tournaments it enters. With 101–104, the winners do not change because the tournament only compares which individual is better.
 </details>
@@ -121,7 +121,7 @@ Expected copies hold only on average. Each spin is independent, so in a particul
 [Open: roulette with fitness values 1–4](https://josemagalan.github.io/selection-ga/#op=roulette&lang=en&r=135&f=1-2-3-4){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 0.11 falls in B's interval (0.10–0.30); 0.71 and 0.80 fall in D's interval (0.60–1); and 0.45 falls in C's interval (0.30–0.60). The parents are **B, D, D, and C**: the best individual is selected twice and the worst not at all. The observed copies (0, 1, 1, and 2) are similar to the expected copies, but they do not match exactly.
 </details>
@@ -140,7 +140,7 @@ b) Roulette-wheel selection with random numbers 0.05, 0.47, 0.60, and 0.95. Whic
 c) Can C, the worst individual, be selected with each mechanism? If you want the worst to have a small chance that does not depend on the fitness scale, which mechanism would you choose?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 a) The individual with higher fitness wins: **A, D, B, and A**. In the last tournament, A competes against itself. C loses both tournaments it enters.
 
@@ -171,7 +171,7 @@ With fitness values 1, 2, 3, and 4, the best individual, D, has probability $4/1
 [Open: counterexample with C = 100](https://josemagalan.github.io/selection-ga/#op=offset&lang=en&r=135&shift=100&f=1-2-3-4){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 | | A | B | C | D |
 |---|:---:|:---:|:---:|:---:|
@@ -210,7 +210,7 @@ This happens in practice more often than it might seem. Toward the end of a sear
 The traveling salesman problem minimizes route length, so using roulette-wheel selection requires converting cost into fitness. Four routes have lengths 10, 12, 15, and 20. Calculate the roulette probabilities for three conversions: $f = 20 - \text{cost}$, $f = 25 - \text{cost}$, and $f = 1/(1 + \text{cost})$. Which one gives the longest route no chance of selection? Does the ordering change? Does the pressure change? What would happen with a binary tournament?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 | Conversion | Fitness values | Probabilities |
 |---|---|---|
@@ -242,7 +242,7 @@ These rules may seem reasonable, but they are discouraged: they reduce diversity
 The simulation takes a few seconds. Its result appears at the bottom of the page, under “Several generations of selection only.”
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 | Mechanism | Distinct at generation 5 | Distinct at generation 20 | Takeover | The best is lost |
 |---|:---:|:---:|---|:---:|
@@ -280,7 +280,7 @@ Mean fitness stops improving as soon as the population fills with copies: after 
 A classmate runs the roulette simulation once, and the best individual is not lost. They conclude that roulette-wheel selection never loses the best. What would you say? How would you check this with the tool?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 One run is not enough to make a claim about frequencies. In the 50 repetitions of each simulation, the best is lost with roulette-wheel selection in about half the cases, and the proportion varies between simulations (from 48 to 66% in the first five). Its survival in a particular run is perfectly consistent with that frequency. To check this, look at the “The best is lost” column and click “Simulate again” several times.
 </details>
@@ -309,7 +309,7 @@ This section extends the basic path. It requires familiarity with cumulative pro
 [Open: SUS with fitness values 1–4](https://josemagalan.github.io/selection-ga/#op=sus&lang=en&r=135&f=1-2-3-4){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 D can receive only 1 or 2 copies, and A can receive 0 or 1. In this draw the parents are **A, B, C, and D**: each receives one copy, its expected copies rounded. With roulette-wheel selection (example [](#ejemplo-seleccion-ruleta)), D received 2 copies and A none, but in another draw it could have received 0, 1, 2, 3, or 4.
 </details>
@@ -355,7 +355,7 @@ There are several ways to complete the rule:
 [Open: second draw](https://josemagalan.github.io/selection-ga/#op=axelrod&lang=en&r=6&f=1-2-3-10){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 In the first draw, one of D's offspring is removed, and the parents are **A, B, C, and D**: the best ends up with one copy, like everyone else. In the second draw, C's offspring is removed, and the parents are **A, B, D, and D**. Since 2 of the 5 offspring belong to D, the first event has probability 2/5 = 0.4. The reward given by the rule depends on a step that the rule does not specify.
 </details>

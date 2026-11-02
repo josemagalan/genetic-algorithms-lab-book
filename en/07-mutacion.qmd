@@ -73,7 +73,7 @@ The number of bits that change is not fixed. On average, $\mathit{pm} \times L$ 
 [Open: bit-flip mutation](https://josemagalan.github.io/mutation-ga/#op=bit-flip&lang=en&r=12&pm=0.15&p=1-1-0-1-0-0-1-0){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 Positions 2 and 6 mutate, the only ones with $r < 0.15$. Position 5 does not mutate: $r = 0.15$ is not less than *pm*.
 
@@ -96,7 +96,7 @@ With $0 < \mathit{pm} < 1$, each bit can either change or stay the same, so any 
 A chromosome has 8 bits and is mutated with $\mathit{pm} = 1/8$. How many bits change on average? What is the probability that none changes? And exactly one?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 On average, $8 \times 1/8 = 1$ bit changes. Each bit stays the same with probability 7/8, and the draws are independent, so none changes with probability $(7/8)^8 \approx 0.34$. Exactly one changes with probability $8 \times (1/8) \times (7/8)^7 = (7/8)^7 \approx 0.39$. Even though one bit changes on average, in about one mutation in three the mutant is a copy of the parent.
 </details>
@@ -147,7 +147,7 @@ Creep mutation with $\mathit{pm} = 0.3$ and maximum step $s = 1$:
 [Open: creep mutation](https://josemagalan.github.io/mutation-ga/#op=creep&lang=en&v=clamp&r=4&pm=0.3&smax=1&p=3-7-1-4-9-0-6-2){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 In random resetting, positions 4 and 6 mutate. Position 4 takes the value $\lfloor 10 \times 0.23 \rfloor = 2$, and position 6 takes $\lfloor 10 \times 0.97 \rfloor = 9$. In creep mutation, positions 3, 4, and 5 mutate: position 3 goes down ($u = 0.08 < 0.5$), position 4 goes up, and so does position 5, but 9 + 1 = 10 is out of range, so the gene stays at 9.
 
@@ -170,7 +170,7 @@ With random resetting, gene 6 jumped from 0 to 9 in one go. With creep mutation,
 2. A company assigns each order to one of its ten suppliers, numbered 0 to 9. Which mutation would you use? What if each gene were the number of trucks, from 0 to 9, sent each day?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 1. The gene mutates with probability 0.2, but the new value matches the old one once in every ten draws. It changes with probability $0.2 \times 9/10 = 0.18$.
 2. Suppliers are unordered categories: random resetting. Creep mutation would make moving from supplier 4 to supplier 5 more likely than to supplier 9, for no reason. The number of trucks is an ordered quantity: creep mutation, which changes the quantity gradually.
@@ -208,7 +208,7 @@ The tool obtains *z* from two random numbers (we will see how in section -@sec-m
 [Open: Gaussian mutation with σ = 2](https://josemagalan.github.io/mutation-ga/#op=gaussian&lang=en&r=12&pm=0.25&sigma=2&p=2-8.5-4-1.5-6){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 | Position | 1 | 2 | 3 | 4 | 5 |
 |---|:---:|:---:|:---:|:---:|:---:|
@@ -229,7 +229,7 @@ With σ = 1, $8.5 + 1.2288 = 9.73$ and $4.0 - 0.0551 = 3.94$. With σ = 2, the j
 A gene has the value 5.0 and undergoes Gaussian mutation. Between which values will about 95 in 100 mutants fall if σ = 0.5? And if σ = 2? Which would you use to fine-tune a solution that is already nearly optimal?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 About 95 in 100 jumps are smaller than 2σ. With σ = 0.5, the mutants will almost always fall between 4 and 6; with σ = 2, between 1 and 9. To fine-tune a nearly optimal solution, σ = 0.5 is better, because it takes small steps; σ = 2 explores more but has difficulty approaching the optimum precisely.
 </details>
@@ -262,7 +262,7 @@ In a permutation representation, each number is a city (or a task) and must appe
 [Open: counterexample with random resetting](https://josemagalan.github.io/mutation-ga/#op=reset-perm&lang=en&r=17&pm=0.25&p=1-2-3-4-5-6-7-8-9){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 Positions 2 and 3 mutate (position 7 does not, because $r = 0.25$ is not less than *pm*). Position 2 takes the value $1 + \lfloor 9 \times 0.53 \rfloor = 5$, and position 3 takes $1 + \lfloor 9 \times 0.08 \rfloor = 1$.
 
@@ -311,7 +311,7 @@ In a permutation, genes cannot be mutated one at a time, so *pm* is interpreted 
 [Open: inversion](https://josemagalan.github.io/mutation-ga/#op=inversion&lang=en&p=1-2-3-4-5-6-7-8-9&c=2-7){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 | Position | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
@@ -332,7 +332,7 @@ The swap moves only two genes: 7 of the 9 stay in place. The insertion removes t
 Apply the three mutations to the parent 9 4 5 2 6 3 8 1 7: a swap of positions 2 and 6, an insertion of the gene at position 2 into position 6, and an inversion of the stretch at positions 2–6.
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 - Swap: the 4 and the 3 change places: **9 3 5 2 6 4 8 1 7**.
 - Insertion: the 4 is removed; the 5, 2, 6, and 3 shift to the left, and the 4 ends up at position 6: **9 5 2 6 3 4 8 1 7**.
@@ -367,7 +367,7 @@ In bit-flip mutation, the extreme case is $\mathit{pm} = 0.5$: each bit of the m
 The average over random parents takes a few seconds to compute.
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 | Mutation | Hamming distance | Copy of the parent |
 |---|:---:|:---:|
@@ -383,7 +383,7 @@ The **Hamming distance** is the number of bits in which the mutant and the paren
 A population has 100 individuals of 10 bits. After crossover, bit-flip mutation is applied to all of them. On average, how many individuals remain completely unchanged with $\mathit{pm} = 0.01$? And with $\mathit{pm} = 0.1$?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 An individual stays the same if none of its 10 bits mutates. With $\mathit{pm} = 0.01$, this happens with probability $0.99^{10} \approx 0.90$: about 90 of the 100 individuals do not change. With $\mathit{pm} = 0.1$, $0.9^{10} \approx 0.35$: about 35. With a small *pm*, most individuals do not change, even though all of them, crossed or not, have a chance to mutate.
 </details>
@@ -435,7 +435,7 @@ where *u* is a random number, *t* the current generation, *T* the maximum number
 [Open: non-uniform with t/T = 0.5](https://josemagalan.github.io/mutation-ga/#op=non-uniform&lang=en&r=12&pm=0.25&g=0.5&b=5&p=2-8.5-4-1.5-6){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 Gene 2 moves down (τ ≥ 0.5): its gap to 0 is *y* = 8.5. Gene 3 moves up (τ < 0.5): its gap to 10 is *y* = 6.
 
@@ -483,7 +483,7 @@ The small-change condition from section -@sec-mutacion-para-que-mutar can be mea
 The average over random parents takes a few seconds to compute.
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 | Operator | Position | Adjacencies | Relative order | Copy of the parent | Valid mutants |
 |---|:---:|:---:|:---:|:---:|:---:|
@@ -504,7 +504,7 @@ The tool does not measure precedences: its “Relative order” column reads the
 2. Now read the same chromosomes from left to right. The parent has 36 precedences: 1 before 2, 1 before 3, and so on. How many does each mutant change?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 1. Adjacencies:
    - Swap (1 2 7 4 5 6 3 8 9): preserves 5. The new ones are 2–7, 7–4, 6–3, and 3–8: each moved gene breaks both of its adjacencies.
@@ -540,7 +540,7 @@ The tool does not measure precedences: its “Relative order” column reads the
 [Open: inversion, shown as routes](https://josemagalan.github.io/mutation-ga/#op=inversion&lang=en&p=1-2-3-4-5-6-7-8-9&c=1-9&m=1){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 The mutant is **1 9 8 7 6 5 4 3 2**. Only the 1 stays in its position, but the route is the same one traveled in reverse: it has no new legs, and its length does not change. Measured by positions, the change is enormous; for the traveling salesman, there is no change.
 </details>

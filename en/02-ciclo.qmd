@@ -42,7 +42,7 @@ The chromosome and the solution are not the same thing. The chromosome is the fo
 A population contains four individuals written as 5-bit strings: 01101, 11000, 01000, and 10011. How many chromosomes are there? How many genes does each have? Which allele does the second individual have at the first locus?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 There are **four chromosomes**, one per individual, each with **five genes**. The second individual is 11000: its allele at the first locus is **1**.
 </details>
@@ -82,7 +82,7 @@ The figure, pseudocode, and portal use the same order: evaluate the initial popu
 These genetic-algorithm steps are out of order: *mutate offspring*, *create the initial population*, *replace*, *select parents*, *represent the problem*, *evaluate offspring*, *cross over parents*, *evaluate the initial population*. Put them in order and identify which happen once and which happen every generation.
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 Once: **represent the problem**, **create the initial population**, and **evaluate the initial population**. Each generation: **select parents**, **cross over parents**, **mutate offspring**, **evaluate offspring**, and **replace**. After replacement, check the stopping criterion; if it is not met, begin another generation.
 </details>
@@ -124,7 +124,7 @@ b) If each parent pair produces two offspring, how many pairs must be formed per
 c) How many fitness evaluations occur during the whole run?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 a) **100 times**, once per generation.
 
@@ -160,7 +160,7 @@ $$
 Calculate *x* and fitness $f(x) = x^2$ for B = 11000, C = 01000, and D = 10011. What is the sum of all four fitness values? What are the mean and best fitness?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 | Individual | Chromosome | *x* | Fitness $x^2$ |
 |---|:---:|:---:|:---:|
@@ -201,7 +201,7 @@ To spin the wheel, the tool draws a random number *r* between 0 and 1 and places
 [Open: roulette with Goldberg's example](https://josemagalan.github.io/selection-ga/#op=roulette&lang=en&ex=goldberg&r=19){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 The parents are **A B B D**:
 
@@ -238,7 +238,7 @@ We have four parents. How do they produce four different offspring?
 [Open: second pair (cut 2)](https://josemagalan.github.io/crossover-ga/#op=one-point&lang=en&p1=1-1-0-0-0&p2=1-0-0-1-1&c=2){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 | Pair | Parents | Cut | Offspring | *x* | Fitness |
 |---|:---:|:---:|:---:|:---:|:---:|
@@ -262,7 +262,7 @@ In the first pair, only one gene lies after the cut, so each offspring copies on
 With *pm* = 0.001 and 20 bits, what is the probability that no bit mutates in a generation? What if *pm* = 1/5 = 0.2, giving one mutated bit per offspring on average? Hint: if bits are sampled independently, the probability that none changes is the product of their individual probabilities of not changing.
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 Each bit stays unchanged with probability $1 - \mathit{pm}$, and all 20 bits are sampled independently. The probability of no mutation is $(1 - 0.001)^{20} = 0.999^{20} \approx$ **0.980**. With *pm* = 0.2, it is $0.8^{20} \approx$ **0.012**: at least one mutation is almost certain, and on average $20 \times 0.2 = 4$ bits mutate, one per offspring.
 </details>
@@ -290,7 +290,7 @@ In Goldberg's algorithm, offspring replace every parent: **generational replacem
 [Open: generational replacement, e = 0](https://josemagalan.github.io/selection-ga/#op=elitism&lang=en&elite=0&f=169-576-64-361&g=144-625-729-256){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 Generation 1 is **a b c d**: all four offspring enter, and no parent remains.
 
@@ -318,7 +318,7 @@ One generation of a random process is not enough to draw general conclusions, ho
 Another classic example [@mitchell1998, section 1.6] uses 8-bit strings whose fitness is their number of ones. Initial fitness values are A = 2, B = 6, C = 1, and D = 3. After selection, crossover with probability 0.7 (one of the two pairs did not cross over), and mutation, offspring fitness values are 3, 5, 1, and 5. Under generational replacement, what happens to mean and best fitness? What changes if the best parent enters the next generation instead of the worst offspring?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 The mean rises from $12/4 = 3$ to $14/4 = 3.5$, but best fitness **falls from 6 to 5**: B, the best individual, is lost. If B replaces the worst offspring, whose fitness is 1, the next generation has values 6, 3, 5, and 5: best fitness stays at 6 and the mean rises to 4.75. This is **elitism**, covered in section -@sec-reemplazo-elitismo. Check both cases in selection-ga: [without an elite](https://josemagalan.github.io/selection-ga/#op=elitism&lang=en&elite=0&f=2-6-1-3&g=3-5-1-5){target="_blank"} and [with one elite individual](https://josemagalan.github.io/selection-ga/#op=elitism&lang=en&elite=1&f=2-6-1-3&g=3-5-1-5){target="_blank"}. The tool rounds the mean to 4.8.
 </details>
@@ -358,7 +358,7 @@ f) “With probability 0.05, exchange two customers in an offspring.”
 g) “Choose parents by tournament among 4 individuals.”
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 a\) Representation (1). b) Fitness (4). c) Genotype and phenotype (3): the permutation is the chromosome, and the complete route is the solution. d) Replacement (8): elitism. e) Stopping (9). f) Mutation (5). g) Selection (7).
 </details>
@@ -391,7 +391,7 @@ a) Complete the table from section -@sec-ciclo-decisiones for EvoTraveller and i
 b) With the [reference settings](09-experimentos.qmd#configuracion-evotraveller), the **Fitness** curve rises or stays level, but never falls. Why?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 a) The completed table:
 
@@ -438,7 +438,7 @@ The cycle in figure -@fig-ciclo is the most common, but some variants change imp
 A generational algorithm with *N* = 50 runs for 100 generations. A steady-state algorithm, also with *N* = 50, creates one offspring per step. How many evaluations does the first perform? How many steps does the second need for the same total? If the first literally followed Talbi's scheme without storing fitness, how many evaluations would it perform?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 The generational algorithm evaluates the 50 initial individuals and 50 offspring per generation: $50 + 50 \times 100 =$ **5050** evaluations. The steady-state algorithm evaluates the 50 initial individuals and one offspring per step, so it needs **5000 steps** to reach the same 5050. Without stored fitness, Talbi's scheme evaluates the population (50) and offspring (50) every generation: 100 evaluations each, or **10 000** over 100 generations, almost twice as many. The extra 4950 repeat existing calculations: from the second generation onward, the population evaluated at the beginning consists of offspring already evaluated in the previous generation.
 </details>

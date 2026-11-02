@@ -56,7 +56,7 @@ Figure -@fig-himmelblau shows the function. It has four minima, all with *f* = 0
 [Open: decode the chromosome](https://josemagalan.github.io/representation-ga/#enc=function-bits&lang=en&fn=himmelblau&v=standard&k=4&x=10100011&step=11){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 The first group, 1010, gives $8 + 2 = 10$; the second, 0011, gives $2 + 1 = 3$. Thus,
 
@@ -79,7 +79,7 @@ Mutating just one bit, for example the first, gives 0 0 1 0 0 0 1 1: $z_1$ chang
 Using the same representation (Himmelblau, $[-5, 5]^2$, *k* = 4), decode 0 0 0 0 1 1 1 1 and calculate *f*. Can any chromosome represent (0, 0) exactly? What about (1, −1)? If so, write it.
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 The first four bits give $z_1 = 0$, so $x_1 = -5$; the last four give $z_2 = 15$, so $x_2 = -5 + 15 \times 10/15 = 5$. The point is $(-5, 5)$, a corner of the box, and $f = (25 + 5 - 11)^2 + (-5 + 25 - 7)^2 = 19^2 + 13^2 = 530$.
 
@@ -121,7 +121,7 @@ A notation detail: we divide by $2^k - 1$ because the largest representable inte
 A parameter ranges from 2.5 to 20.5 and is written with 8 bits. What value does chromosome 1 0 1 0 0 0 1 1 represent? How many distinct values are available, and how far apart are consecutive ones?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 Read as one integer, the 8 bits give $z = 128 + 32 + 2 + 1 = 163$. With $k = 8$, there are $2^8 = 256$ values and $\Delta = (20.5 - 2.5)/255 \approx 0.0706$. The represented value is $x = 2.5 + 163 \times 18/255 \approx 14.006$.
 
@@ -140,7 +140,7 @@ Every value between consecutive representable values is lost. The desired soluti
 [Enlarge figure](figuras/03-rejilla.svg){.ampliar-figura target="_blank" rel="noopener"}
 
 <details>
-<summary>See the figure data</summary>
+<summary>Show the figure data</summary>
 
 | Bits per variable *k* | Points | Δ | Best representable point | *f* at that point |
 |:---:|:---:|:---:|:---:|:---:|
@@ -161,7 +161,7 @@ Adding one bit per variable roughly halves point spacing. But with two variables
 [Open: *k* = 5](https://josemagalan.github.io/representation-ga/#enc=function-bits&lang=en&fn=himmelblau&v=standard&k=5&x=1010000110&step=13){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 There are $2^6 = 64$, $2^8 = 256$, and $2^{10} = 1\,024$ chromosomes, with $\Delta = 10/7 \approx 1.4286$, $10/15 \approx 0.6667$, and $10/31 \approx 0.3226$. No grid contains an exact minimum, so the best representable values are not 0: they are 1.504, 0.9136, and 0.2971. More bits improve the result here, but not always in the same valley: for *k* = 3 and *k* = 4, the best point lies near the lower-right minimum; for *k* = 5, near the upper-left one. The finer grid is not a refinement containing the previous grid, because their points do not coincide.
 </details>
@@ -173,7 +173,7 @@ With *k* = 10 bits per variable, precision is already about one hundredth ($\Del
 We want consecutive values of a variable in $[-5, 5]$ to be at most 0.01 apart. How many bits does each variable need? How many bits does the Himmelblau chromosome then contain?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 We need $10/(2^k - 1) \le 0.01$, or $2^k - 1 \ge 1\,000$. With $k = 9$, $2^9 - 1 = 511$ and $\Delta \approx 0.0196$, which is insufficient. With $k = 10$, $2^{10} - 1 = 1\,023$ and $\Delta \approx 0.0098$, which is sufficient. Each variable needs 10 bits, making a chromosome of $2 \times 10 = 20$.
 </details>
@@ -215,7 +215,7 @@ This representation satisfies the constraint automatically: each gene holds one 
 [Open: assignment 2 1 3 2 1](https://josemagalan.github.io/representation-ga/#enc=assignment-int&lang=en&s=1&n=5&m=3&p=4.6.3-5.2.7-3.3.5-6.4.2-2.5.6&x=2-1-3-2-1&step=12){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 | Machine | Tasks | Load |
 |:---:|:---:|:---:|
@@ -238,7 +238,7 @@ The genes are integers, but they are not quantities here: machine 3 is no “clo
 Start with chromosome 2 1 3 2 1 from example [](#ejemplo-representacion-entera). (a) Move task 4 to machine 3. What is the new chromosome and makespan? (b) Instead, move task 1 to machine 3. What happens now? (c) Which change is better?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 (a) The chromosome is 2 1 3 3 1. Task 4 leaves machine 2 (load $10 - 4 = 6$) for machine 3, where it takes 2: load $5 + 2 = 7$. The loads are 7, 6, and 7; makespan is 7.
 
@@ -274,7 +274,7 @@ There is another feature. With *n* cities, there are *n*! permutations, but the 
 [Open: tour 1 3 5 2 6 4](https://josemagalan.github.io/representation-ga/#enc=tsp-perm&lang=en&s=3&n=6&x=1-3-5-2-6-4&step=16){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 There are $6! = 720$ permutations and $5!/2 = 60$ distinct tours. Each tour has $2n = 12$ chromosomes: the 6 rotations, such as 3 5 2 6 4 1, and the 6 rotations of the reverse order, such as 4 6 2 5 3 1. All describe the same solution with length 327.4. Tour 4 6 2 5 3 1 follows the route backward and has the same length.
 
@@ -291,7 +291,7 @@ That 327.4 is far from the optimum, 239.6, given by tour 1 3 5 6 4 2. Swapping t
 \(a) With 6 cities, is chromosome 1 3 5 3 6 4 valid? If not, what is wrong? (b) A simple repair scans the chromosome and replaces each repeated city by the smallest missing city. What chromosome results? (c) With *n* = 10 cities, how many permutations and distinct tours exist?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 (a) It is invalid: city 3 appears twice, and city 2 is missing. It describes no tour.
 
@@ -325,7 +325,7 @@ This has advantages. There is no *k* to choose, intermediate values are not lost
 [Open: point (3, 2)](https://josemagalan.github.io/representation-ga/#enc=function-real&lang=en&fn=himmelblau&v=clamp&k=4&x=3_2&step=9){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 $f(3, 2) = (9 + 2 - 11)^2 + (3 + 4 - 7)^2 = 0$: this is one of the four global minima. A real-valued vector represents it exactly.
 
@@ -344,7 +344,7 @@ A real-valued vector faces a problem binary encoding did not: a gene can take an
 Which representation would you choose for each problem, and what would a gene mean? (a) Decide which products from a catalog of 20 to include in an order. (b) Divide 12 deliveries among 4 drivers, each delivery assigned to exactly one. (c) Choose the order of 8 jobs on one machine. (d) Adjust three continuous model coefficients.
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 \(a) A 20-gene bit vector: gene *i* is 1 if product *i* enters the order (a yes-or-no decision). (b) A 12-gene integer vector with values 1 to 4: gene *i* gives delivery *i*'s driver (an unordered category). (c) An 8-gene permutation: gene *j* is the job processed at position *j*. (d) A 3-gene real-valued vector: one coefficient per gene. This is natural, although binary encoding is possible with precision determined by its bit count.
 </details>
@@ -375,7 +375,7 @@ We use 6 items and capacity *W* = 10:
 [Open: 101101](https://josemagalan.github.io/representation-ga/#enc=knapsack-bits&lang=en&v=penalty-linear&l=2&s=1&w=3-5-2-4-6-1&val=4-6-3-5-7-2&W=10&x=1-0-1-1-0-1&step=14){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 | Chromosome | Included items | Weight | Value | Feasible? |
 |:---:|:---:|:---:|:---:|:---:|
@@ -400,7 +400,7 @@ When representation absorbs constraints, as the assignment integer vector does, 
 For the problem in example [](#ejemplo-representacion-validez), are 0 1 1 0 0 1 and 0 1 1 0 1 1 feasible? What are their values? Is a 7-bit chromosome valid?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 Chromosome 0 1 1 0 0 1 includes items 2, 3, and 6: weight $5 + 2 + 1 = 8 \le 10$ and value $6 + 3 + 2 = 11$. It is feasible.
 
@@ -451,7 +451,7 @@ $\oplus$ gives 1 for different bits and 0 for identical bits. Decode by reversin
 [Enlarge figure](figuras/03-saltos-hamming.svg){.ampliar-figura target="_blank" rel="noopener"}
 
 <details>
-<summary>See the figure data</summary>
+<summary>Show the figure data</summary>
 
 Bits changed from *z* to *z* + 1, with *k* = 4:
 
@@ -472,7 +472,7 @@ Across the 15 transitions, standard binary changes 26 bits (1.73 on average), an
 [Open: Gray code](https://josemagalan.github.io/representation-ga/#enc=function-bits&lang=en&fn=himmelblau&v=gray&k=4&x=01000100&step=16){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 In standard binary, 0 1 1 1 becomes 1 0 0 0: **4 bits** change. In Gray, 0 1 0 0 becomes 1 1 0 0: only **1 bit**, the first, changes. Both chromosomes represent the same point, with $f \approx 178.1$.
 
@@ -491,7 +491,7 @@ Gray guarantees that a grid neighbor is one bit away, not that every one-bit cha
 \(a) Write integer *z* = 5 in 4-bit Gray code. (b) What integer does Gray code 1 1 0 0 represent? (c) Write 15 and 16 in 5-bit standard binary and Gray, and count changed bits in each.
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 (a) Binary 5 is 0101. Copy the first bit (0); the second is $0 \oplus 1 = 1$; the third, $1 \oplus 0 = 1$; the fourth, $0 \oplus 1 = 1$. Gray code is 0 1 1 1.
 
@@ -525,7 +525,7 @@ This resembles section -@sec-representacion-validez, but more strongly. Of $2^{1
 [Open: infeasible matrix and repair](https://josemagalan.github.io/representation-ga/#enc=assignment-matrix&lang=en&v=repair&s=1&n=5&m=3&p=4.6.3-5.2.7-3.3.5-6.4.2-2.5.6&x=000-110-001-010-100&step=18){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 It is infeasible. Task 1 has no machine (000), and task 2 has two (110); the other three satisfy the constraint. Total violation *v* sums each task's deviation from exactly one 1: $v = |0 - 1| + |2 - 1| = 2$.
 
@@ -558,7 +558,7 @@ With the vector, any one-gene change gives another assignment. With the matrix, 
 Using the processing times from example [](#ejemplo-representacion-entera), repair 1 1 1 | 0 0 0 | 0 1 0 | 0 0 1 | 0 0 0 with the rule from example [](#ejemplo-representacion-matriz). What assignment results?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 Task 1 has three 1s; keep its fastest machine, 3 (time 3). Task 2 has none; assign its fastest machine, 2 (time 2). Tasks 3 (machine 2) and 4 (machine 3) already satisfy the constraint. Task 5 has none; assign its fastest machine, 1 (time 2). The assignment is 3 2 2 3 1.
 
@@ -599,7 +599,7 @@ Which works best? It depends. @michalewicz1994 [pp. 140–141] compared penaltie
 [Open: decoder](https://josemagalan.github.io/representation-ga/#enc=knapsack-bits&lang=en&v=decoder&s=1&w=3-5-2-4-6-1&val=4-6-3-5-7-2&W=10&x=1-1-0-1-1-0&step=15){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 | Treatment | Evaluated solution | Weight | Value | Fitness |
 |:---|:---:|:---:|:---:|:---:|
@@ -630,7 +630,7 @@ Decoding comes at a cost: redundancy. Of 64 chromosomes, 4 decode to 1 1 0 0 0 0
 In the knapsack from example [](#ejemplo-representacion-validez), chromosome 1 1 1 1 0 0 has weight 14 and value 18. Calculate fitness with linear penalty λ = 2, then the solutions produced by greedy repair and the decoder. Which feasible solution has greater value? What about the optimum?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 For the linear penalty, excess is $e = 14 - 10 = 4$ and fitness is $18 - 2 \times 4 = 10$.
 
@@ -662,7 +662,7 @@ Nothing in real-valued representation prevents a gene leaving $[a, b]$. Gaussian
 [Open: penalize](https://josemagalan.github.io/representation-ga/#enc=function-real&lang=en&fn=himmelblau&v=penalty&l=10&k=4&x=6.3_-1.2&step=11){.abrir target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 | Treatment | Evaluated point | Fitness (minimized) |
 |:---|:---:|:---:|
@@ -685,7 +685,7 @@ Each treatment has consequences. Clamping gives all genes crossing the same boun
 Real-valued chromosome $(-7.2, 2)$ lies outside $[-5, 5]^2$. Which point is evaluated under clamping? Under reflection? What is *d*? What fitness results with penalty λ = 10? Use $f(x_1, x_2) = (x_1^2 + x_2 - 11)^2 + (x_1 + x_2^2 - 7)^2$.
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 Clamping gives $x_1 = -5$ and evaluates $(-5, 2)$: $f = (25 + 2 - 11)^2 + (-5 + 4 - 7)^2 = 256 + 64 = 320$.
 
@@ -738,7 +738,7 @@ Equal counts are the most debatable requirement: Davis considered it too demandi
 For each case, say whether the solution-to-chromosome mapping is one-to-one or one-to-many, and why: (a) an assignment's integer vector; (b) a traveling-salesman tour permutation; (c) a repaired binary matrix; (d) the knapsack decoder.
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 (a) **One-to-one.** Each assignment is one vector, and the 243 vectors describe 243 different assignments.
 

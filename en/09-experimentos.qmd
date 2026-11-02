@@ -54,7 +54,7 @@ If **Zzzz** appears when you open EvoTraveller, the application is asleep: click
 [Open and configure: EvoTraveller](https://evotraveller.streamlit.app/){.abrir .configurar target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 The **Fitness** curve rises from 0.0230 in generation 0 to 0.0293 at the end, and it stops improving around generation 3. The inverses of those values are the route lengths: from 43.45 to 34.11. The optimum is 31.50, so the route found is 8.3% longer.
 
@@ -66,7 +66,7 @@ If you click **Run** again, you get exactly the same route: the seed is the same
 Change only the **Seed** to 1112 and click **Run**. What has changed: only the algorithm's random numbers, or the problem as well? What does this imply for comparing two runs with different seeds?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 In EvoTraveller, the seed fixes both the algorithm's random numbers and the positions of the places, so with another seed the map changes too: it is another problem, and its best route may be longer or shorter. Comparing two runs with different seeds mixes the effect of the algorithm's randomness with the difficulty of each map. To compare two configurations, you must use the same seed, and therefore the same map, and change only the parameter.
 </details>
@@ -88,7 +88,7 @@ Remember that *pm* does not mean the same thing in every representation. With bi
 [Open and configure: EvoTraveller](https://evotraveller.streamlit.app/){.abrir .configurar target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 | Mutation rate | Final fitness | Final length | Above the optimum (31.50) |
 |:---:|:---:|:---:|:---:|
@@ -106,7 +106,7 @@ But be careful: this is one run with each value. That 0.2 won here does not tell
 In example [](#ejemplo-experimentos-pc-pm), without mutation, the best fitness stops improving around generation 5. Why does it not keep improving, if crossover keeps combining routes?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 Selection only copies routes that already exist. When the population fills up with copies of a few routes, many recombinations stop producing improvements. EvoTraveller's OX, “Order from the start”, can create another route even when it crosses two copies, because it is not pure (example [](#ejemplo-cruce-ampliaciones)); but a new route need not be better. Mutation provides another way of varying the routes. In section -@sec-viajante-interpretar we will see why the changes made by crossover are not enough in this run.
 </details>
@@ -123,7 +123,7 @@ By repeating the run. Each repetition with a different seed is a **replicate**, 
 [Enlarge figure](figuras/09-replicas.svg){.ampliar-figura target="_blank" rel="noopener"}
 
 <details>
-<summary>Show the Figure Data</summary>
+<summary>Show the figure data</summary>
 
 Final length of the best route in the 30 runs, from lowest to highest: 50.3; 55.8; 56.8; 57.6; 57.9; 58.3; 58.7; 58.7; 58.8; 60.0; 60.0; 61.1; 61.2; 61.4; 61.5; 62.5; 63.4; 64.4; 64.6; 64.7; 65.1; 65.4; 65.4; 65.9; 66.0; 67.6; 67.7; 68.7; 69.0; 78.0.
 
@@ -146,7 +146,7 @@ where $x_i$ is the result of replicate *i* and *n* is the number of replicates. 
 [Open and configure: EvoTraveller](https://evotraveller.streamlit.app/){.abrir .configurar target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 | Seed | Optimum | Mutation rate 0 | 0.05 | 0.2 |
 |:---:|:---:|:---:|:---:|:---:|
@@ -165,7 +165,7 @@ With 0.2, the route is the shortest of the three for all five seeds. But for see
 The first five replicates in figure -@fig-replicas, with seeds 1 to 5, end at 66.0; 56.8; 61.2; 58.7; and 57.9. Calculate their mean and standard deviation. Compare them with those of the 30 replicates (62.6 and 5.2). What would have happened if you had done only the run with seed 1?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 The mean is $(66.0 + 56.8 + 61.2 + 58.7 + 57.9)/5 = 60.12$. The deviations from the mean are 5.88; −3.32; 1.08; −1.42; and −2.22, and their squares add up to 53.7. Divided by $n - 1 = 4$, this gives 13.4, and its square root is the standard deviation: 3.7.
 
@@ -184,7 +184,7 @@ With the same map and the same 30 seeds, we repeated the experiment with three v
 [Enlarge figure](figuras/09-comparar-pm.svg){.ampliar-figura target="_blank" rel="noopener"}
 
 <details>
-<summary>Show the Figure Data</summary>
+<summary>Show the figure data</summary>
 
 | *pm* | Mean | Standard deviation | Minimum | Maximum |
 |:---:|:---:|:---:|:---:|:---:|
@@ -205,7 +205,7 @@ There is one more condition: the comparison is valid only for what has been test
 A classmate compares *pm* = 0.05 and *pm* = 0.2 with a single run of each, with different seeds chosen at random. According to the 900 pairs in section -@sec-experimentos-comparar, how often will they find that 0.05 is better? And if they use the same seed for both? And what would they find if they compared the means of 30 replicates?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 With one run of each, 0.05 comes out better in 146 of 900 pairs, 16%: they would be wrong about once in every six comparisons. With the same seed, 0.05 comes out better for 3 of the 30 seeds. With so few pairs, this figure is compatible with 16%: in this algorithm, sharing the seed does not protect against being wrong. With the means of 30 replicates, the means are 62.6 and 55.4: the difference is 7.2, and the advantage of 0.2 holds. In section -@sec-experimentos-numero-replicas we will see how to measure whether this difference is credible: it is about five times its standard error, so with 30 replicates it would almost never come out the other way around.
 </details>
@@ -224,7 +224,7 @@ To see how much it depends on the problem, we repeated the experiment with three
 [Enlarge figure](figuras/09-tamano.svg){.ampliar-figura target="_blank" rel="noopener"}
 
 <details>
-<summary>Show the Figure Data</summary>
+<summary>Show the figure data</summary>
 
 Mean final length of 30 runs and, in parentheses, the percentage above the best mean on the same map:
 
@@ -245,7 +245,7 @@ This leads to a practical rule: **tune the parameters with cases similar to the 
 You have a real problem with 30 destinations, but to tune *pm* you use only the one with 10, because it is faster. With the data in figure -@fig-tamano, what difference do you see between *pm* = 0.05 and *pm* = 0.2 for each size? What conclusion would you draw from the small case about how much choosing *pm* well matters, and what would happen with the real one?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 With 10 destinations, 0.05 and 0.2 are 7% and 4% above the best mean: only 3 points apart. With 30 destinations they are 24% and 6% above: 18 points. With the small case, the difference looks negligible, and we might think that we could just as well keep the usual value, 0.05. Applied to the problem with 30 destinations, we would lose much more: the route would be, on average, 24% longer than with the best value tested. In these examples, using only the small map would have underestimated how much *pm* matters on the large map.
 </details>
@@ -276,7 +276,7 @@ Eiben and Smith make a similar division. They separate **design** problems, whic
 Classify each case as strategic, tactical, or operational and say whether quality or time would come first: (a) designing a company's communications network once; (b) calculating a company's delivery routes every week; (c) deciding in fractions of a second over which link each message is sent in a network.
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 \(a) It is strategic: it is solved once, there is time, and a mistake weighs heavily for years. Quality comes first, and many replicates and a large population can be afforded. (b) It is tactical: it is repeated every week, and computing time must be balanced against the quality of the routes. Because there may be time for only one run each week, a configuration with a good mean and little spread is preferable. (c) It is operational: the decision must be made in real time, so time comes first and a very fast heuristic is needed; a genetic algorithm with many generations is not suitable here.
 </details>
@@ -300,7 +300,7 @@ To see how diversity is lost, SelectionMechanisms repeatedly simulates a populat
 [Open and configure: SelectionMechanisms](https://josemagalan.shinyapps.io/SelectionMechanisms/){.abrir .configurar target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 The table gives, for the last generation and averaged over the 30 simulations:
 
@@ -320,7 +320,7 @@ Diversity is lost in two ways: because the best individuals multiply and because
 In SelectionMechanisms, with **Method** set to **Tournament**, **Population size (N)** 100, **Generations (G)** 60, **Simulations** 30, **Seed (optional)** 1, and **Elitism (n elites)** 1, look at the distinct-ID chart in the **Diversity** tab with **Tournament size (k)** 2 and with 5. In which generation does the average number of distinct IDs fall below 10 with each value? How does this relate to selection pressure?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 The average number of distinct IDs in generations 0 to 6 is:
 
@@ -370,7 +370,7 @@ Because *n* is inside a square root, much more work is needed to improve precisi
 [Open and configure: SelectionMechanisms](https://josemagalan.shinyapps.io/SelectionMechanisms/){.abrir .configurar target="_blank"}
 
 <details>
-<summary>**Show the Result**</summary>
+<summary>**Show the result**</summary>
 
 | Seed | 10 simulations | 100 simulations |
 |:---:|:---:|:---:|
@@ -388,7 +388,7 @@ With 10 simulations, the results range from 9.5 to 12.0; with 100, from 10.43 to
 With the standard deviation of 5.2 from figure -@fig-replicas, how many replicates are needed for the 95% confidence interval of the mean to have a half-width of at most 1, that is, $\bar{x} \pm 1$? And of 0.5?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 We need $1.96 \cdot 5.2/\sqrt{n} \leq 1$, that is, $n \geq (1.96 \cdot 5.2)^2 \approx 104$ replicates. For $\pm 0.5$, the half-width is halved, so four times as many are needed: $n \geq (1.96 \cdot 5.2/0.5)^2 \approx 416$. With 30 replicates, the half-width is $1.96 \cdot 0.95 \approx 1.9$, in line with the interval from 60.7 to 64.4. This is why Talbi speaks of "more than 100 if possible".
 </details>
@@ -415,7 +415,7 @@ With the same algorithm, the map of 20 destinations, and 30 replicates, we repea
 [Enlarge figure](figuras/09-interaccion.svg){.ampliar-figura target="_blank" rel="noopener"}
 
 <details>
-<summary>Show the Figure Data</summary>
+<summary>Show the figure data</summary>
 
 Mean final length of 30 runs and, in parentheses, the standard error:
 
@@ -441,7 +441,7 @@ The best value of *pm* therefore depends on selection and on replacement.
 There is also interaction between *Pc* and *pm*. With *pm* = 0.05, raising *Pc* from 0 to 0.6 and 0.9 lowers the mean from 69.0 to 62.6 and 59.9: crossing over helps. With *pm* = 0.5, the means are 51.2; 51.6; and 53.3, which means that crossover hardly matters. With a lot of mutation and OX, this algorithm hardly needs crossover: it is, above all, a search that mutates and selects many routes at once. In section -@sec-experimentos-operadores we will see that the same does not happen with a crossover that preserves what matters in the traveling salesman problem.
 
 <details>
-<summary>Show the Data on the Effect of *Pc*</summary>
+<summary>Show the data on the effect of *Pc*</summary>
 
 Mean final length of 30 runs and, in parentheses, the standard error, on the map of 20 destinations with a tournament of 3:
 
@@ -457,7 +457,7 @@ The practical consequence is that **combinations** must be tested. A full factor
 You start with a tournament of 2 and tune *pm* with the data in figure -@fig-interaccion. Then, with that *pm*, you try a tournament of 10 in case it improves things. Which combination do you keep? Which is the best one in the figure? How much longer is the mean route of the one you choose?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 With a tournament of 2, the best *pm* among the five is 0.2 (55.2). With that *pm*, the tournament of 10 gives 55.8: it does not improve, and we keep the tournament of 2. But the best combination in the figure is a tournament of 10 with *pm* = 1, at 48.8. The route we chose is 13% longer (55.2/48.8 ≈ 1.13). Tuning one at a time has left us at a local optimum of the tuning itself. To find the best, combinations must be tested.
 </details>
@@ -496,7 +496,7 @@ Inversion and ERX are the most local operators for the traveling salesman proble
 | ERX | **53.9** | **43.3** | **53.1** | **42.4** |
 
 <details>
-<summary>Show All the Data</summary>
+<summary>Show all the data</summary>
 
 Mean final length of 30 runs and, in parentheses, the standard error:
 
@@ -522,7 +522,7 @@ The conclusion is that parameters are tuned **after** choosing a representation 
 With OX and swap mutation, our starting point, the mean is 62.6 with *pm* = 0.05. With the data in this section, which improves the mean more: raising *pm* to 0.5, or replacing OX with ERX without touching *pm*? And doing both? Why does it make almost no difference which crossover is used with inversion and *pm* = 0.5?
 
 <details>
-<summary>**Show the Solution**</summary>
+<summary>**Show the solution**</summary>
 
 Raising *pm* to 0.5 lowers the mean to 51.6, 18% less. Replacing OX with ERX with *pm* = 0.05 lowers it to 53.9, 14% less. Both at once, to 43.3, 31% less, within 6% of the best known route (40.68). With inversion, the mutation itself performs a local search that respects the edges: the algorithm reaches about 42–44 with any crossover when *pm* = 0.5, and the choice of crossover is no longer decisive.
 </details>
