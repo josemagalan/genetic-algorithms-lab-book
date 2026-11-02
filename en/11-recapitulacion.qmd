@@ -37,11 +37,11 @@ In section -@sec-ciclo-decisiones we gathered the design into nine decisions. Th
 | 6. Crossover | How are two parents combined? | One-point, two-point, or uniform in binary and integer representations; uniform or arithmetic in the real one; OX, PMX, or CX in the permutation | -@sec-cruce |
 | 7. Selection | Who reproduces? | Tournament, which depends only on the ranking; roulette wheel, with care for the scale of the fitness | -@sec-seleccion |
 | 8. Replacement | Who passes into the next generation? | Generational with a small elite | -@sec-reemplazo-generacional–-@sec-reemplazo-elitismo |
-| 9. Stopping | When does the run end? | On reaching the optimum, if it is known; on exhausting the resources; or after several generations without improvement | -@sec-reemplazo-cuando-parar |
+| 9. Stopping | When does the run end? | When the optimum is reached, if it is known; when the resources run out; or after several generations without improvement | -@sec-reemplazo-cuando-parar |
 
 In addition to the decisions, there are the **parameters**: the population size *N* and the crossover and mutation probabilities *Pc* and *pm*. Classic studies used populations of 20 to 100 individuals, *Pc* between 0.6 and 0.95, and *pm* between 0.001 and 0.01 per bit, but those values were obtained with particular problems, and there is no set of values that is best for all of them (section -@sec-experimentos-casos-parecidos). That is why parameters are tuned with cases similar to the real one and compared using several runs (chapter -@sec-experimentos). And before tuning them, we need to know how much time there is for the search, which depends on the horizon of the decision (section -@sec-experimentos-objetivo). In a **strategic** problem, which is solved once and whose consequences last for years, a lot can be spent on the search: large populations, many generations, and several runs to keep the best one. In an **operational** problem, which is solved very frequently, sometimes in real time, the evaluation budget is small, and a fast configuration that rarely fails is preferable. **Tactical** problems, in the medium term, lie between the two [@talbi2009, pp. 33–34; @eiben2015, pp. 147–149].
 
-The order of the table is the order of design. Representation comes first, because fitness is calculated on the decoded solution, and crossover and mutation have to be designed for the chromosome (section -@sec-ciclo-decisiones). Selection, replacement, and stopping, on the other hand, do not depend on the representation: they look at fitness (and stopping also at the cost), so they work the same for any representation.
+The order of the table is the order of design. Representation comes first, because fitness is calculated on the decoded solution, and crossover and mutation have to be designed for the chromosome (section -@sec-ciclo-decisiones). Selection, replacement, and stopping, on the other hand, do not depend on the representation: they look at fitness (and stopping also at the computational budget spent), so they work the same for any representation.
 
 :::: {.callout-note .ejercicio #ejercicio-recapitulacion-decisiones title="Exercise · An Incomplete Description"}
 A paper says: "We used a genetic algorithm with a population of 100 individuals, a crossover probability of 0.8, and a mutation probability of 0.01, for 200 generations." With this information, could you repeat the experiment? Which decisions are missing?
@@ -91,7 +91,7 @@ For each problem, choose the representation, a crossover, and a mutation from th
 
 a) A company has an advertising budget and 25 possible ads, each with its price and estimated reach. Which ads should it buy?
 b) 30 orders have to be distributed among 5 trucks.
-c) The order in which 10 jobs are processed on a single machine has to be decided so that they are as little delayed as possible.
+c) The order in which 10 jobs are processed on a single machine has to be decided so that they are delayed as little as possible.
 d) The diameter, between 10 and 50 mm, and the wall thickness, between 1 and 5 mm, of a pipe have to be chosen.
 
 <details>
@@ -231,7 +231,7 @@ b) One proposal:
 | 6. Crossover | Uniform: the numbering of the exams is arbitrary, so there is no reason to keep neighboring genes together |
 | 7. Selection | Binary tournament: it depends only on the ranking, so there is no need to transform the cost |
 | 8. Replacement | Generational with an elite of 1 |
-| 9. Stopping | When the fitness reaches 0, or on exhausting a maximum number of evaluations, or after many generations without improvement |
+| 9. Stopping | When the fitness reaches 0, when a maximum number of evaluations has been used up, or after many generations without improvement |
 
 Starting parameters: a population of 50 to 100 and *Pc* = 0.8, within the classic values. Other options are reasonable if they are justified: for example, the roulette wheel with a transformed fitness, or handling capacity with a repair that moves exams out of full slots.
 
@@ -328,7 +328,7 @@ A genetic algorithm is a **metaheuristic**: a general search method that can be 
 - **Estimation of distribution algorithms.** They replace crossover and mutation with a probability model that is estimated from the best individuals and from which new ones are sampled [@muhlenbein1996].
 - **Swarm intelligence.** It is inspired by the collective behavior of animals. **Ant colony** methods were proposed for combinatorial problems, starting with the traveling salesman problem [@dorigo1996], and **particle swarms** for continuous problems [@kennedy1995].
 
-**Trajectory-based.** They transform a single solution, which moves from one neighbor to another (section -@sec-ciclo-poblacion). The local search that always moves to the best neighbor stops at the first local optimum (section -@sec-evolucion-optimizar), and these methods are ways of escaping from it: sometimes accepting worse neighbors, changing the neighborhood, or starting again from other solutions [@blum2003, pp. 270 and 272]:
+**Trajectory-based.** They transform a single solution, which moves from one neighbor to another (section -@sec-ciclo-poblacion). The local search that always moves to the best neighbor stops at the first local optimum (section -@sec-evolucion-optimizar), and these methods are ways of escaping from it: sometimes accepting worse neighbors, changing the neighborhood, or starting again from other solutions [@blum2003, pp. 270, 272]:
 
 - **Simulated annealing.** It tries a random neighbor. If it is better, it accepts it; if it is worse, it accepts it with a probability that depends on how much worse it is and on a parameter, the temperature, which decreases little by little, as when a metal is cooled [@kirkpatrick1983].
 - **Tabu search.** It moves to the best neighbor even if it is worse than the current solution and, to avoid going back, it stores the recent moves in a memory, the **tabu list**, and forbids undoing them for a while [@glover1986, p. 541].
