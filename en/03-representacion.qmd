@@ -113,7 +113,7 @@ $$
 x = a + z\,\Delta, \qquad \Delta = \frac{b - a}{2^k - 1}.
 $$
 
-Δ is the representation's **precision**: the distance between consecutive representable values. For several variables, give each its own *k* bits and concatenate the groups, as in figure [-@fig-genotipo-fenotipo] [@goldberg1989, pp. 82–83]. With *n* variables and *k* bits per variable, the chromosome has $n \times k$ bits and the search space contains $2^{nk}$ chromosomes. Each variable can take only $2^k$ values.
+The step Δ is the **precision** of the representation: the distance between two consecutive representable values. For several variables, give each its own *k* bits and concatenate the groups, as in figure [-@fig-genotipo-fenotipo] [@goldberg1989, pp. 82–83]. With *n* variables and *k* bits per variable, the chromosome has $n \times k$ bits and the search space contains $2^{nk}$ chromosomes. Each variable can take only $2^k$ values.
 
 A notation detail: we divide by $2^k - 1$ because the largest representable integer is $2^k - 1$, making both *a* and *b* representable. Dividing by $2^k$ would leave endpoint *b* unreachable.
 
@@ -262,9 +262,9 @@ A traveler must visit each of *n* cities exactly once. Would an integer vector l
 
 An integer vector allows repeated values, but a tour cannot repeat cities. **Permutation representation** describes an order: each gene is a city, and each city appears exactly once. Gene *j* gives the city visited in position *j*; the traveler returns from the last city to the first [@talbi2009, p. 36]. This representation suits sequencing, scheduling, and routing problems.
 
-Here, the once-per-city constraint is not in each gene's domain but in the **structure** of the whole chromosome. A **valid** chromosome meets that structure: it is a permutation. Permutations therefore need operators that preserve it, such as those in chapters [](#sec-cruce-permutaciones){.capitulo} and [](#sec-mutacion-permutaciones){.capitulo}.
+Here, the constraint that each city be visited once is enforced not by each gene's domain but by the **structure** of the whole chromosome. A **valid** chromosome meets that structure: it is a permutation. Permutations therefore need operators that preserve it, such as those in chapters [](#sec-cruce-permutaciones){.capitulo} and [](#sec-mutacion-permutaciones){.capitulo}.
 
-There is another feature. With *n* cities, there are *n*! permutations, but the same tour has many descriptions: it can start at any of its *n* cities and run in either direction. Thus, each tour has $2n$ chromosomes, leaving only $(n-1)!/2$ distinct tours. Multiple chromosomes representing one solution is called **redundancy**.
+There is another feature. With *n* cities, there are *n*! permutations, but the same tour has many descriptions: it can start at any of its *n* cities and run in either direction. Thus, each tour has $2n$ chromosomes, leaving only $(n-1)!/2$ distinct tours. When several chromosomes represent the same solution, this is called **redundancy**.
 
 ::: {.callout-tip .ejemplo #ejemplo-representacion-permutaciones title="Reproducible Example · One Tour, Twelve Chromosomes"}
 **Data.** A problem with *n* = 6 cities (seed 3) and chromosome 1 3 5 2 6 4. The tour leaves city 1, visits 3, 5, 2, 6, and 4, then returns to 1.
@@ -317,7 +317,7 @@ No. In **real-valued representation**, the chromosome is a vector of real number
 
 This has advantages. There is no *k* to choose, intermediate values are not lost to a binary grid, and operators act directly on problem values, as do arithmetic crossover and Gaussian mutation in chapters [](#sec-cruce-reales){.capitulo} and [](#sec-mutacion-gaussiana){.capitulo}. It is also the most natural representation in many applications. There are no rigorous rules saying which of binary and real-valued encoding works better, however; that depends on the problem and algorithm details [@mitchell1998, section 5.2].
 
-::: {.callout-tip .ejemplo #ejemplo-representacion-real title="Reproducible Example · A Point Binary Cannot Represent"}
+::: {.callout-tip .ejemplo #ejemplo-representacion-real title="Reproducible Example · A Point That Binary Encoding Cannot Represent"}
 **Data.** Himmelblau's function on $[-5, 5]^2$ and real-valued chromosome $(3, 2)$.
 
 **Predict.** What is *f* at this point? Can binary encoding with *k* = 4 bits per variable represent it?
@@ -509,7 +509,7 @@ Gray guarantees that a grid neighbor is one bit away, not that every one-bit cha
 - Click **Random point** several times, looking for points where standard binary needs 1 bit change and others where it needs many.
 :::
 
-## Binary Matrix: A Constraint Not Absorbed [[Advanced]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-representacion-matriz}
+## Binary Matrix: When the Constraint Is Not Absorbed [[Advanced]{.largo}[A]{.corto}]{.nivel .avanzado} {#sec-representacion-matriz}
 
 The same assignment problem can use bits. What changes if each task–machine pair has a bit?
 
@@ -716,7 +716,7 @@ Talbi asks for three characteristics [@talbi2009, p. 35]:
 He distinguishes three mappings between solutions and chromosomes [@talbi2009, p. 40]:
 
 - **One-to-one:** each solution has one chromosome, and each chromosome describes one solution. There is no redundancy, as in the integer vector in section -@sec-representacion-entera.
-- **One-to-many:** one solution has several chromosomes. Redundancy enlarges the search space and may affect a metaheuristic's effectiveness [@talbi2009, p. 40]. Its distribution matters: if every solution has the same number of chromosomes, behavior changes little; if some have more, redundancy helps only when the favored solution is optimal [@rothlauf2003, p. 381]. Examples include tour permutations (section -@sec-representacion-permutaciones), repaired binary matrices, and the knapsack decoder.
+- **One-to-many:** one solution has several chromosomes. Redundancy enlarges the search space and may affect a metaheuristic's effectiveness [@talbi2009, p. 40]. Its distribution matters: if every solution is represented by the same number of chromosomes, redundancy barely changes the algorithm's behavior; if some solutions have more chromosomes than others, it helps only when the favored solution is the optimum [@rothlauf2003, p. 381]. Examples include tour permutations (section -@sec-representacion-permutaciones), repaired binary matrices, and the knapsack decoder.
 - **Many-to-one:** a chromosome lacks some solution information, so several solutions share it. This reduces the search space. Talbi associates it with **indirect** representations requiring a decoder to construct the complete solution [@talbi2009, pp. 40–41]. They are common in heavily constrained problems such as scheduling, since decoding can guarantee validity [@talbi2009, p. 41]. But not every decoder is many-to-one: the knapsack decoder is one-to-many, because each chromosome gives one solution while several chromosomes give the same solution. Terminology varies: @hinterding1994 [p. 17] calls his decoder “many-to-one” because he counts in the other direction, many chromosomes per solution.
 
 The table summarizes this chapter's cases using the checked values:
