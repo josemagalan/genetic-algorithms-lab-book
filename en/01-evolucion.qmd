@@ -56,7 +56,7 @@ Why do giraffes have such long necks? Explain this as Lamarck would and as Darwi
 
 **Lamarck.** Giraffes' ancestors stretched their necks to reach high leaves. Through use, each individual's neck grew slightly longer during its life, and its offspring inherited that increase. Generation after generation, necks became longer.
 
-**Darwin.** The ancestral population contained slightly longer and slightly shorter necks through variation, not effort. When food was scarce, individuals with longer necks reached more leaves, survived more often, and left more offspring, which inherited long necks. Generation after generation, average neck length increased.
+**Darwin.** The ancestral population contained slightly longer and slightly shorter necks through variation, not effort. When food was scarce, individuals with longer necks reached more leaves, were more likely to survive, and left more offspring, which inherited long necks. Generation after generation, average neck length increased.
 
 **The difference** concerns where change originates and what is inherited. For Lamarck, use produces a change during an individual's life, and that change is inherited. For Darwin, variation exists before selection and is not caused by need; individuals pass on what they were born with, and selection determines which variants become more common.
 </details>
@@ -264,7 +264,7 @@ What must we borrow from evolution for a computer to solve problems?
 
 To transfer the mechanism to a computer, we must decide what each individual represents and how to evaluate its quality. If we seek a short route, each individual is a possible route, and its length lets us compare it with others. Selection favors better routes while crossover and mutation produce variants. This is the traveling salesman problem, which chapter -@sec-viajante solves from start to finish.
 
-Holland framed this generally through **adaptation**: any process in which a structure gradually changes to function better in its environment, whether a protein, a horse's leg, or a human brain. Biology, psychology, economics, and control all contain adaptive processes, fundamentally processes of optimization [@holland1992, p. xiii]. Each has **structures** that change, **operators** that change them, and a **performance measure**; in genetics these are chromosomes, mutation and recombination, and fitness [@holland1992, pp. 4–5]. For routes, the structures are routes; the operators are crossover and mutation; and the performance measure is length.
+Holland framed this generally through **adaptation**: any process in which a structure gradually changes to function better in its environment, whether a protein, a horse's leg, or a human brain. Biology, psychology, economics, and control all contain adaptive processes, fundamentally processes of optimization [@holland1992, p. xiii]. Each has **structures** that change, **operators** that change them, and a **performance measure**; in genetics these are chromosomes, mutation and recombination, and fitness [@holland1992, pp. 4–5]. In the route example, the structures are the routes themselves, the operators are crossover and mutation, and the performance measure is route length.
 
 Holland presented these ideas in 1975, after developing them during the sixties and seventies, in *Adaptation in Natural and Artificial Systems* [@mitchell1998, section 1.1]. He called his algorithms **genetic plans**; his doctoral students began using **genetic algorithm** [@holland1992, p. x]. Goldberg defines them as follows [@goldberg1989, p. 1]:
 
