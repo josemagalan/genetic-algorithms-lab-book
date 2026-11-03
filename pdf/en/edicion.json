@@ -22,6 +22,7 @@
     "aviso_borrador": "Generated on {fecha} from the book's sources (commit {short}). The applications and the web version are not part of this file.",
     "version": "<strong>Version {version}</strong>, revised {revision}. English translation of the Spanish edition {fuente_version} ({fuente_fecha}), produced with AI assistants and reviewed manually by the authors in November 2026. First published on the web: {primera}. PDF edition generated on {fecha} from the same sources as the web version ({commit}).",
     "doi": "DOI of this edition: {doi}.",
+    "doi_concepto": "DOI of all versions (resolves to the latest): {doi_concepto}.",
     "doi_fuente": "DOI of the Spanish original, edition {fuente_version}: {doi_fuente}.",
     "portal": "Portal archive 1.0.0: {portal}.",
     "laboratorio": "This book is meant to be read together with the Genetic Algorithms Lab: the examples and activities are done with web applications that the PDF does not contain. Their links require a connection. Interactive version: {site}. Sources: {repo}.",
@@ -54,6 +55,17 @@
       "configuracion": "Configuration",
       "configuracion_d": "Configuration D"
     }
+  },
+  "qr": {
+    "_nota": "Edition 1.1: QR codes next to the links to the applications (D100; adaptar.cjs, step 5b; qr.py). Keys and destinations in qr/claves.json.",
+    "registro": "en",
+    "base": "https://josemagalan.github.io/genetic-algorithms-lab-book/en/a/",
+    "herramientas": "^https://(josemagalan\\.github\\.io/(initialization-and-evaluation-ga|selection-ga|crossover-ga|mutation-ga|representation-ga)/|evotraveller\\.streamlit\\.app/|josemagalan\\.shinyapps\\.io/SelectionMechanisms/?)",
+    "portal": "^https://josemagalan\\.github\\.io/genetic-algorithms-lab/",
+    "rotulo_herramientas": "^Tools:$",
+    "quitar_prefijo": "^(⚙\\s*)?(Open and configure|Open):\\s*",
+    "alt": "QR code for link {clave}",
+    "explicacion": "<p class=\"pdf-qr-nota\">For reading on paper, each link to an application comes with a QR code and a key, such as <span class=\"pdf-qr-key\">4.6b</span> (section 4.6, second link). Open the code with your phone's camera; if you cannot scan it, type <span class=\"pdf-qr-key\">{base}</span> followed by the key. The tools used in each chapter also have their code under “Tools” at the start of the chapter.</p>"
   },
   "posproceso": {
     "marcador_portada": "Cover",

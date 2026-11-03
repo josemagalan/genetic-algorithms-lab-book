@@ -1,5 +1,6 @@
 """Comprueba enlaces locales, selectores y avisos del sitio bilingüe generado."""
 import argparse
+import html
 from collections import Counter
 from html.parser import HTMLParser
 import json
@@ -93,7 +94,19 @@ def comprobar(site, meta):
             errors.append(f'en/{name}: estado de revisión humana no identificado')
         if meta.get('doi') and meta['doi'] not in text:
             errors.append(f'en/{name}: falta el DOI propio de la traducción')
-    return {'pages': len(pages), 'links': links, 'resources': resources,
+    # Redirecciones de los códigos QR del PDF (D100): una por clave registrada, con su destino.
+    registro = json.loads((BOOK / 'qr/claves.json').read_text(encoding='utf-8'))
+    redirects = 0
+    for lang, folder in (('es', site), ('en', site / 'en')):
+        for clave, destino in registro[lang]['claves'].items():
+            page = folder / 'a' / clave / 'index.html'
+            if not page.is_file():
+                errors.append(f'{page.relative_to(site)}: falta la redirección QR')
+            elif f'url={html.escape(destino, quote=True)}"' not in page.read_text(encoding='utf-8'):
+                errors.append(f'{page.relative_to(site)}: la redirección QR no lleva a {destino}')
+            else:
+                redirects += 1
+    return {'pages': len(pages), 'links': links, 'resources': resources, 'qr_redirects': redirects,
             'edition_pages': len(names), 'errors': errors}
 
 

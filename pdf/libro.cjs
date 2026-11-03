@@ -19,6 +19,7 @@ const ONLY = arg('solo') ? arg('solo').split(',') : null;
 const BODY = arg('cuerpo', '10.5pt');
 const PYTHON = arg('python', process.platform === 'win32' ? 'python' : 'python3');
 const HERE = __dirname;
+const REGISTER_QR = process.argv.includes('--registrar-qr');
 const config = JSON.parse(fs.readFileSync(path.join(WORK, 'config.json'), 'utf8'));
 const dictionary = JSON.parse(fs.readFileSync(path.join(WORK, 'silabeo.json'), 'utf8'));
 const edicion = JSON.parse(fs.readFileSync(path.resolve(arg('edicion', config.edicion || path.join(HERE, 'edicion.json'))), 'utf8'));
@@ -26,6 +27,11 @@ const textos = JSON.parse(fs.readFileSync(path.join(HERE, edicion.textos_impresi
 const ajustes = JSON.parse(fs.readFileSync(path.join(HERE, edicion.ajustes), 'utf8'));
 // Plantillas de texto de la edición: «{clave}» se sustituye por su valor.
 const fill = (t, vars) => t.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? vars[k] : m));
+// Registro de claves QR (qr/claves.json): una clave publicada conserva siempre su destino (D100).
+const qrFile = path.join(HERE, '..', 'qr', 'claves.json');
+const qrAll = edicion.qr ? JSON.parse(fs.readFileSync(qrFile, 'utf8')) : null;
+const qrEd = edicion.qr ? qrAll[edicion.qr.registro] : null;
+if (edicion.qr && qrEd.base !== edicion.qr.base) throw Error(`Base QR distinta en edicion.json y qr/claves.json (${edicion.qr.registro})`);
 let printCss = fs.readFileSync(path.join(HERE, 'impresion.css'), 'utf8') + '\n' + (ajustes.css || []).join('\n');
 
 const mime = {'.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.woff2': 'font/woff2', '.woff': 'font/woff', '.ttf': 'font/ttf'};
@@ -34,6 +40,7 @@ const server = http.createServer((req, res) => {
     let p = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
     let base = BOOK;
     if (p.startsWith('/pdf-assets/')) { base = HERE; p = p.slice('/pdf-assets'.length); }
+    else if (p.startsWith('/pdf-qr/')) { base = path.join(WORK, 'qr'); p = p.slice('/pdf-qr'.length); }
     const file = path.resolve(base, '.' + p);
     if (!file.startsWith(base + path.sep) || !fs.existsSync(file)) throw Error();
     res.writeHead(200, {'Content-Type': mime[path.extname(file).toLowerCase()] || 'application/octet-stream'});
@@ -63,13 +70,14 @@ function creditos() {
   const vars = {short, fecha, version: esc(config.version), revision: esc(config.revision), primera: fechaDe(config.first_published),
     commit: link(`${config.repo}/commit/${config.commit}`, config.cambios_locales?.length ? fill(t.base_con_cambios, {short}) : short),
     doi: config.doi ? link(`https://doi.org/${config.doi}`, config.doi) : '',
+    doi_concepto: config.concept_doi ? link(`https://doi.org/${config.concept_doi}`, config.concept_doi) : '',
     doi_fuente: config.source_doi ? link(`https://doi.org/${config.source_doi}`, config.source_doi) : '',
     fuente_version: esc(config.source_version || ''), fuente_fecha: config.source_date ? fechaDe(config.source_date) : '',
     portal: config.portal_doi ? link(`https://doi.org/${config.portal_doi}`, config.portal_doi) : '',
     site: link(config.site, config.site.replace(/^https:\/\//, '').replace(/\/$/, '')), repo: link(config.repo, config.repo.replace(/^https:\/\//, ''))};
   const notice = ajustes.borrador ? `<div class="pdf-notice"><p><strong>${esc(ajustes.borrador)}</strong></p><p>${fill(t.aviso_borrador, vars)}</p></div>` : '';
   // DOI: el de esta edición o, en una traducción, el del original del que procede.
-  const doi = [config.doi && t.doi ? fill(t.doi, vars) : '', config.source_doi && t.doi_fuente ? fill(t.doi_fuente, vars) : '',
+  const doi = [config.doi && t.doi ? fill(t.doi, vars) : '', config.concept_doi && t.doi_concepto ? fill(t.doi_concepto, vars) : '', config.source_doi && t.doi_fuente ? fill(t.doi_fuente, vars) : '',
     config.portal_doi ? fill(t.portal, vars) : ''].filter(Boolean).join(' ');
   return `<section class="pdf-creditos" id="pdf-creditos">
   <h1>${esc(config.title)}</h1><p class="pdf-subtitulo">${esc(config.subtitle)}</p>
@@ -102,10 +110,28 @@ function creditos() {
       await page.evaluate(() => document.fonts.ready);
       await page.waitForFunction(() => [...document.querySelectorAll('main .math')].every(m => m.querySelector('.katex')), null, {timeout: 20000});
       const part = await page.evaluate(adaptarArchivo, {key: f.key, file: f.file, fileMap, replaced, origin: config.site,
-        substitutions: textos[f.file] || [], isChapter: /^c\d\d$/.test(f.key), strings: {...edicion.adaptar, abrir_aplicacion: edicion.libro.abrir_aplicacion}});
+        substitutions: textos[f.file] || [], isChapter: /^c\d\d$/.test(f.key), qr: edicion.qr ? {...edicion.qr, registro: qrEd.claves} : null, strings: {...edicion.adaptar, abrir_aplicacion: edicion.libro.abrir_aplicacion}});
       parts.push({...f, ...part});
       await page.close();
       console.log(`${f.file}: ${part.stats.solutionsMoved} soluciones, ${part.stats.resultsFlattened} desplegables, ${part.stats.paragraphsWrapped} párrafos normalizados`);
+    }
+
+    // 1b. Códigos QR: manifiesto clave → destino (base de las redirecciones de la web) e imágenes SVG.
+    const qr = parts.flatMap(p => p.stats.qr || []);
+    if (edicion.qr) {
+      const seen = new Map();
+      for (const q of qr) { if (seen.has(q.clave) && seen.get(q.clave) !== q.destino) throw Error(`Clave QR repetida con otro destino: ${q.clave}`); seen.set(q.clave, q.destino); }
+      fs.writeFileSync(path.join(WORK, 'qr.json'), JSON.stringify({base: edicion.qr.base, codigos: qr}, null, 1));
+      const nuevas = [...seen].filter(([k]) => !(k in qrEd.claves));
+      if (nuevas.length && !REGISTER_QR) throw Error(`Claves QR sin registrar en qr/claves.json (${nuevas.length}): ${nuevas.slice(0, 8).map(([k]) => k).join(', ')}. Revisa ${path.join(WORK, 'qr.json')} y genera con --registrar-qr`);
+      if (nuevas.length) {
+        for (const [k, d] of nuevas) qrEd.claves[k] = d;
+        qrEd.claves = Object.fromEntries(Object.entries(qrEd.claves).sort(([a], [b]) => a.localeCompare(b, 'en', {numeric: true})));
+        fs.writeFileSync(qrFile, JSON.stringify(qrAll, null, 2) + '\n');
+        console.log(`Registradas ${nuevas.length} claves QR nuevas en qr/claves.json (${edicion.qr.registro})`);
+      }
+      execFileSync(PYTHON, [path.join(HERE, 'qr.py'), path.join(WORK, 'qr.json'), path.join(WORK, 'qr')], {stdio: 'inherit'});
+      console.log(`Códigos QR: ${qr.length} (${new Set(qr.map(q => q.clave)).size} claves)`);
     }
 
     // 2. Documento único.
@@ -113,7 +139,7 @@ function creditos() {
     page.on('pageerror', e => errors.push(`libro: ${e}`));
     page.on('console', m => { if (m.type() === 'error') errors.push(`consola: ${m.text()}`); });
     await page.goto(base + 'index.html', {waitUntil: 'networkidle'});
-    const leerFinal = textos.pdf_leer_final.replaceAll('{site}', config.site).replaceAll('{site_text}', config.site.replace(/^https:\/\//, '').replace(/\/$/, ''));
+    const leerFinal = textos.pdf_leer_final.replace('{qr}', edicion.qr ? fill(edicion.qr.explicacion, {base: esc(edicion.qr.base.replace(/^https:\/\//, ''))}) : '').replaceAll('{site}', config.site).replaceAll('{site_text}', config.site.replace(/^https:\/\//, '').replace(/\/$/, ''));
     const assembly = await page.evaluate(({parts, creditosHtml, leerFinal, full, dictionary, ajustes, lang, title, rotulos}) => {
       document.documentElement.lang = lang;
       document.title = title;

@@ -8,3 +8,4 @@ reportlab==4.4.9
 Pillow==13.0.0
 # Solo si no hay pdftotext (Poppler) en el PATH; es mucho más lento.
 pdfplumber==0.11.9
+segno==1.6.6

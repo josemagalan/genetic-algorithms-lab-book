@@ -65,6 +65,81 @@ function adaptarArchivo(args) {
     const t = document.createElement('p'); t.className = 'pdf-box-title'; t.append(...text.childNodes); head.replaceWith(t);
   });
 
+  // 5b. Códigos QR de los enlaces a las aplicaciones (edición 1.1, D100). Cada enlace «Abrir», «Explorar»
+  // o a una variante concreta, y cada herramienta de la línea «Herramientas» del capítulo, recibe una clave
+  // (número de sección o de capítulo seguido de una letra: 4.6a, 4.6b…, 4a) y un código que apunta a
+  // qr.base + clave. La web publica una redirección por clave (qr/claves.json, bilingue/generar.py).
+  // Las claves ya registradas se reutilizan: una clave impresa no cambia de destino. Las nuevas toman la
+  // primera letra libre y libro.cjs exige registrarlas. Los códigos van en una fila tras el párrafo, la
+  // lista o la tabla que contiene los enlaces. Se hace antes de mover las soluciones, para que la fila
+  // viaje con su enlace.
+  stats.qr = [];
+  if (isChapter && args.qr) {
+    const Q = args.qr;
+    const tool = new RegExp(Q.herramientas), portal = new RegExp(Q.portal), toolsLine = new RegExp(Q.rotulo_herramientas);
+    const params = a => { const u = new URL(a.href); return (u.hash.slice(1) + '&' + u.search.slice(1)).split('&').filter(x => x && !/^lang=/.test(x)).length; };
+    const inToolsLine = a => { const p = a.closest('p'); return !!p && !p.closest('.callout') && toolsLine.test(p.querySelector(':scope > strong:first-child')?.textContent.trim() || ''); };
+    const wanted = a => inToolsLine(a) ? (tool.test(a.href) || (portal.test(a.href) && params(a) > 0))
+      : tool.test(a.href) && (a.matches('.abrir,.explorar,.configurar') || params(a) > 0);
+    // Sin i, l ni o, que en papel se confunden con 1 y 0.
+    const letters = 'abcdefghjkmnpqrstuvwxyz';
+    const registry = Q.registro || {};
+    const assigned = new Map();   // «prefijo destino» → clave (en este archivo)
+    const taken = new Set(Object.keys(registry));
+    const keyFor = (prefix, href) => {
+      const id = prefix + ' ' + href;
+      if (assigned.has(id)) return assigned.get(id);
+      let clave = Object.keys(registry).find(k => registry[k] === href && k.slice(0, -1) === prefix);
+      if (!clave) {
+        const l = [...letters].find(c => !taken.has(prefix + c));
+        if (!l) throw Error(`${file}: sin letras libres para el prefijo QR ${prefix}`);
+        clave = prefix + l;
+      }
+      taken.add(clave); assigned.set(id, clave); return clave;
+    };
+    const rows = new Map();   // contenedor → [{clave, href, label, tipo}]
+    main.querySelectorAll('a[href]').forEach(a => {
+      if (!wanted(a)) return;
+      const h2 = a.closest('section.level2')?.querySelector(':scope > h2');
+      const prefix = h2?.querySelector('.header-section-number')?.textContent.trim() || number;
+      if (!prefix) throw Error(`${file}: enlace a aplicación sin sección ni capítulo numerado: ${a.href}`);
+      const clave = keyFor(prefix, a.href);
+      // Contenedor: la lista más externa (dentro de la misma caja), la tabla o el párrafo.
+      let box = a.closest('table') || a.closest('p,li');
+      if (box?.tagName === 'LI') {
+        let l = box.closest('ul,ol'), up;
+        while ((up = l.parentElement?.closest('ul,ol')) && up.closest('.callout') === l.closest('.callout')) l = up;
+        box = l;
+      }
+      if (!box) {
+        // Texto suelto (p. ej. al final de un <details>, que el paso 8 envuelve después): la fila va tras
+        // el último nodo en línea que sigue al enlace.
+        const inline = n => n.nodeType === Node.TEXT_NODE || (n.nodeType === Node.ELEMENT_NODE && getComputedStyle(n).display.startsWith('inline'));
+        let n = a;
+        while (n.parentElement && n.parentElement !== main && inline(n.parentElement)) n = n.parentElement;
+        while (n.nextSibling && inline(n.nextSibling)) n = n.nextSibling;
+        box = n;
+      }
+      const list = rows.get(box) || []; rows.set(box, list);
+      const label = a.textContent.replace(/\s+/g, ' ').trim().replace(new RegExp(Q.quitar_prefijo), '');
+      const tipo = inToolsLine(a) ? 'herramienta' : a.matches('.explorar') ? 'explorar' : a.matches('.abrir,.configurar') ? 'abrir' : 'texto';
+      if (!list.some(x => x.clave === clave)) list.push({clave, href: a.href, label, tipo});
+    });
+    for (const [box, list] of rows) {
+      const row = document.createElement('div'); row.className = 'pdf-qr-row';
+      for (const x of list) {
+        const item = document.createElement('a'); item.className = 'pdf-qr'; item.href = x.href;
+        item.innerHTML = `<img alt="" src="/pdf-qr/${x.clave}.svg"><span class="pdf-qr-text"><span class="pdf-qr-label"></span><span class="pdf-qr-key"></span></span>`;
+        item.querySelector('img').alt = Q.alt.replace('{clave}', x.clave);
+        item.querySelector('.pdf-qr-label').textContent = x.label;
+        item.querySelector('.pdf-qr-key').textContent = x.clave;
+        row.append(item);
+        stats.qr.push({clave: x.clave, destino: x.href, rotulo: x.label, tipo: x.tipo, url: Q.base + x.clave, registrada: x.clave in registry});
+      }
+      box.after(row);
+    }
+  }
+
   // 6. Soluciones de los ejercicios al final del capítulo, con enlaces de ida y vuelta.
   stats.solutionsMoved = 0; stats.exercises = main.querySelectorAll('.ejercicio').length; stats.exercisesWithoutSolution = [];
   if (isChapter) {

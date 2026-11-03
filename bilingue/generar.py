@@ -324,6 +324,38 @@ def enlaces_idioma(site, lang, meta):
         search.write_text(texto, encoding='utf-8')
 
 
+REDIRECCION = '''<!doctype html>
+<html lang="{lang}">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta http-equiv="refresh" content="0; url={url}">
+<link rel="canonical" href="{url}">
+<title>{clave}</title>
+<script>location.replace({js});</script>
+</head>
+<body><p>{texto} <a href="{url}">{url}</a></p></body>
+</html>
+'''
+
+
+def redirecciones(site, lang):
+    """Una página por clave QR del PDF (D100): base + clave → destino de qr/claves.json."""
+    registro = json.loads((BOOK / 'qr/claves.json').read_text(encoding='utf-8'))[lang]
+    base = 'https://josemagalan.github.io/genetic-algorithms-lab-book/' + ('en/' if lang == 'en' else '')
+    if registro['base'] != base + 'a/':
+        raise ValueError(f'qr/claves.json: base inesperada para {lang}: {registro["base"]}')
+    texto = 'Opening:' if lang == 'en' else 'Abriendo:'
+    for clave, destino in registro['claves'].items():
+        if not re.fullmatch(r'\d+(\.\d+)?[a-z]', clave) or not destino.startswith('https://'):
+            raise ValueError(f'qr/claves.json: clave o destino no válidos: {clave} → {destino}')
+        carpeta = site / 'a' / clave
+        carpeta.mkdir(parents=True, exist_ok=True)
+        (carpeta / 'index.html').write_text(REDIRECCION.format(lang=lang, clave=html.escape(clave), texto=texto,
+            url=html.escape(destino, quote=True), js=json.dumps(destino).replace('</', '<\\/')), encoding='utf-8')
+    return len(registro['claves'])
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--quarto', default='quarto', help='Ejecutable de Quarto')
@@ -365,10 +397,12 @@ def main():
     enlaces_idioma(site, 'es', meta)
     shutil.copytree(work / 'en/_book', site / 'en')
     enlaces_idioma(site / 'en', 'en', meta)
+    qr = {'es': redirecciones(site, 'es'), 'en': redirecciones(site / 'en', 'en')}
+    print(f"Redirecciones QR: {qr['es']} (es), {qr['en']} (en)", flush=True)
     record = {'source_spanish_live': head, 'source_translation': source_commit,
               'source_doi': meta['source_doi'], 'translation': meta,
               'python': sys.version, 'quarto': subprocess.check_output([args.quarto, '--version'], encoding='utf-8').strip(),
-              'translated_content': detalle, 'build_driver_sha256': digest(Path(__file__)),
+              'translated_content': detalle, 'qr_redirects': qr, 'build_driver_sha256': digest(Path(__file__)),
               'shared_build_hashes': {p.name: digest(p) for p in (BOOK / 'bilingue').glob('*.py')},
               'translation_source_hashes': {str(p.relative_to(BOOK)).replace('\\', '/'): digest(p) for p in (BOOK / 'en').rglob('*') if p.is_file()},
               'output_hashes': {str(p.relative_to(site)).replace('\\', '/'): digest(p) for p in site.rglob('*') if p.is_file()}}

@@ -50,6 +50,12 @@ El guion crea en `TRABAJO/bin` un `python3` que apunta al Python con el que se e
 
 Los créditos del PDF indican la versión, la fecha de revisión, el commit de origen y la fecha de generación. Una copia con cambios sin confirmar no supera `verificar.py`.
 
+## Códigos QR (versión 1.1)
+
+Desde la versión 1.1 (D100), `adaptar.cjs` añade un código QR junto a cada enlace a una aplicación y `qr.py` (segno) genera las imágenes. Las claves y sus destinos están en [`qr/claves.json`](../qr/claves.json), que también usa la web para publicar las redirecciones; las reglas, en [`qr/LEEME.md`](../qr/LEEME.md). Si el libro tiene enlaces nuevos, el generador se detiene: `--registrar-qr` los añade al registro, que hay que confirmar con un commit antes de generar el PDF definitivo. El manifiesto de cada generación queda en `TRABAJO/qr.json`.
+
+Para comprobar los códigos, renderizar el PDF a 200 ppp (`pdftoppm`) y leerlos con zbar (`pyzbar`): deben coincidir uno a uno con el manifiesto.
+
 ## Edición inglesa
 
 La traducción inglesa se imprime con el mismo generador:

@@ -135,7 +135,7 @@ else:  # el Poppler del runtime de Windows no trae pdftotext; pdfplumber es much
     import pdfplumber
     with pdfplumber.open(PDF) as document:
         text = '\n'.join(page.extract_text(layout=True) or '' for page in document.pages)
-for doi in (config.get('doi'), config.get('source_doi'), config.get('portal_doi')):
+for doi in (config.get('doi'), config.get('concept_doi'), config.get('source_doi'), config.get('portal_doi')):
     if doi: check('https://doi.org/' + doi in uris, 'DOI sin enlace en PDF: ' + doi)
 hyphen_lines = len(re.findall(r'[a-záéíóúñ]\u00ad?-[ \t]*\n', text))
 unresolved = re.findall(r'\?\?|@\w+\d{4}', text)

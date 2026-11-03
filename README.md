@@ -2,19 +2,19 @@
 
 *Algoritmos genéticos en un laboratorio interactivo*
 
-> **Versión 1.0, revisada el 31 de octubre de 2026** (primera publicación: 7 de octubre de 2026). La versión y la fecha de revisión están en `_quarto.yml` (`libro-version` y `libro-revision`).
+> **Versión 1.1, revisada el 3 de noviembre de 2026** (primera publicación: 7 de octubre de 2026). La versión y la fecha de revisión están en `_quarto.yml` (`libro-version` y `libro-revision`).
 
 Libro para aprender algoritmos genéticos de forma práctica, con actividades sobre las herramientas interactivas del [Laboratorio de algoritmos genéticos](https://josemagalan.github.io/genetic-algorithms-lab/) (*genetic-algorithms-lab*). Está pensado para estudiantes de grado que empiezan.
 
 **Ediciones para leer:** [Español · original](https://josemagalan.github.io/genetic-algorithms-lab-book/) · [English · AI translation](https://josemagalan.github.io/genetic-algorithms-lab-book/en/).
 
-La edición inglesa se titula *Evolution Made Visible: Genetic Algorithms in an Interactive Laboratory* y traduce los once capítulos de la edición española 1.0. Identifica el original y los asistentes utilizados en su entrada y en sus avisos; los autores la revisaron manualmente en noviembre de 2026, aunque puede haber revisiones posteriores. Tiene su propio registro en Zenodo, con PDF, HTML y fuentes: DOI de la versión 1.0, [10.5281/zenodo.23890034](https://doi.org/10.5281/zenodo.23890034); de todas las versiones, [10.5281/zenodo.23890033](https://doi.org/10.5281/zenodo.23890033). El DOI español sigue identificando solo el original.
+La edición inglesa se titula *Evolution Made Visible: Genetic Algorithms in an Interactive Laboratory* y traduce los once capítulos de la edición española 1.0. Identifica el original y los asistentes utilizados en su entrada y en sus avisos; los autores la revisaron manualmente en noviembre de 2026, aunque puede haber revisiones posteriores. Tiene su propio registro en Zenodo, con PDF, HTML y fuentes: DOI de la versión 1.1, [10.5281/zenodo.23913810](https://doi.org/10.5281/zenodo.23913810); de todas las versiones, [10.5281/zenodo.23890033](https://doi.org/10.5281/zenodo.23890033). El DOI español sigue identificando solo el original.
 
 ## Cómo citar
 
-Galán, J. M., Díaz-de la Fuente, S., Ahedo, V., Pereda, M., y Santos, J. I. (2026). *Evolución a la vista. Algoritmos genéticos en un laboratorio interactivo* (versión 1.0). Zenodo. DOI: [10.5281/zenodo.23835733](https://doi.org/10.5281/zenodo.23835733).
+Galán, J. M., Díaz-de la Fuente, S., Ahedo, V., Pereda, M., y Santos, J. I. (2026). *Evolución a la vista. Algoritmos genéticos en un laboratorio interactivo* (versión 1.1). Zenodo. DOI: [10.5281/zenodo.23913874](https://doi.org/10.5281/zenodo.23913874).
 
-El DOI identifica esta edición, cuyos archivos (PDF, HTML y fuentes) están en [Zenodo](https://zenodo.org/records/23835733); la web puede incorporar revisiones posteriores. Para remitir siempre a la versión más reciente, el DOI de todas las versiones es [10.5281/zenodo.23835732](https://doi.org/10.5281/zenodo.23835732). Los metadatos de cita están en [`CITATION.cff`](CITATION.cff). El archivo independiente de la versión 1.0.0 del portal tiene el DOI [10.5281/zenodo.23834485](https://doi.org/10.5281/zenodo.23834485); contiene el portal y su inventario, con enlaces a las herramientas externas.
+El DOI identifica esta edición, cuyos archivos (PDF, HTML y fuentes) están en [Zenodo](https://zenodo.org/records/23913874); la web puede incorporar revisiones posteriores. Para remitir siempre a la versión más reciente, el DOI de todas las versiones es [10.5281/zenodo.23835732](https://doi.org/10.5281/zenodo.23835732). Los metadatos de cita están en [`CITATION.cff`](CITATION.cff). El archivo independiente de la versión 1.0.0 del portal tiene el DOI [10.5281/zenodo.23834485](https://doi.org/10.5281/zenodo.23834485); contiene el portal y su inventario, con enlaces a las herramientas externas.
 
 <!-- ga-series-links:start -->
 ## Teaching resources / Materiales docentes

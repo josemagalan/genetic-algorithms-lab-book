@@ -3,9 +3,9 @@
   "source_commit": "75b82d8",
   "source_doi": "10.5281/zenodo.23835733",
   "source_date": "2026-10-31",
-  "doi": "10.5281/zenodo.23890034",
+  "doi": "10.5281/zenodo.23913810",
   "concept_doi": "10.5281/zenodo.23890033",
-  "version": "1.0",
+  "version": "1.1",
   "translation_date": "2026-10-31",
   "timezone": "Europe/Madrid",
   "assistant": "Codex",
@@ -53,5 +53,5 @@
   },
   "human_review": "The authors reviewed the English text manually, chapter by chapter, in November 2026, and corrected it where needed; later revisions are possible.",
   "naturalness_pass": "Required after source comparison by D095; performed by the assistant, separately from human review.",
-  "scope": "Chapters 1-11 translated (1-5 by Codex, 6-11 by Claude) after the approved chapter 5 pilot. HTML publication with an explicit AI translation notice and a note on the authors' manual review (November 2026). Own DOI 10.5281/zenodo.23890034 (reserved on November 2, 2026), in a Zenodo record separate from the Spanish original."
+  "scope": "Chapters 1-11 translated (1-5 by Codex, 6-11 by Claude) after the approved chapter 5 pilot. HTML publication with an explicit AI translation notice and a note on the authors' manual review (November 2026). Own Zenodo record, separate from the Spanish original: version 1.0, DOI 10.5281/zenodo.23890034 (reserved on November 2, 2026); version 1.1, PDF with QR codes, DOI 10.5281/zenodo.23913810 (reserved on November 3, 2026); all versions, 10.5281/zenodo.23890033."
 }

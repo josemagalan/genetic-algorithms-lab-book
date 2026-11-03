@@ -19,6 +19,7 @@
     "aviso_borrador": "Generada el {fecha} a partir de las fuentes del libro (commit {short}). Las aplicaciones y la versión web no forman parte del archivo.",
     "version": "<strong>Versión {version}</strong>, revisada el {revision}. Primera publicación en la web: {primera}. Edición en PDF generada el {fecha} a partir de las mismas fuentes que la web ({commit}).",
     "doi": "DOI de esta edición: {doi}.",
+    "doi_concepto": "DOI de todas las versiones (lleva a la más reciente): {doi_concepto}.",
     "portal": "Archivo del portal 1.0.0: {portal}.",
     "laboratorio": "Este libro se lee junto con el Laboratorio de algoritmos genéticos: los ejemplos y las actividades se hacen con aplicaciones web que el PDF no contiene. Sus enlaces necesitan conexión. Versión interactiva: {site}. Fuentes: {repo}.",
     "licencia": "Texto, figuras propias y ejercicios: licencia <a href=\"https://creativecommons.org/licenses/by/4.0/deed.es\">Creative Commons Atribución 4.0 Internacional (CC BY 4.0)</a>. Código del repositorio: MIT. Las imágenes de terceros, la biblioteca KaTeX, el estilo de citas y las herramientas enlazadas conservan su propia licencia; véase <a href=\"#avisos--licencia\">«Agradecimientos y avisos»</a>. Tipografía: Noto Sans (SIL Open Font License 1.1).",
@@ -40,6 +41,17 @@
       "numericas_extra": ["^\\d+ de \\d+$", "^\\d+ \\(valor inicial\\)$"],
       "cruce": "Cruce", "mutacion": "Mutación", "configuracion": "Configuración", "configuracion_d": "Configuración D"
     }
+  },
+  "qr": {
+    "_nota": "Edición 1.1: códigos QR junto a los enlaces a las aplicaciones (D100; adaptar.cjs, paso 5b; qr.py). Claves y destinos en qr/claves.json.",
+    "registro": "es",
+    "base": "https://josemagalan.github.io/genetic-algorithms-lab-book/a/",
+    "herramientas": "^https://(josemagalan\\.github\\.io/(initialization-and-evaluation-ga|selection-ga|crossover-ga|mutation-ga|representation-ga)/|evotraveller\\.streamlit\\.app/|josemagalan\\.shinyapps\\.io/SelectionMechanisms/?)",
+    "portal": "^https://josemagalan\\.github\\.io/genetic-algorithms-lab/",
+    "rotulo_herramientas": "^Herramientas:$",
+    "quitar_prefijo": "^(⚙\\s*)?(Abrir y configurar|Abrir):\\s*",
+    "alt": "Código QR del enlace {clave}",
+    "explicacion": "<p class=\"pdf-qr-nota\">Para leer en papel, cada enlace a una aplicación va acompañado de un código QR y de una clave, como <span class=\"pdf-qr-key\">4.6b</span> (sección 4.6, segundo enlace). El código se abre con la cámara del móvil; si no puedes escanearlo, escribe <span class=\"pdf-qr-key\">{base}</span> seguido de la clave. Las herramientas de cada capítulo tienen también su código en «Herramientas», al principio del capítulo.</p>"
   },
   "posproceso": {
     "marcador_portada": "Portada",

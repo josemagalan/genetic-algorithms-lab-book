@@ -11,9 +11,10 @@ book:
   page-footer:
     center: "Text: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) · Code: [MIT](https://github.com/josemagalan/genetic-algorithms-lab-book/blob/main/LICENSE) · [Translation notice and contact](avisos.html#contacto)"
 lang: en-US
-libro-version: "1.0"                      # versión de la traducción inglesa, con registro propio en Zenodo (P028)
-libro-revision: "November 2, 2026"        # fecha de la última revisión; fijarla al cerrar la versión
-libro-doi: "10.5281/zenodo.23890034"      # DOI de la traducción inglesa 1.0; reservado el 2026-11-02, se registra al publicar
+libro-version: "1.1"                      # versión de la traducción inglesa, con registro propio en Zenodo (P028); 1.1: PDF con códigos QR (D100)
+libro-revision: "November 3, 2026"        # fecha de la última revisión; fijarla al cerrar la versión
+libro-doi: "10.5281/zenodo.23913810"      # DOI de la traducción inglesa 1.1; reservado el 2026-11-03 (1.0: 10.5281/zenodo.23890034)
+libro-doi-concepto: "10.5281/zenodo.23890033"   # DOI de todas las versiones inglesas (concepto en Zenodo)
 language:
   search-submit-button-title: "Search the book"
   search-label: "Search the book"

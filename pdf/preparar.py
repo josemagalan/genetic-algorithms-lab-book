@@ -81,6 +81,8 @@ config = {
     # En una traducción (edición con perfil), el DOI propio es el que declara su perfil; el de _quarto.yml
     # es el del original y nunca se presenta como DOI de la traducción.
     'doi': meta.get('libro-doi') if not profile or meta.get('libro-doi') != base_meta.get('libro-doi') else None,
+    # DOI de todas las versiones (concepto en Zenodo); en una traducción, solo el que declara su perfil.
+    'concept_doi': meta.get('libro-doi-concepto') if not profile or meta.get('libro-doi-concepto') != base_meta.get('libro-doi-concepto') else None,
     'portal_doi': meta.get('portal-doi'),
     'source_version': base_meta['libro-version'] if profile else None,
     'source_doi': base_meta.get('libro-doi') if profile else None,

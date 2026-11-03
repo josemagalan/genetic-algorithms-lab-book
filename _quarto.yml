@@ -95,9 +95,10 @@ book:
     - avisos.qmd            # siempre al final: los capítulos nuevos van antes
 
 lang: es
-libro-version: "1.0"                     # versión que muestran la portada y el formulario de comentarios (D055)
-libro-revision: "31 de octubre de 2026"   # fecha de la última revisión; cambiarla con cada versión
-libro-doi: "10.5281/zenodo.23835733"       # DOI de esta edición; reservado antes del depósito
+libro-version: "1.1"                     # versión que muestran la portada y el formulario de comentarios (D055)
+libro-revision: "3 de noviembre de 2026"  # fecha de la última revisión; cambiarla con cada versión
+libro-doi: "10.5281/zenodo.23913874"       # DOI de esta edición (1.1); reservado antes del depósito. 1.0: 10.5281/zenodo.23835733
+libro-doi-concepto: "10.5281/zenodo.23835732"   # DOI de todas las versiones (concepto en Zenodo); lo citan los créditos del PDF
 portal-doi: "10.5281/zenodo.23834485"      # archivo del portal 1.0.0, recurso independiente
 
 language:   # etiquetas accesibles (revisión beta, M07)

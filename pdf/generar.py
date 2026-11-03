@@ -1,7 +1,7 @@
 """Genera la edición PDF de «Evolución a la vista» desde una copia limpia del repositorio.
 
 Uso (desde cualquier carpeta):
-    python pdf/generar.py TRABAJO SALIDA.pdf [--quarto RUTA] [--chrome RUTA] [--sin-render] [--contactos] [--edicion en]
+    python pdf/generar.py TRABAJO SALIDA.pdf [--quarto RUTA] [--chrome RUTA] [--sin-render] [--contactos] [--registrar-qr] [--edicion en]
 
   TRABAJO      carpeta temporal (se crea): configuración, pasadas, informes y hojas de contacto
   SALIDA.pdf   PDF final
@@ -9,6 +9,7 @@ Uso (desde cualquier carpeta):
   --chrome     navegador Chrome/Chromium que usará Playwright (por defecto, el de Playwright)
   --sin-render no vuelve a ejecutar «quarto render»: usa el _book/ existente
   --contactos  genera también hojas de contacto (12 páginas por hoja) para revisar la paginación
+  --registrar-qr añade a qr/claves.json las claves QR nuevas (después hay que confirmarlas con un commit)
   --edicion en edición inglesa: genera antes el sitio bilingüe con bilingue/generar.py en
                TRABAJO/bilingue (con --sin-render, reutiliza el existente) e imprime su copia inglesa,
                con los textos y ajustes de pdf/en/. Commit y cambios locales se leen de este repositorio.
@@ -43,6 +44,7 @@ quarto = option('--quarto', 'quarto')
 chrome = option('--chrome')
 no_render = flag('--sin-render')
 sheets = flag('--contactos')
+register_qr = flag('--registrar-qr')
 edition = option('--edicion', 'es')
 if edition not in ('es', 'en'):
     raise SystemExit('Ediciones disponibles: es, en')
@@ -90,7 +92,7 @@ else:
     printed = BOOK
     step('preparar', [*python, HERE / 'preparar.py', BOOK, work, quarto, *(['--sin-render'] if no_render else [])])
 step('imprimir', ['node', HERE / 'libro.cjs', '--libro', printed / '_book', '--trabajo', work, '--python', sys.executable,
-                  *(['--chrome', chrome] if chrome else [])])
+                  *(['--chrome', chrome] if chrome else []), *(['--registrar-qr'] if register_qr else [])])
 step('posproceso', [*python, HERE / 'posproceso.py', work, output])
 step('verificar', [*python, HERE / 'verificar.py', printed, work, output])
 if sheets:

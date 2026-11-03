@@ -6,13 +6,13 @@ This is an **AI-generated English translation** of [*Evolución a la vista. Algo
 
 The Spanish edition is the original reference text prepared and reviewed by the authors. The English text translates that edition. All eleven chapters are translated.
 
-Translation: **Codex (GPT-6)** translated chapters 1–5, and **Claude** (Cowork, configured model claude-opus-5-5) translated chapters 6–11, on October 31, 2026. Both assistants checked the text against the source for terminology, numbers, formulas, citations, links, and activity settings, and revised the English for naturalness. **The authors then reviewed the English text manually, chapter by chapter, in November 2026**, and corrected it where needed. Later revisions are possible. This translation has its own DOI, [10.5281/zenodo.23890034](https://doi.org/10.5281/zenodo.23890034), in a [Zenodo record](https://zenodo.org/records/23890034) separate from the Spanish original, with the PDF, HTML, and sources of this edition. To always point to the latest English version, use the DOI for all versions, [10.5281/zenodo.23890033](https://doi.org/10.5281/zenodo.23890033).
+Translation: **Codex (GPT-6)** translated chapters 1–5, and **Claude** (Cowork, configured model claude-opus-5-5) translated chapters 6–11, on October 31, 2026. Both assistants checked the text against the source for terminology, numbers, formulas, citations, links, and activity settings, and revised the English for naturalness. **The authors then reviewed the English text manually, chapter by chapter, in November 2026**, and corrected it where needed. Later revisions are possible. This translation has its own DOI, [10.5281/zenodo.23913810](https://doi.org/10.5281/zenodo.23913810), in a [Zenodo record](https://zenodo.org/records/23913810) separate from the Spanish original, with the PDF, HTML, and sources of this edition. To always point to the latest English version, use the DOI for all versions, [10.5281/zenodo.23890033](https://doi.org/10.5281/zenodo.23890033).
 
 ## How to Cite {#como-citar}
 
 This translation:
 
-Galán, J. M., Díaz-de la Fuente, S., Ahedo, V., Pereda, M., & Santos, J. I. (2026). *Evolution made visible: Genetic algorithms in an interactive laboratory* (Version 1.0) [English translation of [*Evolución a la vista. Algoritmos genéticos en un laboratorio interactivo*]{lang="es"}]. Zenodo. [https://doi.org/10.5281/zenodo.23890034](https://doi.org/10.5281/zenodo.23890034).
+Galán, J. M., Díaz-de la Fuente, S., Ahedo, V., Pereda, M., & Santos, J. I. (2026). *Evolution made visible: Genetic algorithms in an interactive laboratory* (Version {{< meta libro-version >}}) [English translation of [*Evolución a la vista. Algoritmos genéticos en un laboratorio interactivo*]{lang="es"}]. Zenodo. [https://doi.org/10.5281/zenodo.23913810](https://doi.org/10.5281/zenodo.23913810).
 
 The Spanish original:
 
