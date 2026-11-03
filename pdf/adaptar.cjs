@@ -19,9 +19,10 @@ function adaptarArchivo(args) {
   }
   if (stats.substitutions) main.innerHTML = html;
 
-  // 2. Material exclusivo de la web: incrustaciones, ampliar figura, comentarios.
+  // 2. Material exclusivo de la web: incrustaciones, ampliar figura, comentarios y lo marcado {.solo-web}
+  //    en las fuentes (p. ej. el aviso de la entrada que remite al PDF).
   stats.webOnlyRemoved = main.querySelectorAll('.incrustada').length;
-  main.querySelectorAll('.incrustada,.ampliar-figura,.quarto-comment-link,.comentario-pagina,script,img.quarto-cover-image').forEach(n => {
+  main.querySelectorAll('.incrustada,.solo-web,.ampliar-figura,.quarto-comment-link,.comentario-pagina,script,img.quarto-cover-image').forEach(n => {
     const p = n.parentElement; n.remove();
     if (p && p.tagName === 'P' && !p.textContent.trim() && !p.querySelector('img,svg')) p.remove();
   });
