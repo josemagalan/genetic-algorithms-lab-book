@@ -97,7 +97,9 @@ async function lastStep(page) {
         await page.goto(base+'/'+modules[i]+'/#lang=es');
         assert.ok((await page.locator('#bookLink').getAttribute('href')).includes('/0'+(i+3)+'-'));
         await page.getByRole('button',{name:'EN',exact:true}).click();
-        assert.match(await page.locator('#bookLink').innerText(),/Spanish/);
+        // Desde el 2026-11-02 (D099), la interfaz inglesa enlaza el capítulo de la edición inglesa.
+        assert.match(await page.locator('#bookLink').innerText(),/^Book · chapter \d+$/);
+        assert.ok((await page.locator('#bookLink').getAttribute('href')).includes('genetic-algorithms-lab-book/en/0'+(i+3)+'-'));
       }
     });
     await check('goldberg',async page=>{
